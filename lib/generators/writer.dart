@@ -126,11 +126,21 @@ class Writer {
           _sb.write("request,");
         } else if (parameters[j].type.toString() == "String") {
           _sb.write("args[${i++}],");
+        } else if (parameters[j].type.toString() == "int") {
+          _sb.write("int.parse(args[${i++}])");
+        } else if (parameters[j].type.toString() == "double") {
+          _sb.write("double.parse(args[${i++}])");
         }
       } else {
         if (parameters[j].type.toString() == "String") {
           _sb.write(
               "${parameters[j].name}: request.requestedUri.queryParameters['${parameters[j].name}'],");
+        } else if (parameters[j].type.toString() == "int") {
+          _sb.write(
+              "${parameters[j].name}: int.parse(request.requestedUri.queryParameters['${parameters[j].name}']),");
+        } else if (parameters[j].type.toString() == "double") {
+          _sb.write(
+              "${parameters[j].name}: double.parse(request.requestedUri.queryParameters['${parameters[j].name}']),");
         }
       }
     }
