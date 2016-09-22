@@ -8,21 +8,13 @@ part of api;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi {
-  List<RouteInformations> _routes;
-
-  void _initRoute() {
-    _routes = <RouteInformations>[];
-    _addRoute(new RouteInformations("/test/v1/ping", ["GET"]));
-    _addRoute(new RouteInformations("/test/v1/users/", ["GET"]));
-    _addRoute(new RouteInformations("/test/v1/users/([a-zA-Z0-9]+)", ["GET"]));
-  }
-
-  void _addRoute(RouteInformations route) {
-    _routes.add(route);
-  }
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations("/test/v1/ping", ["GET"]),
+    new RouteInformations("/test/v1/users/", ["GET"]),
+    new RouteInformations("/test/v1/users/([a-zA-Z0-9]+)", ["GET"]),
+  ];
 
   Future<bool> handleApiRequest(HttpRequest request) async {
-    if (_routes == null) _initRoute();
     List<String> args = <String>[];
     bool match = false;
     match = _routes[0]

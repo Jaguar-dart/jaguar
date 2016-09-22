@@ -22,28 +22,28 @@ class Writer {
 
   String generate() {
     _sb.writeln("abstract class _\$Jaguar$className {");
-    _sb.writeln("List<RouteInformations> _routes;");
-    // _sb.writeln("List<RouteInformations> _routes = <RouteInformations>[");
-    // _routes.forEach((RouteInformationsGenerator route) {
-    //   _sb.writeln(
-    //       "new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}, ${route.signature}),");
-    // });
-    // _sb.writeln("];");
-    _sb.writeln("");
-
-    _sb.writeln("void _initRoute() {");
-    _sb.writeln("_routes = <RouteInformations>[];");
+    // _sb.writeln("List<RouteInformations> _routes;");
+    _sb.writeln("List<RouteInformations> _routes = <RouteInformations>[");
     _routes.forEach((RouteInformationsGenerator route) {
       _sb.writeln(
-          "_addRoute(new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}));");
+          "new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}),");
     });
-    _sb.writeln("}");
+    _sb.writeln("];");
     _sb.writeln("");
 
-    _sb.writeln("void _addRoute(RouteInformations route) {");
-    _sb.writeln("_routes.add(route);");
-    _sb.writeln("}");
-    _sb.writeln("");
+    // _sb.writeln("void _initRoute() {");
+    // _sb.writeln("_routes = <RouteInformations>[];");
+    // _routes.forEach((RouteInformationsGenerator route) {
+    //   _sb.writeln(
+    //       "_addRoute(new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}));");
+    // });
+    // _sb.writeln("}");
+    // _sb.writeln("");
+
+    // _sb.writeln("void _addRoute(RouteInformations route) {");
+    // _sb.writeln("_routes.add(route);");
+    // _sb.writeln("}");
+    // _sb.writeln("");
 
     // _sb.writeln(
     //     "RouteInformations _getRoute(List<String> args, String path, String method) {");
@@ -69,7 +69,7 @@ class Writer {
     // _sb.writeln("");
 
     _sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
-    _sb.writeln("if (_routes == null) _initRoute();");
+    // _sb.writeln("if (_routes == null) _initRoute();");
     _sb.writeln("List<String> args = <String>[];");
     _sb.writeln("bool match = false;");
     for (int i = 0; i < _routes.length; i++) {
@@ -78,13 +78,7 @@ class Writer {
       _sb.writeln("if (match) {");
       String type;
       if (_routes[i].returnType.startsWith("Future")) {
-        RegExp regExp = new RegExp("^Future<([A-Za-z]+)>\$");
-        Iterable<Match> matchs = regExp.allMatches(_routes[i].returnType);
-        if (matchs.isEmpty) {
-          type = "var";
-        } else {
-          type = matchs.first.group(1);
-        }
+        type = _getTypeFromFuture(_routes[i].returnType);
         _sb.write("$type result = await ${_routes[i].signature}(");
         _fillParameter(_routes[i].parameters);
         _sb.writeln(");");
@@ -113,6 +107,15 @@ class Writer {
 
     _sb.writeln("}");
     return _sb.toString();
+  }
+
+  String _getTypeFromFuture(String returnType) {
+    RegExp regExp = new RegExp("^Future<([A-Za-z]+)>\$");
+    Iterable<Match> matchs = regExp.allMatches(returnType);
+    if (matchs.isEmpty) {
+      return "var";
+    }
+    return matchs.first.group(1);
   }
 
   void _fillParameter(List<ParameterElement> parameters) {
