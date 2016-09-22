@@ -1,0 +1,7 @@
+name: jaguar
+version: 0.0.1
+description: jaguar is a performant server side framework
+
+dev_dependencies:
+  source_gen: 0.5.1+3
+  build: 0.4.1
