@@ -7,11 +7,11 @@ import 'package:jaguar/jaguar.dart' as jaguar;
 import 'api.dart';
 
 Future<Null> main(List<String> args) async {
-  TestApi tsa = new TestApi();
+  ExampleApi tsa = new ExampleApi();
 
-  jaguar.Configuration jaguarConfiguraion =
+  jaguar.Configuration configuration =
       new jaguar.Configuration(multiThread: true);
-  jaguarConfiguraion.addApi(tsa);
+  configuration.addApi(tsa);
 
-  await jaguar.serve(jaguarConfiguraion);
+  await jaguar.serve(configuration);
 }

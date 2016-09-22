@@ -20,7 +20,7 @@ class UserResource {
 }
 
 @ApiClass(name: 'test', version: 'v1')
-class TestApi extends Object with _$JaguarTestApi {
+class ExampleApi extends Object with _$JaguarExampleApi {
   @ApiMethod(path: 'ping', methods: const ['GET'])
   Future<Null> get(HttpRequest request) async {
     request.response.write("pong");

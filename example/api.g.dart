@@ -4,10 +4,10 @@ part of api;
 
 // **************************************************************************
 // Generator: ApiClass
-// Target: class TestApi
+// Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarTestApi {
+abstract class _$JaguarExampleApi {
   List<Route> _routes;
 
   void _initRoute() {
