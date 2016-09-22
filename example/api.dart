@@ -8,24 +8,24 @@ import 'package:jaguar/jaguar.dart';
 part 'api.g.dart';
 
 class UserResource {
-  @ApiMethod(methods: const ['GET'])
+  @Route(methods: const ['GET'])
   Future<Null> getUser(HttpRequest request) async {
     print("get user");
   }
 
-  @ApiMethod(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
+  @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
   Future<Null> getUserWithId(HttpRequest request, List<String> params) async {
     request.response.write(params);
   }
 }
 
-@ApiClass(name: 'test', version: 'v1')
+@Api(name: 'test', version: 'v1')
 class ExampleApi extends Object with _$JaguarExampleApi {
-  @ApiMethod(path: 'ping', methods: const ['GET'])
+  @Route(path: 'ping', methods: const ['GET'])
   Future<Null> get(HttpRequest request) async {
     request.response.write("pong");
   }
 
-  @ApiResource(path: 'users')
+  @Group(path: 'users')
   UserResource users = new UserResource();
 }

@@ -1,24 +1,24 @@
 library source_gen_experimentation.annotations;
 
-class ApiClass {
+class Api {
   final String name;
   final String version;
 
-  const ApiClass({this.name, this.version});
+  const Api({this.name, this.version});
 
   String toString() => "$name $version";
 }
 
-class ApiMethod {
+class Route {
   final String path;
 
   final List<String> methods;
 
-  const ApiMethod({this.path: '', this.methods});
+  const Route({this.path: '', this.methods});
 }
 
-class ApiResource {
+class Group {
   final String path;
 
-  const ApiResource({this.path: ''});
+  const Group({this.path: ''});
 }

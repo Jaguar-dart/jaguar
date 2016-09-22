@@ -8,23 +8,23 @@ part of api;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi {
-  List<Route> _routes;
+  List<RouteInformations> _routes;
 
   void _initRoute() {
-    _routes = <Route>[];
-    _addRoute(new Route("/test/v1/ping", ["GET"], get));
-    _addRoute(new Route("/test/v1/users/", ["GET"], users.getUser));
-    _addRoute(new Route(
+    _routes = <RouteInformations>[];
+    _addRoute(new RouteInformations("/test/v1/ping", ["GET"], get));
+    _addRoute(new RouteInformations("/test/v1/users/", ["GET"], users.getUser));
+    _addRoute(new RouteInformations(
         "/test/v1/users/([a-zA-Z0-9]+)", ["GET"], users.getUserWithId));
   }
 
-  void _addRoute(Route route) {
+  void _addRoute(RouteInformations route) {
     _routes.add(route);
   }
 
-  Route _getRoute(List<String> args, String path, String method) {
+  RouteInformations _getRoute(List<String> args, String path, String method) {
     return _routes.firstWhere(
-        (Route route) =>
+        (RouteInformations route) =>
             route.matchWithRequestPathAndMethod(args, path, method),
         orElse: () => null);
   }
@@ -32,7 +32,7 @@ abstract class _$JaguarExampleApi {
   Future<bool> handleApiRequest(HttpRequest request) async {
     if (_routes == null) _initRoute();
     List<String> args = <String>[];
-    Route route = _getRoute(args, request.uri.path, request.method);
+    RouteInformations route = _getRoute(args, request.uri.path, request.method);
     if (route != null) {
       if (args.isNotEmpty)
         await route.function(request, args);

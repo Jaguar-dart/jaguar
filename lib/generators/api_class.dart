@@ -11,12 +11,12 @@ import 'package:jaguar/src/annotations.dart';
 import 'writer.dart';
 import 'route.dart';
 
-class ApiClassAnnotationGenerator extends GeneratorForAnnotation<ApiClass> {
+class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
   const ApiClassAnnotationGenerator();
 
   @override
   Future<String> generateForAnnotatedElement(
-      Element element, ApiClass annotation, BuildStep buildStep) async {
+      Element element, Api annotation, BuildStep buildStep) async {
     if (element is! ClassElement) {
       var friendlyName = friendlyNameForElement(element);
       throw new InvalidGenerationSourceError(
@@ -40,12 +40,12 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<ApiClass> {
     classElement.methods.forEach((MethodElement methodElement) {
       List<ElementAnnotation> apiMethods = methodElement.metadata
           .where((ElementAnnotation elementAnnotation) =>
-              matchAnnotation(ApiMethod, elementAnnotation))
+              matchAnnotation(Route, elementAnnotation))
           .toList();
 
       apiMethods.forEach((ElementAnnotation elementAnnotation) {
-        ApiMethod apiMethod = instantiateAnnotation(elementAnnotation);
-        writer.addRoute(new RouteInformations(
+        Route apiMethod = instantiateAnnotation(elementAnnotation);
+        writer.addRoute(new RouteInformationsGenrator(
             "$prefix/${apiMethod.path}",
             apiMethod.methods,
             "$resourceName${resourceName.isEmpty ? '' : '.'}${methodElement.displayName}"));
@@ -59,7 +59,7 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<ApiClass> {
       List<FieldElement> apiResourcesFields = <FieldElement>[];
       List<ElementAnnotation> apiResources =
           fieldElement.metadata.where((ElementAnnotation elementAnnotation) {
-        bool match = matchAnnotation(ApiResource, elementAnnotation);
+        bool match = matchAnnotation(Group, elementAnnotation);
         if (match) {
           apiResourcesFields.add(fieldElement);
           return true;
@@ -68,7 +68,7 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<ApiClass> {
       }).toList();
 
       for (int i = 0; i < apiResources.length; i++) {
-        ApiResource apiResource = instantiateAnnotation(apiResources[i]);
+        Group apiResource = instantiateAnnotation(apiResources[i]);
         await _apiResourceRecursion(apiResourcesFields[i].type.element, writer,
             "$prefix/${apiResource.path}", apiResourcesFields[i].displayName);
       }
