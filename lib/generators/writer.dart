@@ -121,10 +121,17 @@ class Writer {
   void _fillParameter(List<ParameterElement> parameters) {
     int i = 0;
     for (int j = 0; j < parameters.length; j++) {
-      if (parameters[j].type.toString() == "HttpRequest") {
-        _sb.write("request,");
-      } else if (parameters[j].type.toString() == "String") {
-        _sb.write("args[${i++}],");
+      if (!parameters[j].parameterKind.isOptional) {
+        if (parameters[j].type.toString() == "HttpRequest") {
+          _sb.write("request,");
+        } else if (parameters[j].type.toString() == "String") {
+          _sb.write("args[${i++}],");
+        }
+      } else {
+        if (parameters[j].type.toString() == "String") {
+          _sb.write(
+              "${parameters[j].name}: request.requestedUri.queryParameters['${parameters[j].name}'],");
+        }
       }
     }
   }

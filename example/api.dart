@@ -15,8 +15,8 @@ class UserResource {
   }
 
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
-  void getUserWithId(HttpRequest request, String id) {
-    request.response.write(id);
+  void getUserWithId(HttpRequest request, String id, {String toto}) {
+    request.response..writeln(id)..writeln(toto);
   }
 }
 

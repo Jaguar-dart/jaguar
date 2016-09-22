@@ -41,6 +41,7 @@ abstract class _$JaguarExampleApi {
       users.getUserWithId(
         request,
         args[0],
+        toto: request.requestedUri.queryParameters['toto'],
       );
       return true;
     }
