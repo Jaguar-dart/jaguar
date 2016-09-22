@@ -2,6 +2,7 @@ library api;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:jaguar/jaguar.dart';
 
@@ -9,13 +10,13 @@ part 'api.g.dart';
 
 class UserResource {
   @Route(methods: const ['GET'])
-  Future<Null> getUser(HttpRequest request) async {
-    print("get user");
+  Future<String> getUser() async {
+    return "get user";
   }
 
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
-  Future<Null> getUserWithId(HttpRequest request, List<String> params) async {
-    request.response.write(params);
+  void getUserWithId(HttpRequest request, String id) {
+    request.response.write(id);
   }
 }
 

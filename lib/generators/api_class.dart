@@ -45,12 +45,12 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
 
       apiMethods.forEach((ElementAnnotation elementAnnotation) {
         Route apiMethod = instantiateAnnotation(elementAnnotation);
-        writer.addRoute(new RouteInformationsGenrator(
+        writer.addRoute(new RouteInformationsGenerator(
             "$prefix/${apiMethod.path}",
             apiMethod.methods,
-            "$resourceName${resourceName.isEmpty ? '' : '.'}${methodElement.displayName}"));
-        // sb.writeln(
-        //     "//\t$prefix/${apiMethod.path} ${apiMethod.methods} $resourceName${resourceName.isEmpty ? '' : '.'}${methodElement.displayName}(HttpRequest request);");
+            "$resourceName${resourceName.isEmpty ? '' : '.'}${methodElement.displayName}",
+            methodElement.returnType.displayName,
+            methodElement.parameters));
       });
     });
 

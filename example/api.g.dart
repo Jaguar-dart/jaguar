@@ -22,24 +22,37 @@ abstract class _$JaguarExampleApi {
     _routes.add(route);
   }
 
-  RouteInformations _getRoute(List<String> args, String path, String method) {
-    return _routes.firstWhere(
-        (RouteInformations route) =>
-            route.matchWithRequestPathAndMethod(args, path, method),
-        orElse: () => null);
-  }
-
   Future<bool> handleApiRequest(HttpRequest request) async {
     if (_routes == null) _initRoute();
     List<String> args = <String>[];
-    RouteInformations route = _getRoute(args, request.uri.path, request.method);
-    if (route != null) {
-      if (args.isNotEmpty)
-        await route.function(request, args);
-      else
-        await route.function(request);
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      Null result = await get(
+        request,
+      );
       return true;
     }
-    return false;
+    match = _routes[1]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      String result = await users.getUser();
+      int length = UTF8.encode(result).length;
+      request.response
+        ..contentLength = length
+        ..write(result);
+      return true;
+    }
+    match = _routes[2]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      users.getUserWithId(
+        request,
+        args[0],
+      );
+      return true;
+    }
+    return null;
   }
 }

@@ -1,11 +1,16 @@
 library source_gen_experimentation.generators.route;
 
-class RouteInformationsGenrator {
+import 'package:analyzer/dart/element/element.dart';
+
+class RouteInformationsGenerator {
   String path;
   List<String> methods;
   String signature;
+  String returnType;
+  List<ParameterElement> parameters;
 
-  RouteInformationsGenrator(this.path, this.methods, this.signature);
+  RouteInformationsGenerator(this.path, this.methods, this.signature,
+      this.returnType, this.parameters);
 
   String toString() => "$path $methods";
 }
