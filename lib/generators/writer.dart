@@ -35,7 +35,7 @@ class Writer {
     _sb.writeln("_routes = <RouteInformations>[];");
     _routes.forEach((RouteInformationsGenerator route) {
       _sb.writeln(
-          "_addRoute(new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}, ${route.signature}));");
+          "_addRoute(new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}));");
     });
     _sb.writeln("}");
     _sb.writeln("");

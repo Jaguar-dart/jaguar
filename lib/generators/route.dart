@@ -18,9 +18,8 @@ class RouteInformationsGenerator {
 class RouteInformations {
   String path;
   List<String> methods;
-  Function function;
 
-  RouteInformations(this.path, this.methods, this.function);
+  RouteInformations(this.path, this.methods);
 
   bool matchWithRequestPathAndMethod(
       List<String> args, String requestPath, String method) {

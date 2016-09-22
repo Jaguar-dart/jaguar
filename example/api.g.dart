@@ -12,10 +12,9 @@ abstract class _$JaguarExampleApi {
 
   void _initRoute() {
     _routes = <RouteInformations>[];
-    _addRoute(new RouteInformations("/test/v1/ping", ["GET"], get));
-    _addRoute(new RouteInformations("/test/v1/users/", ["GET"], users.getUser));
-    _addRoute(new RouteInformations(
-        "/test/v1/users/([a-zA-Z0-9]+)", ["GET"], users.getUserWithId));
+    _addRoute(new RouteInformations("/test/v1/ping", ["GET"]));
+    _addRoute(new RouteInformations("/test/v1/users/", ["GET"]));
+    _addRoute(new RouteInformations("/test/v1/users/([a-zA-Z0-9]+)", ["GET"]));
   }
 
   void _addRoute(RouteInformations route) {
