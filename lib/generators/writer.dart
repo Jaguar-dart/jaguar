@@ -22,7 +22,6 @@ class Writer {
 
   String generate() {
     _sb.writeln("abstract class _\$Jaguar$className {");
-    // _sb.writeln("List<RouteInformations> _routes;");
     _sb.writeln("List<RouteInformations> _routes = <RouteInformations>[");
     _routes.forEach((RouteInformationsGenerator route) {
       _sb.writeln(
@@ -31,73 +30,15 @@ class Writer {
     _sb.writeln("];");
     _sb.writeln("");
 
-    // _sb.writeln("void _initRoute() {");
-    // _sb.writeln("_routes = <RouteInformations>[];");
-    // _routes.forEach((RouteInformationsGenerator route) {
-    //   _sb.writeln(
-    //       "_addRoute(new RouteInformations(\"${route.path}\", ${JSON.encode(route.methods)}));");
-    // });
-    // _sb.writeln("}");
-    // _sb.writeln("");
-
-    // _sb.writeln("void _addRoute(RouteInformations route) {");
-    // _sb.writeln("_routes.add(route);");
-    // _sb.writeln("}");
-    // _sb.writeln("");
-
-    // _sb.writeln(
-    //     "RouteInformations _getRoute(List<String> args, String path, String method) {");
-    // _sb.writeln("return _routes.firstWhere(");
-    // _sb.writeln(
-    //     "(RouteInformations route) => route.matchWithRequestPathAndMethod(args, path, method),");
-    // _sb.writeln("orElse: () => null);");
-    // _sb.writeln("}");
-    // _sb.writeln("");
-
-    // _sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
-    // _sb.writeln("if (_routes == null) _initRoute();");
-    // _sb.writeln("List<String> args = <String>[];");
-    // _sb.writeln(
-    //     "RouteInformations route = _getRoute(args, request.uri.path, request.method);");
-    // _sb.writeln("if (route != null) {");
-    // _sb.writeln("if (args.isNotEmpty) await route.function(request, args);");
-    // _sb.writeln("else await route.function(request);");
-    // _sb.writeln("return true;");
-    // _sb.writeln("}");
-    // _sb.writeln("return false;");
-    // _sb.writeln("}");
-    // _sb.writeln("");
-
     _sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
-    // _sb.writeln("if (_routes == null) _initRoute();");
     _sb.writeln("List<String> args = <String>[];");
     _sb.writeln("bool match = false;");
     for (int i = 0; i < _routes.length; i++) {
       _sb.writeln(
           "match = _routes[$i].matchWithRequestPathAndMethod(args, request.uri.path, request.method);");
       _sb.writeln("if (match) {");
-      String type;
-      if (_routes[i].returnType.startsWith("Future")) {
-        type = _getTypeFromFuture(_routes[i].returnType);
-        _sb.write("$type result = await ${_routes[i].signature}(");
-        _fillParameter(_routes[i].parameters);
-        _sb.writeln(");");
-      } else {
-        if (_routes[i].returnType == "void") {
-          _sb.write("${_routes[i].signature}(");
-          _fillParameter(_routes[i].parameters);
-          _sb.writeln(");");
-        } else {
-          type = _routes[i].returnType;
-          _sb.write("$type result = ${_routes[i].signature}(");
-          _fillParameter(_routes[i].parameters);
-          _sb.writeln(");");
-        }
-      }
-      if (type == "String" || type == "var") {
-        _sb.writeln("int length = UTF8.encode(result).length;");
-        _sb.writeln("request.response..contentLength = length..write(result);");
-      }
+      String returnType = _callFunction(i);
+      _executeResponse(returnType);
       _sb.writeln("return true;");
       _sb.writeln("}");
     }
@@ -107,6 +48,35 @@ class Writer {
 
     _sb.writeln("}");
     return _sb.toString();
+  }
+
+  String _callFunction(int i) {
+    String returnType;
+    if (_routes[i].returnType.startsWith("Future")) {
+      returnType = _getTypeFromFuture(_routes[i].returnType);
+      _sb.write("$returnType result = await ${_routes[i].signature}(");
+      _fillParameter(_routes[i].parameters);
+      _sb.writeln(");");
+    } else {
+      if (_routes[i].returnType == "void") {
+        _sb.write("${_routes[i].signature}(");
+        _fillParameter(_routes[i].parameters);
+        _sb.writeln(");");
+      } else {
+        returnType = _routes[i].returnType;
+        _sb.write("$returnType result = ${_routes[i].signature}(");
+        _fillParameter(_routes[i].parameters);
+        _sb.writeln(");");
+      }
+    }
+    return returnType;
+  }
+
+  void _executeResponse(String type) {
+    if (type == "String") {
+      _sb.writeln("int length = UTF8.encode(result).length;");
+      _sb.writeln("request.response..contentLength = length..write(result);");
+    }
   }
 
   String _getTypeFromFuture(String returnType) {
