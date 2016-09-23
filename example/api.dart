@@ -10,15 +10,15 @@ part 'api.g.dart';
 
 class UserResource {
   @Route(methods: const ['POST'])
-  @DecodeBodyToJson()
-  @EncodeResponseToJson()
   Future<Map<String, String>> getUser(Map<String, String> json) async {
     return json;
   }
 
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
-  void getUserWithId(HttpRequest request, String id, {String toto}) {
-    request.response..writeln(id)..writeln(toto);
+  List<int> getUserWithId(
+      HttpRequest request, Map<String, dynamic> json, String id,
+      {String toto}) {
+    return [12, 13];
   }
 }
 
@@ -30,5 +30,7 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   }
 
   @Group(path: 'users')
+  @DecodeBodyToJson()
+  @EncodeResponseToJson()
   UserResource users = new UserResource();
 }

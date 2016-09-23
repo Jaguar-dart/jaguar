@@ -106,7 +106,8 @@ class Writer {
     _sb.writeln(
         "Future<dynamic> _getJsonFromBody(HttpRequest request) async {");
     _sb.writeln("mustBeContentType(request, ContentType.JSON);");
-    _sb.writeln("if (request.contentLength == 0) {");
+    _sb.writeln("if (request.contentLength <= 0) {");
+    _sb.writeln("return null;");
     _sb.writeln("throw new BadRequestError('Your json is empty');");
     _sb.writeln("}");
     _sb.writeln("String data = await getUtf8Data(request);");
@@ -154,8 +155,11 @@ class Writer {
         if (type.startsWith("Map") || type.startsWith("List")) {
           _sb.writeln("String stringifyResult = JSON.encode(result);");
           _sb.writeln("int length = UTF8.encode(stringifyResult).length;");
+          _sb.writeln("request.response");
           _sb.writeln(
-              "request.response..contentLength = length..write(stringifyResult);");
+              "..headers.add('Content-Type', ContentType.JSON.toString())");
+          _sb.writeln("..contentLength = length");
+          _sb.writeln("..write(stringifyResult);");
         }
       }
     });
@@ -163,6 +167,8 @@ class Writer {
       if (type == "String") {
         _sb.writeln("int length = UTF8.encode(result).length;");
         _sb.writeln("request.response..contentLength = length..write(result);");
+      } else if (type != null && type.startsWith("Map")) {
+        _sb.writeln("request.response.write(result);");
       }
     }
   }

@@ -37,13 +37,16 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
     sb.writeln("//\t$className ${annotation.name} ${annotation.version}");
     Writer writer = new Writer(className);
 
-    await _apiResourceRecursion(
+    await _groupRecursion(
         classElement, writer, "/${annotation.name}/${annotation.version}");
     return writer.generate();
   }
 
-  Future<Null> _apiResourceRecursion(ClassElement classElement, Writer writer,
-      [String prefix = '', String resourceName = '']) async {
+  Future<Null> _groupRecursion(ClassElement classElement, Writer writer,
+      [String prefix = '',
+      String resourceName = '',
+      List<dynamic> parentPreparesRequest = const [],
+      List<dynamic> parentPreparesResponse = const []]) async {
     classElement.methods.forEach((MethodElement methodElement) {
       Map<int, ElementAnnotation> routes = <int, ElementAnnotation>{};
       Map<int, ElementAnnotation> decodeJsonBodys = <int, ElementAnnotation>{};
@@ -63,8 +66,10 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
 
       routes.forEach((int key, ElementAnnotation annotation) {
         Route route = instantiateAnnotation(annotation);
-        List<dynamic> preparesRequest = <dynamic>[];
-        List<dynamic> preparesResponse = <dynamic>[];
+        List<dynamic> preparesRequest = <dynamic>[]
+          ..addAll(parentPreparesRequest);
+        List<dynamic> preparesResponse = <dynamic>[]
+          ..addAll(parentPreparesResponse);
         for (int i = 0; i < methodElement.metadata.length; i++) {
           if (decodeJsonBodys.containsKey(i)) {
             DecodeBodyToJson decode = instantiateAnnotation(decodeJsonBodys[i]);
@@ -90,22 +95,59 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
 
     for (int i = 0; i < classElement.fields.length; i++) {
       FieldElement fieldElement = classElement.fields[i];
-      List<FieldElement> apiResourcesFields = <FieldElement>[];
-      List<ElementAnnotation> apiResources =
-          fieldElement.metadata.where((ElementAnnotation elementAnnotation) {
-        bool match = matchAnnotation(Group, elementAnnotation);
-        if (match) {
-          apiResourcesFields.add(fieldElement);
-          return true;
+      Map<int, FieldElement> groupFields = <int, FieldElement>{};
+      Map<int, ElementAnnotation> groups = <int, ElementAnnotation>{};
+      List<dynamic> prepareRequest = <dynamic>[]..addAll(parentPreparesRequest);
+      List<dynamic> prepareResponse = <dynamic>[]
+        ..addAll(parentPreparesResponse);
+      fieldElement.metadata
+          .asMap()
+          .forEach((int key, ElementAnnotation elementAnnotation) {
+        if (matchAnnotation(Group, elementAnnotation)) {
+          groups.putIfAbsent(key, () => elementAnnotation);
+          groupFields.putIfAbsent(key, () => fieldElement);
+        } else if (matchAnnotation(DecodeBodyToJson, elementAnnotation)) {
+          DecodeBodyToJson decodeBodyToJson =
+              instantiateAnnotation(elementAnnotation);
+          prepareRequest.add(
+              new DecodeEncodeToJsonInformations(decodeBodyToJson.encoding));
+        } else if (matchAnnotation(EncodeResponseToJson, elementAnnotation)) {
+          EncodeResponseToJson decodeBodyToJson =
+              instantiateAnnotation(elementAnnotation);
+          prepareResponse.add(
+              new DecodeEncodeToJsonInformations(decodeBodyToJson.encoding));
         }
-        return false;
-      }).toList();
+      });
 
-      for (int i = 0; i < apiResources.length; i++) {
-        Group apiResource = instantiateAnnotation(apiResources[i]);
-        await _apiResourceRecursion(apiResourcesFields[i].type.element, writer,
-            "$prefix/${apiResource.path}", apiResourcesFields[i].displayName);
+      for (int i = 0; i < groupFields.length; i++) {
+        Group group = instantiateAnnotation(groups[i]);
+        for (int j = 0; j < fieldElement.metadata.length; j++) {}
+        await _groupRecursion(
+            groupFields[i].type.element,
+            writer,
+            "$prefix/${group.path}",
+            groupFields[i].displayName,
+            prepareRequest,
+            prepareResponse);
       }
+
+      // List<FieldElement> apiResourcesFields = <FieldElement>[];
+      // List<ElementAnnotation> apiResources =
+      //     fieldElement.metadata.where((ElementAnnotation elementAnnotation) {
+      //   bool match = matchAnnotation(Group, elementAnnotation);
+      //   if (match) {
+      //     apiResourcesFields.add(fieldElement);
+      //     return true;
+      //   }
+      //   return false;
+      // }).toList();
+      //
+      // for (int i = 0; i < apiResources.length; i++) {
+      //   Group apiResource = instantiateAnnotation(apiResources[i]);
+      //   await _apiResourceRecursion(apiResourcesFields[i].type.element, writer,
+      //       "$prefix/${apiResource.path}", apiResourcesFields[i].displayName);
+      // }
+
     }
   }
 

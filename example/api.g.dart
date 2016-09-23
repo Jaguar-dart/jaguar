@@ -35,6 +35,7 @@ abstract class _$JaguarExampleApi {
       String stringifyResult = JSON.encode(result);
       int length = UTF8.encode(stringifyResult).length;
       request.response
+        ..headers.add('Content-Type', ContentType.JSON.toString())
         ..contentLength = length
         ..write(stringifyResult);
       return true;
@@ -42,11 +43,19 @@ abstract class _$JaguarExampleApi {
     match = _routes[2]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      users.getUserWithId(
+      var json = await _getJsonFromBody(request);
+      List<int> result = users.getUserWithId(
         request,
+        json,
         args[0],
         toto: request.requestedUri.queryParameters['toto'],
       );
+      String stringifyResult = JSON.encode(result);
+      int length = UTF8.encode(stringifyResult).length;
+      request.response
+        ..headers.add('Content-Type', ContentType.JSON.toString())
+        ..contentLength = length
+        ..write(stringifyResult);
       return true;
     }
     return null;
@@ -54,7 +63,8 @@ abstract class _$JaguarExampleApi {
 
   Future<dynamic> _getJsonFromBody(HttpRequest request) async {
     mustBeContentType(request, ContentType.JSON);
-    if (request.contentLength == 0) {
+    if (request.contentLength <= 0) {
+      return null;
       throw new BadRequestError('Your json is empty');
     }
     String data = await getUtf8Data(request);
