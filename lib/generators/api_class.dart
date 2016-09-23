@@ -36,9 +36,29 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
     StringBuffer sb = new StringBuffer();
     sb.writeln("//\t$className ${annotation.name} ${annotation.version}");
     Writer writer = new Writer(className);
+    List<dynamic> prepareRequest = <dynamic>[];
+    List<dynamic> prepareResponse = <dynamic>[];
+    element.metadata.forEach((ElementAnnotation elementAnnotation) {
+      if (matchAnnotation(DecodeBodyToJson, elementAnnotation)) {
+        DecodeBodyToJson decodeBodyToJson =
+            instantiateAnnotation(elementAnnotation);
+        prepareRequest
+            .add(new DecodeEncodeToJsonInformations(decodeBodyToJson.encoding));
+      } else if (matchAnnotation(EncodeResponseToJson, elementAnnotation)) {
+        EncodeResponseToJson decodeBodyToJson =
+            instantiateAnnotation(elementAnnotation);
+        prepareResponse
+            .add(new DecodeEncodeToJsonInformations(decodeBodyToJson.encoding));
+      }
+    });
 
     await _groupRecursion(
-        classElement, writer, "/${annotation.name}/${annotation.version}");
+        classElement,
+        writer,
+        "/${annotation.name}/${annotation.version}",
+        "",
+        prepareRequest,
+        prepareResponse);
     return writer.generate();
   }
 
@@ -130,32 +150,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
             prepareRequest,
             prepareResponse);
       }
-
-      // List<FieldElement> apiResourcesFields = <FieldElement>[];
-      // List<ElementAnnotation> apiResources =
-      //     fieldElement.metadata.where((ElementAnnotation elementAnnotation) {
-      //   bool match = matchAnnotation(Group, elementAnnotation);
-      //   if (match) {
-      //     apiResourcesFields.add(fieldElement);
-      //     return true;
-      //   }
-      //   return false;
-      // }).toList();
-      //
-      // for (int i = 0; i < apiResources.length; i++) {
-      //   Group apiResource = instantiateAnnotation(apiResources[i]);
-      //   await _apiResourceRecursion(apiResourcesFields[i].type.element, writer,
-      //       "$prefix/${apiResource.path}", apiResourcesFields[i].displayName);
-      // }
-
     }
   }
 
   String toString() => 'ApiClass';
 }
-
-// class ApiClassGenerator extends Generator {
-//   Future<String> generator(Element element, BuildStep buildStep) async {
-//     return "hello";
-//   }
-// }

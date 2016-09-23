@@ -23,14 +23,17 @@ class UserResource {
 }
 
 @Api(name: 'test', version: 'v1')
+@DecodeBodyToJson()
+@EncodeResponseToJson()
 class ExampleApi extends Object with _$JaguarExampleApi {
-  @Route(path: 'ping', methods: const ['GET'])
-  Future<Null> get(HttpRequest request) async {
-    request.response.write("pong");
-  }
+  // @Route(path: 'ping', methods: const ['GET'])
+  // Future<Null> get(HttpRequest request) async {
+  //   request.response.write("pong");
+  // }
 
   @Group(path: 'users')
-  @DecodeBodyToJson()
-  @EncodeResponseToJson()
   UserResource users = new UserResource();
+
+  @Group(path: 'users1')
+  UserResource users1 = new UserResource();
 }

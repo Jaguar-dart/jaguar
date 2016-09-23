@@ -9,23 +9,16 @@ part of api;
 
 abstract class _$JaguarExampleApi {
   List<RouteInformations> _routes = <RouteInformations>[
-    new RouteInformations("/test/v1/ping", ["GET"]),
     new RouteInformations("/test/v1/users/", ["POST"]),
     new RouteInformations("/test/v1/users/([a-zA-Z0-9]+)", ["GET"]),
+    new RouteInformations("/test/v1/users1/", ["POST"]),
+    new RouteInformations("/test/v1/users1/([a-zA-Z0-9]+)", ["GET"]),
   ];
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     List<String> args = <String>[];
     bool match = false;
     match = _routes[0]
-        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
-    if (match) {
-      Null result = await get(
-        request,
-      );
-      return true;
-    }
-    match = _routes[1]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
       var json = await _getJsonFromBody(request);
@@ -40,11 +33,44 @@ abstract class _$JaguarExampleApi {
         ..write(stringifyResult);
       return true;
     }
-    match = _routes[2]
+    match = _routes[1]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
       var json = await _getJsonFromBody(request);
       List<int> result = users.getUserWithId(
+        request,
+        json,
+        args[0],
+        toto: request.requestedUri.queryParameters['toto'],
+      );
+      String stringifyResult = JSON.encode(result);
+      int length = UTF8.encode(stringifyResult).length;
+      request.response
+        ..headers.add('Content-Type', ContentType.JSON.toString())
+        ..contentLength = length
+        ..write(stringifyResult);
+      return true;
+    }
+    match = _routes[2]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      var json = await _getJsonFromBody(request);
+      Map<String, String> result = await users1.getUser(
+        json,
+      );
+      String stringifyResult = JSON.encode(result);
+      int length = UTF8.encode(stringifyResult).length;
+      request.response
+        ..headers.add('Content-Type', ContentType.JSON.toString())
+        ..contentLength = length
+        ..write(stringifyResult);
+      return true;
+    }
+    match = _routes[3]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      var json = await _getJsonFromBody(request);
+      List<int> result = users1.getUserWithId(
         request,
         json,
         args[0],
