@@ -107,7 +107,7 @@ class Writer {
         "Future<dynamic> _getJsonFromBody(HttpRequest request) async {");
     _sb.writeln("mustBeContentType(request, ContentType.JSON);");
     _sb.writeln("if (request.contentLength == 0) {");
-    _sb.writeln("throw new BadRequestError('Your jons is empty');");
+    _sb.writeln("throw new BadRequestError('Your json is empty');");
     _sb.writeln("}");
     _sb.writeln("String data = await getUtf8Data(request);");
     _sb.writeln("return JSON.decode(data);");
@@ -116,8 +116,8 @@ class Writer {
   }
 
   void _prepareFunction(RouteInformationsGenerator route) {
-    route.prepares.forEach((dynamic prepare) {
-      if (prepare is DecodeBodyToJsonInformations) {
+    route.preparesRequest.forEach((dynamic prepare) {
+      if (prepare is DecodeEncodeToJsonInformations) {
         _needGetJsonFromBodyFunction = true;
         if (prepare.encoding == 'utf-8') {
           _sb.writeln("var json = await _getJsonFromBody(request);");
@@ -149,14 +149,26 @@ class Writer {
   }
 
   void _executeResponse(RouteInformationsGenerator route, String type) {
-    if (type == "String") {
-      _sb.writeln("int length = UTF8.encode(result).length;");
-      _sb.writeln("request.response..contentLength = length..write(result);");
+    route.preparesResponse.forEach((dynamic prepare) {
+      if (prepare is DecodeEncodeToJsonInformations) {
+        if (type.startsWith("Map") || type.startsWith("List")) {
+          _sb.writeln("String stringifyResult = JSON.encode(result);");
+          _sb.writeln("int length = UTF8.encode(stringifyResult).length;");
+          _sb.writeln(
+              "request.response..contentLength = length..write(stringifyResult);");
+        }
+      }
+    });
+    if (route.preparesResponse.isEmpty) {
+      if (type == "String") {
+        _sb.writeln("int length = UTF8.encode(result).length;");
+        _sb.writeln("request.response..contentLength = length..write(result);");
+      }
     }
   }
 
   String _getTypeFromFuture(String returnType) {
-    RegExp regExp = new RegExp("^Future<([A-Za-z]+)>\$");
+    RegExp regExp = new RegExp("^Future<([A-Za-z, <>]+)>\$");
     Iterable<Match> matchs = regExp.allMatches(returnType);
     if (matchs.isEmpty) {
       return "var";

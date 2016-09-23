@@ -11,9 +11,9 @@ part 'api.g.dart';
 class UserResource {
   @Route(methods: const ['POST'])
   @DecodeBodyToJson()
-  Future<String> getUser(Map<String, String> json) async {
-    print(json);
-    return "get user";
+  @EncodeResponseToJson()
+  Future<Map<String, String>> getUser(Map<String, String> json) async {
+    return json;
   }
 
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])

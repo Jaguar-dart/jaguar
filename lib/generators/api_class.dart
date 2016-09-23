@@ -47,6 +47,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
     classElement.methods.forEach((MethodElement methodElement) {
       Map<int, ElementAnnotation> routes = <int, ElementAnnotation>{};
       Map<int, ElementAnnotation> decodeJsonBodys = <int, ElementAnnotation>{};
+      Map<int, ElementAnnotation> encodeResponseToJSon =
+          <int, ElementAnnotation>{};
       methodElement.metadata
           .asMap()
           .forEach((int key, ElementAnnotation elementAnnotation) {
@@ -54,16 +56,25 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
           routes.putIfAbsent(key, () => elementAnnotation);
         } else if (matchAnnotation(DecodeBodyToJson, elementAnnotation)) {
           decodeJsonBodys.putIfAbsent(key, () => elementAnnotation);
+        } else if (matchAnnotation(EncodeResponseToJson, elementAnnotation)) {
+          encodeResponseToJSon.putIfAbsent(key, () => elementAnnotation);
         }
       });
 
       routes.forEach((int key, ElementAnnotation annotation) {
         Route route = instantiateAnnotation(annotation);
-        List<dynamic> prepares = <dynamic>[];
+        List<dynamic> preparesRequest = <dynamic>[];
+        List<dynamic> preparesResponse = <dynamic>[];
         for (int i = 0; i < methodElement.metadata.length; i++) {
           if (decodeJsonBodys.containsKey(i)) {
             DecodeBodyToJson decode = instantiateAnnotation(decodeJsonBodys[i]);
-            prepares.add(new DecodeBodyToJsonInformations(decode.encoding));
+            preparesRequest
+                .add(new DecodeEncodeToJsonInformations(decode.encoding));
+          } else if (encodeResponseToJSon.containsKey(i)) {
+            EncodeResponseToJson encode =
+                instantiateAnnotation(encodeResponseToJSon[i]);
+            preparesResponse
+                .add(new DecodeEncodeToJsonInformations(encode.encoding));
           }
         }
         writer.addRoute(new RouteInformationsGenerator(
@@ -72,7 +83,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
             "$resourceName${resourceName.isEmpty ? '' : '.'}${methodElement.displayName}",
             methodElement.returnType.displayName,
             methodElement.parameters,
-            prepares: prepares));
+            preparesRequest: preparesRequest,
+            preparesResponse: preparesResponse));
       });
     });
 

@@ -28,3 +28,9 @@ class DecodeBodyToJson {
 
   const DecodeBodyToJson({this.encoding: 'utf-8'});
 }
+
+class EncodeResponseToJson {
+  final String encoding;
+
+  const EncodeResponseToJson({this.encoding: 'utf-8'});
+}

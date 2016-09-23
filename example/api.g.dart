@@ -29,13 +29,14 @@ abstract class _$JaguarExampleApi {
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
       var json = await _getJsonFromBody(request);
-      String result = await users.getUser(
+      Map<String, String> result = await users.getUser(
         json,
       );
-      int length = UTF8.encode(result).length;
+      String stringifyResult = JSON.encode(result);
+      int length = UTF8.encode(stringifyResult).length;
       request.response
         ..contentLength = length
-        ..write(result);
+        ..write(stringifyResult);
       return true;
     }
     match = _routes[2]
@@ -54,7 +55,7 @@ abstract class _$JaguarExampleApi {
   Future<dynamic> _getJsonFromBody(HttpRequest request) async {
     mustBeContentType(request, ContentType.JSON);
     if (request.contentLength == 0) {
-      throw new BadRequestError('Your jons is empty');
+      throw new BadRequestError('Your json is empty');
     }
     String data = await getUtf8Data(request);
     return JSON.decode(data);
@@ -81,7 +82,7 @@ abstract class _$JaguarExampleApi {
         request.headers.contentType.charset != contentType.charset) {
       String value = request.headers.contentType?.charset ?? '';
       throw new BadRequestError(
-          'The request has chaset $value instead of ${contentType.charset}');
+          'The request has charset $value instead of ${contentType.charset}');
     }
   }
 }
