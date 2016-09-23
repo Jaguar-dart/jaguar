@@ -11,6 +11,13 @@ import 'package:jaguar/src/annotations.dart';
 import 'writer.dart';
 import 'route.dart';
 
+class GroupInformations {
+  final String prefix;
+  final String resourceName;
+
+  GroupInformations(this.prefix, this.resourceName);
+}
+
 class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
   const ApiClassAnnotationGenerator();
 
@@ -38,19 +45,34 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
   Future<Null> _apiResourceRecursion(ClassElement classElement, Writer writer,
       [String prefix = '', String resourceName = '']) async {
     classElement.methods.forEach((MethodElement methodElement) {
-      List<ElementAnnotation> apiMethods = methodElement.metadata
-          .where((ElementAnnotation elementAnnotation) =>
-              matchAnnotation(Route, elementAnnotation))
-          .toList();
+      Map<int, ElementAnnotation> routes = <int, ElementAnnotation>{};
+      Map<int, ElementAnnotation> decodeJsonBodys = <int, ElementAnnotation>{};
+      methodElement.metadata
+          .asMap()
+          .forEach((int key, ElementAnnotation elementAnnotation) {
+        if (matchAnnotation(Route, elementAnnotation)) {
+          routes.putIfAbsent(key, () => elementAnnotation);
+        } else if (matchAnnotation(DecodeBodyToJson, elementAnnotation)) {
+          decodeJsonBodys.putIfAbsent(key, () => elementAnnotation);
+        }
+      });
 
-      apiMethods.forEach((ElementAnnotation elementAnnotation) {
-        Route apiMethod = instantiateAnnotation(elementAnnotation);
+      routes.forEach((int key, ElementAnnotation annotation) {
+        Route route = instantiateAnnotation(annotation);
+        List<dynamic> prepares = <dynamic>[];
+        for (int i = 0; i < methodElement.metadata.length; i++) {
+          if (decodeJsonBodys.containsKey(i)) {
+            DecodeBodyToJson decode = instantiateAnnotation(decodeJsonBodys[i]);
+            prepares.add(new DecodeBodyToJsonInformations(decode.encoding));
+          }
+        }
         writer.addRoute(new RouteInformationsGenerator(
-            "$prefix/${apiMethod.path}",
-            apiMethod.methods,
+            "$prefix/${route.path}",
+            route.methods,
             "$resourceName${resourceName.isEmpty ? '' : '.'}${methodElement.displayName}",
             methodElement.returnType.displayName,
-            methodElement.parameters));
+            methodElement.parameters,
+            prepares: prepares));
       });
     });
 

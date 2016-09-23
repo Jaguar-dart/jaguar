@@ -22,3 +22,9 @@ class Group {
 
   const Group({this.path: ''});
 }
+
+class DecodeBodyToJson {
+  final String encoding;
+
+  const DecodeBodyToJson({this.encoding: 'utf-8'});
+}

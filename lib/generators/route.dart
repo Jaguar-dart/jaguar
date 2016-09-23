@@ -2,15 +2,23 @@ library source_gen_experimentation.generators.route;
 
 import 'package:analyzer/dart/element/element.dart';
 
+class DecodeBodyToJsonInformations {
+  final String encoding;
+
+  DecodeBodyToJsonInformations(this.encoding);
+}
+
 class RouteInformationsGenerator {
   String path;
   List<String> methods;
   String signature;
   String returnType;
   List<ParameterElement> parameters;
+  List<dynamic> prepares;
 
-  RouteInformationsGenerator(this.path, this.methods, this.signature,
-      this.returnType, this.parameters);
+  RouteInformationsGenerator(
+      this.path, this.methods, this.signature, this.returnType, this.parameters,
+      {this.prepares: const []});
 
   String toString() => "$path $methods";
 }

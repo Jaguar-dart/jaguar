@@ -9,8 +9,10 @@ import 'package:jaguar/jaguar.dart';
 part 'api.g.dart';
 
 class UserResource {
-  @Route(methods: const ['GET'])
-  Future<String> getUser() async {
+  @Route(methods: const ['POST'])
+  @DecodeBodyToJson()
+  Future<String> getUser(Map<String, String> json) async {
+    print(json);
     return "get user";
   }
 
