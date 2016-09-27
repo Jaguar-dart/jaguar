@@ -15,25 +15,27 @@ class UserResource {
   }
 
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
-  List<int> getUserWithId(
-      HttpRequest request, Map<String, dynamic> json, String id,
-      {String toto}) {
+  List<int> getUserWithId(HttpRequest request, String id, {String toto}) {
     return [12, 13];
   }
 }
 
-@Api(name: 'test', version: 'v1')
 @DecodeBodyToJson()
-@EncodeResponseToJson()
+@Api(name: 'test', version: 'v1')
 class ExampleApi extends Object with _$JaguarExampleApi {
-  // @Route(path: 'ping', methods: const ['GET'])
-  // Future<Null> get(HttpRequest request) async {
-  //   request.response.write("pong");
-  // }
+  @Route(path: 'ping', methods: const ['POST'])
+  @EncodeResponseToJson()
+  Map<String, String> ping(Map<String, String> json) {
+    return json;
+  }
+
+  @Route(path: 'test', methods: const ['POST'])
+  test(HttpRequest request, Map<String, String> json) {
+    print(json);
+    return json;
+  }
 
   @Group(path: 'users')
+  @EncodeResponseToJson()
   UserResource users = new UserResource();
-
-  @Group(path: 'users1')
-  UserResource users1 = new UserResource();
 }

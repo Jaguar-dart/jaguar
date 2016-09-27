@@ -9,104 +9,11 @@ part of api;
 
 abstract class _$JaguarExampleApi {
   List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations("/test/v1/ping", ["POST"]),
+    new RouteInformations("/test/v1/test", ["POST"]),
     new RouteInformations("/test/v1/users/", ["POST"]),
     new RouteInformations("/test/v1/users/([a-zA-Z0-9]+)", ["GET"]),
-    new RouteInformations("/test/v1/users1/", ["POST"]),
-    new RouteInformations("/test/v1/users1/([a-zA-Z0-9]+)", ["GET"]),
   ];
-
-  Future<bool> handleApiRequest(HttpRequest request) async {
-    List<String> args = <String>[];
-    bool match = false;
-    match = _routes[0]
-        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
-    if (match) {
-      var json = await _getJsonFromBody(request);
-      Map<String, String> result = await users.getUser(
-        json,
-      );
-      String stringifyResult = JSON.encode(result);
-      int length = UTF8.encode(stringifyResult).length;
-      request.response
-        ..headers.add('Content-Type', ContentType.JSON.toString())
-        ..contentLength = length
-        ..write(stringifyResult);
-      return true;
-    }
-    match = _routes[1]
-        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
-    if (match) {
-      var json = await _getJsonFromBody(request);
-      List<int> result = users.getUserWithId(
-        request,
-        json,
-        args[0],
-        toto: request.requestedUri.queryParameters['toto'],
-      );
-      String stringifyResult = JSON.encode(result);
-      int length = UTF8.encode(stringifyResult).length;
-      request.response
-        ..headers.add('Content-Type', ContentType.JSON.toString())
-        ..contentLength = length
-        ..write(stringifyResult);
-      return true;
-    }
-    match = _routes[2]
-        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
-    if (match) {
-      var json = await _getJsonFromBody(request);
-      Map<String, String> result = await users1.getUser(
-        json,
-      );
-      String stringifyResult = JSON.encode(result);
-      int length = UTF8.encode(stringifyResult).length;
-      request.response
-        ..headers.add('Content-Type', ContentType.JSON.toString())
-        ..contentLength = length
-        ..write(stringifyResult);
-      return true;
-    }
-    match = _routes[3]
-        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
-    if (match) {
-      var json = await _getJsonFromBody(request);
-      List<int> result = users1.getUserWithId(
-        request,
-        json,
-        args[0],
-        toto: request.requestedUri.queryParameters['toto'],
-      );
-      String stringifyResult = JSON.encode(result);
-      int length = UTF8.encode(stringifyResult).length;
-      request.response
-        ..headers.add('Content-Type', ContentType.JSON.toString())
-        ..contentLength = length
-        ..write(stringifyResult);
-      return true;
-    }
-    return null;
-  }
-
-  Future<dynamic> _getJsonFromBody(HttpRequest request) async {
-    mustBeContentType(request, ContentType.JSON);
-    if (request.contentLength <= 0) {
-      return null;
-      throw new BadRequestError('Your json is empty');
-    }
-    String data = await getUtf8Data(request);
-    return JSON.decode(data);
-  }
-
-  Future<String> getUtf8Data(HttpRequest request) async {
-    Completer<String> completer = new Completer<String>();
-    String datas = '';
-    request.transform(UTF8.decoder).listen((String data) {
-      datas += data;
-    },
-        onDone: () => completer.complete(datas),
-        onError: (dynamic error) => completer.completeError(error));
-    return completer.future;
-  }
 
   void mustBeContentType(HttpRequest request, ContentType contentType) {
     if (request.headers.contentType.value != contentType.value) {
@@ -120,5 +27,101 @@ abstract class _$JaguarExampleApi {
       throw new BadRequestError(
           'The request has charset $value instead of ${contentType.charset}');
     }
+  }
+
+  Future<String> getDataFromBodyInUtf8(HttpRequest request) async {
+    Completer<String> completer = new Completer<String>();
+    String datas = '';
+    request.transform(UTF8.decoder).listen((String data) {
+      datas += data;
+    },
+        onDone: () => completer.complete(datas),
+        onError: (dynamic error) => completer.completeError(error));
+    return completer.future;
+  }
+
+  Future<dynamic> getJsonFromBodyInUtf8(HttpRequest request) async {
+    mustBeContentType(request, ContentType.parse('application/json'));
+    if (request.contentLength <= 0) {
+      return null;
+    }
+    String data = await getDataFromBodyInUtf8(request);
+    return JSON.decode(data);
+  }
+
+  String getJsonFromResponse(dynamic data) {
+    return JSON.encode(data);
+  }
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      var json = await getJsonFromBodyInUtf8(
+        request,
+      );
+      Map<String, String> result = ping(
+        json,
+      );
+      String response = getJsonFromResponse(
+        result,
+      );
+      int length = UTF8.encode(response).length;
+      request.response
+        ..headers.add('Content-Type', 'application/json')
+        ..contentLength = length
+        ..write(response);
+      return true;
+    }
+    match = _routes[1]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      var json = await getJsonFromBodyInUtf8(
+        request,
+      );
+      var result = test(
+        request,
+        json,
+      );
+      request.response.write(result);
+      return true;
+    }
+    match = _routes[2]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      var json = await getJsonFromBodyInUtf8(
+        request,
+      );
+      Map<String, String> result = await getUser(
+        json,
+      );
+      String response = getJsonFromResponse(
+        result,
+      );
+      int length = UTF8.encode(response).length;
+      request.response
+        ..headers.add('Content-Type', 'application/json')
+        ..contentLength = length
+        ..write(response);
+      return true;
+    }
+    match = _routes[3]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      List<int> result =
+          getUserWithId(request, json, request.uri.queryParameters['toto']);
+      String response = getJsonFromResponse(
+        result,
+      );
+      int length = UTF8.encode(response).length;
+      request.response
+        ..headers.add('Content-Type', 'application/json')
+        ..contentLength = length
+        ..write(response);
+      return true;
+    }
+    return false;
   }
 }

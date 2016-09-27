@@ -18,8 +18,8 @@ class Jaguar {
     try {
       for (int i = 0; i < configuration.apis.length; i++) {
         var apiClass = configuration.apis[i];
-        var result = await apiClass.handleApiRequest(request);
-        if (result != null) break;
+        bool result = await apiClass.handleApiRequest(request);
+        if (result) break;
       }
     } catch (e) {
       print(e);

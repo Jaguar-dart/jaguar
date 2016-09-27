@@ -1,6 +1,8 @@
 library source_gen_experimentation.annotations;
 
-class Api {
+import '../generators/processor.dart';
+
+class Api extends Processor {
   final String name;
   final String version;
 
@@ -9,7 +11,7 @@ class Api {
   String toString() => "$name $version";
 }
 
-class Route {
+class Route extends Processor {
   final String path;
 
   final List<String> methods;
@@ -17,20 +19,32 @@ class Route {
   const Route({this.path: '', this.methods});
 }
 
-class Group {
+class Group extends Processor {
   final String path;
 
   const Group({this.path: ''});
 }
 
-class DecodeBodyToJson {
-  final String encoding;
+class MustBeContentType extends PreProcessor {
+  final String contentType;
 
-  const DecodeBodyToJson({this.encoding: 'utf-8'});
+  const MustBeContentType({this.contentType: 'text/plain'});
 }
 
-class EncodeResponseToJson {
+class GetRawDataFromBody extends PreProcessor {
   final String encoding;
 
-  const EncodeResponseToJson({this.encoding: 'utf-8'});
+  const GetRawDataFromBody({this.encoding: 'utf-8'});
+}
+
+class DecodeBodyToJson extends PreProcessor {
+  final String contentType;
+  final String charset;
+
+  const DecodeBodyToJson(
+      {this.contentType: 'application/json', this.charset: ''});
+}
+
+class EncodeResponseToJson extends PostProcessor {
+  const EncodeResponseToJson();
 }
