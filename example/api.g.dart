@@ -92,13 +92,8 @@ abstract class _$JaguarExampleApi {
     match = _routes[3]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      Db mongoDb = await getMongoDbInstance(
-        'mongodb://localhost:27017/',
-        'test',
-      );
-      List<int> result = users.getUserWithId(request, mongoDb, args[0],
+      List<int> result = users.getUserWithId(request, args[0],
           toto: request.uri.queryParameters['toto']);
-      await mongoDb.close();
       request.response.write(result);
       return true;
     }
