@@ -150,6 +150,21 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
                 parameter.type.toString(), parameter.displayName));
           }
         });
+        preProcessors = preProcessors.where((PreProcessor preProcessor) {
+          for (int i = 0; i < route.methods.length; i++) {
+            for (int j = 0; j < preProcessor.authorizedMethods.length; j++) {
+              if (route.methods[i] == preProcessor.authorizedMethods[j]) {
+                return true;
+              }
+            }
+          }
+          return false;
+        }).toList();
+        String functionName = method.displayName;
+        if (resourceName.isNotEmpty) {
+          functionName = "$resourceName.$functionName";
+        }
+
         routeInformationsProcessor = new RouteInformationsProcessor(
             path: "$prefix/${route.path}",
             methods: route.methods,
@@ -160,7 +175,7 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
                 })
                 .where((String variableName) => variableName != null)
                 .toList(),
-            functionName: method.displayName,
+            functionName: functionName,
             returnType: method.returnType.toString(),
             parameters: parameters,
             namedParameters: namedParameters);
@@ -206,6 +221,7 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
         }
       });
       if (hasPassedProcessor) {
+        print(fieldElement.displayName);
         await _groupRecursion(
             fieldElement.type.element,
             writer,

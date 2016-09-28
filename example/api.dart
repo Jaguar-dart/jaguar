@@ -16,6 +16,7 @@ class UserResource {
 
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
   List<int> getUserWithId(HttpRequest request, String id, {String toto}) {
+    request.response..writeln(id)..writeln(toto);
     return [12, 13];
   }
 }
@@ -24,7 +25,6 @@ class UserResource {
 @Api(name: 'test', version: 'v1')
 class ExampleApi extends Object with _$JaguarExampleApi {
   @Route(path: 'ping', methods: const ['POST'])
-  @EncodeResponseToJson()
   Map<String, String> ping(Map<String, String> json) {
     return json;
   }
@@ -36,6 +36,5 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   }
 
   @Group(path: 'users')
-  @EncodeResponseToJson()
   UserResource users = new UserResource();
 }

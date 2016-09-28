@@ -111,13 +111,16 @@ class RouteInformationsProcessor extends Processor {
 
     namedParameters.forEach((Parameter param) {
       if (param.type == "String") {
-        sb.write("request.uri.queryParameters['${param.name}']");
+        sb.write("${param.name}: request.uri.queryParameters['${param.name}']");
       } else if (param.type == "int") {
-        sb.write("int.parse(request.uri.queryParameters['${param.name}'])");
+        sb.write(
+            "${param.name}: int.parse(request.uri.queryParameters['${param.name}'])");
       } else if (param.type == "double") {
-        sb.write("double.parse(request.uri.queryParameters['${param.name}'])");
+        sb.write(
+            "${param.name}: double.parse(request.uri.queryParameters['${param.name}'])");
       } else if (param.type == "num") {
-        sb.write("num.parse(request.uri.queryParameters['${param.name}'])");
+        sb.write(
+            "${param.name}: num.parse(request.uri.queryParameters['${param.name}'])");
       }
     });
   }
@@ -238,7 +241,10 @@ class DecodeBodyToJsonInUtf8PreProcessor extends PreProcessor {
               new GetDataFromBodyInUtf8PreProcessor()
             ],
             authorizedMethods: const <String>[
-              'POST'
+              'POST',
+              'PUT',
+              'DELETE',
+              'OPTIONS'
             ],
             parameters: <Parameter>[
               new Parameter('HttpRequest', 'request')

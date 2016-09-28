@@ -49,10 +49,6 @@ abstract class _$JaguarExampleApi {
     return JSON.decode(data);
   }
 
-  String getJsonFromResponse(dynamic data) {
-    return JSON.encode(data);
-  }
-
   Future<bool> handleApiRequest(HttpRequest request) async {
     List<String> args = <String>[];
     bool match = false;
@@ -65,14 +61,7 @@ abstract class _$JaguarExampleApi {
       Map<String, String> result = ping(
         json,
       );
-      String response = getJsonFromResponse(
-        result,
-      );
-      int length = UTF8.encode(response).length;
-      request.response
-        ..headers.add('Content-Type', 'application/json')
-        ..contentLength = length
-        ..write(response);
+      request.response.write(result);
       return true;
     }
     match = _routes[1]
@@ -94,32 +83,18 @@ abstract class _$JaguarExampleApi {
       var json = await getJsonFromBodyInUtf8(
         request,
       );
-      Map<String, String> result = await getUser(
+      Map<String, String> result = await users.getUser(
         json,
       );
-      String response = getJsonFromResponse(
-        result,
-      );
-      int length = UTF8.encode(response).length;
-      request.response
-        ..headers.add('Content-Type', 'application/json')
-        ..contentLength = length
-        ..write(response);
+      request.response.write(result);
       return true;
     }
     match = _routes[3]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      List<int> result =
-          getUserWithId(request, json, request.uri.queryParameters['toto']);
-      String response = getJsonFromResponse(
-        result,
-      );
-      int length = UTF8.encode(response).length;
-      request.response
-        ..headers.add('Content-Type', 'application/json')
-        ..contentLength = length
-        ..write(response);
+      List<int> result = users.getUserWithId(request, args[0],
+          toto: request.uri.queryParameters['toto']);
+      request.response.write(result);
       return true;
     }
     return false;
