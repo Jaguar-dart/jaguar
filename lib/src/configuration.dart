@@ -26,6 +26,9 @@ class Configuration {
 }
 
 Future<Null> serve(Configuration configuration) async {
+  String url =
+      "${configuration.context == null ? 'http': 'https'}://${configuration.address}:${configuration.port}/";
+  print("Start your server on $url");
   if (configuration.multiThread) {
     for (int i = 0; i < Platform.numberOfProcessors - 1; i++) {
       await Isolate.spawn(_serve, configuration);

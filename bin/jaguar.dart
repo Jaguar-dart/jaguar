@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:build/build.dart';
 import 'package:yaml/yaml.dart';
@@ -20,9 +21,9 @@ void launchWatch() {
         print("kill old server");
         Process.killPid(process.pid);
       }
-      print("launch new server");
       String bin = getBin() ?? 'bin/server.dart';
       process = await Process.start('dart', [bin]);
+      process.stdout.transform(UTF8.decoder).listen(stdout.write);
     }
   });
 }
