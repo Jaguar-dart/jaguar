@@ -147,7 +147,7 @@ class OpenMongoDbPreProcessor extends PreProcessor {
             variableName: 'mongoDb',
             functionName: 'getMongoDbInstance');
 
-  void generaFunction(StringBuffer sb) {
+  void generateFunction(StringBuffer sb) {
     sb.writeln(
         "Future<Db> getMongoDbInstance(String uri, String dbName) async {");
     sb.writeln("Db db = new Db('\$uri\$dbName');");

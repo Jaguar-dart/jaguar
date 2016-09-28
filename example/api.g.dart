@@ -49,6 +49,12 @@ abstract class _$JaguarExampleApi {
     return JSON.decode(data);
   }
 
+  Future<Db> getMongoDbInstance(String uri, String dbName) async {
+    Db db = new Db('$uri$dbName');
+    await db.open();
+    return db;
+  }
+
   Future<bool> handleApiRequest(HttpRequest request) async {
     List<String> args = <String>[];
     bool match = false;
