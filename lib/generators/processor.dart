@@ -1,4 +1,4 @@
-library source_gen_experimentation.generators.processor;
+library jaguar.generators.processor;
 
 import 'dart:io';
 

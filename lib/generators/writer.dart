@@ -1,4 +1,4 @@
-library source_gen_experimentation.generators.writer;
+library jaguar.generators.writer;
 
 import 'dart:convert';
 

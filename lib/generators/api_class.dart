@@ -1,4 +1,4 @@
-library source_gen_experimentation.generators.api_class;
+library jaguar.generators.api_class;
 
 import 'dart:async';
 import 'dart:io';

@@ -1,4 +1,4 @@
-library source_gen_experimentation.generators.route;
+library jaguar.generators.route;
 
 import 'processor.dart';
 

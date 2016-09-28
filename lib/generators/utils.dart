@@ -1,4 +1,4 @@
-library source_gen_experimentation.generators.utils;
+library jaguar.generators.utils;
 
 String getTypeFromFuture(String returnType) {
   RegExp regExp = new RegExp("^Future<([A-Za-z, <>]+)>\$");
