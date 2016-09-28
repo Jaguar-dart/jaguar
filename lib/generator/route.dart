@@ -1,6 +1,8 @@
 library jaguar.generators.route;
 
 import 'processor.dart';
+import 'pre_processor.dart';
+import 'post_processor.dart';
 
 class RouteInformationsGenerator {
   List<PreProcessor> preProcessor;

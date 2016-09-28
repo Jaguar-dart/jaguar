@@ -12,6 +12,8 @@ import 'package:jaguar/src/annotations.dart';
 import 'writer.dart';
 import 'route.dart';
 import 'processor.dart';
+import 'pre_processor.dart';
+import 'post_processor.dart';
 import '../src/annotations.dart';
 
 class GroupInformations {

@@ -1,8 +1,6 @@
-import 'dart:io';
-
 import 'package:build/build.dart';
 
-import 'package:jaguar/generators/phases.dart';
+import 'package:jaguar/generator/phases.dart';
 
 main(List<String> args) {
   if (args.length > 0) {

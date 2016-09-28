@@ -1,6 +1,8 @@
 library source_gen_experimentation.annotations;
 
-import '../generators/processor.dart';
+import '../generator/processor.dart';
+import '../generator/pre_processor.dart';
+import '../generator/post_processor.dart';
 
 class Api extends Processor {
   final String name;
