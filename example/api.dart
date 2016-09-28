@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:jaguar/jaguar.dart';
 
 part 'api.g.dart';
@@ -14,8 +15,10 @@ class UserResource {
     return json;
   }
 
+  @OpenMongoDb(dbName: 'test')
   @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
-  List<int> getUserWithId(HttpRequest request, String id, {String toto}) {
+  List<int> getUserWithId(HttpRequest request, Db db, String id,
+      {String toto}) {
     request.response..writeln(id)..writeln(toto);
     return [12, 13];
   }

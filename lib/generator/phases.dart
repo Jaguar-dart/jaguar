@@ -1,4 +1,4 @@
-library jaguar.generators.phases;
+library jaguar.generator.phases;
 
 import 'dart:io';
 

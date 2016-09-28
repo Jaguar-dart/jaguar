@@ -4,7 +4,7 @@ import 'processor.dart';
 
 abstract class PostProcessor extends Processor {
   const PostProcessor(
-      {List<Parameter> parameters,
+      {List<Parameter> parameters: const <Parameter>[],
       String returnType,
       String functionName,
       String variableName})
@@ -28,4 +28,9 @@ class EncodeResponseToJsonPostProcessor extends PostProcessor {
     sb.writeln("return JSON.encode(data);");
     sb.writeln("}");
   }
+}
+
+class CloseMongoDbPostProcessor extends PostProcessor {
+  const CloseMongoDbPostProcessor()
+      : super(returnType: 'void', functionName: 'await mongoDb.close');
 }

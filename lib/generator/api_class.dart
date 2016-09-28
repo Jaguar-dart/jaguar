@@ -1,4 +1,4 @@
-library jaguar.generators.api_class;
+library jaguar.generator.api_class;
 
 import 'dart:async';
 import 'dart:io';
@@ -50,7 +50,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
       Processor processor = instantiateAnnotation(annotation);
 
       if (processor is PreProcessor) {
-        _addPreProcessor(processor, preProcessors, hasPassedProcessor);
+        _addPreProcessor(
+            processor, preProcessors, postProcessors, hasPassedProcessor);
       } else if (processor is PostProcessor) {
         _addPostProcessor(processor, postProcessors, hasPassedProcessor);
       }
@@ -71,8 +72,11 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
     return writer.generate();
   }
 
-  void _addPreProcessor(PreProcessor preProcessor,
-      List<PreProcessor> preProcessors, bool hasPassedProcessor) {
+  void _addPreProcessor(
+      PreProcessor preProcessor,
+      List<PreProcessor> preProcessors,
+      List<PostProcessor> postProcessors,
+      bool hasPassedProcessor) {
     if (hasPassedProcessor) {
       throw "Your pre processor need to be before the route";
     }
@@ -98,6 +102,11 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
       if (getDataFromBody.encoding == 'utf-8') {
         preProcessors.add(new GetDataFromBodyInUtf8PreProcessor());
       }
+    } else if (preProcessor is OpenMongoDb) {
+      OpenMongoDb openMongoDb = preProcessor;
+      preProcessors.add(new OpenMongoDbPreProcessor(
+          uri: openMongoDb.uri, dbName: openMongoDb.dbName));
+      postProcessors.add(new CloseMongoDbPostProcessor());
     } else {
       preProcessors.add(preProcessor);
     }
@@ -133,7 +142,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
       Processor processor = instantiateAnnotation(annotation);
 
       if (processor is PreProcessor) {
-        _addPreProcessor(processor, preProcessors, hasPassedProcessor);
+        _addPreProcessor(
+            processor, preProcessors, postProcessors, hasPassedProcessor);
       } else if (processor is PostProcessor) {
         _addPostProcessor(processor, postProcessors, hasPassedProcessor);
       }
@@ -212,7 +222,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
         Processor processor = instantiateAnnotation(annotation);
 
         if (processor is PreProcessor) {
-          _addPreProcessor(processor, preProcessors, hasPassedProcessor);
+          _addPreProcessor(
+              processor, preProcessors, postProcessors, hasPassedProcessor);
         } else if (processor is PostProcessor) {
           _addPostProcessor(processor, postProcessors, hasPassedProcessor);
         }

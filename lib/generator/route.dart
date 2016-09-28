@@ -1,4 +1,4 @@
-library jaguar.generators.route;
+library jaguar.generator.route;
 
 import 'processor.dart';
 import 'pre_processor.dart';

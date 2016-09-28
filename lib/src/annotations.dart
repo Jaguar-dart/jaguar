@@ -1,4 +1,4 @@
-library source_gen_experimentation.annotations;
+library jaguar.annotations;
 
 import '../generator/processor.dart';
 import '../generator/pre_processor.dart';
@@ -47,6 +47,17 @@ class DecodeBodyToJson extends PreProcessor {
       {this.contentType: 'application/json', this.charset: ''});
 }
 
+class OpenMongoDb extends PreProcessor {
+  final String uri;
+  final String dbName;
+
+  const OpenMongoDb({this.uri: 'mongodb://localhost:27017/', this.dbName});
+}
+
 class EncodeResponseToJson extends PostProcessor {
   const EncodeResponseToJson();
+}
+
+class CloseMongoDb extends PostProcessor {
+  const CloseMongoDb();
 }

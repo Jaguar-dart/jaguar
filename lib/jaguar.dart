@@ -1,4 +1,4 @@
-library test_source_gen;
+library jaguar;
 
 export 'src/annotations.dart';
 export 'src/configuration.dart';

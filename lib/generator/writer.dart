@@ -1,4 +1,4 @@
-library jaguar.generators.writer;
+library jaguar.generator.writer;
 
 import 'dart:convert';
 

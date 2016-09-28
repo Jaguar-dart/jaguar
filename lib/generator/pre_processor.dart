@@ -135,3 +135,25 @@ class DecodeBodyToJsonInUtf8PreProcessor extends PreProcessor {
     decodeBodyToJsonFunctionBase(sb, 'Utf8', _contentType);
   }
 }
+
+class OpenMongoDbPreProcessor extends PreProcessor {
+  OpenMongoDbPreProcessor({String uri, String dbName})
+      : super(
+            parameters: <Parameter>[
+              new Parameter("String", "'$uri'"),
+              new Parameter('String', "'$dbName'")
+            ],
+            returnType: 'Future<Db>',
+            variableName: 'mongoDb',
+            functionName: 'getMongoDbInstance');
+
+  void generaFunction(StringBuffer sb) {
+    sb.writeln(
+        "Future<Db> getMongoDbInstance(String uri, String dbName) async {");
+    sb.writeln("Db db = new Db('\$uri\$dbName');");
+    sb.writeln("await db.open();");
+    sb.writeln("return db;");
+    sb.writeln("}");
+    sb.writeln("");
+  }
+}

@@ -1,4 +1,4 @@
-library jaguar.generators.processor;
+library jaguar.generator.processor;
 
 import 'utils.dart';
 
