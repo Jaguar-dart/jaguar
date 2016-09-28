@@ -24,6 +24,7 @@ void launchWatch() {
       String bin = getBin() ?? 'bin/server.dart';
       process = await Process.start('dart', [bin]);
       process.stdout.transform(UTF8.decoder).listen(stdout.write);
+      process.stderr.transform(UTF8.decoder).listen(stderr.write);
     }
   });
 }
