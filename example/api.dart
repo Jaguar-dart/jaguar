@@ -10,8 +10,9 @@ import 'package:jaguar/jaguar.dart';
 part 'api.g.dart';
 
 class UserResource {
+  @OpenMongoDb(dbName: 'test')
   @Route(methods: const ['POST'])
-  Future<Map<String, String>> getUser(Map<String, String> json) async {
+  Future<Map<String, String>> getUser(Map<String, String> json, Db db) async {
     return json;
   }
 

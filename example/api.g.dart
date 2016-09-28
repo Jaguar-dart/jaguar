@@ -83,9 +83,15 @@ abstract class _$JaguarExampleApi {
       var json = await getJsonFromBodyInUtf8(
         request,
       );
+      Db mongoDb = await getMongoDbInstance(
+        'mongodb://localhost:27017/',
+        'test',
+      );
       Map<String, String> result = await users.getUser(
         json,
+        mongoDb,
       );
+      await mongoDb.close();
       request.response.write(result);
       return true;
     }

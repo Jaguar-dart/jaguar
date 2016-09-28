@@ -72,6 +72,11 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
     return writer.generate();
   }
 
+  bool alreadyContainsPreProcessor(
+          List<PreProcessor> preProcessors, String type) =>
+      preProcessors.any((PreProcessor tmpPreProcessor) =>
+          tmpPreProcessor.runtimeType.toString() == type);
+
   void _addPreProcessor(
       PreProcessor preProcessor,
       List<PreProcessor> preProcessors,
@@ -81,6 +86,8 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
       throw "Your pre processor need to be before the route";
     }
     if (preProcessor is DecodeBodyToJson) {
+      if (alreadyContainsPreProcessor(
+          preProcessors, 'DecodeBodyToJsonInUtf8PreProcessor')) return;
       DecodeBodyToJson decode = preProcessor;
       if (decode.charset == 'utf-8' || decode.charset == '') {
         ContentType contentType;
@@ -94,15 +101,21 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
             new DecodeBodyToJsonInUtf8PreProcessor(contentType: contentType));
       }
     } else if (preProcessor is MustBeContentType) {
+      if (alreadyContainsPreProcessor(
+          preProcessors, 'MustBeContentTypePreProcessor')) return;
       MustBeContentType contentTypeAnnotation = preProcessor;
       preProcessors.add(new MustBeContentTypePreProcessor(
           contentType: contentTypeAnnotation.contentType));
     } else if (preProcessor is GetRawDataFromBody) {
+      if (alreadyContainsPreProcessor(
+          preProcessors, 'GetDataFromBodyInUtf8PreProcessor')) return;
       GetRawDataFromBody getDataFromBody = preProcessor;
       if (getDataFromBody.encoding == 'utf-8') {
         preProcessors.add(new GetDataFromBodyInUtf8PreProcessor());
       }
     } else if (preProcessor is OpenMongoDb) {
+      if (alreadyContainsPreProcessor(preProcessors, 'OpenMongoDbPreProcessor'))
+        return;
       OpenMongoDb openMongoDb = preProcessor;
       preProcessors.add(new OpenMongoDbPreProcessor(
           uri: openMongoDb.uri, dbName: openMongoDb.dbName));
@@ -234,7 +247,6 @@ class ApiClassAnnotationGenerator extends GeneratorForAnnotation<Api> {
         }
       });
       if (hasPassedProcessor) {
-        print(fieldElement.displayName);
         await _groupRecursion(
             fieldElement.type.element,
             writer,
