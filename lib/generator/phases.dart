@@ -6,7 +6,8 @@ import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
-import 'api_class.dart';
+import 'api_annotation.dart';
+import 'pre_processor/pre_processor_function_annotation_generator.dart';
 
 String getProjectName() {
   File pubspec = new File('./pubspec.yaml');
@@ -29,6 +30,9 @@ PhaseGroup phaseGroup() {
   }
   List<String> apis = getApis();
   return new PhaseGroup.singleAction(
-      new GeneratorBuilder(const [const ApiClassAnnotationGenerator()]),
+      new GeneratorBuilder(const [
+        const ApiAnnotationGenerator(),
+        const PreProcessorFunctionAnnotationGenerator()
+      ]),
       new InputSet(projectName, apis));
 }

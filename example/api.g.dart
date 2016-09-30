@@ -3,57 +3,16 @@
 part of api;
 
 // **************************************************************************
-// Generator: ApiClass
+// Generator: ApiAnnotationGenerator
 // Target: class ExampleApi
 // **************************************************************************
 
 abstract class _$JaguarExampleApi {
   List<RouteInformations> _routes = <RouteInformations>[
-    new RouteInformations("/test/v1/ping", ["POST"]),
+    new RouteInformations("/test/v1/ping/([a-z]+)", ["POST"]),
     new RouteInformations("/test/v1/test", ["POST"]),
     new RouteInformations("/test/v1/users/", ["POST"]),
-    new RouteInformations("/test/v1/users/([a-zA-Z0-9]+)", ["GET"]),
   ];
-
-  void mustBeContentType(HttpRequest request, ContentType contentType) {
-    if (request.headers.contentType.value != contentType.value) {
-      String value = request.headers.contentType?.value ?? '';
-      throw new BadRequestError(
-          'The request has content type $value instead of $contentType');
-    }
-    if (contentType.charset != null &&
-        request.headers.contentType.charset != contentType.charset) {
-      String value = request.headers.contentType?.charset ?? '';
-      throw new BadRequestError(
-          'The request has charset $value instead of ${contentType.charset}');
-    }
-  }
-
-  Future<String> getDataFromBodyInUtf8(HttpRequest request) async {
-    Completer<String> completer = new Completer<String>();
-    String datas = '';
-    request.transform(UTF8.decoder).listen((String data) {
-      datas += data;
-    },
-        onDone: () => completer.complete(datas),
-        onError: (dynamic error) => completer.completeError(error));
-    return completer.future;
-  }
-
-  Future<dynamic> getJsonFromBodyInUtf8(HttpRequest request) async {
-    mustBeContentType(request, ContentType.parse('application/json'));
-    if (request.contentLength <= 0) {
-      return null;
-    }
-    String data = await getDataFromBodyInUtf8(request);
-    return JSON.decode(data);
-  }
-
-  Future<Db> getMongoDbInstance(String uri, String dbName) async {
-    Db db = new Db('$uri$dbName');
-    await db.open();
-    return db;
-  }
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     List<String> args = <String>[];
@@ -61,52 +20,40 @@ abstract class _$JaguarExampleApi {
     match = _routes[0]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      var json = await getJsonFromBodyInUtf8(
-        request,
+      ping(
+        args[0],
       );
-      Map<String, String> result = ping(
-        json,
-      );
-      request.response.write(result);
       return true;
     }
     match = _routes[1]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      var json = await getJsonFromBodyInUtf8(
-        request,
+      String _openDbExample0 = await openDbExample(
+        "test2",
       );
-      var result = test(
-        request,
-        json,
+      String _openDbExample1 = await openDbExample(
+        "test1",
       );
-      request.response.write(result);
+      Map<String, String> result = test(
+        _openDbExample0,
+        _openDbExample1,
+      );
+      encodeMapOrListToJson(
+        request,
+        result,
+      );
+      await closeDbExample(
+        _getDb0,
+      );
+      await closeDbExample(
+        _getDb1,
+      );
       return true;
     }
     match = _routes[2]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      var json = await getJsonFromBodyInUtf8(
-        request,
-      );
-      Db mongoDb = await getMongoDbInstance(
-        'mongodb://localhost:27017/',
-        'test',
-      );
-      Map<String, String> result = await users.getUser(
-        json,
-        mongoDb,
-      );
-      await mongoDb.close();
-      request.response.write(result);
-      return true;
-    }
-    match = _routes[3]
-        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
-    if (match) {
-      List<int> result = users.getUserWithId(request, args[0],
-          toto: request.uri.queryParameters['toto']);
-      request.response.write(result);
+      var result = users.users();
       return true;
     }
     return false;

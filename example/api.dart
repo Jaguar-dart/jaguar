@@ -4,39 +4,36 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:mongo_dart/mongo_dart.dart';
 import 'package:jaguar/jaguar.dart';
 
 part 'api.g.dart';
 
-class UserResource {
-  @OpenMongoDb(dbName: 'test')
-  @Route(methods: const ['POST'])
-  Future<Map<String, String>> getUser(Map<String, String> json, Db db) async {
-    return json;
-  }
-
-  @Route(path: '([a-zA-Z0-9]+)', methods: const ['GET'])
-  List<int> getUserWithId(HttpRequest request, String id, {String toto}) {
-    request.response..writeln(id)..writeln(toto);
-    return [12, 13];
+class UsersResource {
+  @Route(methods: const <String>['POST'])
+  users() {
+    print("users");
   }
 }
 
-@DecodeBodyToJson()
 @Api(name: 'test', version: 'v1')
 class ExampleApi extends Object with _$JaguarExampleApi {
-  @Route(path: 'ping', methods: const ['POST'])
-  Map<String, String> ping(Map<String, String> json) {
-    return json;
+  @Route(path: 'ping/([a-z]+)', methods: const ['POST'])
+  void ping(String name) {
+    print(name);
   }
 
+  @OpenDbExample(dbName: 'test1')
+  @OpenDbExample(dbName: 'test2')
   @Route(path: 'test', methods: const ['POST'])
-  test(HttpRequest request, Map<String, String> json) {
-    print(json);
-    return json;
+  @EncodeMapOrListToJson()
+  @CloseDbExample()
+  @CloseDbExample()
+  Map<String, String> test(String dbName1, String dbName2) {
+    print(dbName1);
+    print(dbName2);
+    return {"a": dbName1, "b": dbName2};
   }
 
-  @Group(path: 'users')
-  UserResource users = new UserResource();
+  @Group(name: 'users')
+  UsersResource users = new UsersResource();
 }
