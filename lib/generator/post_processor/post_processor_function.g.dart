@@ -51,12 +51,9 @@ class CloseDbExample extends PostProcessor {
           returnType: 'Future<Null>',
           functionName: 'closeDbExample',
           parameters: const <Parameter>[
-            const Parameter(type: 'String', name: '_getDb'),
+            const Parameter(type: 'String', name: '_openDbExample'),
           ],
           allowMultiple: true,
           takeResponse: false,
-          preProcessors: const <String>[
-            'OpenDbExample',
-          ],
         );
 }

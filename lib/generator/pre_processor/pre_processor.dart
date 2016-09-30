@@ -10,7 +10,7 @@ abstract class PreProcessor {
   final String functionName;
   final List<Parameter> parameters;
   final List<String> methods;
-  final List<String> postProcessors;
+  final List<PostProcessor> callPostProcessorsAfter;
   final bool allowMultiple;
 
   const PreProcessor(
@@ -26,7 +26,7 @@ abstract class PreProcessor {
         'DELETE',
         'OPTIONS'
       ],
-      this.postProcessors: const <String>[],
+      this.callPostProcessorsAfter: const <PostProcessor>[],
       this.allowMultiple: false});
 
   void generateCall(StringBuffer sb, int numberPreProcessor) {

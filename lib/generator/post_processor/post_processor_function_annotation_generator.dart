@@ -68,10 +68,10 @@ class PostProcessorFunctionAnnotationGenerator
     sb.write("allowMultiple: ${annotation.allowMultiple},");
     // sb.write("]");
     sb.write("takeResponse: ${annotation.takeResponse},");
-    if (annotation.preProcessors.isNotEmpty) {
+    if (annotation.needPreProcessors.isNotEmpty) {
       sb.write("preProcessors: const <String>[");
-      annotation.preProcessors.forEach((String preProcessor) {
-        sb.write("'$preProcessor',");
+      annotation.needPreProcessors.forEach((Type preProcessor) {
+        sb.write("'${preProcessor.toString()}',");
       });
       sb.write("],");
     }

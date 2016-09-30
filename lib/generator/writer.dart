@@ -67,18 +67,18 @@ class Writer {
 
   void preProcessorHasNeededPostProcessor(
       RouteInformationsGenerator route, PreProcessor preProcessor) {
-    if (preProcessor.postProcessors.isNotEmpty) {
-      for (int j = 0; j < preProcessor.postProcessors.length; j++) {
+    if (preProcessor.callPostProcessorsAfter.isNotEmpty) {
+      for (int j = 0; j < preProcessor.callPostProcessorsAfter.length; j++) {
         bool ok = false;
         for (int i = 0; i < route.postProcessor.length; i++) {
-          if (preProcessor.postProcessors[j] ==
+          if (preProcessor.callPostProcessorsAfter[j] ==
               route.postProcessor[i].runtimeType.toString()) {
             ok = true;
             break;
           }
         }
         if (!ok) {
-          throw "${preProcessor.runtimeType.toString()} need ${preProcessor.postProcessors[j]} to work";
+          throw "${preProcessor.runtimeType.toString()} need ${preProcessor.callPostProcessorsAfter[j]} to work";
         }
       }
     }
@@ -103,7 +103,7 @@ class Writer {
       } else {
         numberPreProcessor[type] += 1;
       }
-      preProcessorHasNeededPostProcessor(route, preProcessor);
+      // preProcessorHasNeededPostProcessor(route, preProcessor);
       preProcessor.callProcessor(sb, numberPreProcessor[type]);
     });
   }
@@ -152,8 +152,21 @@ class Writer {
       } else if (someoneTakeTheResponse && postProcessor.takeResponse) {
         throw "Someone already take charge of sending the response";
       }
-      postProcessorHasNeededPreProcessor(route, postProcessor);
+      // postProcessorHasNeededPreProcessor(route, postProcessor);
       postProcessor.callProcessor(sb, numberPostProcessor[type]);
+    });
+    numberPostProcessor.clear();
+    route.preProcessors.forEach((PreProcessor preProcessor) {
+      preProcessor.callPostProcessorsAfter
+          .forEach((PostProcessor postProcessor) {
+        String type = postProcessor.runtimeType.toString();
+        if (!numberPostProcessor.containsKey(type)) {
+          numberPostProcessor[type] = 0;
+        } else {
+          numberPostProcessor[type] += 1;
+        }
+        postProcessor.callProcessor(sb, numberPostProcessor[type]);
+      });
     });
     return someoneTakeTheResponse;
   }

@@ -14,12 +14,12 @@ part 'post_processor_function.g.dart';
 class PostProcessorFunction {
   final bool allowMultiple;
   final bool takeResponse;
-  final List<String> preProcessors;
+  final List<Type> needPreProcessors;
 
   const PostProcessorFunction(
       {this.allowMultiple: false,
       this.takeResponse: false,
-      this.preProcessors: const <String>[]});
+      this.needPreProcessors: const <Type>[]});
 }
 
 @PostProcessorFunction(takeResponse: true)
@@ -36,8 +36,7 @@ void encodeMapOrListToJson(HttpRequest request, dynamic result) {
   encodeStringToJson(request, JSON.encode(result));
 }
 
-@PostProcessorFunction(
-    allowMultiple: true, preProcessors: const <String>['OpenDbExample'])
-Future<Null> closeDbExample(String _getDb) async {
-  print("close $_getDb");
+@PostProcessorFunction(allowMultiple: true)
+Future<Null> closeDbExample(String _openDbExample) async {
+  print("close $_openDbExample");
 }

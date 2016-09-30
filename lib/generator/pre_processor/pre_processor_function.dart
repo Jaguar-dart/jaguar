@@ -17,7 +17,7 @@ part 'pre_processor_function.g.dart';
 class PreProcessorFunction {
   final List<String> authorizedMethods;
   final bool allowMultiple;
-  final List<String> postProcessors;
+  final List<Type> postProcessors;
 
   const PreProcessorFunction(
       {this.authorizedMethods: const <String>[
@@ -29,7 +29,7 @@ class PreProcessorFunction {
         'OPTIONS'
       ],
       this.allowMultiple: false,
-      this.postProcessors: const <String>[]});
+      this.postProcessors: const <Type>[]});
 }
 
 @PreProcessorFunction(
@@ -120,7 +120,7 @@ Future<Map<String, FormField>> getFormDataFromBody(HttpRequest request) async {
 }
 
 @PreProcessorFunction(
-    allowMultiple: true, postProcessors: const <String>['CloseDbExample'])
+    allowMultiple: true, postProcessors: const <Type>[CloseDbExample])
 Future<String> openDbExample(String dbName) async {
   return "create beautifull $dbName";
 }

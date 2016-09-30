@@ -26,8 +26,6 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   @OpenDbExample(dbName: 'test2')
   @Route(path: 'test', methods: const ['POST'])
   @EncodeMapOrListToJson()
-  @CloseDbExample()
-  @CloseDbExample()
   Map<String, String> test(String dbName1, String dbName2) {
     print(dbName1);
     print(dbName2);

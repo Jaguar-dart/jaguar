@@ -7,6 +7,7 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'pre_processor_function.dart';
+import '../post_processor/post_processor.dart';
 import '../parameter.dart';
 
 class PreProcessorFunctionAnnotationGenerator
@@ -67,9 +68,9 @@ class PreProcessorFunctionAnnotationGenerator
     sb.write("],");
     sb.write("allowMultiple: ${annotation.allowMultiple},");
     if (annotation.postProcessors.isNotEmpty) {
-      sb.write("postProcessors: const <String>[");
-      annotation.postProcessors.forEach((String postProcessor) {
-        sb.write("'$postProcessor',");
+      sb.write("callPostProcessorsAfter: const <PostProcessor>[");
+      annotation.postProcessors.forEach((Type postProcessor) {
+        sb.write("const ${postProcessor.toString()}(),");
       });
       sb.write("]");
     }

@@ -43,10 +43,10 @@ abstract class _$JaguarExampleApi {
         result,
       );
       await closeDbExample(
-        _getDb0,
+        _openDbExample0,
       );
       await closeDbExample(
-        _getDb1,
+        _openDbExample1,
       );
       return true;
     }

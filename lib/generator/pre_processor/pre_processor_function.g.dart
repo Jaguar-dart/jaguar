@@ -135,8 +135,8 @@ class OpenDbExample extends PreProcessor {
               'OPTIONS',
             ],
             allowMultiple: true,
-            postProcessors: const <String>[
-              'CloseDbExample',
+            callPostProcessorsAfter: const <PostProcessor>[
+              const CloseDbExample(),
             ]);
 
   @override
