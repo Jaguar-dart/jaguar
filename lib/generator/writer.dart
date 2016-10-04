@@ -53,8 +53,11 @@ class Writer {
 
       _generateProcessor(routes[i]);
 
-      _generatePostProcessor(routes[i]);
-      //
+      bool handleResponse = _generatePostProcessor(routes[i]);
+
+      if (!handleResponse) {
+        sb.write("request.response.write(result);");
+      }
       // _sendResponse(routes[i]);
 
       sb.writeln("return true;");

@@ -28,7 +28,7 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
 
     Writer w = new Writer(className);
 
-    String prefix = "/";
+    String prefix = "";
     if (annotation.name.isNotEmpty && annotation.version.isNotEmpty) {
       prefix = "/${annotation.name}/${annotation.version}";
     }
