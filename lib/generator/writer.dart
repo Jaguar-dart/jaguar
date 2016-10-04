@@ -25,7 +25,7 @@ class Writer {
     sb.writeln("List<RouteInformations> _routes = <RouteInformations>[");
     routes.forEach((RouteInformationsGenerator route) {
       sb.writeln(
-          "new RouteInformations(\"${route.routeProcessor.path}\", ${JSON.encode(route.routeProcessor.methods)}),");
+          "new RouteInformations(r\"${route.routeProcessor.path}\", ${JSON.encode(route.routeProcessor.methods)}),");
     });
     sb.writeln("];");
     sb.writeln("");
