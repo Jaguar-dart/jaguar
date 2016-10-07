@@ -3,6 +3,35 @@
 Jaguar is a server-side framework which use annotation and code generation to help
 you to be productive and focus only on your code.
 
+## How to use it
+
+Clone this repos go inside you project folder and launch the jaguar.dart script with the param build or watch
+
+The build param will build you server you have to launch it after this step.
+
+The watch param will watch your modification, build after it and launch you server every time you change you server.
+
+In order to build your server the jaguar script need some configuration file.
+
+You have an example in this repos jaguar.yaml
+
+This file define two things
+- The name of the file which launch your server.
+Example
+```yaml
+bin:
+  'bin/server.dart'
+```
+
+- A list of file where you have `@Api` annotation
+Example
+```yaml
+apis:
+  - 'example/api.dart'
+```
+
+The entire file is [here](https://github.com/Jaguar-dart/jaguar/blob/master/jaguar.yaml)
+
 ## Basic API
 
 Jaguar has 3 type processor built-in.
