@@ -87,21 +87,7 @@ You can create PreProcessor and PostProcessor with `PreProcessorFunction` and `P
 
 For doing that you just have to write a simple function and annotated it with the `PreProcessorFunction` to create a PreProcessor or `PostProcessorFunction` to create a PostProcessor.
 
-### PreProcessor
-
-```dart
-@PreProcessorFunction(
-    authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
-void mustBeMimeType(HttpRequest request, String mimeType) {
-  if (request.headers.contentType?.mimeType != mimeType) {
-    throw "Mime type is ${request.headers.contentType?.mimeType} instead of $mimeType";
-  }
-}
-```
-
-Here we have write a PreProcessor that check the content type of the request on the authorized methods.
-
-There is a rules for the arguments !
+There are rules for the arguments !
 
 You can ask for the request object by putting this arguments inside the needed arguments.
 
@@ -109,4 +95,49 @@ Arguments with the variable name which start with an _ are not modified so you c
 
 Argument which doesn't start with _ are argument needed by your function and have to be specified in the annotation
 
+Another special case happend when you request the variable result.<br/>
+When you ask for this one you will get the result of your Route.
+
+### PreProcessor
+
+```dart
+@PreProcessorFunction(
+  authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
+void mustBeMimeType(HttpRequest request, String mimeType) {
+  if (request.headers.contentType?.mimeType != mimeType) {
+    throw
+      "Mime type is ${request.headers.contentType?.mimeType} instead of $mimeType";
+  }
+}
+```
+
+Here we have write a PreProcessor that check the content type of the request on the authorized methods.
+
 In our example above the framework will auto inject the request and the mimeType will be get from the annotation.
+
+### PostProcessor
+
+```dart
+@PostProcessorFunction(takeResponse: true)
+void encodeStringToJson(HttpRequest request, String result) {
+  int length = UTF8.encode(result).length;
+  request.response
+    ..headers.contentType = new ContentType("application", "json")
+    ..contentLength = length
+    ..write(result);
+}
+```
+
+In this example we ask for the request and the result.
+
+result is a special variable name that will return to you the object you have return in your route.
+
+In the annotation here we have the `takeResponse` argument which is false by default, this argument allow you to tell to the framework that you are responsible for sending the response.
+
+## The State of Jaguar
+
+Jaguar is under development and feedback are welcome.
+
+## Issue
+
+If you have an issue please tell us which version of jaguar and if you can provide an example this will simplify the path to resolve it :).
