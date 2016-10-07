@@ -55,7 +55,9 @@ class Writer {
 
       bool handleResponse = _generatePostProcessor(routes[i]);
 
-      if (!handleResponse) {
+      if (!handleResponse &&
+          routes[i].routeProcessor.returnType != "void" &&
+          routes[i].routeProcessor.returnType != "Future<Null>") {
         sb.write("request.response.write(result);");
       }
       // _sendResponse(routes[i]);
