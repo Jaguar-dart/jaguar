@@ -80,3 +80,33 @@ class ExampleApi extends _$JaguarExampleApi {
 With your route you can return all sort of object.
 
 The default behavior is to call `toString` on your object to put it in the response
+
+## Advenced Api
+
+You can create PreProcessor and PostProcessor with `PreProcessorFunction` and `PostProcessorFunction`
+
+For doing that you just have to write a simple function and annotated it with the `PreProcessorFunction` to create a PreProcessor or `PostProcessorFunction` to create a PostProcessor.
+
+### PreProcessor
+
+```dart
+@PreProcessorFunction(
+    authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
+void mustBeMimeType(HttpRequest request, String mimeType) {
+  if (request.headers.contentType?.mimeType != mimeType) {
+    throw "Mime type is ${request.headers.contentType?.mimeType} instead of $mimeType";
+  }
+}
+```
+
+Here we have write a PreProcessor that check the content type of the request on the authorized methods.
+
+There is a rules for the arguments !
+
+You can ask for the request object by putting this arguments inside the needed arguments.
+
+Arguments with the variable name which start with an _ are not modified so you can ask for a specific variable.
+
+Argument which doesn't start with _ are argument needed by your function and have to be specified in the annotation
+
+In our example above the framework will auto inject the request and the mimeType will be get from the annotation.
