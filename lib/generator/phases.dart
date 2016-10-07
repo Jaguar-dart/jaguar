@@ -8,6 +8,7 @@ import 'package:yaml/yaml.dart';
 
 import 'api_annotation.dart';
 import 'pre_processor/pre_processor_function_annotation_generator.dart';
+import 'post_processor/post_processor_function_annotation_generator.dart';
 
 String getProjectName() {
   File pubspec = new File('./pubspec.yaml');
@@ -20,7 +21,7 @@ List<String> getApis() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['apis'];
+  return doc['annotations'];
 }
 
 PhaseGroup phaseGroup() {
@@ -32,7 +33,8 @@ PhaseGroup phaseGroup() {
   return new PhaseGroup.singleAction(
       new GeneratorBuilder(const [
         const ApiAnnotationGenerator(),
-        const PreProcessorFunctionAnnotationGenerator()
+        const PreProcessorFunctionAnnotationGenerator(),
+        const PostProcessorFunctionAnnotationGenerator()
       ]),
       new InputSet(projectName, apis));
 }

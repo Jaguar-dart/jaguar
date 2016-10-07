@@ -17,16 +17,14 @@ You have an example in this repos jaguar.yaml
 
 This file define two things
 - The name of the file which launch your server.
-Example
 ```yaml
 bin:
   'bin/server.dart'
 ```
 
-- A list of file where you have `@Api` annotation
-Example
+- A list of file where you have `@Api`, `@PreProcessorFunction`, `@PostProcessorFunction` annotation.<br>
 ```yaml
-apis:
+annotations:
   - 'example/api.dart'
 ```
 
