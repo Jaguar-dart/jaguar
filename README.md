@@ -30,6 +30,33 @@ annotations:
 
 The entire file is [here](https://github.com/Jaguar-dart/jaguar/blob/master/jaguar.yaml)
 
+Ok now how to use the Api we have written.
+
+Here a basic example
+```dart
+import 'dart:async';
+
+import 'package:jaguar/jaguar.dart' as jaguar;
+
+import 'api.dart';
+
+Future<Null> main(List<String> args) async {
+  ExampleApi tsa = new ExampleApi();
+
+  jaguar.Configuration configuration =
+      new jaguar.Configuration();
+  configuration.addApi(tsa);
+
+  await jaguar.serve(configuration);
+}
+```
+
+We create the class we have in the api.dart file, create a configuration object which will configure our jaguar server.
+
+And serve with the configuration object.
+
+Easy !
+
 ## Basic API
 
 Jaguar has 3 type processor built-in.
