@@ -64,7 +64,7 @@ class UsersResource {}
 
 @Api()
 class ExampleApi extends _$JaguarExampleApi {
-  @Group()
+  @Group(name: 'users')
   UsersResource users = new UsersResource();
 }
 ```
