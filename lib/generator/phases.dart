@@ -17,7 +17,7 @@ String getProjectName() {
   return doc['name'];
 }
 
-List<String> getApis() {
+List<String> getAnnotations() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
@@ -29,7 +29,7 @@ PhaseGroup phaseGroup() {
   if (projectName == null) {
     throw "Could not find the project name";
   }
-  List<String> apis = getApis();
+  List<String> apis = getAnnotations();
   return new PhaseGroup.singleAction(
       new GeneratorBuilder(const [
         const ApiAnnotationGenerator(),
