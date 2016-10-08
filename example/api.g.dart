@@ -9,9 +9,9 @@ part of api;
 
 abstract class _$JaguarExampleApi {
   List<RouteInformations> _routes = <RouteInformations>[
-    new RouteInformations("/test/v1/ping/([a-z]+)", ["POST"]),
-    new RouteInformations("/test/v1/test", ["POST"]),
-    new RouteInformations("/test/v1/users/", ["POST"]),
+    new RouteInformations(r"/test/v1/ping/([a-z]+)", ["POST"]),
+    new RouteInformations(r"/test/v1/test", ["POST"]),
+    new RouteInformations(r"/test/v1/users/", ["POST"]),
   ];
 
   Future<bool> handleApiRequest(HttpRequest request) async {
@@ -28,32 +28,18 @@ abstract class _$JaguarExampleApi {
     match = _routes[1]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      String _openDbExample0 = await openDbExample(
-        "test2",
-      );
-      String _openDbExample1 = await openDbExample(
-        "test1",
-      );
       Map<String, String> result = test(
-        _openDbExample0,
-        _openDbExample1,
+        args[0],
+        args[1],
       );
-      encodeMapOrListToJson(
-        request,
-        result,
-      );
-      await closeDbExample(
-        _openDbExample0,
-      );
-      await closeDbExample(
-        _openDbExample1,
-      );
+      request.response.write(result);
       return true;
     }
     match = _routes[2]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
       var result = users.users();
+      request.response.write(result);
       return true;
     }
     return false;
