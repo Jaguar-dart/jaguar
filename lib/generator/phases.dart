@@ -21,7 +21,59 @@ List<String> getAnnotations() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['annotations'];
+  return doc['apis'];
+}
+
+List<String> getPreProcessor() {
+  File pubspec = new File('./jaguar.yaml');
+  String content = pubspec.readAsStringSync();
+  var doc = loadYaml(content);
+  return doc['pre_processors'] == null ? <String>[] : doc['pre_processors'];
+}
+
+List<String> getPostProcessor() {
+  File pubspec = new File('./jaguar.yaml');
+  String content = pubspec.readAsStringSync();
+  var doc = loadYaml(content);
+  return doc['post_processors'] == null ? <String>[] : doc['post_processors'];
+}
+
+Phase postProcessorPhase(String projectName, List<String> postProcessors) {
+  return new Phase()
+    ..addAction(
+        new GeneratorBuilder(const [
+          const PostProcessorFunctionAnnotationGenerator(),
+        ]),
+        new InputSet(projectName, postProcessors));
+}
+
+Phase preProcessorPhase(String projectName, List<String> preProcessors) {
+  return new Phase()
+    ..addAction(
+        new GeneratorBuilder(const [
+          const PreProcessorFunctionAnnotationGenerator(),
+        ]),
+        new InputSet(projectName, preProcessors));
+}
+
+Phase apisPhase(String projectName, List<String> apis) {
+  return new Phase()
+    ..addAction(
+        new GeneratorBuilder(const [
+          const ApiAnnotationGenerator(),
+        ]),
+        new InputSet(projectName, apis));
+}
+
+PhaseGroup generatePhaseGroup(
+    {String projectName,
+    List<String> postProcessors,
+    List<String> preProcessors,
+    List<String> apis}) {
+  return new PhaseGroup()
+    ..addPhase(postProcessorPhase(projectName, postProcessors))
+    ..addPhase(preProcessorPhase(projectName, preProcessors))
+    ..addPhase(apisPhase(projectName, apis));
 }
 
 PhaseGroup phaseGroup() {
@@ -30,11 +82,11 @@ PhaseGroup phaseGroup() {
     throw "Could not find the project name";
   }
   List<String> apis = getAnnotations();
-  return new PhaseGroup.singleAction(
-      new GeneratorBuilder(const [
-        const ApiAnnotationGenerator(),
-        const PreProcessorFunctionAnnotationGenerator(),
-        const PostProcessorFunctionAnnotationGenerator()
-      ]),
-      new InputSet(projectName, apis));
+  List<String> postProcessor = getPostProcessor();
+  List<String> preProcessor = getPreProcessor();
+  return generatePhaseGroup(
+      projectName: projectName,
+      postProcessors: postProcessor,
+      preProcessors: preProcessor,
+      apis: apis);
 }
