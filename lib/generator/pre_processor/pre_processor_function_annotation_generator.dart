@@ -22,7 +22,7 @@ class PreProcessorFunctionAnnotationGenerator
         .map((ParameterElement parameter) {
           if (parameter.type.name == 'HttpRequest') return null;
           return new Parameter(
-              stringType: parameter.type.name,
+              typeAsString: parameter.type.name,
               name: parameter.name,
               isOptional: true);
         })
@@ -34,7 +34,7 @@ class PreProcessorFunctionAnnotationGenerator
 
     sb.writeln("class $className extends PreProcessor {");
     parameters.forEach((Parameter parameter) {
-      sb.writeln("final ${parameter.stringType} ${parameter.name};");
+      sb.writeln("final ${parameter.typeAsString} ${parameter.name};");
     });
     sb.writeln("");
 

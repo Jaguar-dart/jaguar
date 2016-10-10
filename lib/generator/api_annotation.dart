@@ -137,13 +137,13 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
             .where((ParameterElement parameter) =>
                 !parameter.parameterKind.isOptional)
             .map((ParameterElement parameter) => new Parameter(
-                stringType: parameter.type.name, name: parameter.name))
+                typeAsString: parameter.type.name, name: parameter.name))
             .toList();
         List<Parameter> namedParameters = method.parameters
             .where((ParameterElement parameter) =>
                 parameter.parameterKind.isOptional)
             .map((ParameterElement parameter) => new Parameter(
-                stringType: parameter.type.name, name: parameter.name))
+                typeAsString: parameter.type.name, name: parameter.name))
             .toList();
         return new RouteInformationsGenerator(
             preProcessors,
