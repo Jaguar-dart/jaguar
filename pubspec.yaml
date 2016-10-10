@@ -2,15 +2,15 @@ name: jaguar
 version: 0.0.1
 description: jaguar is a performant server side framework
 
-author: Jaguar Authors
+author: Jaguar Authors <segaud.kevin@gmail.com>
 homepage: https://github.com/Jaguar-dart/jaguar
 
 executables:
   jaguar:
 
 dependencies:
-  source_gen: 0.5.1+3
-  build: 0.4.1
-  yaml: 2.1.10
-  http_server: 0.9.6
-  mime: 0.9.3
+  source_gen: ">=0.5.1+3 <0.6.0"
+  build: ">=0.4.1 <0.5.0"
+  yaml: ">=2.1.10 <3.0.0"
+  http_server: ">=0.9.6 <0.10.0"
+  mime: ">=0.9.3 <0.10.0"
