@@ -45,11 +45,7 @@ abstract class PreProcessor {
     sb.write("$functionName(");
     fillParameters(sb);
     sb.write(")");
-    // if (!insideParameter) {
     sb.writeln(";");
-    // } else {
-    //   sb.writeln(",");
-    // }
   }
 
   void fillParameters(StringBuffer sb) {

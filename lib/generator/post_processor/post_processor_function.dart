@@ -12,12 +12,10 @@ part 'post_processor_function.g.dart';
 class PostProcessorFunction {
   final bool allowMultiple;
   final bool takeResponse;
-  // final List<Type> needPreProcessors;
 
   const PostProcessorFunction({
     this.allowMultiple: false,
     this.takeResponse: false,
-    // this.needPreProcessors: const <Type>[]
   });
 }
 

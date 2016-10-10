@@ -7,8 +7,6 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'post_processor_function.dart';
-// import '../pre_processor/pre_processor.dart';
-// import '../pre_processor/pre_processor_function.dart';
 import '../parameter.dart';
 
 class PostProcessorFunctionAnnotationGenerator
@@ -63,18 +61,9 @@ class PostProcessorFunctionAnnotationGenerator
       //       "const Parameter(type: '${parameter.type.toString()}', value: '${parameter.name}'),");
       // }
     });
-    // sb.write("],");
     sb.write("],");
     sb.write("allowMultiple: ${annotation.allowMultiple},");
-    // sb.write("]");
     sb.write("takeResponse: ${annotation.takeResponse},");
-    // if (annotation.needPreProcessors.isNotEmpty) {
-    //   sb.write("preProcessors: const <String>[");
-    //   annotation.needPreProcessors.forEach((Type preProcessor) {
-    //     sb.write("'${preProcessor.toString()}',");
-    //   });
-    //   sb.write("],");
-    // }
     sb.writeln(");");
 
     sb.writeln("");

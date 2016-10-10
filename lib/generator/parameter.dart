@@ -1,7 +1,5 @@
 library jaguar.generator.api_class;
 
-import 'package:analyzer/dart/element/type.dart';
-
 class Parameter {
   final String stringType;
   final Type type;

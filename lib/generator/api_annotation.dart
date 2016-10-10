@@ -9,8 +9,10 @@ import 'package:source_gen/src/annotation.dart';
 
 import 'processor.dart';
 import 'pre_processor/pre_processor.dart';
+//  ignore: unused_import
 import 'pre_processor/pre_processor_function.dart';
 import 'post_processor/post_processor.dart';
+//  ignore: unused_import
 import 'post_processor/post_processor_function.dart';
 import 'writer.dart';
 import 'route/route_information_generator.dart';

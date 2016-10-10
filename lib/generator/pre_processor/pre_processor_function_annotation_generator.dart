@@ -1,6 +1,5 @@
 library jaguar.generator.pre_processor_function_annotation_generator;
 
-import 'dart:io';
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
@@ -8,7 +7,6 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'pre_processor_function.dart';
-import '../post_processor/post_processor.dart';
 import '../parameter.dart';
 
 class PreProcessorFunctionAnnotationGenerator
