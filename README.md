@@ -22,15 +22,19 @@ bin:
   'bin/server.dart'
 ```
 
-- A list of file where you have `@Api`, `@PreProcessorFunction`, `@PostProcessorFunction` annotation.<br>
+- A list of file where you have `@Api` annotation.<br>
 ```yaml
-annotations:
+apis:
   - 'example/api.dart'
 ```
 
-The entire file is [here](https://github.com/Jaguar-dart/jaguar/blob/master/jaguar.yaml)
+- A list of file where you have `@PreProcessor` annotation.<br>
 
-Ok now how to use the Api we have written.
+- A list of file where you have `@PostProcessor` annotation.<br>
+
+The entire file of the example code is [here](https://github.com/Jaguar-dart/jaguar/blob/master/jaguar.yaml)
+
+Ok now how to create a jaguar server we have to writte.
 
 Here a basic example
 ```dart
@@ -135,7 +139,7 @@ With your route you can return all sort of object.
 
 The default behavior is to call `toString` on your object to put it in the response
 
-## Advenced Api
+## Advanced Api
 
 You can create PreProcessor and PostProcessor with `PreProcessorFunction` and `PostProcessorFunction`
 
@@ -151,6 +155,8 @@ Argument which doesn't start with _ are argument needed by your function and hav
 
 Another special case happend when you request the variable result.<br/>
 When you ask for this one you will get the result of your Route.
+
+If you add a PreProcessor or a PostProcessor to a `@Group` or an `@Api` this annotation will be added to all the children.
 
 ### PreProcessor
 
@@ -191,6 +197,12 @@ In the annotation here we have the `takeResponse` argument which is false by def
 ## The State of Jaguar
 
 Jaguar is under development and feedback are welcome.
+
+## What more
+
+- Add test
+- More built-in Post/Pre Processor
+- More check during generation.
 
 ## Issue
 
