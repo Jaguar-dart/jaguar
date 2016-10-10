@@ -14,7 +14,7 @@ class GetStringFromBody extends PreProcessor {
           variableName: '_getStringFromBody',
           functionName: 'getStringFromBody',
           parameters: const <Parameter>[
-            const Parameter(type: 'HttpRequest', name: 'request'),
+            const Parameter(type: HttpRequest, name: 'request'),
           ],
           methods: const <String>[
             'POST',
@@ -41,8 +41,8 @@ class MustBeMimeType extends PreProcessor {
           returnType: 'void',
           functionName: 'mustBeMimeType',
           parameters: const <Parameter>[
-            const Parameter(type: 'HttpRequest', name: 'request'),
-            const Parameter(type: 'String', value: 'mimeType'),
+            const Parameter(type: HttpRequest, name: 'request'),
+            const Parameter(type: String, value: 'mimeType'),
           ],
           methods: const <String>[
             'POST',
@@ -72,7 +72,7 @@ class GetJsonFromBody extends PreProcessor {
           variableName: '_getJsonFromBody',
           functionName: 'getJsonFromBody',
           parameters: const <Parameter>[
-            const Parameter(type: 'HttpRequest', name: 'request'),
+            const Parameter(type: HttpRequest, name: 'request'),
           ],
           methods: const <String>[
             'POST',
@@ -96,7 +96,7 @@ class GetFormDataFromBody extends PreProcessor {
           variableName: '_getFormDataFromBody',
           functionName: 'getFormDataFromBody',
           parameters: const <Parameter>[
-            const Parameter(type: 'HttpRequest', name: 'request'),
+            const Parameter(type: HttpRequest, name: 'request'),
           ],
           methods: const <String>[
             'POST',
@@ -124,7 +124,7 @@ class OpenDbExample extends PreProcessor {
             variableName: '_openDbExample',
             functionName: 'openDbExample',
             parameters: const <Parameter>[
-              const Parameter(type: 'String', value: 'dbName'),
+              const Parameter(type: String, value: 'dbName'),
             ],
             methods: const <String>[
               'GET',

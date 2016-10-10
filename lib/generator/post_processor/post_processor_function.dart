@@ -5,8 +5,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'post_processor.dart';
-import '../pre_processor/pre_processor.dart';
-import '../pre_processor/pre_processor_function.dart';
 import '../parameter.dart';
 
 part 'post_processor_function.g.dart';
@@ -14,12 +12,13 @@ part 'post_processor_function.g.dart';
 class PostProcessorFunction {
   final bool allowMultiple;
   final bool takeResponse;
-  final List<Type> needPreProcessors;
+  // final List<Type> needPreProcessors;
 
-  const PostProcessorFunction(
-      {this.allowMultiple: false,
-      this.takeResponse: false,
-      this.needPreProcessors: const <Type>[]});
+  const PostProcessorFunction({
+    this.allowMultiple: false,
+    this.takeResponse: false,
+    // this.needPreProcessors: const <Type>[]
+  });
 }
 
 @PostProcessorFunction(takeResponse: true)

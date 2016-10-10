@@ -28,11 +28,26 @@ abstract class _$JaguarExampleApi {
     match = _routes[1]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      Map<String, String> result = test(
-        args[0],
-        args[1],
+      String _openDbExample0 = await openDbExample(
+        "test2",
       );
-      request.response.write(result);
+      String _openDbExample1 = await openDbExample(
+        "test1",
+      );
+      Map<String, String> result = test(
+        _openDbExample0,
+        _openDbExample1,
+      );
+      encodeMapOrListToJson(
+        request,
+        result,
+      );
+      await closeDbExample(
+        _openDbExample0,
+      );
+      await closeDbExample(
+        _openDbExample1,
+      );
       return true;
     }
     match = _routes[2]

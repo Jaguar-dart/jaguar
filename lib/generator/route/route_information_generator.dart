@@ -11,4 +11,8 @@ class RouteInformationsGenerator {
 
   RouteInformationsGenerator(
       this.preProcessors, this.routeProcessor, this.postProcessor);
+
+  String toString() {
+    return "${routeProcessor.path} ${routeProcessor.parameters}";
+  }
 }

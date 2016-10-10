@@ -1,7 +1,7 @@
 library jaguar.generator.post_processor;
 
 import '../parameter.dart';
-import '../pre_processor/pre_processor.dart';
+// import '../pre_processor/pre_processor.dart';
 import '../utils.dart';
 
 abstract class PostProcessor {
@@ -9,7 +9,7 @@ abstract class PostProcessor {
   final String variableName;
   final String functionName;
   final List<Parameter> parameters;
-  final List<String> preProcessors;
+  // final List<String> preProcessors;
   final bool allowMultiple;
   final bool takeResponse;
 
@@ -18,7 +18,7 @@ abstract class PostProcessor {
       this.variableName: null,
       this.functionName: null,
       this.parameters: const <Parameter>[],
-      this.preProcessors: const <String>[],
+      // this.preProcessors: const <String>[],
       this.allowMultiple: false,
       this.takeResponse: false});
 

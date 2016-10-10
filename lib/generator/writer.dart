@@ -70,24 +70,24 @@ class Writer {
     sb.writeln("");
   }
 
-  void preProcessorHasNeededPostProcessor(
-      RouteInformationsGenerator route, PreProcessor preProcessor) {
-    if (preProcessor.callPostProcessorsAfter.isNotEmpty) {
-      for (int j = 0; j < preProcessor.callPostProcessorsAfter.length; j++) {
-        bool ok = false;
-        for (int i = 0; i < route.postProcessor.length; i++) {
-          if (preProcessor.callPostProcessorsAfter[j] ==
-              route.postProcessor[i].runtimeType.toString()) {
-            ok = true;
-            break;
-          }
-        }
-        if (!ok) {
-          throw "${preProcessor.runtimeType.toString()} need ${preProcessor.callPostProcessorsAfter[j]} to work";
-        }
-      }
-    }
-  }
+  // void preProcessorHasNeededPostProcessor(
+  //     RouteInformationsGenerator route, PreProcessor preProcessor) {
+  //   if (preProcessor.callPostProcessorsAfter.isNotEmpty) {
+  //     for (int j = 0; j < preProcessor.callPostProcessorsAfter.length; j++) {
+  //       bool ok = false;
+  //       for (int i = 0; i < route.postProcessor.length; i++) {
+  //         if (preProcessor.callPostProcessorsAfter[j] ==
+  //             route.postProcessor[i].runtimeType.toString()) {
+  //           ok = true;
+  //           break;
+  //         }
+  //       }
+  //       if (!ok) {
+  //         throw "${preProcessor.runtimeType.toString()} need ${preProcessor.callPostProcessorsAfter[j]} to work";
+  //       }
+  //     }
+  //   }
+  // }
 
   void _generatePreProcessor(RouteInformationsGenerator route) {
     List<PreProcessor> preProcessors = route.preProcessors
@@ -123,24 +123,24 @@ class Writer {
     sb.write(route.routeProcessor.generateCall(preProcessors));
   }
 
-  void postProcessorHasNeededPreProcessor(
-      RouteInformationsGenerator route, PostProcessor postProcessor) {
-    if (postProcessor.preProcessors.isNotEmpty) {
-      for (int j = 0; j < postProcessor.preProcessors.length; j++) {
-        bool ok = false;
-        for (int i = 0; i < route.preProcessors.length; i++) {
-          if (postProcessor.preProcessors[j] ==
-              route.preProcessors[i].runtimeType.toString()) {
-            ok = true;
-            break;
-          }
-        }
-        if (!ok) {
-          throw "${postProcessor.runtimeType.toString()} need ${postProcessor.preProcessors[j]} to work";
-        }
-      }
-    }
-  }
+  // void postProcessorHasNeededPreProcessor(
+  //     RouteInformationsGenerator route, PostProcessor postProcessor) {
+  //   if (postProcessor.preProcessors.isNotEmpty) {
+  //     for (int j = 0; j < postProcessor.preProcessors.length; j++) {
+  //       bool ok = false;
+  //       for (int i = 0; i < route.preProcessors.length; i++) {
+  //         if (postProcessor.preProcessors[j] ==
+  //             route.preProcessors[i].runtimeType.toString()) {
+  //           ok = true;
+  //           break;
+  //         }
+  //       }
+  //       if (!ok) {
+  //         throw "${postProcessor.runtimeType.toString()} need ${postProcessor.preProcessors[j]} to work";
+  //       }
+  //     }
+  //   }
+  // }
 
   bool _generatePostProcessor(RouteInformationsGenerator route) {
     Map<String, int> numberPostProcessor = <String, int>{};

@@ -13,8 +13,8 @@ class EncodeStringToJson extends PostProcessor {
           returnType: 'void',
           functionName: 'encodeStringToJson',
           parameters: const <Parameter>[
-            const Parameter(type: 'HttpRequest', name: 'request'),
-            const Parameter(type: 'String', name: 'result'),
+            const Parameter(type: HttpRequest, name: 'request'),
+            const Parameter(type: String, name: 'result'),
           ],
           allowMultiple: false,
           takeResponse: true,
@@ -32,8 +32,8 @@ class EncodeMapOrListToJson extends PostProcessor {
           returnType: 'void',
           functionName: 'encodeMapOrListToJson',
           parameters: const <Parameter>[
-            const Parameter(type: 'HttpRequest', name: 'request'),
-            const Parameter(type: 'dynamic', name: 'result'),
+            const Parameter(type: HttpRequest, name: 'request'),
+            const Parameter(type: dynamic, name: 'result'),
           ],
           allowMultiple: false,
           takeResponse: true,
@@ -51,7 +51,7 @@ class CloseDbExample extends PostProcessor {
           returnType: 'Future<Null>',
           functionName: 'closeDbExample',
           parameters: const <Parameter>[
-            const Parameter(type: 'String', name: '_openDbExample'),
+            const Parameter(type: String, name: '_openDbExample'),
           ],
           allowMultiple: true,
           takeResponse: false,

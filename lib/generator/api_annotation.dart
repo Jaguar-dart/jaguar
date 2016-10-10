@@ -49,6 +49,7 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
             if (annotation is PreProcessor) {
               return annotation;
             }
+            return null;
           })
           .where((annotation) => annotation != null)
           .toList();
@@ -126,23 +127,21 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
           List<PostProcessor> parentPostProcessors) =>
       classElement.methods.map((MethodElement method) {
         Route route = _getRouteMetadata(method);
-        List<PreProcessor> preProcessors =
-            _getPreProcessorMetadata(classElement)..addAll(parentPreProcessors);
-        List<PostProcessor> postProcessors =
-            _getPostProcessorMetadata(classElement)
-              ..addAll(parentPostProcessors);
-
+        List<PreProcessor> preProcessors = _getPreProcessorMetadata(method)
+          ..addAll(parentPreProcessors);
+        List<PostProcessor> postProcessors = _getPostProcessorMetadata(method)
+          ..addAll(parentPostProcessors);
         List<Parameter> parameters = method.parameters
             .where((ParameterElement parameter) =>
                 !parameter.parameterKind.isOptional)
             .map((ParameterElement parameter) => new Parameter(
-                type: parameter.type.toString(), name: parameter.name))
+                stringType: parameter.type.name, name: parameter.name))
             .toList();
         List<Parameter> namedParameters = method.parameters
             .where((ParameterElement parameter) =>
                 parameter.parameterKind.isOptional)
             .map((ParameterElement parameter) => new Parameter(
-                type: parameter.type.toString(), name: parameter.name))
+                stringType: parameter.type.name, name: parameter.name))
             .toList();
         return new RouteInformationsGenerator(
             preProcessors,

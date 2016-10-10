@@ -1,5 +1,6 @@
 library jaguar.generator.pre_processor_function_annotation_generator;
 
+import 'dart:io';
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
@@ -21,9 +22,9 @@ class PreProcessorFunctionAnnotationGenerator
 
     List<Parameter> parameters = element.parameters
         .map((ParameterElement parameter) {
-          if (parameter.type.toString() == 'HttpRequest') return null;
+          if (parameter.type.name == 'HttpRequest') return null;
           return new Parameter(
-              type: parameter.type.toString(),
+              stringType: parameter.type.name,
               name: parameter.name,
               isOptional: true);
         })
@@ -35,7 +36,7 @@ class PreProcessorFunctionAnnotationGenerator
 
     sb.writeln("class $className extends PreProcessor {");
     parameters.forEach((Parameter parameter) {
-      sb.writeln("final ${parameter.type} ${parameter.name};");
+      sb.writeln("final ${parameter.stringType} ${parameter.name};");
     });
     sb.writeln("");
 
@@ -52,12 +53,12 @@ class PreProcessorFunctionAnnotationGenerator
     sb.write("functionName: '${element.displayName}',");
     sb.write("parameters: const <Parameter>[");
     element.parameters.forEach((ParameterElement parameter) {
-      if (parameter.type.toString() == "HttpRequest") {
+      if (parameter.type.name == 'HttpRequest') {
         sb.write(
-            "const Parameter(type: '${parameter.type.toString()}', name: '${parameter.name}'),");
+            "const Parameter(type: ${parameter.type.name}, name: '${parameter.name}'),");
       } else {
         sb.write(
-            "const Parameter(type: '${parameter.type.toString()}', value: '${parameter.name}'),");
+            "const Parameter(type: ${parameter.type.name}, value: '${parameter.name}'),");
       }
     });
     sb.write("],");
@@ -83,7 +84,7 @@ class PreProcessorFunctionAnnotationGenerator
       sb.writeln("void fillParameters(StringBuffer sb) {");
 
       element.parameters.forEach((ParameterElement parameter) {
-        if (parameter.type.toString() == "HttpRequest") {
+        if (parameter.type.name == "HttpRequest") {
           sb.writeln("sb.writeln('${parameter.name},');");
         } else {
           sb.writeln("sb.writeln('\"\$${parameter.name}\",');");

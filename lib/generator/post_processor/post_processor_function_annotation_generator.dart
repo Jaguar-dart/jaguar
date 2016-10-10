@@ -7,8 +7,8 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'post_processor_function.dart';
-import '../pre_processor/pre_processor.dart';
-import '../pre_processor/pre_processor_function.dart';
+// import '../pre_processor/pre_processor.dart';
+// import '../pre_processor/pre_processor_function.dart';
 import '../parameter.dart';
 
 class PostProcessorFunctionAnnotationGenerator
@@ -26,7 +26,7 @@ class PostProcessorFunctionAnnotationGenerator
             return null;
           if (parameter.name.startsWith("_")) return null;
           return new Parameter(
-              type: parameter.type.toString(),
+              stringType: parameter.type.name,
               name: parameter.name,
               isOptional: true);
         })
@@ -38,7 +38,7 @@ class PostProcessorFunctionAnnotationGenerator
 
     sb.writeln("class $className extends PostProcessor {");
     parameters.forEach((Parameter parameter) {
-      sb.writeln("final ${parameter.type} ${parameter.name};");
+      sb.writeln("final ${parameter.stringType} ${parameter.name};");
     });
     sb.writeln("");
 
@@ -57,7 +57,7 @@ class PostProcessorFunctionAnnotationGenerator
     element.parameters.forEach((ParameterElement parameter) {
       // if (parameter.type.toString() == "HttpRequest") {
       sb.write(
-          "const Parameter(type: '${parameter.type.toString()}', name: '${parameter.name}'),");
+          "const Parameter(type: ${parameter.type.name}, name: '${parameter.name}'),");
       //     } else {
       //   sb.write(
       //       "const Parameter(type: '${parameter.type.toString()}', value: '${parameter.name}'),");
@@ -68,13 +68,13 @@ class PostProcessorFunctionAnnotationGenerator
     sb.write("allowMultiple: ${annotation.allowMultiple},");
     // sb.write("]");
     sb.write("takeResponse: ${annotation.takeResponse},");
-    if (annotation.needPreProcessors.isNotEmpty) {
-      sb.write("preProcessors: const <String>[");
-      annotation.needPreProcessors.forEach((Type preProcessor) {
-        sb.write("'${preProcessor.toString()}',");
-      });
-      sb.write("],");
-    }
+    // if (annotation.needPreProcessors.isNotEmpty) {
+    //   sb.write("preProcessors: const <String>[");
+    //   annotation.needPreProcessors.forEach((Type preProcessor) {
+    //     sb.write("'${preProcessor.toString()}',");
+    //   });
+    //   sb.write("],");
+    // }
     sb.writeln(");");
 
     sb.writeln("");
