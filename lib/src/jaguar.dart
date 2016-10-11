@@ -1,3 +1,5 @@
+library jaguar.src.jaguar;
+
 import 'dart:async';
 import 'dart:io';
 

@@ -1,4 +1,4 @@
-library jaguar.generator.pre_processor_function_annotation_generator;
+library jaguar.generator.pre_interceptors_generator;
 
 import 'dart:async';
 

@@ -1,4 +1,4 @@
-library jaguar.generator.post_processor;
+library jaguar.generator.post_interceptor;
 
 import '../parameter.dart';
 import '../utils.dart';

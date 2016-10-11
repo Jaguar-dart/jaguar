@@ -1,4 +1,4 @@
-library jaguar.generator.post_interceptors.generator;
+library jaguar.generator.post_interceptors_generator;
 
 import 'dart:async';
 

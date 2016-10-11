@@ -1,4 +1,4 @@
-library jaguar.generator.api_class;
+library jaguar.generator.api_generator;
 
 import 'dart:async';
 
@@ -15,8 +15,8 @@ import 'post_interceptors/post_interceptor.dart';
 //  ignore: unused_import
 import 'post_interceptors/post_interceptor_function.dart';
 import 'writer.dart';
-import 'route/route_information_generator.dart';
-import 'route/route_information_processor.dart';
+import 'route/route_informations_generator.dart';
+import 'route/route_informations_processor.dart';
 import 'parameter.dart';
 
 class ApiGenerator extends GeneratorForAnnotation<Api> {
@@ -147,7 +147,7 @@ class ApiGenerator extends GeneratorForAnnotation<Api> {
             .toList();
         return new RouteInformationsGenerator(
             preProcessors,
-            new RouteInformationsProcessor(
+            new RouteInformationsInterceptor(
                 path: "$prefix/${route.path}",
                 methods: route.methods,
                 parameters: parameters,

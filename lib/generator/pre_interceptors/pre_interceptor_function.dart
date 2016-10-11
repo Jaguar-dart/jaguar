@@ -1,4 +1,4 @@
-library jaguar.generator.pre_processor.pre_processor_function;
+library jaguar.generator.pre_interceptor_function;
 
 class PreProcessorFunction {
   final List<String> authorizedMethods;

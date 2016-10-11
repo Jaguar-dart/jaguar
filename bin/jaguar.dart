@@ -9,7 +9,7 @@ String getBin() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['bin'];
+  return doc['bin'] ?? 'bin/server.dart';
 }
 
 void launchWatch() {
@@ -21,7 +21,7 @@ void launchWatch() {
         print("kill old server");
         Process.killPid(process.pid);
       }
-      String bin = getBin() ?? 'bin/server.dart';
+      String bin = getBin();
       process = await Process.start('dart', [bin]);
       process.stdout.transform(UTF8.decoder).listen(stdout.write);
       process.stderr.transform(UTF8.decoder).listen(stderr.write);

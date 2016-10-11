@@ -1,4 +1,4 @@
-library jaguar.generator.post_interceptor.post_interceptor_function;
+library jaguar.generator.post_interceptor_function;
 
 class PostInterceptorFunction {
   final bool allowMultiple;

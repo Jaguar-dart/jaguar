@@ -1,3 +1,5 @@
+library jaguar.src.error;
+
 /// [JaguarError] is the basic error in jaguar
 class JaguarError extends Error {
   /// define the status code of the request

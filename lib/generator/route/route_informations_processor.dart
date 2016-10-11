@@ -1,11 +1,11 @@
-library jaguar.generator.route.route_information_processor;
+library jaguar.generator.route_informations_processor;
 
 import '../parameter.dart';
 import '../../src/interceptors/interceptors.dart';
 import '../pre_interceptors/pre_interceptor.dart';
 import '../utils.dart';
 
-class RouteInformationsProcessor extends Interceptor {
+class RouteInformationsInterceptor extends Interceptor {
   final String path;
   final List<String> methods;
   final List<Parameter> parameters;
@@ -13,7 +13,7 @@ class RouteInformationsProcessor extends Interceptor {
   final String returnType;
   final String functionName;
 
-  const RouteInformationsProcessor(
+  const RouteInformationsInterceptor(
       {this.path,
       this.methods,
       this.parameters,

@@ -1,4 +1,4 @@
-library jaguar.generator.pre_processor;
+library jaguar.generator.pre_interceptor;
 
 import '../parameter.dart';
 import '../utils.dart';

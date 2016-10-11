@@ -70,10 +70,15 @@ PhaseGroup generatePhaseGroup(
     List<String> postProcessors,
     List<String> preProcessors,
     List<String> apis}) {
-  return new PhaseGroup()
-    ..addPhase(postProcessorPhase(projectName, postProcessors))
-    ..addPhase(preProcessorPhase(projectName, preProcessors))
-    ..addPhase(apisPhase(projectName, apis));
+  PhaseGroup phaseGroup = new PhaseGroup();
+  if (postProcessors.isNotEmpty) {
+    phaseGroup.addPhase(postProcessorPhase(projectName, postProcessors));
+  }
+  if (preProcessors.isNotEmpty) {
+    phaseGroup.addPhase(preProcessorPhase(projectName, preProcessors));
+  }
+  phaseGroup.addPhase(apisPhase(projectName, apis));
+  return phaseGroup;
 }
 
 PhaseGroup phaseGroup() {
@@ -82,6 +87,9 @@ PhaseGroup phaseGroup() {
     throw "Could not find the project name";
   }
   List<String> apis = getAnnotations();
+  if (apis == null) {
+    throw "You need to provide one or more api file";
+  }
   List<String> postProcessor = getPostProcessor();
   List<String> preProcessor = getPreProcessor();
   return generatePhaseGroup(
