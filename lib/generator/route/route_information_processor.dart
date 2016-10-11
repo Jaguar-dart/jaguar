@@ -1,7 +1,5 @@
 library jaguar.generator.route.route_information_processor;
 
-import 'dart:io';
-
 import '../parameter.dart';
 import '../processor.dart';
 import '../pre_processor/pre_processor.dart';
