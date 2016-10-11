@@ -118,9 +118,3 @@ Future<Map<String, FormField>> getFormDataFromBody(HttpRequest request) async {
       .toList()
       .then(Future.wait);
 }
-
-@PreProcessorFunction(
-    allowMultiple: true, postProcessors: const <Type>[CloseDbExample])
-Future<String> openDbExample(String dbName) async {
-  return "create beautifull $dbName";
-}

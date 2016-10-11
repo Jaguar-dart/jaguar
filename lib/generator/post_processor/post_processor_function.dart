@@ -1,7 +1,6 @@
 library jaguar.generator.post_processor.post_processor_function;
 
 import 'dart:io';
-import 'dart:async';
 import 'dart:convert';
 
 import 'post_processor.dart';
@@ -31,9 +30,4 @@ void encodeStringToJson(HttpRequest request, String result) {
 @PostProcessorFunction(takeResponse: true)
 void encodeMapOrListToJson(HttpRequest request, dynamic result) {
   encodeStringToJson(request, JSON.encode(result));
-}
-
-@PostProcessorFunction(allowMultiple: true)
-Future<Null> closeDbExample(String _openDbExample) async {
-  print("close $_openDbExample");
 }
