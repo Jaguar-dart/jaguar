@@ -1,21 +1,8 @@
-library source_gen_experimentation.generators.route;
-
-class RouteInformationsGenrator {
-  String path;
-  List<String> methods;
-  String signature;
-
-  RouteInformationsGenrator(this.path, this.methods, this.signature);
-
-  String toString() => "$path $methods";
-}
-
 class RouteInformations {
   String path;
   List<String> methods;
-  Function function;
 
-  RouteInformations(this.path, this.methods, this.function);
+  RouteInformations(this.path, this.methods);
 
   bool matchWithRequestPathAndMethod(
       List<String> args, String requestPath, String method) {
@@ -30,6 +17,4 @@ class RouteInformations {
     });
     return true;
   }
-
-  String toString() => "$path $methods";
 }

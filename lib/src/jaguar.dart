@@ -23,6 +23,7 @@ class Jaguar {
       }
     } catch (e) {
       print(e);
+      request.response.write(e);
     } finally {
       await request.response.close();
     }

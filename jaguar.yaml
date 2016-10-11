@@ -1,0 +1,5 @@
+bin:
+  'example/main.dart'
+
+apis:
+  - 'example/api.dart'
