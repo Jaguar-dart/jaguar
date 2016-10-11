@@ -7,20 +7,20 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_gen/src/annotation.dart';
 
-import 'processor.dart';
-import 'pre_processor/pre_processor.dart';
+import '../src/interceptors/interceptors.dart';
+import 'pre_interceptors/pre_interceptor.dart';
 //  ignore: unused_import
-import 'pre_processor/pre_processor_function.dart';
-import 'post_processor/post_processor.dart';
+import 'pre_interceptors/pre_interceptor_function.dart';
+import 'post_interceptors/post_interceptor.dart';
 //  ignore: unused_import
-import 'post_processor/post_processor_function.dart';
+import 'post_interceptors/post_interceptor_function.dart';
 import 'writer.dart';
 import 'route/route_information_generator.dart';
 import 'route/route_information_processor.dart';
 import 'parameter.dart';
 
-class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
-  const ApiAnnotationGenerator();
+class ApiGenerator extends GeneratorForAnnotation<Api> {
+  const ApiGenerator();
 
   @override
   Future<String> generateForAnnotatedElement(
@@ -35,8 +35,8 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
       prefix = "/${annotation.name}/${annotation.version}";
     }
 
-    List<PreProcessor> preProcessors = _getPreProcessorMetadata(element);
-    List<PostProcessor> postProcessors = _getPostProcessorMetadata(element);
+    List<PreInterceptor> preProcessors = _getPreProcessorMetadata(element);
+    List<PostInterceptor> postProcessors = _getPostProcessorMetadata(element);
     List<RouteInformationsGenerator> routesProcessor = _groupRecursion(
         classElement, prefix, "", preProcessors, postProcessors);
 
@@ -44,11 +44,11 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
     return w.toString();
   }
 
-  List<PreProcessor> _getPreProcessorMetadata(Element element) =>
+  List<PreInterceptor> _getPreProcessorMetadata(Element element) =>
       element.metadata
           .map((ElementAnnotation elementAnnotation) {
             var annotation = instantiateAnnotation(elementAnnotation);
-            if (annotation is PreProcessor) {
+            if (annotation is PreInterceptor) {
               return annotation;
             }
             return null;
@@ -56,11 +56,11 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
           .where((annotation) => annotation != null)
           .toList();
 
-  List<PostProcessor> _getPostProcessorMetadata(Element element) =>
+  List<PostInterceptor> _getPostProcessorMetadata(Element element) =>
       element.metadata
           .map((ElementAnnotation elementAnnotation) {
             var annotation = instantiateAnnotation(elementAnnotation);
-            if (annotation is PostProcessor) {
+            if (annotation is PostInterceptor) {
               return annotation;
             }
           })
@@ -87,8 +87,8 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
       ClassElement classElement,
       String prefix,
       String resource,
-      List<PreProcessor> parentPreProcessors,
-      List<PostProcessor> parentPostProcessors) {
+      List<PreInterceptor> parentPreProcessors,
+      List<PostInterceptor> parentPostProcessors) {
     List<RouteInformationsGenerator> routes = getRouteInformationsGenerator(
         classElement,
         prefix,
@@ -99,9 +99,9 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
     List<List<RouteInformationsGenerator>> nestedRoutes =
         classElement.fields.map((FieldElement fieldElement) {
       Group group = _getGroupMetadata(fieldElement);
-      List<PreProcessor> preProcessors = _getPreProcessorMetadata(fieldElement)
-        ..addAll(parentPreProcessors);
-      List<PostProcessor> postProcessors =
+      List<PreInterceptor> preProcessors =
+          _getPreProcessorMetadata(fieldElement)..addAll(parentPreProcessors);
+      List<PostInterceptor> postProcessors =
           _getPostProcessorMetadata(fieldElement)..addAll(parentPostProcessors);
 
       return _groupRecursion(
@@ -125,13 +125,13 @@ class ApiAnnotationGenerator extends GeneratorForAnnotation<Api> {
           ClassElement classElement,
           String prefix,
           String resource,
-          List<PreProcessor> parentPreProcessors,
-          List<PostProcessor> parentPostProcessors) =>
+          List<PreInterceptor> parentPreProcessors,
+          List<PostInterceptor> parentPostProcessors) =>
       classElement.methods.map((MethodElement method) {
         Route route = _getRouteMetadata(method);
-        List<PreProcessor> preProcessors = _getPreProcessorMetadata(method)
+        List<PreInterceptor> preProcessors = _getPreProcessorMetadata(method)
           ..addAll(parentPreProcessors);
-        List<PostProcessor> postProcessors = _getPostProcessorMetadata(method)
+        List<PostInterceptor> postProcessors = _getPostProcessorMetadata(method)
           ..addAll(parentPostProcessors);
         List<Parameter> parameters = method.parameters
             .where((ParameterElement parameter) =>

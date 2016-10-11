@@ -2,8 +2,8 @@ library jaguar.generator.writer;
 
 import 'dart:convert';
 
-import 'pre_processor/pre_processor.dart';
-import 'post_processor/post_processor.dart';
+import 'pre_interceptors/pre_interceptor.dart';
+import 'post_interceptors/post_interceptor.dart';
 import 'route/route_information_generator.dart';
 
 class Writer {
@@ -70,18 +70,18 @@ class Writer {
   }
 
   void _generatePreProcessor(RouteInformationsGenerator route) {
-    List<PreProcessor> preProcessors = route.preProcessors
-        .where((PreProcessor preProcessor) => preProcessor.methods.any(
+    List<PreInterceptor> preProcessors = route.preProcessors
+        .where((PreInterceptor preProcessor) => preProcessor.methods.any(
             (String method) => route.routeProcessor.methods.contains(method)))
         .toList();
-    preProcessors.sort((PreProcessor p1, PreProcessor p2) {
+    preProcessors.sort((PreInterceptor p1, PreInterceptor p2) {
       if (p1.variableName == null && p2.variableName != null) {
         return -1;
       }
       return 1;
     });
     Map<String, int> numberPreProcessor = <String, int>{};
-    preProcessors.forEach((PreProcessor preProcessor) {
+    preProcessors.forEach((PreInterceptor preProcessor) {
       String type = preProcessor.runtimeType.toString();
       if (!numberPreProcessor.containsKey(type)) {
         numberPreProcessor[type] = 0;
@@ -93,8 +93,8 @@ class Writer {
   }
 
   void _generateProcessor(RouteInformationsGenerator route) {
-    List<PreProcessor> preProcessors = route.preProcessors.where(
-        (PreProcessor preProcessor) =>
+    List<PreInterceptor> preProcessors = route.preProcessors.where(
+        (PreInterceptor preProcessor) =>
             preProcessor.methods.any((String method) =>
                 route.routeProcessor.methods.contains(method)) &&
             preProcessor.variableName != null);
@@ -105,7 +105,7 @@ class Writer {
   bool _generatePostProcessor(RouteInformationsGenerator route) {
     Map<String, int> numberPostProcessor = <String, int>{};
     bool someoneTakeTheResponse = false;
-    route.postProcessor.forEach((PostProcessor postProcessor) {
+    route.postProcessor.forEach((PostInterceptor postProcessor) {
       String type = postProcessor.runtimeType.toString();
       if (!numberPostProcessor.containsKey(type)) {
         numberPostProcessor[type] = 0;
@@ -120,9 +120,9 @@ class Writer {
       postProcessor.callProcessor(sb, numberPostProcessor[type]);
     });
     numberPostProcessor.clear();
-    route.preProcessors.forEach((PreProcessor preProcessor) {
+    route.preProcessors.forEach((PreInterceptor preProcessor) {
       preProcessor.callPostProcessorsAfter
-          .forEach((PostProcessor postProcessor) {
+          .forEach((PostInterceptor postProcessor) {
         String type = postProcessor.runtimeType.toString();
         if (!numberPostProcessor.containsKey(type)) {
           numberPostProcessor[type] = 0;

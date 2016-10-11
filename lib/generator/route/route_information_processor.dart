@@ -1,11 +1,11 @@
 library jaguar.generator.route.route_information_processor;
 
 import '../parameter.dart';
-import '../processor.dart';
-import '../pre_processor/pre_processor.dart';
+import '../../src/interceptors/interceptors.dart';
+import '../pre_interceptors/pre_interceptor.dart';
 import '../utils.dart';
 
-class RouteInformationsProcessor extends Processor {
+class RouteInformationsProcessor extends Interceptor {
   final String path;
   final List<String> methods;
   final List<Parameter> parameters;
@@ -22,14 +22,14 @@ class RouteInformationsProcessor extends Processor {
       this.functionName})
       : super();
 
-  void fillParameters(StringBuffer sb, List<PreProcessor> preProcessors) {
+  void fillParameters(StringBuffer sb, List<PreInterceptor> preProcessors) {
     if (parameters.isEmpty) return;
     if (parameters.first.typeAsString == 'HttpRequest') {
       sb.write("request, ");
       parameters.removeAt(0);
     }
     Map<String, int> numberPreProcessor = <String, int>{};
-    preProcessors.forEach((PreProcessor preProcessor) {
+    preProcessors.forEach((PreInterceptor preProcessor) {
       String type = preProcessor.runtimeType.toString();
       if (!numberPreProcessor.containsKey(type)) {
         numberPreProcessor[type] = 0;
@@ -59,7 +59,7 @@ class RouteInformationsProcessor extends Processor {
     });
   }
 
-  void callProcessor(StringBuffer sb, List<PreProcessor> preProcessor) {
+  void callProcessor(StringBuffer sb, List<PreInterceptor> preProcessor) {
     if (returnType.startsWith("Future")) {
       String type = getTypeFromFuture(returnType);
       manageType(sb, type, true, preProcessor);
@@ -69,7 +69,7 @@ class RouteInformationsProcessor extends Processor {
   }
 
   void manageType(StringBuffer sb, String type, bool needAwait,
-      List<PreProcessor> preProcessors) {
+      List<PreInterceptor> preProcessors) {
     if (type == "void") {
       sb.write("$functionName(");
       fillParameters(sb, preProcessors);
@@ -85,7 +85,7 @@ class RouteInformationsProcessor extends Processor {
     }
   }
 
-  String generateCall(List<PreProcessor> preProcessors) {
+  String generateCall(List<PreInterceptor> preProcessors) {
     StringBuffer sb = new StringBuffer();
 
     callProcessor(sb, preProcessors);

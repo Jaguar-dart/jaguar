@@ -6,10 +6,10 @@ PhaseGroup getPhaseGroup() {
   return new PhaseGroup()
     ..addPhase(postProcessorPhase(
       'jaguar',
-      ['lib/generator/post_processor/post_processor_function.dart'],
+      ['lib/src/interceptors/post/post_interceptors_function.dart'],
     ))
     ..addPhase(preProcessorPhase('jaguar', [
-      'lib/generator/pre_processor/pre_processor_function.dart',
+      'lib/src/interceptors/pre/pre_interceptors_function.dart',
     ]));
 }
 

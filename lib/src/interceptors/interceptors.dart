@@ -1,10 +1,10 @@
-library jaguar.generator.processor;
+library jaguar.src.interceptors;
 
-abstract class Processor {
-  const Processor();
+abstract class Interceptor {
+  const Interceptor();
 }
 
-class Route extends Processor {
+class Route extends Interceptor {
   final String path;
   final List<String> methods;
 
@@ -20,14 +20,14 @@ class Route extends Processor {
       ]});
 }
 
-class Api extends Processor {
+class Api extends Interceptor {
   final String name;
   final String version;
 
   const Api({this.name: '', this.version: ''});
 }
 
-class Group extends Processor {
+class Group extends Interceptor {
   final String name;
 
   const Group({this.name});

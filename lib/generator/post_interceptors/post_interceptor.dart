@@ -1,35 +1,25 @@
-library jaguar.generator.pre_processor;
+library jaguar.generator.post_processor;
 
 import '../parameter.dart';
 import '../utils.dart';
-import '../post_processor/post_processor.dart';
 
-abstract class PreProcessor {
+abstract class PostInterceptor {
   final String returnType;
   final String variableName;
   final String functionName;
   final List<Parameter> parameters;
-  final List<String> methods;
-  final List<PostProcessor> callPostProcessorsAfter;
   final bool allowMultiple;
+  final bool takeResponse;
 
-  const PreProcessor(
+  const PostInterceptor(
       {this.returnType: null,
       this.variableName: null,
       this.functionName: null,
       this.parameters: const <Parameter>[],
-      this.methods: const <String>[
-        'GET',
-        'POST',
-        'PUT',
-        'PATCH',
-        'DELETE',
-        'OPTIONS'
-      ],
-      this.callPostProcessorsAfter: const <PostProcessor>[],
-      this.allowMultiple: false});
+      this.allowMultiple: false,
+      this.takeResponse: false});
 
-  void generateCall(StringBuffer sb, int numberPreProcessor) {
+  void generateCall(StringBuffer sb, int numberPostProcessor) {
     bool needAwait = false;
     String type = returnType;
     if (returnType.startsWith("Future")) {
@@ -37,27 +27,31 @@ abstract class PreProcessor {
       needAwait = true;
     }
     if (type != "void" && type != "Null") {
-      sb.write("$type $variableName$numberPreProcessor = ");
+      sb.write("$type $variableName$numberPostProcessor = ");
     }
     if (needAwait) {
       sb.write("await ");
     }
     sb.write("$functionName(");
-    fillParameters(sb);
+    fillParameters(sb, numberPostProcessor);
     sb.write(")");
     sb.writeln(";");
   }
 
-  void fillParameters(StringBuffer sb) {
+  void fillParameters(StringBuffer sb, int numberPostProcessor) {
     parameters.forEach((Parameter parameter) {
       if (parameter.name != null) {
-        sb.write("${parameter.name},");
+        if (parameter.name == "request" || parameter.name == "result") {
+          sb.write("${parameter.name},");
+        } else {
+          sb.write("${parameter.name}$numberPostProcessor,");
+        }
       }
     });
   }
 
-  void callProcessor(StringBuffer sb, int numberPreProcessor,
+  void callProcessor(StringBuffer sb, int numberPostProcessor,
       [bool insideParameter = false]) {
-    generateCall(sb, numberPreProcessor);
+    generateCall(sb, numberPostProcessor);
   }
 }

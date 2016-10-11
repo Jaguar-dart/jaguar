@@ -1,9 +1,9 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of jaguar.generator.pre_processor.pre_processor_function;
+part of jaguar.src.interceptors.pre;
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: getStringFromBody
 // **************************************************************************
 
@@ -27,7 +27,7 @@ class GetStringFromBody extends PreProcessor {
 }
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: mustBeMimeType
 // **************************************************************************
 
@@ -61,7 +61,7 @@ class MustBeMimeType extends PreProcessor {
 }
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: getJsonFromBody
 // **************************************************************************
 
@@ -85,7 +85,7 @@ class GetJsonFromBody extends PreProcessor {
 }
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: getFormDataFromBody
 // **************************************************************************
 

@@ -6,9 +6,9 @@ import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
-import 'api_annotation.dart';
-import 'pre_processor/pre_processor_function_annotation_generator.dart';
-import 'post_processor/post_processor_function_annotation_generator.dart';
+import 'api_generator.dart';
+import 'pre_interceptors/pre_interceptors_generator.dart';
+import 'post_interceptors/post_interceptors_generator.dart';
 
 String getProjectName() {
   File pubspec = new File('./pubspec.yaml');
@@ -42,7 +42,7 @@ Phase postProcessorPhase(String projectName, List<String> postProcessors) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
-          const PostProcessorFunctionAnnotationGenerator(),
+          const PostInterceptorGenerator(),
         ]),
         new InputSet(projectName, postProcessors));
 }
@@ -51,7 +51,7 @@ Phase preProcessorPhase(String projectName, List<String> preProcessors) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
-          const PreProcessorFunctionAnnotationGenerator(),
+          const PreInterceptorGenerator(),
         ]),
         new InputSet(projectName, preProcessors));
 }
@@ -60,7 +60,7 @@ Phase apisPhase(String projectName, List<String> apis) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
-          const ApiAnnotationGenerator(),
+          const ApiGenerator(),
         ]),
         new InputSet(projectName, apis));
 }
