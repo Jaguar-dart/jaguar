@@ -39,21 +39,3 @@ class EncodeMapOrListToJson extends PostProcessor {
           takeResponse: true,
         );
 }
-
-// **************************************************************************
-// Generator: PostProcessorFunctionAnnotationGenerator
-// Target: closeDbExample
-// **************************************************************************
-
-class CloseDbExample extends PostProcessor {
-  const CloseDbExample()
-      : super(
-          returnType: 'Future<Null>',
-          functionName: 'closeDbExample',
-          parameters: const <Parameter>[
-            const Parameter(type: String, name: '_openDbExample'),
-          ],
-          allowMultiple: true,
-          takeResponse: false,
-        );
-}

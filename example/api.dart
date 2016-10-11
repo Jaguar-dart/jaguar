@@ -21,14 +21,10 @@ class ExampleApi extends Object with _$JaguarExampleApi {
     print(name);
   }
 
-  @OpenDbExample(dbName: 'test1')
-  @OpenDbExample(dbName: 'test2')
   @Route(path: 'test', methods: const ['POST'])
   @EncodeMapOrListToJson()
-  Map<String, String> test(String dbName1, String dbName2) {
-    print(dbName1);
-    print(dbName2);
-    return {"a": dbName1, "b": dbName2};
+  Map<String, String> test() {
+    return {"a": "dbName1", "b": "dbName2"};
   }
 
   @Group(name: 'users')
