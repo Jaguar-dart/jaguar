@@ -1,7 +1,7 @@
 library jaguar.generator.route_informations_generator;
 
 import '../pre_interceptors/pre_interceptor.dart';
-import 'route_informations_processor.dart';
+import 'interceptor.dart';
 import '../post_interceptors/post_interceptor.dart';
 
 class RouteInformationsGenerator {

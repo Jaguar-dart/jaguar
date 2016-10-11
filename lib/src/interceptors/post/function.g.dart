@@ -7,7 +7,7 @@ part of jaguar.src.interceptors.post;
 // Target: encodeStringToJson
 // **************************************************************************
 
-class EncodeStringToJson extends PostProcessor {
+class EncodeStringToJson extends PostInterceptor {
   const EncodeStringToJson()
       : super(
           returnType: 'void',
@@ -26,7 +26,7 @@ class EncodeStringToJson extends PostProcessor {
 // Target: encodeMapOrListToJson
 // **************************************************************************
 
-class EncodeMapOrListToJson extends PostProcessor {
+class EncodeMapOrListToJson extends PostInterceptor {
   const EncodeMapOrListToJson()
       : super(
           returnType: 'void',

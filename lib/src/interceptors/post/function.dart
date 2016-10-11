@@ -3,7 +3,10 @@ library jaguar.src.interceptors.post;
 import 'dart:io';
 import 'dart:convert';
 
-import '../../../generator/post_interceptors/post_interceptor_function.dart';
+import '../../../generator/post_interceptors/function.dart';
+import '../../../generator/parameter.dart';
+
+part 'function.g.dart';
 
 @PostInterceptorFunction(takeResponse: true)
 void encodeStringToJson(HttpRequest request, String result) {

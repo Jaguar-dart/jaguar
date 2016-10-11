@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'pre_interceptors/pre_interceptor.dart';
 import 'post_interceptors/post_interceptor.dart';
-import 'route/route_informations_generator.dart';
+import 'route_informations/generator.dart';
 
 class Writer {
   final String className;

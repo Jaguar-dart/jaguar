@@ -7,8 +7,8 @@ import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
 import 'api_generator.dart';
-import 'pre_interceptors/pre_interceptors_generator.dart';
-import 'post_interceptors/post_interceptors_generator.dart';
+import 'pre_interceptors/generator.dart';
+import 'post_interceptors/generator.dart';
 
 String getProjectName() {
   File pubspec = new File('./pubspec.yaml');

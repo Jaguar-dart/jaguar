@@ -7,7 +7,7 @@ part of jaguar.src.interceptors.pre;
 // Target: getStringFromBody
 // **************************************************************************
 
-class GetStringFromBody extends PreProcessor {
+class GetStringFromBody extends PreInterceptor {
   const GetStringFromBody()
       : super(
           returnType: 'Future<String>',
@@ -31,7 +31,7 @@ class GetStringFromBody extends PreProcessor {
 // Target: mustBeMimeType
 // **************************************************************************
 
-class MustBeMimeType extends PreProcessor {
+class MustBeMimeType extends PreInterceptor {
   final String mimeType;
 
   const MustBeMimeType({
@@ -65,7 +65,7 @@ class MustBeMimeType extends PreProcessor {
 // Target: getJsonFromBody
 // **************************************************************************
 
-class GetJsonFromBody extends PreProcessor {
+class GetJsonFromBody extends PreInterceptor {
   const GetJsonFromBody()
       : super(
           returnType: 'Future<String>',
@@ -89,7 +89,7 @@ class GetJsonFromBody extends PreProcessor {
 // Target: getFormDataFromBody
 // **************************************************************************
 
-class GetFormDataFromBody extends PreProcessor {
+class GetFormDataFromBody extends PreInterceptor {
   const GetFormDataFromBody()
       : super(
           returnType: 'Future<Map<String, FormField>>',

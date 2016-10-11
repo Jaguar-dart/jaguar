@@ -6,7 +6,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'pre_interceptor_function.dart';
+import 'function.dart';
 import '../parameter.dart';
 
 class PreInterceptorGenerator
@@ -32,7 +32,7 @@ class PreInterceptorGenerator
     String className =
         "${element.displayName.substring(0, 1).toUpperCase()}${element.displayName.substring(1)}";
 
-    sb.writeln("class $className extends PreProcessor {");
+    sb.writeln("class $className extends PreInterceptor {");
     parameters.forEach((Parameter parameter) {
       sb.writeln("final ${parameter.typeAsString} ${parameter.name};");
     });

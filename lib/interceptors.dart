@@ -1,5 +1,5 @@
 library interceptors;
 
 export 'src/interceptors/interceptors.dart';
-export 'src/interceptors/pre/pre_interceptors_function.dart';
-export 'src/interceptors/post/post_interceptors_function.dart';
+export 'src/interceptors/pre/function.dart';
+export 'src/interceptors/post/function.dart';

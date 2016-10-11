@@ -6,7 +6,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'post_interceptor_function.dart';
+import 'function.dart';
 import '../parameter.dart';
 
 class PostInterceptorGenerator
@@ -34,7 +34,7 @@ class PostInterceptorGenerator
     String className =
         "${element.displayName.substring(0, 1).toUpperCase()}${element.displayName.substring(1)}";
 
-    sb.writeln("class $className extends PostProcessor {");
+    sb.writeln("class $className extends PostInterceptor {");
     parameters.forEach((Parameter parameter) {
       sb.writeln("final ${parameter.typeAsString} ${parameter.name};");
     });

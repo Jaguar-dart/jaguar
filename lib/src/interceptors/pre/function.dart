@@ -7,7 +7,10 @@ import 'dart:convert';
 import 'package:http_server/http_server.dart';
 import 'package:mime/mime.dart';
 
-import '../../../generator/pre_interceptors/pre_interceptor_function.dart';
+import '../../../generator/pre_interceptors/function.dart';
+import '../../../generator/parameter.dart';
+
+part 'function.g.dart';
 
 @PreProcessorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])

@@ -10,13 +10,13 @@ import 'package:source_gen/src/annotation.dart';
 import '../src/interceptors/interceptors.dart';
 import 'pre_interceptors/pre_interceptor.dart';
 //  ignore: unused_import
-import 'pre_interceptors/pre_interceptor_function.dart';
+import 'pre_interceptors/function.dart';
 import 'post_interceptors/post_interceptor.dart';
 //  ignore: unused_import
-import 'post_interceptors/post_interceptor_function.dart';
+import 'post_interceptors/function.dart';
 import 'writer.dart';
-import 'route/route_informations_generator.dart';
-import 'route/route_informations_processor.dart';
+import 'route_informations/generator.dart';
+import 'route_informations/interceptor.dart';
 import 'parameter.dart';
 
 class ApiGenerator extends GeneratorForAnnotation<Api> {
