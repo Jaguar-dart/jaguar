@@ -1,5 +1,7 @@
 library jaguar.generator.route.route_information_processor;
 
+import 'dart:io';
+
 import '../parameter.dart';
 import '../processor.dart';
 import '../pre_processor/pre_processor.dart';
@@ -24,7 +26,7 @@ class RouteInformationsProcessor extends Processor {
 
   void fillParameters(StringBuffer sb, List<PreProcessor> preProcessors) {
     if (parameters.isEmpty) return;
-    if (parameters.first.type == 'HttpRequest') {
+    if (parameters.first.typeAsString == 'HttpRequest') {
       sb.write("request, ");
       parameters.removeAt(0);
     }

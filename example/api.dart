@@ -9,7 +9,7 @@ part 'api.g.dart';
 
 class UsersResource {
   @Route(methods: const <String>['POST'])
-  users() {
+  users(HttpRequest request) {
     print("users");
   }
 }

@@ -53,7 +53,9 @@ abstract class _$JaguarExampleApi {
     match = _routes[2]
         .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
     if (match) {
-      var result = users.users();
+      var result = users.users(
+        request,
+      );
       request.response.write(result);
       return true;
     }
