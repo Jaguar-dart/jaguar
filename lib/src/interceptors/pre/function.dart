@@ -8,6 +8,7 @@ import 'package:http_server/http_server.dart';
 import 'package:mime/mime.dart';
 
 import '../../../generator/pre_interceptors/function.dart';
+import '../../../generator/pre_interceptors/pre_interceptor.dart';
 import '../../../generator/parameter.dart';
 
 part 'function.g.dart';
