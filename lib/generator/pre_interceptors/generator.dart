@@ -10,12 +10,12 @@ import 'function.dart';
 import '../parameter.dart';
 
 class PreInterceptorGenerator
-    extends GeneratorForAnnotation<PreProcessorFunction> {
+    extends GeneratorForAnnotation<PreInterceptorFunction> {
   const PreInterceptorGenerator();
 
   @override
   Future<String> generateForAnnotatedElement(FunctionElement element,
-      PreProcessorFunction annotation, BuildStep buildStep) async {
+      PreInterceptorFunction annotation, BuildStep buildStep) async {
     StringBuffer sb = new StringBuffer();
 
     List<Parameter> parameters = element.parameters
@@ -66,10 +66,10 @@ class PreInterceptorGenerator
     });
     sb.write("],");
     sb.write("allowMultiple: ${annotation.allowMultiple},");
-    if (annotation.postProcessors.isNotEmpty) {
-      sb.write("callPostProcessorsAfter: const <PostProcessor>[");
-      annotation.postProcessors.forEach((Type postProcessor) {
-        sb.write("const ${postProcessor.toString()}(),");
+    if (annotation.postInterceptors.isNotEmpty) {
+      sb.write("callPostInterceptorsAfter: const <PostInterceptor>[");
+      annotation.postInterceptors.forEach((Type postInterceptor) {
+        sb.write("const ${postInterceptor.toString()}(),");
       });
       sb.write("]");
     }

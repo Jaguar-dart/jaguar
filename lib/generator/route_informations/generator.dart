@@ -5,14 +5,14 @@ import 'interceptor.dart';
 import '../post_interceptors/post_interceptor.dart';
 
 class RouteInformationsGenerator {
-  List<PreInterceptor> preProcessors;
-  RouteInformationsInterceptor routeProcessor;
-  List<PostInterceptor> postProcessor;
+  List<PreInterceptor> preInterceptors;
+  RouteInformationsInterceptor routeInterceptor;
+  List<PostInterceptor> postInterceptor;
 
   RouteInformationsGenerator(
-      this.preProcessors, this.routeProcessor, this.postProcessor);
+      this.preInterceptors, this.routeInterceptor, this.postInterceptor);
 
   String toString() {
-    return "${routeProcessor.path} ${routeProcessor.parameters}";
+    return "${routeInterceptor.path} ${routeInterceptor.parameters}";
   }
 }

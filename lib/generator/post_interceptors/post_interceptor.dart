@@ -19,7 +19,7 @@ abstract class PostInterceptor {
       this.allowMultiple: false,
       this.takeResponse: false});
 
-  void generateCall(StringBuffer sb, int numberPostProcessor) {
+  void generateCall(StringBuffer sb, int numberPostInterceptor) {
     bool needAwait = false;
     String type = returnType;
     if (returnType.startsWith("Future")) {
@@ -27,31 +27,31 @@ abstract class PostInterceptor {
       needAwait = true;
     }
     if (type != "void" && type != "Null") {
-      sb.write("$type $variableName$numberPostProcessor = ");
+      sb.write("$type $variableName$numberPostInterceptor = ");
     }
     if (needAwait) {
       sb.write("await ");
     }
     sb.write("$functionName(");
-    fillParameters(sb, numberPostProcessor);
+    fillParameters(sb, numberPostInterceptor);
     sb.write(")");
     sb.writeln(";");
   }
 
-  void fillParameters(StringBuffer sb, int numberPostProcessor) {
+  void fillParameters(StringBuffer sb, int numberPostInterceptor) {
     parameters.forEach((Parameter parameter) {
       if (parameter.name != null) {
         if (parameter.name == "request" || parameter.name == "result") {
           sb.write("${parameter.name},");
         } else {
-          sb.write("${parameter.name}$numberPostProcessor,");
+          sb.write("${parameter.name}$numberPostInterceptor,");
         }
       }
     });
   }
 
-  void callProcessor(StringBuffer sb, int numberPostProcessor,
+  void callInterceptor(StringBuffer sb, int numberPostInterceptor,
       [bool insideParameter = false]) {
-    generateCall(sb, numberPostProcessor);
+    generateCall(sb, numberPostInterceptor);
   }
 }

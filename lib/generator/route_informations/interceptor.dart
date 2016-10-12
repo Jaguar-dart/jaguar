@@ -22,21 +22,21 @@ class RouteInformationsInterceptor extends Interceptor {
       this.functionName})
       : super();
 
-  void fillParameters(StringBuffer sb, List<PreInterceptor> preProcessors) {
+  void fillParameters(StringBuffer sb, List<PreInterceptor> preInterceptors) {
     if (parameters.isEmpty) return;
     if (parameters.first.typeAsString == 'HttpRequest') {
       sb.write("request, ");
       parameters.removeAt(0);
     }
-    Map<String, int> numberPreProcessor = <String, int>{};
-    preProcessors.forEach((PreInterceptor preProcessor) {
-      String type = preProcessor.runtimeType.toString();
-      if (!numberPreProcessor.containsKey(type)) {
-        numberPreProcessor[type] = 0;
+    Map<String, int> numberPreInterceptor = <String, int>{};
+    preInterceptors.forEach((PreInterceptor preInterceptor) {
+      String type = preInterceptor.runtimeType.toString();
+      if (!numberPreInterceptor.containsKey(type)) {
+        numberPreInterceptor[type] = 0;
       } else {
-        numberPreProcessor[type] += 1;
+        numberPreInterceptor[type] += 1;
       }
-      sb.write("${preProcessor.variableName}${numberPreProcessor[type]}, ");
+      sb.write("${preInterceptor.variableName}${numberPreInterceptor[type]}, ");
       parameters.removeAt(0);
     });
     for (int i = 0; i < parameters.length; i++) {
@@ -59,36 +59,36 @@ class RouteInformationsInterceptor extends Interceptor {
     });
   }
 
-  void callProcessor(StringBuffer sb, List<PreInterceptor> preProcessor) {
+  void callInterceptor(StringBuffer sb, List<PreInterceptor> preInterceptor) {
     if (returnType.startsWith("Future")) {
       String type = getTypeFromFuture(returnType);
-      manageType(sb, type, true, preProcessor);
+      manageType(sb, type, true, preInterceptor);
     } else {
-      manageType(sb, returnType, false, preProcessor);
+      manageType(sb, returnType, false, preInterceptor);
     }
   }
 
   void manageType(StringBuffer sb, String type, bool needAwait,
-      List<PreInterceptor> preProcessors) {
+      List<PreInterceptor> preInterceptors) {
     if (type == "void") {
       sb.write("$functionName(");
-      fillParameters(sb, preProcessors);
+      fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else if (type == "dynamic") {
       sb.write("var result = ${needAwait ? 'await ' : ''} $functionName(");
-      fillParameters(sb, preProcessors);
+      fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else {
       sb.write("$type result = ${needAwait ? 'await ' : ''}$functionName(");
-      fillParameters(sb, preProcessors);
+      fillParameters(sb, preInterceptors);
       sb.writeln(");");
     }
   }
 
-  String generateCall(List<PreInterceptor> preProcessors) {
+  String generateCall(List<PreInterceptor> preInterceptors) {
     StringBuffer sb = new StringBuffer();
 
-    callProcessor(sb, preProcessors);
+    callInterceptor(sb, preInterceptors);
 
     return sb.toString();
   }

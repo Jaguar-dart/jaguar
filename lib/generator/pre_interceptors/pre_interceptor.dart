@@ -10,7 +10,7 @@ abstract class PreInterceptor {
   final String functionName;
   final List<Parameter> parameters;
   final List<String> methods;
-  final List<PostInterceptor> callPostProcessorsAfter;
+  final List<PostInterceptor> callPostInterceptorsAfter;
   final bool allowMultiple;
 
   const PreInterceptor(
@@ -26,10 +26,10 @@ abstract class PreInterceptor {
         'DELETE',
         'OPTIONS'
       ],
-      this.callPostProcessorsAfter: const <PostInterceptor>[],
+      this.callPostInterceptorsAfter: const <PostInterceptor>[],
       this.allowMultiple: false});
 
-  void generateCall(StringBuffer sb, int numberPreProcessor) {
+  void generateCall(StringBuffer sb, int numberPreInterceptor) {
     bool needAwait = false;
     String type = returnType;
     if (returnType.startsWith("Future")) {
@@ -37,7 +37,7 @@ abstract class PreInterceptor {
       needAwait = true;
     }
     if (type != "void" && type != "Null") {
-      sb.write("$type $variableName$numberPreProcessor = ");
+      sb.write("$type $variableName$numberPreInterceptor = ");
     }
     if (needAwait) {
       sb.write("await ");
@@ -56,8 +56,8 @@ abstract class PreInterceptor {
     });
   }
 
-  void callProcessor(StringBuffer sb, int numberPreProcessor,
+  void callInterceptor(StringBuffer sb, int numberPreInterceptor,
       [bool insideParameter = false]) {
-    generateCall(sb, numberPreProcessor);
+    generateCall(sb, numberPreInterceptor);
   }
 }

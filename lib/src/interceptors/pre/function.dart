@@ -13,7 +13,7 @@ import '../../../generator/parameter.dart';
 
 part 'function.g.dart';
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 Future<String> getStringFromBody(HttpRequest request) {
   Completer<String> completer = new Completer<String>();
@@ -24,7 +24,7 @@ Future<String> getStringFromBody(HttpRequest request) {
   return completer.future;
 }
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 void mustBeMimeType(HttpRequest request, String mimeType) {
   if (request.headers.contentType?.mimeType != mimeType) {
@@ -32,7 +32,7 @@ void mustBeMimeType(HttpRequest request, String mimeType) {
   }
 }
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 Future<String> getJsonFromBody(HttpRequest request) async {
   mustBeMimeType(request, "application/json");
@@ -67,7 +67,7 @@ class FormField {
   }
 }
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 Future<Map<String, FormField>> getFormDataFromBody(HttpRequest request) async {
   if (!request.headers.contentType.parameters.containsKey('boundary')) {

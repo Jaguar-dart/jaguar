@@ -4,11 +4,11 @@ import 'package:jaguar/generator/phases.dart';
 
 PhaseGroup getPhaseGroup() {
   return new PhaseGroup()
-    ..addPhase(postProcessorPhase(
+    ..addPhase(postInterceptorPhase(
       'jaguar',
       ['lib/src/interceptors/post/function.dart'],
     ))
-    ..addPhase(preProcessorPhase('jaguar', [
+    ..addPhase(preInterceptorPhase('jaguar', [
       'lib/src/interceptors/pre/function.dart',
     ]));
 }

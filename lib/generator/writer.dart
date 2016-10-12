@@ -25,7 +25,7 @@ class Writer {
     sb.writeln("List<RouteInformations> _routes = <RouteInformations>[");
     routes.forEach((RouteInformationsGenerator route) {
       sb.writeln(
-          "new RouteInformations(r\"${route.routeProcessor.path}\", ${JSON.encode(route.routeProcessor.methods)}),");
+          "new RouteInformations(r\"${route.routeInterceptor.path}\", ${JSON.encode(route.routeInterceptor.methods)}),");
     });
     sb.writeln("];");
     sb.writeln("");
@@ -56,8 +56,8 @@ class Writer {
       bool handleResponse = _generatePostProcessor(routes[i]);
 
       if (!handleResponse &&
-          routes[i].routeProcessor.returnType != "void" &&
-          routes[i].routeProcessor.returnType != "Future<Null>") {
+          routes[i].routeInterceptor.returnType != "void" &&
+          routes[i].routeInterceptor.returnType != "Future<Null>") {
         sb.write("request.response.write(result);");
       }
 
@@ -70,9 +70,9 @@ class Writer {
   }
 
   void _generatePreProcessor(RouteInformationsGenerator route) {
-    List<PreInterceptor> preProcessors = route.preProcessors
+    List<PreInterceptor> preProcessors = route.preInterceptors
         .where((PreInterceptor preProcessor) => preProcessor.methods.any(
-            (String method) => route.routeProcessor.methods.contains(method)))
+            (String method) => route.routeInterceptor.methods.contains(method)))
         .toList();
     preProcessors.sort((PreInterceptor p1, PreInterceptor p2) {
       if (p1.variableName == null && p2.variableName != null) {
@@ -88,24 +88,24 @@ class Writer {
       } else {
         numberPreProcessor[type] += 1;
       }
-      preProcessor.callProcessor(sb, numberPreProcessor[type]);
+      preProcessor.callInterceptor(sb, numberPreProcessor[type]);
     });
   }
 
   void _generateProcessor(RouteInformationsGenerator route) {
-    List<PreInterceptor> preProcessors = route.preProcessors.where(
+    List<PreInterceptor> preProcessors = route.preInterceptors.where(
         (PreInterceptor preProcessor) =>
             preProcessor.methods.any((String method) =>
-                route.routeProcessor.methods.contains(method)) &&
+                route.routeInterceptor.methods.contains(method)) &&
             preProcessor.variableName != null);
     ;
-    sb.write(route.routeProcessor.generateCall(preProcessors));
+    sb.write(route.routeInterceptor.generateCall(preProcessors));
   }
 
   bool _generatePostProcessor(RouteInformationsGenerator route) {
     Map<String, int> numberPostProcessor = <String, int>{};
     bool someoneTakeTheResponse = false;
-    route.postProcessor.forEach((PostInterceptor postProcessor) {
+    route.postInterceptor.forEach((PostInterceptor postProcessor) {
       String type = postProcessor.runtimeType.toString();
       if (!numberPostProcessor.containsKey(type)) {
         numberPostProcessor[type] = 0;
@@ -117,11 +117,11 @@ class Writer {
       } else if (someoneTakeTheResponse && postProcessor.takeResponse) {
         throw "Someone already take charge of sending the response";
       }
-      postProcessor.callProcessor(sb, numberPostProcessor[type]);
+      postProcessor.callInterceptor(sb, numberPostProcessor[type]);
     });
     numberPostProcessor.clear();
-    route.preProcessors.forEach((PreInterceptor preProcessor) {
-      preProcessor.callPostProcessorsAfter
+    route.preInterceptors.forEach((PreInterceptor preProcessor) {
+      preProcessor.callPostInterceptorsAfter
           .forEach((PostInterceptor postProcessor) {
         String type = postProcessor.runtimeType.toString();
         if (!numberPostProcessor.containsKey(type)) {
@@ -129,7 +129,7 @@ class Writer {
         } else {
           numberPostProcessor[type] += 1;
         }
-        postProcessor.callProcessor(sb, numberPostProcessor[type]);
+        postProcessor.callInterceptor(sb, numberPostProcessor[type]);
       });
     });
     return someoneTakeTheResponse;

@@ -1,11 +1,11 @@
 library jaguar.generator.pre_interceptor_function;
 
-class PreProcessorFunction {
+class PreInterceptorFunction {
   final List<String> authorizedMethods;
   final bool allowMultiple;
-  final List<Type> postProcessors;
+  final List<Type> postInterceptors;
 
-  const PreProcessorFunction(
+  const PreInterceptorFunction(
       {this.authorizedMethods: const <String>[
         'GET',
         'POST',
@@ -15,5 +15,5 @@ class PreProcessorFunction {
         'OPTIONS'
       ],
       this.allowMultiple: false,
-      this.postProcessors: const <Type>[]});
+      this.postInterceptors: const <Type>[]});
 }

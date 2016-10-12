@@ -24,36 +24,36 @@ List<String> getAnnotations() {
   return doc['apis'];
 }
 
-List<String> getPreProcessor() {
+List<String> getPreInterceptor() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['pre_processors'] == null ? <String>[] : doc['pre_processors'];
+  return doc['pre_interceptor'] ?? <String>[];
 }
 
-List<String> getPostProcessor() {
+List<String> getPostInterceptor() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['post_processors'] == null ? <String>[] : doc['post_processors'];
+  return doc['post_processors'] ?? <String>[];
 }
 
-Phase postProcessorPhase(String projectName, List<String> postProcessors) {
+Phase postInterceptorPhase(String projectName, List<String> postInterceptors) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
           const PostInterceptorGenerator(),
         ]),
-        new InputSet(projectName, postProcessors));
+        new InputSet(projectName, postInterceptors));
 }
 
-Phase preProcessorPhase(String projectName, List<String> preProcessors) {
+Phase preInterceptorPhase(String projectName, List<String> preInterceptors) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
           const PreInterceptorGenerator(),
         ]),
-        new InputSet(projectName, preProcessors));
+        new InputSet(projectName, preInterceptors));
 }
 
 Phase apisPhase(String projectName, List<String> apis) {
@@ -67,15 +67,15 @@ Phase apisPhase(String projectName, List<String> apis) {
 
 PhaseGroup generatePhaseGroup(
     {String projectName,
-    List<String> postProcessors,
-    List<String> preProcessors,
+    List<String> postInterceptors,
+    List<String> preInterceptors,
     List<String> apis}) {
   PhaseGroup phaseGroup = new PhaseGroup();
-  if (postProcessors.isNotEmpty) {
-    phaseGroup.addPhase(postProcessorPhase(projectName, postProcessors));
+  if (postInterceptors.isNotEmpty) {
+    phaseGroup.addPhase(postInterceptorPhase(projectName, postInterceptors));
   }
-  if (preProcessors.isNotEmpty) {
-    phaseGroup.addPhase(preProcessorPhase(projectName, preProcessors));
+  if (preInterceptors.isNotEmpty) {
+    phaseGroup.addPhase(preInterceptorPhase(projectName, preInterceptors));
   }
   phaseGroup.addPhase(apisPhase(projectName, apis));
   return phaseGroup;
@@ -90,11 +90,11 @@ PhaseGroup phaseGroup() {
   if (apis == null) {
     throw "You need to provide one or more api file";
   }
-  List<String> postProcessor = getPostProcessor();
-  List<String> preProcessor = getPreProcessor();
+  List<String> postInterceptor = getPostInterceptor();
+  List<String> preInterceptor = getPreInterceptor();
   return generatePhaseGroup(
       projectName: projectName,
-      postProcessors: postProcessor,
-      preProcessors: preProcessor,
+      postInterceptors: postInterceptor,
+      preInterceptors: preInterceptor,
       apis: apis);
 }
