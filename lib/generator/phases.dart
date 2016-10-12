@@ -35,7 +35,7 @@ List<String> getPostInterceptor() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['post_processors'] ?? <String>[];
+  return doc['post_interceptors'] ?? <String>[];
 }
 
 Phase postInterceptorPhase(String projectName, List<String> postInterceptors) {
