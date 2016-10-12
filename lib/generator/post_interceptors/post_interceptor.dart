@@ -1,9 +1,9 @@
-library jaguar.generator.post_processor;
+library jaguar.generator.post_interceptor;
 
 import '../parameter.dart';
 import '../utils.dart';
 
-abstract class PostProcessor {
+abstract class PostInterceptor {
   final String returnType;
   final String variableName;
   final String functionName;
@@ -11,7 +11,7 @@ abstract class PostProcessor {
   final bool allowMultiple;
   final bool takeResponse;
 
-  const PostProcessor(
+  const PostInterceptor(
       {this.returnType: null,
       this.variableName: null,
       this.functionName: null,
@@ -19,7 +19,7 @@ abstract class PostProcessor {
       this.allowMultiple: false,
       this.takeResponse: false});
 
-  void generateCall(StringBuffer sb, int numberPostProcessor) {
+  void generateCall(StringBuffer sb, int numberPostInterceptor) {
     bool needAwait = false;
     String type = returnType;
     if (returnType.startsWith("Future")) {
@@ -27,31 +27,31 @@ abstract class PostProcessor {
       needAwait = true;
     }
     if (type != "void" && type != "Null") {
-      sb.write("$type $variableName$numberPostProcessor = ");
+      sb.write("$type $variableName$numberPostInterceptor = ");
     }
     if (needAwait) {
       sb.write("await ");
     }
     sb.write("$functionName(");
-    fillParameters(sb, numberPostProcessor);
+    fillParameters(sb, numberPostInterceptor);
     sb.write(")");
     sb.writeln(";");
   }
 
-  void fillParameters(StringBuffer sb, int numberPostProcessor) {
+  void fillParameters(StringBuffer sb, int numberPostInterceptor) {
     parameters.forEach((Parameter parameter) {
       if (parameter.name != null) {
         if (parameter.name == "request" || parameter.name == "result") {
           sb.write("${parameter.name},");
         } else {
-          sb.write("${parameter.name}$numberPostProcessor,");
+          sb.write("${parameter.name}$numberPostInterceptor,");
         }
       }
     });
   }
 
-  void callProcessor(StringBuffer sb, int numberPostProcessor,
+  void callInterceptor(StringBuffer sb, int numberPostInterceptor,
       [bool insideParameter = false]) {
-    generateCall(sb, numberPostProcessor);
+    generateCall(sb, numberPostInterceptor);
   }
 }

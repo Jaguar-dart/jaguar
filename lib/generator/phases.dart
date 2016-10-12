@@ -6,9 +6,9 @@ import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
-import 'api_annotation.dart';
-import 'pre_processor/pre_processor_function_annotation_generator.dart';
-import 'post_processor/post_processor_function_annotation_generator.dart';
+import 'api_generator.dart';
+import 'pre_interceptors/generator.dart';
+import 'post_interceptors/generator.dart';
 
 String getProjectName() {
   File pubspec = new File('./pubspec.yaml');
@@ -24,56 +24,61 @@ List<String> getAnnotations() {
   return doc['apis'];
 }
 
-List<String> getPreProcessor() {
+List<String> getPreInterceptor() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['pre_processors'] == null ? <String>[] : doc['pre_processors'];
+  return doc['pre_interceptor'] ?? <String>[];
 }
 
-List<String> getPostProcessor() {
+List<String> getPostInterceptor() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['post_processors'] == null ? <String>[] : doc['post_processors'];
+  return doc['post_interceptors'] ?? <String>[];
 }
 
-Phase postProcessorPhase(String projectName, List<String> postProcessors) {
+Phase postInterceptorPhase(String projectName, List<String> postInterceptors) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
-          const PostProcessorFunctionAnnotationGenerator(),
+          const PostInterceptorGenerator(),
         ]),
-        new InputSet(projectName, postProcessors));
+        new InputSet(projectName, postInterceptors));
 }
 
-Phase preProcessorPhase(String projectName, List<String> preProcessors) {
+Phase preInterceptorPhase(String projectName, List<String> preInterceptors) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
-          const PreProcessorFunctionAnnotationGenerator(),
+          const PreInterceptorGenerator(),
         ]),
-        new InputSet(projectName, preProcessors));
+        new InputSet(projectName, preInterceptors));
 }
 
 Phase apisPhase(String projectName, List<String> apis) {
   return new Phase()
     ..addAction(
         new GeneratorBuilder(const [
-          const ApiAnnotationGenerator(),
+          const ApiGenerator(),
         ]),
         new InputSet(projectName, apis));
 }
 
 PhaseGroup generatePhaseGroup(
     {String projectName,
-    List<String> postProcessors,
-    List<String> preProcessors,
+    List<String> postInterceptors,
+    List<String> preInterceptors,
     List<String> apis}) {
-  return new PhaseGroup()
-    ..addPhase(postProcessorPhase(projectName, postProcessors))
-    ..addPhase(preProcessorPhase(projectName, preProcessors))
-    ..addPhase(apisPhase(projectName, apis));
+  PhaseGroup phaseGroup = new PhaseGroup();
+  if (postInterceptors.isNotEmpty) {
+    phaseGroup.addPhase(postInterceptorPhase(projectName, postInterceptors));
+  }
+  if (preInterceptors.isNotEmpty) {
+    phaseGroup.addPhase(preInterceptorPhase(projectName, preInterceptors));
+  }
+  phaseGroup.addPhase(apisPhase(projectName, apis));
+  return phaseGroup;
 }
 
 PhaseGroup phaseGroup() {
@@ -82,11 +87,14 @@ PhaseGroup phaseGroup() {
     throw "Could not find the project name";
   }
   List<String> apis = getAnnotations();
-  List<String> postProcessor = getPostProcessor();
-  List<String> preProcessor = getPreProcessor();
+  if (apis == null) {
+    throw "You need to provide one or more api file";
+  }
+  List<String> postInterceptor = getPostInterceptor();
+  List<String> preInterceptor = getPreInterceptor();
   return generatePhaseGroup(
       projectName: projectName,
-      postProcessors: postProcessor,
-      preProcessors: preProcessor,
+      postInterceptors: postInterceptor,
+      preInterceptors: preInterceptor,
       apis: apis);
 }

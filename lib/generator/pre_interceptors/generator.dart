@@ -1,4 +1,4 @@
-library jaguar.generator.post_processor_function_annotation_generator;
+library jaguar.generator.pre_interceptors_generator;
 
 import 'dart:async';
 
@@ -6,23 +6,21 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'post_processor_function.dart';
+import 'function.dart';
 import '../parameter.dart';
 
-class PostProcessorFunctionAnnotationGenerator
-    extends GeneratorForAnnotation<PostProcessorFunction> {
-  const PostProcessorFunctionAnnotationGenerator();
+class PreInterceptorGenerator
+    extends GeneratorForAnnotation<PreInterceptorFunction> {
+  const PreInterceptorGenerator();
 
   @override
   Future<String> generateForAnnotatedElement(FunctionElement element,
-      PostProcessorFunction annotation, BuildStep buildStep) async {
+      PreInterceptorFunction annotation, BuildStep buildStep) async {
     StringBuffer sb = new StringBuffer();
 
     List<Parameter> parameters = element.parameters
         .map((ParameterElement parameter) {
-          if (parameter.name == 'request' || parameter.name == "result")
-            return null;
-          if (parameter.name.startsWith("_")) return null;
+          if (parameter.type.name == 'HttpRequest') return null;
           return new Parameter(
               typeAsString: parameter.type.name,
               name: parameter.name,
@@ -34,7 +32,7 @@ class PostProcessorFunctionAnnotationGenerator
     String className =
         "${element.displayName.substring(0, 1).toUpperCase()}${element.displayName.substring(1)}";
 
-    sb.writeln("class $className extends PostProcessor {");
+    sb.writeln("class $className extends PreInterceptor {");
     parameters.forEach((Parameter parameter) {
       sb.writeln("final ${parameter.typeAsString} ${parameter.name};");
     });
@@ -42,7 +40,7 @@ class PostProcessorFunctionAnnotationGenerator
 
     sb.write("const $className(");
     if (parameters.isNotEmpty) {
-      _fillConstructorParameters(sb, parameters);
+      _fillParameters(sb, parameters);
     }
     sb.write(") : super(");
     sb.write("returnType: '${element.returnType.toString()}',");
@@ -53,17 +51,28 @@ class PostProcessorFunctionAnnotationGenerator
     sb.write("functionName: '${element.displayName}',");
     sb.write("parameters: const <Parameter>[");
     element.parameters.forEach((ParameterElement parameter) {
-      // if (parameter.type.toString() == "HttpRequest") {
-      sb.write(
-          "const Parameter(type: ${parameter.type.name}, name: '${parameter.name}'),");
-      //     } else {
-      //   sb.write(
-      //       "const Parameter(type: '${parameter.type.toString()}', value: '${parameter.name}'),");
-      // }
+      if (parameter.type.name == 'HttpRequest') {
+        sb.write(
+            "const Parameter(type: ${parameter.type.name}, name: '${parameter.name}'),");
+      } else {
+        sb.write(
+            "const Parameter(type: ${parameter.type.name}, value: '${parameter.name}'),");
+      }
+    });
+    sb.write("],");
+    sb.write("methods: const <String>[");
+    annotation.authorizedMethods.forEach((String method) {
+      sb.write("'$method',");
     });
     sb.write("],");
     sb.write("allowMultiple: ${annotation.allowMultiple},");
-    sb.write("takeResponse: ${annotation.takeResponse},");
+    if (annotation.postInterceptors.isNotEmpty) {
+      sb.write("callPostInterceptorsAfter: const <PostInterceptor>[");
+      annotation.postInterceptors.forEach((Type postInterceptor) {
+        sb.write("const ${postInterceptor.toString()}(),");
+      });
+      sb.write("]");
+    }
     sb.writeln(");");
 
     sb.writeln("");
@@ -73,7 +82,7 @@ class PostProcessorFunctionAnnotationGenerator
       sb.writeln("void fillParameters(StringBuffer sb) {");
 
       element.parameters.forEach((ParameterElement parameter) {
-        if (parameter.name == "request" || parameter.name == "result") {
+        if (parameter.type.name == "HttpRequest") {
           sb.writeln("sb.writeln('${parameter.name},');");
         } else {
           sb.writeln("sb.writeln('\"\$${parameter.name}\",');");
@@ -87,7 +96,7 @@ class PostProcessorFunctionAnnotationGenerator
     return sb.toString();
   }
 
-  void _fillConstructorParameters(StringBuffer sb, List<Parameter> parameters) {
+  void _fillParameters(StringBuffer sb, List<Parameter> parameters) {
     sb.write("{");
     parameters.forEach((Parameter parameter) {
       sb.write("this.${parameter.name},");

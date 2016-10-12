@@ -1,4 +1,4 @@
-library jaguar.generator.api_class;
+library jaguar.generator.parameter;
 
 class Parameter {
   final String typeAsString;

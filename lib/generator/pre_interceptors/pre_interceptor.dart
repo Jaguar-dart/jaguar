@@ -1,19 +1,19 @@
-library jaguar.generator.pre_processor;
+library jaguar.generator.pre_interceptor;
 
 import '../parameter.dart';
 import '../utils.dart';
-import '../post_processor/post_processor.dart';
+import '../post_interceptors/post_interceptor.dart';
 
-abstract class PreProcessor {
+abstract class PreInterceptor {
   final String returnType;
   final String variableName;
   final String functionName;
   final List<Parameter> parameters;
   final List<String> methods;
-  final List<PostProcessor> callPostProcessorsAfter;
+  final List<PostInterceptor> callPostInterceptorsAfter;
   final bool allowMultiple;
 
-  const PreProcessor(
+  const PreInterceptor(
       {this.returnType: null,
       this.variableName: null,
       this.functionName: null,
@@ -26,10 +26,10 @@ abstract class PreProcessor {
         'DELETE',
         'OPTIONS'
       ],
-      this.callPostProcessorsAfter: const <PostProcessor>[],
+      this.callPostInterceptorsAfter: const <PostInterceptor>[],
       this.allowMultiple: false});
 
-  void generateCall(StringBuffer sb, int numberPreProcessor) {
+  void generateCall(StringBuffer sb, int numberPreInterceptor) {
     bool needAwait = false;
     String type = returnType;
     if (returnType.startsWith("Future")) {
@@ -37,7 +37,7 @@ abstract class PreProcessor {
       needAwait = true;
     }
     if (type != "void" && type != "Null") {
-      sb.write("$type $variableName$numberPreProcessor = ");
+      sb.write("$type $variableName$numberPreInterceptor = ");
     }
     if (needAwait) {
       sb.write("await ");
@@ -56,8 +56,8 @@ abstract class PreProcessor {
     });
   }
 
-  void callProcessor(StringBuffer sb, int numberPreProcessor,
+  void callInterceptor(StringBuffer sb, int numberPreInterceptor,
       [bool insideParameter = false]) {
-    generateCall(sb, numberPreProcessor);
+    generateCall(sb, numberPreInterceptor);
   }
 }

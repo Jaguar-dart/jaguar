@@ -1,11 +1,11 @@
-library jaguar.generator.route.route_information_processor;
+library jaguar.generator.route_informations_processor;
 
 import '../parameter.dart';
-import '../processor.dart';
-import '../pre_processor/pre_processor.dart';
+import '../../src/interceptors/interceptors.dart';
+import '../pre_interceptors/pre_interceptor.dart';
 import '../utils.dart';
 
-class RouteInformationsProcessor extends Processor {
+class RouteInformationsInterceptor extends Interceptor {
   final String path;
   final List<String> methods;
   final List<Parameter> parameters;
@@ -13,7 +13,7 @@ class RouteInformationsProcessor extends Processor {
   final String returnType;
   final String functionName;
 
-  const RouteInformationsProcessor(
+  const RouteInformationsInterceptor(
       {this.path,
       this.methods,
       this.parameters,
@@ -22,21 +22,21 @@ class RouteInformationsProcessor extends Processor {
       this.functionName})
       : super();
 
-  void fillParameters(StringBuffer sb, List<PreProcessor> preProcessors) {
+  void fillParameters(StringBuffer sb, List<PreInterceptor> preInterceptors) {
     if (parameters.isEmpty) return;
     if (parameters.first.typeAsString == 'HttpRequest') {
       sb.write("request, ");
       parameters.removeAt(0);
     }
-    Map<String, int> numberPreProcessor = <String, int>{};
-    preProcessors.forEach((PreProcessor preProcessor) {
-      String type = preProcessor.runtimeType.toString();
-      if (!numberPreProcessor.containsKey(type)) {
-        numberPreProcessor[type] = 0;
+    Map<String, int> numberPreInterceptor = <String, int>{};
+    preInterceptors.forEach((PreInterceptor preInterceptor) {
+      String type = preInterceptor.runtimeType.toString();
+      if (!numberPreInterceptor.containsKey(type)) {
+        numberPreInterceptor[type] = 0;
       } else {
-        numberPreProcessor[type] += 1;
+        numberPreInterceptor[type] += 1;
       }
-      sb.write("${preProcessor.variableName}${numberPreProcessor[type]}, ");
+      sb.write("${preInterceptor.variableName}${numberPreInterceptor[type]}, ");
       parameters.removeAt(0);
     });
     for (int i = 0; i < parameters.length; i++) {
@@ -59,36 +59,36 @@ class RouteInformationsProcessor extends Processor {
     });
   }
 
-  void callProcessor(StringBuffer sb, List<PreProcessor> preProcessor) {
+  void callInterceptor(StringBuffer sb, List<PreInterceptor> preInterceptor) {
     if (returnType.startsWith("Future")) {
       String type = getTypeFromFuture(returnType);
-      manageType(sb, type, true, preProcessor);
+      manageType(sb, type, true, preInterceptor);
     } else {
-      manageType(sb, returnType, false, preProcessor);
+      manageType(sb, returnType, false, preInterceptor);
     }
   }
 
   void manageType(StringBuffer sb, String type, bool needAwait,
-      List<PreProcessor> preProcessors) {
+      List<PreInterceptor> preInterceptors) {
     if (type == "void") {
       sb.write("$functionName(");
-      fillParameters(sb, preProcessors);
+      fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else if (type == "dynamic") {
       sb.write("var result = ${needAwait ? 'await ' : ''} $functionName(");
-      fillParameters(sb, preProcessors);
+      fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else {
       sb.write("$type result = ${needAwait ? 'await ' : ''}$functionName(");
-      fillParameters(sb, preProcessors);
+      fillParameters(sb, preInterceptors);
       sb.writeln(");");
     }
   }
 
-  String generateCall(List<PreProcessor> preProcessors) {
+  String generateCall(List<PreInterceptor> preInterceptors) {
     StringBuffer sb = new StringBuffer();
 
-    callProcessor(sb, preProcessors);
+    callInterceptor(sb, preInterceptors);
 
     return sb.toString();
   }
