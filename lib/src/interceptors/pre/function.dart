@@ -1,4 +1,4 @@
-library jaguar.generator.pre_processor.pre_processor_function;
+library jaguar.src.interceptors.pre;
 
 import 'dart:async';
 import 'dart:io';
@@ -7,30 +7,13 @@ import 'dart:convert';
 import 'package:http_server/http_server.dart';
 import 'package:mime/mime.dart';
 
-import 'pre_processor.dart';
-import '../parameter.dart';
+import '../../../generator/pre_interceptors/function.dart';
+import '../../../generator/pre_interceptors/pre_interceptor.dart';
+import '../../../generator/parameter.dart';
 
-part 'pre_processor_function.g.dart';
+part 'function.g.dart';
 
-class PreProcessorFunction {
-  final List<String> authorizedMethods;
-  final bool allowMultiple;
-  final List<Type> postProcessors;
-
-  const PreProcessorFunction(
-      {this.authorizedMethods: const <String>[
-        'GET',
-        'POST',
-        'PUT',
-        'PATCH',
-        'DELETE',
-        'OPTIONS'
-      ],
-      this.allowMultiple: false,
-      this.postProcessors: const <Type>[]});
-}
-
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 Future<String> getStringFromBody(HttpRequest request) {
   Completer<String> completer = new Completer<String>();
@@ -41,7 +24,7 @@ Future<String> getStringFromBody(HttpRequest request) {
   return completer.future;
 }
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 void mustBeMimeType(HttpRequest request, String mimeType) {
   if (request.headers.contentType?.mimeType != mimeType) {
@@ -49,7 +32,7 @@ void mustBeMimeType(HttpRequest request, String mimeType) {
   }
 }
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 Future<String> getJsonFromBody(HttpRequest request) async {
   mustBeMimeType(request, "application/json");
@@ -84,7 +67,7 @@ class FormField {
   }
 }
 
-@PreProcessorFunction(
+@PreInterceptorFunction(
     authorizedMethods: const <String>['POST', 'PUT', 'PATCH', 'DELETE'])
 Future<Map<String, FormField>> getFormDataFromBody(HttpRequest request) async {
   if (!request.headers.contentType.parameters.containsKey('boundary')) {

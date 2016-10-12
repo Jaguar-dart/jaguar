@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of jaguar.generator.pre_processor.pre_processor_function;
+part of jaguar.src.interceptors.pre;
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: getStringFromBody
 // **************************************************************************
 
-class GetStringFromBody extends PreProcessor {
+class GetStringFromBody extends PreInterceptor {
   const GetStringFromBody()
       : super(
           returnType: 'Future<String>',
@@ -27,11 +27,11 @@ class GetStringFromBody extends PreProcessor {
 }
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: mustBeMimeType
 // **************************************************************************
 
-class MustBeMimeType extends PreProcessor {
+class MustBeMimeType extends PreInterceptor {
   final String mimeType;
 
   const MustBeMimeType({
@@ -61,11 +61,11 @@ class MustBeMimeType extends PreProcessor {
 }
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: getJsonFromBody
 // **************************************************************************
 
-class GetJsonFromBody extends PreProcessor {
+class GetJsonFromBody extends PreInterceptor {
   const GetJsonFromBody()
       : super(
           returnType: 'Future<String>',
@@ -85,11 +85,11 @@ class GetJsonFromBody extends PreProcessor {
 }
 
 // **************************************************************************
-// Generator: PreProcessorFunctionAnnotationGenerator
+// Generator: PreInterceptorGenerator
 // Target: getFormDataFromBody
 // **************************************************************************
 
-class GetFormDataFromBody extends PreProcessor {
+class GetFormDataFromBody extends PreInterceptor {
   const GetFormDataFromBody()
       : super(
           returnType: 'Future<Map<String, FormField>>',

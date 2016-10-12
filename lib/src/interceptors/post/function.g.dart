@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of jaguar.generator.post_processor.post_processor_function;
+part of jaguar.src.interceptors.post;
 
 // **************************************************************************
-// Generator: PostProcessorFunctionAnnotationGenerator
+// Generator: PostInterceptorGenerator
 // Target: encodeStringToJson
 // **************************************************************************
 
-class EncodeStringToJson extends PostProcessor {
+class EncodeStringToJson extends PostInterceptor {
   const EncodeStringToJson()
       : super(
           returnType: 'void',
@@ -22,11 +22,11 @@ class EncodeStringToJson extends PostProcessor {
 }
 
 // **************************************************************************
-// Generator: PostProcessorFunctionAnnotationGenerator
+// Generator: PostInterceptorGenerator
 // Target: encodeMapOrListToJson
 // **************************************************************************
 
-class EncodeMapOrListToJson extends PostProcessor {
+class EncodeMapOrListToJson extends PostInterceptor {
   const EncodeMapOrListToJson()
       : super(
           returnType: 'void',
