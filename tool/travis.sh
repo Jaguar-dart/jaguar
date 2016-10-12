@@ -12,10 +12,10 @@ $(dirname -- "$0")/ensure_dartfmt.sh
 dart --checked tool/build.dart
 
 # Install dart_coveralls; gather and send coverage data.
-if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
-  pub global activate dart_coveralls
-  pub global run dart_coveralls report \
-    --retry 2 \
-    --exclude-test-files \
-    test/test_all.dart
-fi
+# if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
+#   pub global activate dart_coveralls
+#   pub global run dart_coveralls report \
+#     --retry 2 \
+#     --exclude-test-files \
+#     test/test_all.dart
+# fi
