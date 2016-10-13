@@ -25,7 +25,7 @@ class RouteInformationsInterceptor extends Interceptor {
   void fillParameters(StringBuffer sb, List<PreInterceptor> preInterceptors) {
     if (parameters.isEmpty) return;
     if (parameters.first.typeAsString == 'HttpRequest') {
-      sb.write("request, ");
+      sb.write("request,");
       parameters.removeAt(0);
     }
     Map<String, int> numberPreInterceptor = <String, int>{};
@@ -70,12 +70,12 @@ class RouteInformationsInterceptor extends Interceptor {
 
   void manageType(StringBuffer sb, String type, bool needAwait,
       List<PreInterceptor> preInterceptors) {
-    if (type == "void") {
-      sb.write("$functionName(");
+    if (type == "void" || type == "Null") {
+      sb.write("${needAwait ? 'await ' : ''}$functionName(");
       fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else if (type == "dynamic") {
-      sb.write("var result = ${needAwait ? 'await ' : ''} $functionName(");
+      sb.write("var result = ${needAwait ? 'await ' : ''}$functionName(");
       fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else {
