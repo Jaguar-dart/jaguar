@@ -97,6 +97,13 @@ class ApiWithoutParamWithSimpleRoute
 }
 
 @Api()
+class ApiWithoutParamWithSimpleRouteWithHttpRequest
+    extends _$JaguarApiWithoutParamWithSimpleRouteWithHttpRequest {
+  @Route(path: 'ping')
+  void ping(HttpRequest request) {}
+}
+
+@Api()
 class ApiWithoutParamWithFutureRoute
     extends _$JaguarApiWithoutParamWithFutureRoute {
   @Route(path: 'ping')
@@ -108,6 +115,19 @@ class ApiWithoutParamWithFutureRouteWithHttpRequest
     extends _$JaguarApiWithoutParamWithFutureRouteWithHttpRequest {
   @Route(path: 'ping')
   Future<Null> ping(HttpRequest request) async {}
+}
+
+@Api(name: 'api')
+class ApiWithNameWithSimpleRoute extends _$JaguarApiWithNameWithSimpleRoute {
+  @Route(path: 'ping')
+  void ping() {}
+}
+
+@Api(name: 'api', version: 'v1')
+class ApiWithNameAndVersionWithSimpleRoute
+    extends _$JaguarApiWithNameAndVersionWithSimpleRoute {
+  @Route(path: 'ping')
+  void ping() {}
 }
 ''';
 
@@ -139,6 +159,26 @@ bool match = false;
 match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
 if (match) {
 ping();
+return true;
+}
+return false;
+}
+
+}
+''';
+
+const String codeForApiWithoutParamWithSimpleRouteAndWithHttpRequest = r'''
+abstract class _$JaguarApiWithoutParamWithSimpleRouteWithHttpRequest {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/ping", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+ping(request,);
 return true;
 }
 return false;
@@ -179,6 +219,46 @@ bool match = false;
 match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
 if (match) {
 await ping(request,);
+return true;
+}
+return false;
+}
+
+}
+''';
+
+const String codeForApiWithNameWithSimpleRoute = r'''
+abstract class _$JaguarApiWithNameWithSimpleRoute {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/ping", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+ping();
+return true;
+}
+return false;
+}
+
+}
+''';
+
+const String codeForApiWithNameAndVersionWithSimpleRoute = r'''
+abstract class _$JaguarApiWithNameAndVersionWithSimpleRoute {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/api/v1/ping", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+ping();
 return true;
 }
 return false;
@@ -257,6 +337,20 @@ void main() {
       expect(generateResult, codeForApiWithoutParamWithSimpleRoute);
     });
 
+    test('Api annotation with no param and easy route and with HttpRequest',
+        () async {
+      String className = 'ApiWithoutParamWithSimpleRouteWithHttpRequest';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(api_annotation.name, isEmpty);
+      expect(api_annotation.version, isEmpty);
+      expect(generateResult,
+          codeForApiWithoutParamWithSimpleRouteAndWithHttpRequest);
+    });
+
     test('Api annotation with no param and future route', () async {
       String className = 'ApiWithoutParamWithFutureRoute';
       Element element = await _getClassForCodeString(className);
@@ -281,6 +375,30 @@ void main() {
       expect(api_annotation.version, isEmpty);
       expect(
           generateResult, codeForApiWithoutParamWithFutureRouteWithHttpRequest);
+    });
+
+    test('Api annotation with name and simple route', () async {
+      String className = 'ApiWithNameWithSimpleRoute';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(api_annotation.name, 'api');
+      expect(api_annotation.version, isEmpty);
+      expect(generateResult, codeForApiWithNameWithSimpleRoute);
+    });
+
+    test('Api annotation with name and version and simple route', () async {
+      String className = 'ApiWithNameAndVersionWithSimpleRoute';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(api_annotation.name, 'api');
+      expect(api_annotation.version, 'v1');
+      expect(generateResult, codeForApiWithNameAndVersionWithSimpleRoute);
     });
   });
 }

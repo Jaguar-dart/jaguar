@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:jaguar/interceptors.dart';
+import 'package:jaguar/jaguar.dart';
 
 part 'api_test_example.g.dart';
 
@@ -27,6 +28,13 @@ class ApiWithoutParamWithSimpleRoute
 }
 
 @Api()
+class ApiWithoutParamWithSimpleRouteWithHttpRequest
+    extends _$JaguarApiWithoutParamWithSimpleRouteWithHttpRequest {
+  @Route(path: 'ping')
+  void ping(HttpRequest request) {}
+}
+
+@Api()
 class ApiWithoutParamWithFutureRoute
     extends _$JaguarApiWithoutParamWithFutureRoute {
   @Route(path: 'ping')
@@ -38,4 +46,17 @@ class ApiWithoutParamWithFutureRouteWithHttpRequest
     extends _$JaguarApiWithoutParamWithFutureRouteWithHttpRequest {
   @Route(path: 'ping')
   Future<Null> ping(HttpRequest request) async {}
+}
+
+@Api(name: 'api')
+class ApiWithNameWithSimpleRoute extends _$JaguarApiWithNameWithSimpleRoute {
+  @Route(path: 'ping')
+  void ping() {}
+}
+
+@Api(name: 'api', version: 'v1')
+class ApiWithNameAndVersionWithSimpleRoute
+    extends _$JaguarApiWithNameAndVersionWithSimpleRoute {
+  @Route(path: 'ping')
+  void ping() {}
 }

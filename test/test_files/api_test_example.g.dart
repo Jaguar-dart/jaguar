@@ -88,6 +88,32 @@ abstract class _$JaguarApiWithoutParamWithSimpleRoute {
 
 // **************************************************************************
 // Generator: ApiGenerator
+// Target: class ApiWithoutParamWithSimpleRouteWithHttpRequest
+// **************************************************************************
+
+abstract class _$JaguarApiWithoutParamWithSimpleRouteWithHttpRequest {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(
+        r"/ping", ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      ping(
+        request,
+      );
+      return true;
+    }
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: ApiGenerator
 // Target: class ApiWithoutParamWithFutureRoute
 // **************************************************************************
 
@@ -130,6 +156,54 @@ abstract class _$JaguarApiWithoutParamWithFutureRouteWithHttpRequest {
       await ping(
         request,
       );
+      return true;
+    }
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiWithNameWithSimpleRoute
+// **************************************************************************
+
+abstract class _$JaguarApiWithNameWithSimpleRoute {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(
+        r"/ping", ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      ping();
+      return true;
+    }
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiWithNameAndVersionWithSimpleRoute
+// **************************************************************************
+
+abstract class _$JaguarApiWithNameAndVersionWithSimpleRoute {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(
+        r"/api/v1/ping", ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      ping();
       return true;
     }
     return false;
