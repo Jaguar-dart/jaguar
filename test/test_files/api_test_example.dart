@@ -79,3 +79,23 @@ class ApiWithGroupWithSimpleRoute extends _$JaguarApiWithGroupWithSimpleRoute {
   @Group(name: 'myGroup')
   GroupWithOneRoute myGroup = new GroupWithOneRoute();
 }
+
+@Api()
+class ApiAndRouteWithParam extends _$JaguarApiAndRouteWithParam {
+  @Route(path: 'users/([a-zA-Z])')
+  void ping(String id) {}
+}
+
+@Api()
+class ApiAndRouteWithHttpRequestAndParam
+    extends _$JaguarApiAndRouteWithHttpRequestAndParam {
+  @Route(path: 'users/([a-zA-Z])')
+  void ping(HttpRequest request, String id) {}
+}
+
+@Api()
+class ApiAndRouteWithQueryParameter
+    extends _$JaguarApiAndRouteWithQueryParameter {
+  @Route(path: 'users')
+  void ping({String name}) {}
+}

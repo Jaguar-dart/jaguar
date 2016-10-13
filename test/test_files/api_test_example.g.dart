@@ -248,3 +248,80 @@ abstract class _$JaguarApiWithGroupWithSimpleRoute {
     return false;
   }
 }
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiAndRouteWithParam
+// **************************************************************************
+
+abstract class _$JaguarApiAndRouteWithParam {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(r"/users/([a-zA-Z])",
+        ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      ping(
+        args[0],
+      );
+      return true;
+    }
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiAndRouteWithHttpRequestAndParam
+// **************************************************************************
+
+abstract class _$JaguarApiAndRouteWithHttpRequestAndParam {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(r"/users/([a-zA-Z])",
+        ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      ping(
+        request,
+        args[0],
+      );
+      return true;
+    }
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiAndRouteWithQueryParameter
+// **************************************************************************
+
+abstract class _$JaguarApiAndRouteWithQueryParameter {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(
+        r"/users", ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      ping(name: request.uri.queryParameters['name']);
+      return true;
+    }
+    return false;
+  }
+}

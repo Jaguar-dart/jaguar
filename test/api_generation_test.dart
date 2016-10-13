@@ -148,6 +148,26 @@ class ApiWithGroupWithSimpleRoute extends _$JaguarApiWithGroupWithSimpleRoute {
   @Group(name: 'myGroup')
   GroupWithOneRoute myGroup = new GroupWithOneRoute();
 }
+
+@Api()
+class ApiAndRouteWithParam extends _$JaguarApiAndRouteWithParam {
+  @Route(path: 'users/([a-zA-Z])')
+  void ping(String id) {}
+}
+
+@Api()
+class ApiAndRouteWithHttpRequestAndParam
+    extends _$JaguarApiAndRouteWithHttpRequestAndParam {
+  @Route(path: 'users/([a-zA-Z])')
+  void ping(HttpRequest request, String id) {}
+}
+
+@Api()
+class ApiAndRouteWithQueryParameter
+    extends _$JaguarApiAndRouteWithQueryParameter {
+  @Route(path: 'users')
+  void ping({String name}) {}
+}
 ''';
 
 String getCodeForEmptyApi(String className) {
@@ -320,6 +340,66 @@ return false;
 }
 ''';
 
+const String codeForApiAndRouteWithParam = r'''
+abstract class _$JaguarApiAndRouteWithParam {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/users/([a-zA-Z])", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+ping(args[0],);
+return true;
+}
+return false;
+}
+
+}
+''';
+
+const String codeForApiAndRouteWithHttpRequestAndParam = r'''
+abstract class _$JaguarApiAndRouteWithHttpRequestAndParam {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/users/([a-zA-Z])", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+ping(request,args[0],);
+return true;
+}
+return false;
+}
+
+}
+''';
+
+const String codeForApiAndRouteWithQueryParameter = r'''
+abstract class _$JaguarApiAndRouteWithQueryParameter {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/users", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+ping(name: request.uri.queryParameters['name'],);
+return true;
+}
+return false;
+}
+
+}
+''';
+
 void main() {
   LibraryElement libElement;
 
@@ -440,6 +520,39 @@ void main() {
           element, api_annotation, null);
 
       expect(generateResult, codeForApiWithNameAndVersionWithSimpleRoute);
+    });
+
+    test('Api annotation with no param and route with url param', () async {
+      String className = 'ApiAndRouteWithParam';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(generateResult, codeForApiAndRouteWithParam);
+    });
+
+    test(
+        'Api annotation with no param and route with HttpRequest and url param',
+        () async {
+      String className = 'ApiAndRouteWithHttpRequestAndParam';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(generateResult, codeForApiAndRouteWithHttpRequestAndParam);
+    });
+
+    test('Api annotation with no param and route with query parameter',
+        () async {
+      String className = 'ApiAndRouteWithQueryParameter';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(generateResult, codeForApiAndRouteWithQueryParameter);
     });
   });
 
