@@ -209,3 +209,42 @@ abstract class _$JaguarApiWithNameAndVersionWithSimpleRoute {
     return false;
   }
 }
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiWithGroup
+// **************************************************************************
+
+abstract class _$JaguarApiWithGroup {
+  List<RouteInformations> _routes = <RouteInformations>[];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: ApiGenerator
+// Target: class ApiWithGroupWithSimpleRoute
+// **************************************************************************
+
+abstract class _$JaguarApiWithGroupWithSimpleRoute {
+  List<RouteInformations> _routes = <RouteInformations>[
+    new RouteInformations(
+        r"/myGroup/ping", ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]),
+  ];
+
+  Future<bool> handleApiRequest(HttpRequest request) async {
+    List<String> args = <String>[];
+    bool match = false;
+    match = _routes[0]
+        .matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+    if (match) {
+      myGroup.ping();
+      return true;
+    }
+    return false;
+  }
+}

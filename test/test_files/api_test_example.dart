@@ -60,3 +60,22 @@ class ApiWithNameAndVersionWithSimpleRoute
   @Route(path: 'ping')
   void ping() {}
 }
+
+class MyEmptyGroup {}
+
+@Api()
+class ApiWithGroup extends _$JaguarApiWithGroup {
+  @Group(name: 'myGroup')
+  MyEmptyGroup myGroup = new MyEmptyGroup();
+}
+
+class GroupWithOneRoute {
+  @Route(path: 'ping')
+  void ping() {}
+}
+
+@Api()
+class ApiWithGroupWithSimpleRoute extends _$JaguarApiWithGroupWithSimpleRoute {
+  @Group(name: 'myGroup')
+  GroupWithOneRoute myGroup = new GroupWithOneRoute();
+}

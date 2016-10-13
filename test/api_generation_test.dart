@@ -129,6 +129,25 @@ class ApiWithNameAndVersionWithSimpleRoute
   @Route(path: 'ping')
   void ping() {}
 }
+
+class MyEmptyGroup {}
+
+@Api()
+class ApiWithGroup extends _$JaguarApiWithGroup {
+  @Group(name: 'myGroup')
+  MyEmptyGroup myGroup = new MyEmptyGroup();
+}
+
+class GroupWithOneRoute {
+  @Route(path: 'ping')
+  void ping() {}
+}
+
+@Api()
+class ApiWithGroupWithSimpleRoute extends _$JaguarApiWithGroupWithSimpleRoute {
+  @Group(name: 'myGroup')
+  GroupWithOneRoute myGroup = new GroupWithOneRoute();
+}
 ''';
 
 String getCodeForEmptyApi(String className) {
@@ -267,6 +286,40 @@ return false;
 }
 ''';
 
+const String codeForApiWithGroup = r'''
+abstract class _$JaguarApiWithGroup {
+List<RouteInformations> _routes = <RouteInformations>[
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+return false;
+}
+
+}
+''';
+
+const String codeForApiWithGroupWithSimpleRoute = r'''
+abstract class _$JaguarApiWithGroupWithSimpleRoute {
+List<RouteInformations> _routes = <RouteInformations>[
+new RouteInformations(r"/myGroup/ping", ["GET","POST","PUT","PATCH","DELETE","OPTIONS"]),
+];
+
+Future<bool> handleApiRequest(HttpRequest request) async {
+List<String> args = <String>[];
+bool match = false;
+match = _routes[0].matchWithRequestPathAndMethod(args, request.uri.path, request.method);
+if (match) {
+myGroup.ping();
+return true;
+}
+return false;
+}
+
+}
+''';
+
 void main() {
   LibraryElement libElement;
 
@@ -332,8 +385,6 @@ void main() {
       String generateResult = await _generator.generateForAnnotatedElement(
           element, api_annotation, null);
 
-      expect(api_annotation.name, isEmpty);
-      expect(api_annotation.version, isEmpty);
       expect(generateResult, codeForApiWithoutParamWithSimpleRoute);
     });
 
@@ -345,8 +396,6 @@ void main() {
       String generateResult = await _generator.generateForAnnotatedElement(
           element, api_annotation, null);
 
-      expect(api_annotation.name, isEmpty);
-      expect(api_annotation.version, isEmpty);
       expect(generateResult,
           codeForApiWithoutParamWithSimpleRouteAndWithHttpRequest);
     });
@@ -358,8 +407,6 @@ void main() {
       String generateResult = await _generator.generateForAnnotatedElement(
           element, api_annotation, null);
 
-      expect(api_annotation.name, isEmpty);
-      expect(api_annotation.version, isEmpty);
       expect(generateResult, codeForApiWithoutParamWithFutureRoute);
     });
 
@@ -371,8 +418,6 @@ void main() {
       String generateResult = await _generator.generateForAnnotatedElement(
           element, api_annotation, null);
 
-      expect(api_annotation.name, isEmpty);
-      expect(api_annotation.version, isEmpty);
       expect(
           generateResult, codeForApiWithoutParamWithFutureRouteWithHttpRequest);
     });
@@ -384,8 +429,6 @@ void main() {
       String generateResult = await _generator.generateForAnnotatedElement(
           element, api_annotation, null);
 
-      expect(api_annotation.name, 'api');
-      expect(api_annotation.version, isEmpty);
       expect(generateResult, codeForApiWithNameWithSimpleRoute);
     });
 
@@ -396,9 +439,29 @@ void main() {
       String generateResult = await _generator.generateForAnnotatedElement(
           element, api_annotation, null);
 
-      expect(api_annotation.name, 'api');
-      expect(api_annotation.version, 'v1');
       expect(generateResult, codeForApiWithNameAndVersionWithSimpleRoute);
+    });
+  });
+
+  group('group', () {
+    test('test empty group', () async {
+      String className = 'ApiWithGroup';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(generateResult, codeForApiWithGroup);
+    });
+
+    test('with simple route', () async {
+      String className = 'ApiWithGroupWithSimpleRoute';
+      Element element = await _getClassForCodeString(className);
+      Api api_annotation = _getInstantiatedAnnotation(libElement, className);
+      String generateResult = await _generator.generateForAnnotatedElement(
+          element, api_annotation, null);
+
+      expect(generateResult, codeForApiWithGroupWithSimpleRoute);
     });
   });
 }
