@@ -33,15 +33,16 @@ class Group {
   const Group({this.name});
 }
 
-///An annotation to define an interceptor
-class DefineDualInterceptor {
-  const DefineDualInterceptor();
-}
-
 ///An annotation to add a function as interceptor to a route
 class InterceptFunction {
   ///Function that contains the implementation of the interceptor
   final Function function;
 
   const InterceptFunction(this.function);
+}
+
+class Input {
+  final Type resultFrom;
+
+  const Input(this.resultFrom);
 }
