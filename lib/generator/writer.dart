@@ -93,11 +93,12 @@ class Writer {
   }
 
   void _generateProcessor(RouteInformationsGenerator route) {
-    List<PreInterceptor> preProcessors = route.preInterceptors.where(
-        (PreInterceptor preProcessor) =>
+    List<PreInterceptor> preProcessors = route.preInterceptors
+        .where((PreInterceptor preProcessor) =>
             preProcessor.methods.any((String method) =>
                 route.routeInterceptor.methods.contains(method)) &&
-            preProcessor.variableName != null);
+            preProcessor.variableName != null)
+        .toList();
     ;
     sb.write(route.routeInterceptor.generateCall(preProcessors));
   }

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Jaguar-dart/jaguar.svg?branch=master)](https://travis-ci.org/Jaguar-dart/jaguar)
+
 # Jaguar
 
 Jaguar is a server-side framework which use annotation and code generation to help

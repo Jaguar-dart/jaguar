@@ -17,15 +17,15 @@ class RouteInformationsInterceptor extends Interceptor {
       {this.path,
       this.methods,
       this.parameters,
-      this.namedParameters,
+      this.namedParameters: const <Parameter>[],
       this.returnType,
       this.functionName})
       : super();
 
   void fillParameters(StringBuffer sb, List<PreInterceptor> preInterceptors) {
-    if (parameters.isEmpty) return;
-    if (parameters.first.typeAsString == 'HttpRequest') {
-      sb.write("request, ");
+    if (parameters.isNotEmpty &&
+        parameters.first.typeAsString == 'HttpRequest') {
+      sb.write("request,");
       parameters.removeAt(0);
     }
     Map<String, int> numberPreInterceptor = <String, int>{};
@@ -36,25 +36,25 @@ class RouteInformationsInterceptor extends Interceptor {
       } else {
         numberPreInterceptor[type] += 1;
       }
-      sb.write("${preInterceptor.variableName}${numberPreInterceptor[type]}, ");
+      sb.write("${preInterceptor.variableName}${numberPreInterceptor[type]},");
       parameters.removeAt(0);
     });
     for (int i = 0; i < parameters.length; i++) {
-      sb.write("args[${i}], ");
+      sb.write("args[${i}],");
     }
-
     namedParameters.forEach((Parameter param) {
-      if (param.type == "String") {
-        sb.write("${param.name}: request.uri.queryParameters['${param.name}']");
+      if (param.typeAsString == "String") {
+        sb.write(
+            "${param.name}: request.uri.queryParameters['${param.name}'],");
       } else if (param.type == "int") {
         sb.write(
-            "${param.name}: int.parse(request.uri.queryParameters['${param.name}'])");
+            "${param.name}: int.parse(request.uri.queryParameters['${param.name}']),");
       } else if (param.type == "double") {
         sb.write(
-            "${param.name}: double.parse(request.uri.queryParameters['${param.name}'])");
+            "${param.name}: double.parse(request.uri.queryParameters['${param.name}']),");
       } else if (param.type == "num") {
         sb.write(
-            "${param.name}: num.parse(request.uri.queryParameters['${param.name}'])");
+            "${param.name}: num.parse(request.uri.queryParameters['${param.name}']),");
       }
     });
   }
@@ -70,12 +70,12 @@ class RouteInformationsInterceptor extends Interceptor {
 
   void manageType(StringBuffer sb, String type, bool needAwait,
       List<PreInterceptor> preInterceptors) {
-    if (type == "void") {
-      sb.write("$functionName(");
+    if (type == "void" || type == "Null") {
+      sb.write("${needAwait ? 'await ' : ''}$functionName(");
       fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else if (type == "dynamic") {
-      sb.write("var result = ${needAwait ? 'await ' : ''} $functionName(");
+      sb.write("var result = ${needAwait ? 'await ' : ''}$functionName(");
       fillParameters(sb, preInterceptors);
       sb.writeln(");");
     } else {

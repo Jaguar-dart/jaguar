@@ -146,7 +146,9 @@ class ApiGenerator extends GeneratorForAnnotation<Api> {
             .where((ParameterElement parameter) =>
                 parameter.parameterKind.isOptional)
             .map((ParameterElement parameter) => new Parameter(
-                typeAsString: parameter.type.name, name: parameter.name))
+                typeAsString: parameter.type.name,
+                name: parameter.name,
+                isOptional: true))
             .toList();
         return new RouteInformationsGenerator(
             preInterceptors,
