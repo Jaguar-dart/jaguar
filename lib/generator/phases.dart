@@ -28,7 +28,7 @@ List<String> getPreInterceptor() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
   var doc = loadYaml(content);
-  return doc['pre_interceptor'] ?? <String>[];
+  return doc['pre_interceptors'] ?? <String>[];
 }
 
 List<String> getPostInterceptor() {

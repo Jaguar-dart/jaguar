@@ -10,7 +10,8 @@ PhaseGroup getPhaseGroup() {
     ))
     ..addPhase(preInterceptorPhase('jaguar', [
       'lib/src/interceptors/pre/function.dart',
-    ]));
+    ]))
+    ..addPhase(apisPhase('jaguar', ['test/test_files/api_test_example.dart']));
 }
 
 main() async {

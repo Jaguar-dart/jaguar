@@ -13,6 +13,6 @@ class RouteInformationsGenerator {
       this.preInterceptors, this.routeInterceptor, this.postInterceptor);
 
   String toString() {
-    return "${routeInterceptor.path} ${routeInterceptor.parameters}";
+    return "${routeInterceptor.path} ${routeInterceptor.parameters} ${routeInterceptor.namedParameters}";
   }
 }

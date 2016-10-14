@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/Jaguar-dart/jaguar.svg?branch=master)](https://travis-ci.org/Jaguar-dart/jaguar)
-[![Coverage Status](https://coveralls.io/repos/github/Jaguar-dart/jaguar/badge.svg?branch=master)](https://coveralls.io/github/Jaguar-dart/jaguar?branch=master)
 
 # Jaguar
 
