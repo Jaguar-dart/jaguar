@@ -1,10 +1,4 @@
-library jaguar.src.jaguar;
-
-import 'dart:async';
-import 'dart:io';
-
-import 'configuration.dart';
-import 'error.dart';
+part of jaguar.src.serve;
 
 //  TODO(kleak): add doc
 class Jaguar {
