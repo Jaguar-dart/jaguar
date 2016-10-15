@@ -1,0 +1,1 @@
+library jaguar.generator.hook.intercept.func;

@@ -1,9 +1,8 @@
 library source_gen.test.example;
-
+/*
 import 'dart:async';
 import 'dart:io';
 
-import 'package:jaguar/interceptors.dart';
 import 'package:jaguar/jaguar.dart';
 
 part 'api_test_example.g.dart';
@@ -99,3 +98,4 @@ class ApiAndRouteWithQueryParameter
   @Route(path: 'users')
   void ping({String name}) {}
 }
+*/

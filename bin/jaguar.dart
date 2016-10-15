@@ -3,7 +3,10 @@ import 'dart:convert';
 
 import 'package:build/build.dart';
 import 'package:yaml/yaml.dart';
-import 'package:jaguar/generator/phases.dart';
+import 'package:jaguar/generator/phase/import.dart';
+
+// ignore: unused_import
+import '../example/interceptor.dart';
 
 String getBin() {
   File pubspec = new File('./jaguar.yaml');

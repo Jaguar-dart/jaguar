@@ -4,8 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:jaguar/src/error.dart';
-
 part 'config.dart';
 part 'server.dart';
 
