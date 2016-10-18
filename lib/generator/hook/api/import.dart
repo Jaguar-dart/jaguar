@@ -10,20 +10,29 @@ import 'package:jaguar/generator/writer/import.dart';
 
 import 'package:jaguar/src/annotations/import.dart' as ant;
 
-import 'package:jaguar/generator/info/import.dart';
+import 'package:jaguar/generator/parser/import.dart';
 
 class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
   const ApiGenerator();
 
+  /// This method is called when build finds an element with
+  /// [Api] annotation.
+  ///
+  /// [element] is the element annotated with [Api]
+  /// [api] is an instantiation of the [Api] annotation
   @override
   Future<String> generateForAnnotatedElement(
       Element element, ant.Api api, BuildStep buildStep) async {
+    if(element is! ClassElement) {
+      throw new Exception("Api annotation can only be defined on a class.");
+    }
+
     ClassElement classElement = element;
     String className = classElement.name;
 
     print("Generating for Api class $className ...");
 
-    Writer w = new Writer(className);
+    Writer writer = new Writer(className);
 
     final String prefix = api.url;
 
@@ -32,8 +41,8 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
     List<RouteInfo> routes =
         collectAllRoutes(classElement, prefix, interceptors);
 
-    w.addAllRoutes(routes);
+    writer.addAllRoutes(routes);
 
-    return w.toString();
+    return writer.toString();
   }
 }

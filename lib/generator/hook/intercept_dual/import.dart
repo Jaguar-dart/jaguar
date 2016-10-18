@@ -10,7 +10,7 @@ import 'package:jaguar/generator/writer/import.dart';
 
 import 'package:jaguar/src/annotations/import.dart' as ant;
 
-import 'package:jaguar/generator/info/import.dart';
+import 'package:jaguar/generator/parser/import.dart';
 
 class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
   const ApiGenerator();
