@@ -9,9 +9,10 @@ String prototypeOfFunction(MethodElement method) {
   StringBuffer sb = new StringBuffer();
   sb.write(method.returnType.toString() + " ");
   sb.write(method.name + "(");
-  method.parameters
-      .forEach((ParameterElement pel) => sb.write(pel.toString() + ","));
-  sb.writeln(");");
+  String paramsStr = method.parameters
+      .map((ParameterElement pel) => pel.toString())
+      .join(", ");
+  sb.writeln(paramsStr + ");");
   return sb.toString();
 }
 
@@ -74,9 +75,7 @@ class Writer {
 
       _writeRouteCall(routes[i]);
 
-      /* TODO
-      _writePostProcessors(routes[i]);
-      */
+      _writePostInterceptors(routes[i]);
 
       sb.writeln("return true;");
       sb.writeln("}");
@@ -95,9 +94,11 @@ class Writer {
       sb.write("request, ");
     }
 
-    route.inputs.forEach((InputInfo info) {
-      sb.write("r" + info.resultFrom.toString() + ", ");
-    });
+    final String params = route.inputs
+        .map((InputInfo info) => "r" + info.resultFrom.toString())
+        .join(", ");
+
+    sb.write(params);
 
     //TODO url parameter
 
@@ -122,8 +123,6 @@ class Writer {
     sb.write(info.makeParams());
     sb.writeln(";");
 
-    print(info.dual.pre);
-
     if (info.dual.pre is! InterceptorFuncDef) {
       return;
     }
@@ -134,8 +133,12 @@ class Writer {
       sb.write("r" + info.interceptor.toString() + " = ");
     }
 
-    sb.write("pre(");
-    //TODO write argumetns to pre
+    sb.write("i" + info.interceptor.toString());
+    sb.write(".pre(");
+    final String params = info.dual.pre.inputs
+        .map((InputInfo info) => "r" + info.resultFrom.toString())
+        .join(", ");
+    sb.write(params);
     sb.writeln(");");
   }
 
@@ -147,11 +150,37 @@ class Writer {
     //TODO
   }
 
-  void _writePostProcessors(RouteInfo route) {
-    //TODO
+  void _writePostInterceptors(RouteInfo route) {
+    route.interceptors.reversed.forEach((InterceptorInfo info) {
+      if (info is DualInterceptorInfo) {
+        _writePostInterceptorDual(info);
+      } else if (info is InterceptorFuncInfo) {
+        if (info.isPost) {
+          _writePostInterceptorFunc(info);
+        }
+      }
+    });
   }
 
-  void _writePostProcessor() {
+  void _writePostInterceptorDual(DualInterceptorInfo info) {
+    if (info.dual.post is! InterceptorFuncDef) {
+      return;
+    }
+
+    if (!info.dual.post.method.returnType.isVoid) {
+      //TODO check if its future
+    }
+
+    sb.write("i" + info.interceptor.toString());
+    sb.write(".post(");
+    final String params = info.dual.post.inputs
+        .map((InputInfo info) => "r" + info.resultFrom.toString())
+        .join(", ");
+    sb.write(params);
+    sb.writeln(");");
+  }
+
+  void _writePostInterceptorFunc(InterceptorFuncInfo info) {
     //TODO
   }
 

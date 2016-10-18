@@ -20,8 +20,7 @@ class Forum extends Object with _$JaguarForum {
   @MongoDb('test')
   @Login()
   @Input(MongoDb)
-  void delete(HttpRequest request, Db db) {
-  }
+  void delete(HttpRequest request, Db db) {}
 
   /*
   List<Route> _routes = <Route>[

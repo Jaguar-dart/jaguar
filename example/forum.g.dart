@@ -15,10 +15,7 @@ abstract class _$JaguarForum {
 
   Future<User> fetch();
 
-  void delete(
-    HttpRequest request,
-    Db db,
-  );
+  void delete(HttpRequest request, Db db);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     List<String> args = <String>[];
@@ -27,23 +24,24 @@ abstract class _$JaguarForum {
     match = _routes[0].match(args, request.uri.path, request.method);
     if (match) {
       MongoDb iMongoDb = new MongoDb('test');
-      Db rMongoDb = pre();
+      Db rMongoDb = iMongoDb.pre();
       Login iLogin = new Login();
-      pre();
+      iLogin.pre(rMongoDb);
       fetch();
+      iLogin.post();
+      iMongoDb.post();
       return true;
     }
 
     match = _routes[1].match(args, request.uri.path, request.method);
     if (match) {
       MongoDb iMongoDb = new MongoDb('test');
-      Db rMongoDb = pre();
+      Db rMongoDb = iMongoDb.pre();
       Login iLogin = new Login();
-      pre();
-      delete(
-        request,
-        rMongoDb,
-      );
+      iLogin.pre(rMongoDb);
+      delete(request, rMongoDb);
+      iLogin.post();
+      iMongoDb.post();
       return true;
     }
 
