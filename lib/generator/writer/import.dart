@@ -91,7 +91,7 @@ class Writer {
   void _writeRouteCall(RouteInfo route) {
     sb.write(route.methodEl.name + "(");
 
-    if(route.needsHttpRequest) {
+    if (route.needsHttpRequest) {
       sb.write("request, ");
     }
 
@@ -117,12 +117,25 @@ class Writer {
   }
 
   void _writePreInterceptorDual(DualInterceptorInfo info) {
-    sb.write(info.returnsD.toString() + " ");
-    sb.write("r" + info.interceptor.toString() + " = new ");
-    sb.write(info.interceptor.toString() + "(");
+    sb.write(info.interceptor.toString() + " ");
+    sb.write("i" + info.interceptor.toString() + " = new ");
+    sb.write(info.makeParams());
+    sb.writeln(";");
 
-    info.makeParams();
-    //TODO
+    print(info.dual.pre);
+
+    if (info.dual.pre is! InterceptorFuncDef) {
+      return;
+    }
+
+    if (!info.dual.pre.method.returnType.isVoid) {
+      //TODO check if its future
+      sb.write(info.returnsD.toString() + " ");
+      sb.write("r" + info.interceptor.toString() + " = ");
+    }
+
+    sb.write("pre(");
+    //TODO write argumetns to pre
     sb.writeln(");");
   }
 

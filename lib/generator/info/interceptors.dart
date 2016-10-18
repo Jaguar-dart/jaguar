@@ -94,15 +94,9 @@ class DualInterceptorInfo implements InterceptorInfo {
   }
 
   String makeParams() {
-    final ClassElement clazz =
-    elememt.element.getAncestor((Element el) => el is ClassElement);
-    print(clazz.fields);
-
-    final obj = instantiateAnnotation(elememt);
-
-    InstanceMirror instmir = reflect(obj);
-
-    print(instmir.getField(new Symbol('dbName')));
+    String lRet = (elememt as ElementAnnotationImpl).annotationAst.toSource();
+    lRet = lRet.substring(1);
+    return lRet;
   }
 }
 
