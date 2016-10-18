@@ -5,6 +5,12 @@ class InterceptorFuncDef {
   /// The function or method element
   MethodElement method;
 
+  DartType get returnType => method.returnType;
+
+  bool get returnsVoid => returnType.isVoid;
+
+  bool get returnsFuture => returnType.isDartAsyncFuture;
+
   /// Inputs declared on the interceptor
   List<InputInfo> inputs = <InputInfo>[];
 

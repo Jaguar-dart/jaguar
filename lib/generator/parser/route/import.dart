@@ -1,4 +1,14 @@
-part of jaguar.generator.info;
+library jaguar.generator.parser.route;
+
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
+import 'package:source_gen/src/annotation.dart';
+
+import 'package:jaguar/src/annotations/import.dart' as ant;
+
+import 'package:jaguar/generator/parser/interceptor/import.dart';
+
+import 'package:jaguar/generator/parser/import.dart';
 
 class RouteInfo {
   final MethodElement methodEl;
@@ -10,6 +20,12 @@ class RouteInfo {
   final List<InterceptorInfo> interceptors;
 
   final List<InputInfo> inputs;
+
+  DartType get returnType => methodEl.returnType;
+
+  bool get returnsVoid => returnType.isVoid;
+
+  bool get returnsFuture => returnType.isDartAsyncFuture;
 
   RouteInfo(this.methodEl, this.route, this.interceptors, this.inputs,
       this.pathPrefix) {
@@ -36,11 +52,11 @@ class RouteInfo {
       }
 
       if (interc is DualInterceptorInfo) {
-        //TODO fix Futures for interc return type
-        if (interc.returnsD != param.type) {
+        if (!interc.matchesReturnType(param.type)) {
           throw new Exception("Inputs and parameters to route does not match!");
         }
       }
+
       //TODO
     }
   }
@@ -72,23 +88,23 @@ List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
     List<InterceptorInfo> interceptorsParent) {
   return classElement.methods
       .map((MethodElement method) {
-        ant.Route route = parseRoute(method);
+    ant.Route route = parseRoute(method);
 
-        if (route == null) {
-          return null;
-        }
+    if (route == null) {
+      return null;
+    }
 
-        List<InputInfo> inputs = method.metadata
-            .map((ElementAnnotation annot) => instantiateAnnotation(annot))
-            .where((dynamic instance) => instance is ant.Input)
-            .map((ant.Input inp) => new InputInfo(inp.resultFrom))
-            .toList();
+    List<InputInfo> inputs = method.metadata
+        .map((ElementAnnotation annot) => instantiateAnnotation(annot))
+        .where((dynamic instance) => instance is ant.Input)
+        .map((ant.Input inp) => new InputInfo(inp.resultFrom))
+        .toList();
 
-        List<InterceptorInfo> interceptors = parseInterceptor(method);
-        interceptors.insertAll(0, interceptorsParent);
+    List<InterceptorInfo> interceptors = parseInterceptor(method);
+    interceptors.insertAll(0, interceptorsParent);
 
-        return new RouteInfo(method, route, interceptors, inputs, prefix);
-      })
+    return new RouteInfo(method, route, interceptors, inputs, prefix);
+  })
       .where((RouteInfo info) => info != null)
       .toList();
 }

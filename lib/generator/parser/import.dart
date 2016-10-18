@@ -1,18 +1,14 @@
 library jaguar.generator.info;
 
-import 'package:analyzer/dart/element/element.dart';
-
 import 'package:jaguar/src/annotations/import.dart' as ant;
-import 'package:source_gen/src/annotation.dart';
-
-import 'package:jaguar/generator/parser/interceptor/import.dart';
 
 export 'package:jaguar/generator/parser/interceptor/import.dart';
+export 'package:jaguar/generator/parser/route/import.dart';
+export 'package:jaguar/generator/parser/group/import.dart';
 
-part 'group.dart';
-part 'route.dart';
-
+/// Holds information about a single input to an interceptor method or function
 class InputInfo {
+  /// Results of which interceptor must be injected to this input
   final Type resultFrom;
 
   InputInfo(this.resultFrom);

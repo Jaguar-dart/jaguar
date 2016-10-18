@@ -24,24 +24,24 @@ abstract class _$JaguarForum {
     match = _routes[0].match(args, request.uri.path, request.method);
     if (match) {
       MongoDb iMongoDb = new MongoDb('test');
-      Db rMongoDb = iMongoDb.pre();
+      Db rMongoDb = await iMongoDb.pre();
       Login iLogin = new Login();
       iLogin.pre(rMongoDb);
-      fetch();
+      User rResponse = await fetch();
       iLogin.post();
-      iMongoDb.post();
+      await iMongoDb.post();
       return true;
     }
 
     match = _routes[1].match(args, request.uri.path, request.method);
     if (match) {
       MongoDb iMongoDb = new MongoDb('test');
-      Db rMongoDb = iMongoDb.pre();
+      Db rMongoDb = await iMongoDb.pre();
       Login iLogin = new Login();
       iLogin.pre(rMongoDb);
       delete(request, rMongoDb);
       iLogin.post();
-      iMongoDb.post();
+      await iMongoDb.post();
       return true;
     }
 

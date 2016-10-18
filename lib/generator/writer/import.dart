@@ -88,6 +88,19 @@ class Writer {
   }
 
   void _writeRouteCall(RouteInfo route) {
+    if (!route.returnsVoid) {
+      if (!route.returnsFuture) {
+        sb.write(route.returnType.toString() + " ");
+        sb.write("rResponse = ");
+      } else {
+        sb.write(route.returnType
+            .flattenFutures(route.methodEl.context.typeSystem)
+            .toString() +
+            " ");
+        sb.write("rResponse = await ");
+      }
+    }
+
     sb.write(route.methodEl.name + "(");
 
     if (route.needsHttpRequest) {
@@ -127,10 +140,17 @@ class Writer {
       return;
     }
 
-    if (!info.dual.pre.method.returnType.isVoid) {
-      //TODO check if its future
-      sb.write(info.returnsD.toString() + " ");
-      sb.write("r" + info.interceptor.toString() + " = ");
+    if (!info.returnsD.isVoid) {
+      if (!info.returnsD.isDartAsyncFuture) {
+        sb.write(info.returnsD.toString() + " ");
+        sb.write("r" + info.interceptor.toString() + " = ");
+      } else {
+        sb.write(info.returnsD
+                .flattenFutures(info.returnsD.element.context.typeSystem)
+                .toString() +
+            " ");
+        sb.write("r" + info.interceptor.toString() + " = await ");
+      }
     }
 
     sb.write("i" + info.interceptor.toString());
@@ -167,8 +187,10 @@ class Writer {
       return;
     }
 
-    if (!info.dual.post.method.returnType.isVoid) {
-      //TODO check if its future
+    if (!info.dual.post.returnsVoid) {
+      if (info.dual.post.returnsFuture) {
+        sb.write("await ");
+      }
     }
 
     sb.write("i" + info.interceptor.toString());

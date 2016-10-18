@@ -1,5 +1,6 @@
 library example.forum.interceptor;
 
+import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
 class Db {}
@@ -12,11 +13,11 @@ class MongoDb {
 
   const MongoDb(this.dbName);
 
-  Db pre() {
+  Future<Db> pre() async {
     return new Db();
   }
 
-  void post() {}
+  Future post() async {}
 }
 
 @InterceptDual(returns: User)

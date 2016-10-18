@@ -40,6 +40,15 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   DartType returnsD;
 
+  bool matchesReturnType(DartType type) {
+    if(!returnsD.isDartAsyncFuture) {
+      return type.isSupertypeOf(returnsD);
+    } else {
+      DartType flattenedType = returnsD.flattenFutures(elememt.context.typeSystem);
+      return type.isSupertypeOf(flattenedType);
+    }
+  }
+
   ///Create dual interceptor info for given interceptor usage
   DualInterceptorInfo(this.elememt) {
     final ClassElement clazz =
