@@ -40,7 +40,7 @@ class InterceptorFuncInfo implements InterceptorInfo {
 
   bool isPost;
 
-  Type returns;
+  DartType returns;
 
   InterceptorFuncInfo(this.definition, {this.isPost: false});
 }

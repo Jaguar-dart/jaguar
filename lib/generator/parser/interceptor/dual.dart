@@ -36,15 +36,13 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   Type interceptor;
 
-  Type returns;
-
-  DartType returnsD;
+  DartType returns;
 
   bool matchesReturnType(DartType type) {
-    if(!returnsD.isDartAsyncFuture) {
-      return type.isSupertypeOf(returnsD);
+    if(!returns.isDartAsyncFuture) {
+      return type.isSupertypeOf(returns);
     } else {
-      DartType flattenedType = returnsD.flattenFutures(elememt.context.typeSystem);
+      DartType flattenedType = returns.flattenFutures(elememt.context.typeSystem);
       return type.isSupertypeOf(flattenedType);
     }
   }
@@ -55,8 +53,7 @@ class DualInterceptorInfo implements InterceptorInfo {
     elememt.element.getAncestor((Element el) => el is ClassElement);
     interceptor = instantiateAnnotation(elememt).runtimeType;
     dual = new InterceptorDualDef(clazz);
-    returns = getClassInterceptDual(clazz).returns;
-    returnsD = dual.pre.method.returnType;
+    returns = dual.pre.method.returnType;
   }
 
   String toString() {

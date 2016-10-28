@@ -13,12 +13,12 @@ part 'func.dart';
 part 'dual.dart';
 
 abstract class InterceptorInfo {
-  Type get returns;
+  DartType get returns;
 }
 
 bool isAnnotationInterceptDual(ElementAnnotation annot) {
   final ClassElement clazz =
-  annot.element.getAncestor((Element el) => el is ClassElement);
+      annot.element.getAncestor((Element el) => el is ClassElement);
 
   if (clazz == null) {
     return false;
@@ -31,7 +31,14 @@ bool isClassInterceptDual(ClassElement clazz) {
   clazz.metadata
       .forEach((ElementAnnotation annot) => annot.computeConstantValue());
   var matchingAnnotations = clazz.metadata
-      .map((ElementAnnotation annot) => instantiateAnnotation(annot))
+      .map((ElementAnnotation annot) {
+        try {
+          return instantiateAnnotation(annot);
+        } catch (_) {
+          //TODO check what exception and decide accordingly
+          return null;
+        }
+      })
       .where((dynamic instance) => instance is ant.InterceptDual)
       .toList();
 
@@ -48,7 +55,14 @@ ant.InterceptDual getClassInterceptDual(ClassElement clazz) {
   clazz.metadata
       .forEach((ElementAnnotation annot) => annot.computeConstantValue());
   var matchingAnnotations = clazz.metadata
-      .map((ElementAnnotation annot) => instantiateAnnotation(annot))
+      .map((ElementAnnotation annot) {
+        try {
+          return instantiateAnnotation(annot);
+        } catch (_) {
+          //TODO check what exception and decide accordingly
+          return null;
+        }
+      })
       .where((dynamic instance) => instance is ant.InterceptDual)
       .toList();
 
@@ -65,12 +79,12 @@ ant.InterceptDual getClassInterceptDual(ClassElement clazz) {
 List<InterceptorInfo> parseInterceptor(Element element) {
   return element.metadata
       .map((ElementAnnotation annot) {
-    if (!isAnnotationInterceptDual(annot)) {
-      return null;
-    }
+        if (!isAnnotationInterceptDual(annot)) {
+          return null;
+        }
 
-    return new DualInterceptorInfo(annot);
-  })
+        return new DualInterceptorInfo(annot);
+      })
       .where((dynamic val) => val != null)
       .toList();
 }

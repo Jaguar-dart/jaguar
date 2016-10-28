@@ -15,27 +15,32 @@ class GroupInfo {
 }
 
 ant.Group parseGroup(Element element) {
-  return element.metadata
-      .map((ElementAnnotation annot) => instantiateAnnotation(annot))
-      .firstWhere((dynamic instance) => instance is ant.Group, orElse: null);
+  return element.metadata.map((ElementAnnotation annot) {
+    try {
+      return instantiateAnnotation(annot);
+    } catch (_) {
+      //TODO check what exception and decide accordingly
+      return null;
+    }
+  }).firstWhere((dynamic instance) => instance is ant.Group, orElse: null);
 }
 
 List<RouteInfo> collectAllRoutes(ClassElement classElement, String prefix,
     List<InterceptorInfo> interceptorsParent) {
   List<RouteInfo> routes =
-  collectRoutes(classElement, prefix, interceptorsParent);
+      collectRoutes(classElement, prefix, interceptorsParent);
 
   classElement.fields
       .map((FieldElement field) {
-    ant.Group group = parseGroup(field);
+        ant.Group group = parseGroup(field);
 
-    if (field == null) {
-      return null;
-    }
+        if (field == null) {
+          return null;
+        }
 
-    return collectAllRoutes(
-        field.type.element, "$prefix/${group.name}", interceptorsParent);
-  })
+        return collectAllRoutes(
+            field.type.element, "$prefix/${group.name}", interceptorsParent);
+      })
       .where((List<RouteInfo> routes) => routes != null)
       .forEach((List<RouteInfo> val) => routes.addAll(val));
 

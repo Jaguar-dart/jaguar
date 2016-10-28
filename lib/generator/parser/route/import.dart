@@ -79,32 +79,44 @@ class RouteInfo {
 }
 
 ant.Route parseRoute(MethodElement element) {
-  return element.metadata
-      .map((ElementAnnotation annot) => instantiateAnnotation(annot))
-      .firstWhere((dynamic instance) => instance is ant.Route, orElse: null);
+  return element.metadata.map((ElementAnnotation annot) {
+    try {
+      return instantiateAnnotation(annot);
+    } catch (_) {
+      //TODO check what exception and decide accordingly
+      return null;
+    }
+  }).firstWhere((dynamic instance) => instance is ant.Route, orElse: null);
 }
 
 List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
     List<InterceptorInfo> interceptorsParent) {
   return classElement.methods
       .map((MethodElement method) {
-    ant.Route route = parseRoute(method);
+        ant.Route route = parseRoute(method);
 
-    if (route == null) {
-      return null;
-    }
+        if (route == null) {
+          return null;
+        }
 
-    List<InputInfo> inputs = method.metadata
-        .map((ElementAnnotation annot) => instantiateAnnotation(annot))
-        .where((dynamic instance) => instance is ant.Input)
-        .map((ant.Input inp) => new InputInfo(inp.resultFrom))
-        .toList();
+        List<InputInfo> inputs = method.metadata
+            .map((ElementAnnotation annot) {
+              try {
+                return instantiateAnnotation(annot);
+              } catch (_) {
+                //TODO check what exception and decide accordingly
+                return null;
+              }
+            })
+            .where((dynamic instance) => instance is ant.Input)
+            .map((ant.Input inp) => new InputInfo(inp.resultFrom))
+            .toList();
 
-    List<InterceptorInfo> interceptors = parseInterceptor(method);
-    interceptors.insertAll(0, interceptorsParent);
+        List<InterceptorInfo> interceptors = parseInterceptor(method);
+        interceptors.insertAll(0, interceptorsParent);
 
-    return new RouteInfo(method, route, interceptors, inputs, prefix);
-  })
+        return new RouteInfo(method, route, interceptors, inputs, prefix);
+      })
       .where((RouteInfo info) => info != null)
       .toList();
 }

@@ -140,13 +140,13 @@ class Writer {
       return;
     }
 
-    if (!info.returnsD.isVoid) {
-      if (!info.returnsD.isDartAsyncFuture) {
-        sb.write(info.returnsD.toString() + " ");
+    if (!info.returns.isVoid) {
+      if (!info.returns.isDartAsyncFuture) {
+        sb.write(info.returns.toString() + " ");
         sb.write("r" + info.interceptor.toString() + " = ");
       } else {
-        sb.write(info.returnsD
-                .flattenFutures(info.returnsD.element.context.typeSystem)
+        sb.write(info.returns
+                .flattenFutures(info.returns.element.context.typeSystem)
                 .toString() +
             " ");
         sb.write("r" + info.interceptor.toString() + " = await ");
