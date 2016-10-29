@@ -7,11 +7,11 @@ class Db {}
 
 class User {}
 
-@InterceptDual(returns: Db)
-class MongoDb {
+@DefineInterceptDual()
+class MongoDb extends InterceptorDual {
   final String dbName;
 
-  const MongoDb(this.dbName);
+  const MongoDb(this.dbName, {String id}): super(id: id);
 
   Future<Db> pre() async {
     return new Db();
@@ -20,11 +20,11 @@ class MongoDb {
   Future post() async {}
 }
 
-@InterceptDual(returns: User)
-class Login {
+@DefineInterceptDual()
+class Login extends InterceptorDual {
   const Login();
 
-  @Input(MongoDb)
+  @Input(MongoDb, id: 'Admin')
   void pre(Db db) {}
 
   void post() {}

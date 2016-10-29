@@ -22,7 +22,7 @@ ant.Group parseGroup(Element element) {
       //TODO check what exception and decide accordingly
       return null;
     }
-  }).firstWhere((dynamic instance) => instance is ant.Group, orElse: null);
+  }).firstWhere((dynamic instance) => instance is ant.Group, orElse: () => null);
 }
 
 List<RouteInfo> collectAllRoutes(ClassElement classElement, String prefix,
@@ -34,12 +34,12 @@ List<RouteInfo> collectAllRoutes(ClassElement classElement, String prefix,
       .map((FieldElement field) {
         ant.Group group = parseGroup(field);
 
-        if (field == null) {
+        if (group == null) {
           return null;
         }
 
         return collectAllRoutes(
-            field.type.element, "$prefix/${group.name}", interceptorsParent);
+            field.type.element, "$prefix/${group.path}", interceptorsParent);
       })
       .where((List<RouteInfo> routes) => routes != null)
       .forEach((List<RouteInfo> val) => routes.addAll(val));

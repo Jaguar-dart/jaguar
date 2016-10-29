@@ -35,4 +35,3 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
     return w.toString();
   }
 }
-

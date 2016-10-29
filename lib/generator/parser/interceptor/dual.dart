@@ -11,6 +11,8 @@ class InterceptorDualDef {
   /// Post interceptor info
   InterceptorFuncDef post;
 
+  DartType get returnType => pre?.returnType;
+
   /// Default constructor. Constructs [InterceptorDualDef] for a given class
   InterceptorDualDef(this.clazz) {
     /// Find pre and post interceptors in class
@@ -34,9 +36,17 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   InterceptorDualDef dual;
 
-  Type interceptor;
+  InterceptorAnnotationInstance interceptor;
 
-  DartType returns;
+  DartType get returns => dual.returnType;
+
+  String get _genBaseName => interceptor.displayName + (id??'');
+
+  String get genInstanceName => 'i$_genBaseName';
+
+  String get genReturnVarName => 'r$_genBaseName';
+
+  String get id => interceptor.id;
 
   bool matchesReturnType(DartType type) {
     if(!returns.isDartAsyncFuture) {
@@ -51,18 +61,11 @@ class DualInterceptorInfo implements InterceptorInfo {
   DualInterceptorInfo(this.elememt) {
     final ClassElement clazz =
     elememt.element.getAncestor((Element el) => el is ClassElement);
-    interceptor = instantiateAnnotation(elememt).runtimeType;
+    interceptor = new InterceptorAnnotationInstance(elememt);
     dual = new InterceptorDualDef(clazz);
-    returns = dual.pre.method.returnType;
   }
 
   String toString() {
-    return '{$dual}';
-  }
-
-  String makeParams() {
-    String lRet = (elememt as ElementAnnotationImpl).annotationAst.toSource();
-    lRet = lRet.substring(1);
-    return lRet;
+    return '$_genBaseName{$dual}';
   }
 }

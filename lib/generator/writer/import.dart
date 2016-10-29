@@ -1,20 +1,8 @@
 library jaguar.generator.writer;
 
 import 'dart:convert';
-import 'package:analyzer/dart/element/element.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
-
-String prototypeOfFunction(MethodElement method) {
-  StringBuffer sb = new StringBuffer();
-  sb.write(method.returnType.toString() + " ");
-  sb.write(method.name + "(");
-  String paramsStr = method.parameters
-      .map((ParameterElement pel) => pel.toString())
-      .join(", ");
-  sb.writeln(paramsStr + ");");
-  return sb.toString();
-}
 
 class Writer {
   final String className;
@@ -55,7 +43,7 @@ class Writer {
 
   void _writeRoutePrototype() {
     routes.forEach((RouteInfo route) {
-      sb.writeln(prototypeOfFunction(route.methodEl));
+      sb.writeln(route.prototype);
       sb.writeln("");
     });
   }
@@ -93,29 +81,49 @@ class Writer {
         sb.write(route.returnType.toString() + " ");
         sb.write("rResponse = ");
       } else {
-        sb.write(route.returnType
-            .flattenFutures(route.methodEl.context.typeSystem)
-            .toString() +
-            " ");
+        sb.write(route.returnTypeWithoutFuture.toString() + " ");
         sb.write("rResponse = await ");
       }
     }
 
-    sb.write(route.methodEl.name + "(");
+    sb.write(route.name + "(");
 
     if (route.needsHttpRequest) {
       sb.write("request, ");
     }
 
-    final String params = route.inputs
-        .map((InputInfo info) => "r" + info.resultFrom.toString())
-        .join(", ");
+    final String params =
+        route.inputs.map((InputInfo info) => info.genName).join(", ");
 
     sb.write(params);
 
     //TODO url parameter
 
     sb.writeln(");");
+
+    if (!route.returnsVoid) {
+      print(route.name);
+      if (route.route.statusCode is int) {
+        sb.writeln("request.response.statusCode = " +
+            route.route.statusCode.toString() +
+            ";");
+      }
+
+      if (route.route.headers is Map) {
+        Map<String, String> headers = route.route.headers;
+        for (String key in headers.keys) {
+          sb.write(r'request.response.headers.add("');
+          sb.write(key);
+          sb.write(r'", "');
+          sb.write(headers[key]);
+          sb.writeln(r'");');
+        }
+      }
+
+      if (route.defaultResponseWriter) {
+        sb.writeln("request.response..write(rResponse.toString())..close();");
+      }
+    }
   }
 
   void _writePreInterceptors(RouteInfo route) {
@@ -131,9 +139,9 @@ class Writer {
   }
 
   void _writePreInterceptorDual(DualInterceptorInfo info) {
-    sb.write(info.interceptor.toString() + " ");
-    sb.write("i" + info.interceptor.toString() + " = new ");
-    sb.write(info.makeParams());
+    sb.write(info.interceptor.displayName + " ");
+    sb.write(info.genInstanceName + " = ");
+    sb.write(info.interceptor.instantiationString);
     sb.writeln(";");
 
     if (info.dual.pre is! InterceptorFuncDef) {
@@ -143,21 +151,20 @@ class Writer {
     if (!info.returns.isVoid) {
       if (!info.returns.isDartAsyncFuture) {
         sb.write(info.returns.toString() + " ");
-        sb.write("r" + info.interceptor.toString() + " = ");
+        sb.write(info.genReturnVarName + " = ");
       } else {
         sb.write(info.returns
                 .flattenFutures(info.returns.element.context.typeSystem)
                 .toString() +
             " ");
-        sb.write("r" + info.interceptor.toString() + " = await ");
+        sb.write(info.genReturnVarName + " = await ");
       }
     }
 
-    sb.write("i" + info.interceptor.toString());
+    sb.write(info.genInstanceName);
     sb.write(".pre(");
-    final String params = info.dual.pre.inputs
-        .map((InputInfo info) => "r" + info.resultFrom.toString())
-        .join(", ");
+    final String params =
+        info.dual.pre.inputs.map((InputInfo info) => info.genName).join(", ");
     sb.write(params);
     sb.writeln(");");
   }
@@ -193,11 +200,10 @@ class Writer {
       }
     }
 
-    sb.write("i" + info.interceptor.toString());
+    sb.write(info.genInstanceName);
     sb.write(".post(");
-    final String params = info.dual.post.inputs
-        .map((InputInfo info) => "r" + info.resultFrom.toString())
-        .join(", ");
+    final String params =
+        info.dual.post.inputs.map((InputInfo info) => info.genName).join(", ");
     sb.write(params);
     sb.writeln(");");
   }

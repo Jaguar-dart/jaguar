@@ -1,2 +1,0 @@
-library jaguar.src.info;
-

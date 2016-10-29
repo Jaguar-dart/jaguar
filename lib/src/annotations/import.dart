@@ -6,6 +6,10 @@ class Route {
 
   final List<String> methods;
 
+  final int statusCode;
+
+  final Map<String, String> headers;
+
   const Route(this.path,
       {this.methods: const <String>[
         'GET',
@@ -14,7 +18,7 @@ class Route {
         'PATCH',
         'DELETE',
         'OPTIONS'
-      ]});
+      ], this.statusCode: 200, this.headers});
 
   bool match(List<String> args, String requestPath, String method) {
     if (!methods.contains(method)) {
@@ -36,19 +40,14 @@ class Route {
 
 ///An annotation to define an API class
 class Api {
-  final String name;
-  final String version;
+  final String path;
 
-  const Api({this.name: '', this.version: ''});
+  const Api({this.path: ''});
 
   String get url {
     String prefix = "";
-    if (name != null && name.isNotEmpty) {
-      prefix += "${name}";
-    }
-
-    if (version != null && version.isNotEmpty) {
-      prefix += "${version}";
+    if (path != null && path.isNotEmpty) {
+      prefix += "${path}";
     }
 
     return prefix;
@@ -58,9 +57,9 @@ class Api {
 ///An annotation to define an API group in API class
 class Group {
   ///Path prefix to the group
-  final String name;
+  final String path;
 
-  const Group({this.name});
+  const Group({this.path});
 }
 
 class DefineInterceptorFunc {
@@ -77,14 +76,25 @@ class InterceptFunction {
   const InterceptFunction(this.function, {this.isPost: false});
 }
 
-class InterceptDual {
-  final Type returns;
+/// Defines a dual interceptor
+class DefineInterceptDual {
+  final bool writesResponse;
 
-  const InterceptDual({this.returns});
+  const DefineInterceptDual({this.writesResponse: false});
 }
 
+/// Base class for dual interceptors
+class InterceptorDual {
+  final String id;
+
+  const InterceptorDual({this.id});
+}
+
+/// Defines inputs to an interceptor
 class Input {
   final Type resultFrom;
 
-  const Input(this.resultFrom);
+  final String id;
+
+  const Input(this.resultFrom, {this.id});
 }

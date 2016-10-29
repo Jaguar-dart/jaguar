@@ -1,4 +1,4 @@
-part of  jaguar.generator.parser.interceptor;
+part of jaguar.generator.parser.interceptor;
 
 /// Holds information about interceptor functions
 class InterceptorFuncDef {
@@ -23,14 +23,17 @@ class InterceptorFuncDef {
 
     /// Find and collect Inputs to the interceptor
     method.metadata
-        .map((ElementAnnotation annot) => instantiateAnnotation(annot))
-        .where((dynamic instance) => instance is ant.Input)
-        .forEach((ant.Input inp) => inputs.add(new InputInfo.FromAnnot(inp)));
+        .map(instantiateInputAnnotation)
+        .where((InputInfo instance) => instance is InputInfo)
+        .forEach((InputInfo inp) => inputs.add(inp));
   }
 
   /// Debug printer
   String toString() {
-    String lRet = "(" + inputs.map((InputInfo inp) => '$inp}').join(',') + ')';
+    String lRet = method.name +
+        '(' +
+        inputs.map((InputInfo inp) => '$inp}').join(',') +
+        ')';
     return lRet;
   }
 }

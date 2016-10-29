@@ -11,6 +11,7 @@ import 'package:jaguar/generator/parser/import.dart';
 
 part 'func.dart';
 part 'dual.dart';
+part 'type.dart';
 
 abstract class InterceptorInfo {
   DartType get returns;
@@ -39,7 +40,7 @@ bool isClassInterceptDual(ClassElement clazz) {
           return null;
         }
       })
-      .where((dynamic instance) => instance is ant.InterceptDual)
+      .where((dynamic instance) => instance is ant.DefineInterceptDual)
       .toList();
 
   if (matchingAnnotations.isEmpty) {
@@ -49,30 +50,6 @@ bool isClassInterceptDual(ClassElement clazz) {
   }
 
   return true;
-}
-
-ant.InterceptDual getClassInterceptDual(ClassElement clazz) {
-  clazz.metadata
-      .forEach((ElementAnnotation annot) => annot.computeConstantValue());
-  var matchingAnnotations = clazz.metadata
-      .map((ElementAnnotation annot) {
-        try {
-          return instantiateAnnotation(annot);
-        } catch (_) {
-          //TODO check what exception and decide accordingly
-          return null;
-        }
-      })
-      .where((dynamic instance) => instance is ant.InterceptDual)
-      .toList();
-
-  if (matchingAnnotations.isEmpty) {
-    return null;
-  } else if (matchingAnnotations.length > 1) {
-    throw 'Cannot define InterceptDual more than once';
-  }
-
-  return matchingAnnotations[0];
 }
 
 ///Parse interceptors for a given method or class element

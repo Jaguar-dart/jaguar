@@ -416,8 +416,7 @@ void main() {
     String generateResult = await _generator.generateForAnnotatedElement(
         element, api_annotation, null);
 
-    expect(api_annotation.name, isEmpty);
-    expect(api_annotation.version, isEmpty);
+    expect(api_annotation.path, isEmpty);
     expect(generateResult, getCodeForEmptyApi(r'_$Jaguar' + className));
   });
 
@@ -428,8 +427,7 @@ void main() {
     String generateResult = await _generator.generateForAnnotatedElement(
         element, api_annotation, null);
 
-    expect(api_annotation.name, "api");
-    expect(api_annotation.version, isEmpty);
+    expect(api_annotation.path, "api");
     expect(generateResult, getCodeForEmptyApi(r'_$Jaguar' + className));
   });
 
@@ -440,8 +438,7 @@ void main() {
     String generateResult = await _generator.generateForAnnotatedElement(
         element, api_annotation, null);
 
-    expect(api_annotation.name, isEmpty);
-    expect(api_annotation.version, "v1");
+    expect(api_annotation.path, isEmpty);
     expect(generateResult, getCodeForEmptyApi(r'_$Jaguar' + className));
   });
 
@@ -452,8 +449,7 @@ void main() {
     String generateResult = await _generator.generateForAnnotatedElement(
         element, api_annotation, null);
 
-    expect(api_annotation.name, "api");
-    expect(api_annotation.version, "v1");
+    expect(api_annotation.path, "api");
     expect(generateResult, getCodeForEmptyApi(r'_$Jaguar' + className));
   });
 

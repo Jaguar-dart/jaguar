@@ -9,9 +9,11 @@ import 'package:jaguar/src/annotations/import.dart' as ant;
 import 'package:jaguar/generator/parser/interceptor/import.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
+import 'package:jaguar/generator/internal/element/import.dart';
 
+/// Parsed information about route
 class RouteInfo {
-  final MethodElement methodEl;
+  final MethodElementWrap _method;
 
   final String pathPrefix;
 
@@ -21,27 +23,27 @@ class RouteInfo {
 
   final List<InputInfo> inputs;
 
-  DartType get returnType => methodEl.returnType;
+  DartType get returnType => _method.returnType;
 
   bool get returnsVoid => returnType.isVoid;
 
   bool get returnsFuture => returnType.isDartAsyncFuture;
 
-  RouteInfo(this.methodEl, this.route, this.interceptors, this.inputs,
-      this.pathPrefix) {
+  RouteInfo(MethodElement aMethod, this.route, this.interceptors, this.inputs,
+      this.pathPrefix): _method = new MethodElementWrap(aMethod) {
     final int baseParamIndex = needsHttpRequest ? 1 : 0;
 
-    if ((methodEl.parameters.length - baseParamIndex) < inputs.length) {
+    if ((_method.parameters.length - baseParamIndex) < inputs.length) {
       throw new Exception("Inputs and parameters to route does not match!");
     }
 
     for (int index = 0; index < inputs.length; index++) {
-      ParameterElement param = methodEl.parameters[baseParamIndex + index];
+      ParameterElement param = _method.parameters[baseParamIndex + index];
       InputInfo input = inputs[index];
 
       InterceptorInfo interc = interceptors.firstWhere((InterceptorInfo info) {
         if (info is DualInterceptorInfo) {
-          return info.interceptor == input.resultFrom;
+          return input.resultFrom.hasType(info.interceptor) && input.id == info.id;
         } else {
           //TODO
         }
@@ -56,17 +58,15 @@ class RouteInfo {
           throw new Exception("Inputs and parameters to route does not match!");
         }
       }
-
-      //TODO
     }
   }
 
   bool get needsHttpRequest {
-    if (methodEl.parameters.length < 1) {
+    if (_method.parameters.length < 1) {
       return false;
     }
 
-    return methodEl.parameters[0].type.name == "HttpRequest";
+    return _method.parameters[0].type.name == "HttpRequest";
   }
 
   String get path => pathPrefix + route.path;
@@ -75,7 +75,15 @@ class RouteInfo {
     return "${route.path}";
   }
 
-  Map<String, InterceptorInfo> _map = {};
+  String get prototype => _method.prototype;
+
+  String get name => _method.name;
+
+  DartType get returnTypeWithoutFuture => _method.returnTypeWithoutFuture;
+
+  bool _defaultResponseWriter = true;
+
+  bool get defaultResponseWriter => _defaultResponseWriter;
 }
 
 ant.Route parseRoute(MethodElement element) {
@@ -100,16 +108,8 @@ List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
         }
 
         List<InputInfo> inputs = method.metadata
-            .map((ElementAnnotation annot) {
-              try {
-                return instantiateAnnotation(annot);
-              } catch (_) {
-                //TODO check what exception and decide accordingly
-                return null;
-              }
-            })
-            .where((dynamic instance) => instance is ant.Input)
-            .map((ant.Input inp) => new InputInfo(inp.resultFrom))
+            .map(instantiateInputAnnotation)
+            .where((InputInfo instance) => instance is InputInfo)
             .toList();
 
         List<InterceptorInfo> interceptors = parseInterceptor(method);
