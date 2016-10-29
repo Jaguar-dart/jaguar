@@ -11,11 +11,17 @@ abstract class _$JaguarExampleApi {
   List<Route> _routes = <Route>[
     new Route(r"/api/ping", methods: ["GET"]),
     new Route(r"/api/pong", methods: ["POST"]),
+    new Route(r"/api/echo/pathparam/:message", methods: ["POST"]),
+    new Route(r"/api/echo/queryparam", methods: ["POST"]),
   ];
 
   String ping();
 
   String pong();
+
+  String echoPathParam(String message);
+
+  String echoQueryParam(String message);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams({});
@@ -37,6 +43,28 @@ abstract class _$JaguarExampleApi {
       String rResponse = pong();
       request.response.statusCode = 201;
       request.response.headers.add("pong-header", "silly-pong");
+      request.response
+        ..write(rResponse.toString())
+        ..close();
+      return true;
+    }
+
+    match = _routes[2].match(request.uri.path, request.method, pathParams);
+    if (match) {
+      String rResponse = echoPathParam(
+          pathParams.getField('message') ?? queryParams.getField('message'));
+      request.response.statusCode = 200;
+      request.response
+        ..write(rResponse.toString())
+        ..close();
+      return true;
+    }
+
+    match = _routes[3].match(request.uri.path, request.method, pathParams);
+    if (match) {
+      String rResponse = echoQueryParam(
+          pathParams.getField('message') ?? queryParams.getField('message'));
+      request.response.statusCode = 200;
       request.response
         ..write(rResponse.toString())
         ..close();

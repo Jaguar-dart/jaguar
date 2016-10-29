@@ -95,29 +95,21 @@ class Writer {
       sb.write("request, ");
     }
 
-    bool writtenSomeParams = false;
-
-    {
+    if(route.inputs.length != 0) {
       final String params =
           route.inputs.map((InputInfo info) => info.genName).join(", ");
 
       sb.write(params);
 
-      writtenSomeParams = true;
+      sb.write(',');
     }
 
     if (route.nonInputParams.length > 0) {
-      if(writtenSomeParams == true) {
-        sb.write(',');
-      }
-
       final String params = route.nonInputParams.map((ParameterElement info) {
         return "pathParams.getField('${info.name}')??queryParams.getField('${info.name}')";
       }).join(", ");
 
       sb.write(params);
-
-      writtenSomeParams = true;
     }
 
     sb.writeln(");");

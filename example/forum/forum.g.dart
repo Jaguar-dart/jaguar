@@ -56,7 +56,10 @@ abstract class _$JaguarForumApi {
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(rMongoDbAdmin);
-      delete(request, rMongoDbAdmin);
+      delete(
+        request,
+        rMongoDbAdmin,
+      );
       iLogin.post();
       await iMongoDbAdmin.post();
       return true;
