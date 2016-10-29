@@ -52,7 +52,8 @@ abstract class _$JaguarExampleApi {
     match = _routes[2].match(request.uri.path, request.method, pathParams);
     if (match) {
       String rResponse = echoPathParam(
-          pathParams.getField('message') ?? queryParams.getField('message'));
+        pathParams.getField('message') ?? queryParams.getField('message'),
+      );
       request.response.statusCode = 200;
       request.response
         ..write(rResponse.toString())
@@ -63,7 +64,8 @@ abstract class _$JaguarExampleApi {
     match = _routes[3].match(request.uri.path, request.method, pathParams);
     if (match) {
       String rResponse = echoQueryParam(
-          pathParams.getField('message') ?? queryParams.getField('message'));
+        pathParams.getField('message') ?? queryParams.getField('message'),
+      );
       request.response.statusCode = 200;
       request.response
         ..write(rResponse.toString())

@@ -95,12 +95,11 @@ class Writer {
       sb.write("request, ");
     }
 
-    if(route.inputs.length != 0) {
+    if (route.inputs.length != 0) {
       final String params =
           route.inputs.map((InputInfo info) => info.genName).join(", ");
 
       sb.write(params);
-
       sb.write(',');
     }
 
@@ -110,6 +109,20 @@ class Writer {
       }).join(", ");
 
       sb.write(params);
+      sb.write(',');
+    }
+
+    if (route.optionalParams.length > 0) {
+      if (route.areOptionalParamsPositional) {
+        //TODO
+      } else {
+        final String params = route.optionalParams.map((ParameterElement info) {
+          return "${info.name}: pathParams.getField('${info
+              .name}')??queryParams.getField('${info.name}')";
+        }).join(", ");
+        sb.write(params);
+        sb.write(',');
+      }
     }
 
     sb.writeln(");");

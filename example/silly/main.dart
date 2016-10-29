@@ -30,10 +30,10 @@ class ExampleApi extends _$JaguarExampleApi {
 }
 
 Future<Null> main(List<String> args) async {
-  ExampleApi tsa = new ExampleApi();
+  ExampleApi api = new ExampleApi();
 
   Configuration configuration = new Configuration();
-  configuration.addApi(tsa);
+  configuration.addApi(api);
 
   await serve(configuration);
 }

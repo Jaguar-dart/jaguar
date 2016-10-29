@@ -71,8 +71,11 @@ abstract class _$JaguarForumApi {
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(rMongoDbAdmin);
-      String rResponse = create(request, rMongoDbAdmin,
-          pathParams.getField('param1') ?? queryParams.getField('param1'));
+      String rResponse = create(
+        request,
+        rMongoDbAdmin,
+        pathParams.getField('param1') ?? queryParams.getField('param1'),
+      );
       request.response.statusCode = 200;
       request.response
         ..write(rResponse.toString())
@@ -88,8 +91,13 @@ abstract class _$JaguarForumApi {
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(rMongoDbAdmin);
-      String rResponse = update(request, rMongoDbAdmin,
-          pathParams.getField('param1') ?? queryParams.getField('param1'));
+      String rResponse = update(
+        request,
+        rMongoDbAdmin,
+        pathParams.getField('param1') ?? queryParams.getField('param1'),
+        param2: pathParams.getField('param2') ?? queryParams.getField('param2'),
+        param3: pathParams.getField('param3') ?? queryParams.getField('param3'),
+      );
       request.response.statusCode = 200;
       request.response
         ..write(rResponse.toString())
