@@ -25,10 +25,21 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Login()
   @Input(MongoDb, id: 'Admin')
   void delete(HttpRequest request, Db db) {
-    Map<String, String> headers;
+  }
 
-    for (String key in headers.keys) {
-      request.response.headers.add(key, headers[key]);
-    }
+  @Route('/user/:param1', methods: const <String>['POST'])
+  @MongoDb('admin', id: 'Admin')
+  @Login()
+  @Input(MongoDb, id: 'Admin')
+  String create(HttpRequest request, Db db, String param1, [int param2 = 25, int param3 = 5]) {
+    return param1;
+  }
+
+  @Route('/user', methods: const <String>['PUT'])
+  @MongoDb('admin', id: 'Admin')
+  @Login()
+  @Input(MongoDb, id: 'Admin')
+  String update(HttpRequest request, Db db, String param1, {int param2: 5555, int param3: 55}) {
+    return param1;
   }
 }

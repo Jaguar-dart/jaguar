@@ -25,8 +25,8 @@ class Route {
       this.headers,
       this.pathRegEx});
 
-  bool match(Map<String, String> args, String requestPath, String method) {
-    args.clear();
+  bool match(String requestPath, String method, Map<String, dynamic> params) {
+    params.clear();
 
     if (!methods.contains(method)) {
       return false;
@@ -36,7 +36,7 @@ class Route {
 
     List<String> segs = path.split('/');
 
-    return comparePathSegments(segs, rqSegs, args);
+    return comparePathSegments(segs, rqSegs, params);
   }
 
   bool comparePathSegments(

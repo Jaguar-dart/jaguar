@@ -18,10 +18,11 @@ abstract class _$JaguarExampleApi {
   String pong();
 
   Future<bool> handleApiRequest(HttpRequest request) async {
-    List<String> args = <String>[];
+    PathParams pathParams = new PathParams({});
+    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
-    match = _routes[0].match(args, request.uri.path, request.method);
+    match = _routes[0].match(request.uri.path, request.method, pathParams);
     if (match) {
       String rResponse = ping();
       request.response.statusCode = 200;
@@ -31,7 +32,7 @@ abstract class _$JaguarExampleApi {
       return true;
     }
 
-    match = _routes[1].match(args, request.uri.path, request.method);
+    match = _routes[1].match(request.uri.path, request.method, pathParams);
     if (match) {
       String rResponse = pong();
       request.response.statusCode = 201;

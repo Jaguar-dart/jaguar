@@ -1,6 +1,7 @@
 library jaguar.generator.writer;
 
 import 'dart:convert';
+import 'package:analyzer/dart/element/element.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
 
@@ -50,13 +51,15 @@ class Writer {
 
   void _writeRequestHandler() {
     sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
-    sb.writeln("List<String> args = <String>[];");
+    sb.writeln("PathParams pathParams = new PathParams({});");
+    sb.writeln(
+        "QueryParams queryParams = new QueryParams(request.uri.queryParameters);");
     sb.writeln("bool match = false;");
     sb.writeln("");
 
     for (int i = 0; i < routes.length; i++) {
       sb.writeln(
-          "match = _routes[$i].match(args, request.uri.path, request.method);");
+          "match = _routes[$i].match(request.uri.path, request.method, pathParams);");
       sb.writeln("if (match) {");
 
       _writePreInterceptors(routes[i]);
@@ -92,17 +95,34 @@ class Writer {
       sb.write("request, ");
     }
 
-    final String params =
-        route.inputs.map((InputInfo info) => info.genName).join(", ");
+    bool writtenSomeParams = false;
 
-    sb.write(params);
+    {
+      final String params =
+          route.inputs.map((InputInfo info) => info.genName).join(", ");
 
-    //TODO url parameter
+      sb.write(params);
+
+      writtenSomeParams = true;
+    }
+
+    if (route.nonInputParams.length > 0) {
+      if(writtenSomeParams == true) {
+        sb.write(',');
+      }
+
+      final String params = route.nonInputParams.map((ParameterElement info) {
+        return "pathParams.getField('${info.name}')??queryParams.getField('${info.name}')";
+      }).join(", ");
+
+      sb.write(params);
+
+      writtenSomeParams = true;
+    }
 
     sb.writeln(");");
 
     if (!route.returnsVoid) {
-      print(route.name);
       if (route.route.statusCode is int) {
         sb.writeln("request.response.statusCode = " +
             route.route.statusCode.toString() +
