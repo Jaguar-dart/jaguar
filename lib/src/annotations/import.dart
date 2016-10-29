@@ -4,6 +4,8 @@ library jaguar.src.annotations;
 class Route {
   final String path;
 
+  final Map<String, String> pathRegEx;
+
   final List<String> methods;
 
   final int statusCode;
@@ -18,21 +20,67 @@ class Route {
         'PATCH',
         'DELETE',
         'OPTIONS'
-      ], this.statusCode: 200, this.headers});
+      ],
+      this.statusCode: 200,
+      this.headers,
+      this.pathRegEx});
 
-  bool match(List<String> args, String requestPath, String method) {
+  bool match(Map<String, String> args, String requestPath, String method) {
+    args.clear();
+
     if (!methods.contains(method)) {
       return false;
     }
 
-    RegExp regExp = new RegExp("^${path}\$");
-    Iterable<Match> matchs = regExp.allMatches(requestPath);
-    if (matchs.isEmpty) return false;
-    matchs.forEach((Match match) {
-      for (int i = 1; i <= match.groupCount; i++) {
-        args.add(match.group(i));
+    List<String> rqSegs = requestPath.split('/');
+
+    List<String> segs = path.split('/');
+
+    return comparePathSegments(segs, rqSegs, args);
+  }
+
+  bool comparePathSegments(
+      List<String> template, List<String> actual, Map<String, String> args) {
+    if (template.length != actual.length) {
+      return false;
+    }
+
+    for (int index = 0; index < template.length; index++) {
+      if (template[index].isNotEmpty && template[index][0] == ':') {
+        //TODO move this to generator side
+        if (template[index].length < 2) {
+          throw new Exception("Invalid URL parameter specification!");
+        }
+
+        final String argName = template[index].substring(1);
+
+        //TODO move this to generator side
+        {
+          //TODO check that argName is valid Dart variable name
+        }
+
+        if (pathRegEx is Map) {
+          final String regExPtn = pathRegEx[argName];
+
+          if (regExPtn is! String) {
+            continue;
+          }
+
+          RegExp regExp = new RegExp(regExPtn);
+
+          Iterable<Match> matches = regExp.allMatches(actual[index]);
+          if (matches.isEmpty) {
+            return false;
+          }
+        }
+
+        args[argName] = actual[index];
+      } else {
+        if (template[index] != actual[index]) {
+          return false;
+        }
       }
-    });
+    }
 
     return true;
   }

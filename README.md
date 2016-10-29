@@ -4,13 +4,13 @@
 
 Jaguar, a server framework built for **speed, simplicity and extensiblity**.
 
-Advantages of Jaguar
+## Advantages of Jaguar
 
 1. Keeps your route handlers concise and clean
-2. Extensible interceptor infrastructure
-3. Bare metal speed achieved through code generation
-4. Generated API console client to try your server without writing single line of
-client
+2. Bare metal speed achieved through code generation
+3. Extensible interceptor infrastructure
+4. Generates API console client to try your server without writing single line of
+client code
 5. Mock HTTP requests and use dependency injection to test your API
 6. Optional Firebase/Parse like no code or little code servers
 
@@ -22,30 +22,35 @@ Even though Jaguar is feature rich, it is simpler and easy to get started.
 
 ```dart
 /// File: main.dart
+library jaguar.example.silly;
 
 import 'dart:async';
-
-import 'package:jaguar/jaguar.dart' as jaguar;
+import 'dart:io';
+import 'package:jaguar/jaguar.dart';
 
 part 'main.g.dart';
 
-@Api()
+@Api(path: '/api')
 class ExampleApi extends _$JaguarExampleApi {
-  @Route(path: 'ping', methods: const <String>['GET'])
-  String get ping => "got ping";
+  int _pingCount = 0;
 
-  @Route(path: 'ping', methods: const <String>['POST'], statusCode: 201, headers: {})
-  String get ping => "posted pong!";
+  @Route('/ping', methods: const <String>['GET'])
+  String ping() => "You pinged me ${++_pingCount} times, silly!";
+
+  @Route('/pong',
+      methods: const <String>['POST'],
+      statusCode: 201,
+      headers: const {"pong-header": "silly-pong"})
+  String pong() => "Your silly pongs have no effect on me!";
 }
 
 Future<Null> main(List<String> args) async {
   ExampleApi tsa = new ExampleApi();
 
-  jaguar.Configuration configuration =
-      new jaguar.Configuration();
+  Configuration configuration = new Configuration();
   configuration.addApi(tsa);
 
-  await jaguar.serve(configuration);
+  await serve(configuration);
 }
 ```
 
