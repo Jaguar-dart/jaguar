@@ -12,11 +12,11 @@ class InterceptorType {
   String get fullname => '$libraryName.$displayName';
 
   bool hasType(InterceptorAnnotationInstance other) {
-    if(libraryName != other.libraryName) {
+    if (libraryName != other.libraryName) {
       return false;
     }
 
-    if(displayName != other.displayName) {
+    if (displayName != other.displayName) {
       return false;
     }
 
@@ -31,12 +31,16 @@ class InterceptorAnnotationInstance {
 
   String get id => _id;
 
-  String get libraryName => element.constantValue.type.element.library.displayName;
+  String get libraryName =>
+      element.constantValue.type.element.library.displayName;
 
   String get displayName => element.constantValue.type.displayName;
 
   InterceptorAnnotationInstance(this.element) {
-    _id = element.constantValue.getField('(super)')?.getField('id')?.toStringValue();
+    _id = element.constantValue
+        .getField('(super)')
+        ?.getField('id')
+        ?.toStringValue();
   }
 
   String get instantiationString {

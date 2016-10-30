@@ -14,8 +14,7 @@ class Configuration {
       this.port: 8080,
       this.multiThread: false,
       this.securityContext: null,
-      this.log: false}) {
-  }
+      this.log: false});
 
   void addApi(dynamic apiClass) {
     apis.add(apiClass);

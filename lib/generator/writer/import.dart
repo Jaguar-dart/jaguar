@@ -6,6 +6,12 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:jaguar/generator/parser/import.dart';
 import 'package:jaguar/generator/internal/element/import.dart';
 
+part 'pre_dual_inter.dart';
+part 'post_dual_inter.dart';
+part 'route_call.dart';
+part 'route_exceptions.dart';
+part 'default_response.dart';
+
 class Writer {
   final String className;
 
@@ -23,10 +29,10 @@ class Writer {
     sb.writeln("abstract class _\$Jaguar$className {");
 
     _writeRouteList();
-    sb.writeln("");
+    sb.writeln('');
 
     _writeRoutePrototype();
-    sb.writeln("");
+    sb.writeln('');
 
     _writeRequestHandler();
 
@@ -46,13 +52,13 @@ class Writer {
   void _writeRoutePrototype() {
     routes.forEach((RouteInfo route) {
       sb.writeln(route.prototype);
-      sb.writeln("");
+      sb.writeln('');
     });
   }
 
   void _writeRequestHandler() {
     sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
-    sb.writeln("PathParams pathParams = new PathParams({});");
+    sb.writeln("PathParams pathParams = new PathParams();");
     sb.writeln(
         "QueryParams queryParams = new QueryParams(request.uri.queryParameters);");
     sb.writeln("bool match = false;");
@@ -82,99 +88,36 @@ class Writer {
   void _writeRouteCall(RouteInfo route) {
     if (!route.returnsVoid) {
       if (!route.returnsFuture) {
-        sb.write(route.returnType.toString() + " ");
-        sb.write("rResponse = ");
+        sb.write(route.returnType.toString() + " rResponse;");
       } else {
-        sb.write(route.returnTypeWithoutFuture.toString() + " ");
-        sb.write("rResponse = await ");
+        sb.write(route.returnTypeWithoutFuture.toString() + " rResponse;");
       }
     }
 
-    sb.write(route.name + "(");
-
-    if (route.needsHttpRequest) {
-      sb.write("request, ");
+    if (route.exceptions.length != 0) {
+      sb.writeln("try {");
     }
 
-    if (route.inputs.length != 0) {
-      final String params =
-          route.inputs.map((InputInfo info) => info.genName).join(", ");
+    RouteCallWriter callWriter = new RouteCallWriter(route);
+    sb.write(callWriter.generate());
 
-      sb.write(params);
-      sb.write(',');
+    if (route.exceptions.length != 0) {
+      sb.write('} ');
+
+      RouteExceptionWriter exceptWriter = new RouteExceptionWriter(route);
+      sb.write(exceptWriter.generate());
     }
 
-    if (route.nonInputParams.length > 0) {
-      final String params = route.nonInputParams.map((ParameterElement info) {
-        return "pathParams.getField('${info.name}')??queryParams.getField('${info.name}')";
-      }).join(", ");
-
-      sb.write(params);
-      sb.write(',');
-    }
-
-    if (route.optionalParams.length > 0) {
-      if (route.areOptionalParamsPositional) {
-        final String params = route.optionalParams
-            .map((ParameterElement info) => new ParameterElementWrap(info))
-            .map((ParameterElementWrap info) {
-          String build = "pathParams.getField('${info.name}')";
-          build += "??queryParams.getField('${info.name}')";
-          if (info.toValueIfBuiltin != null) {
-            build += "??${info.toValueIfBuiltin}";
-          }
-          return build;
-        }).join(", ");
-        sb.write(params);
-        sb.write(',');
-      } else {
-        final String params = route.optionalParams
-            .where((ParameterElement info) =>
-                new DartTypeWrap(info.type).isBuiltin)
-            .map((ParameterElement info) => new ParameterElementWrap(info))
-            .map((ParameterElementWrap info) {
-          String build = "${info.name}: pathParams.getField('${info.name}')";
-          build += "??queryParams.getField('${info.name}')";
-          if (info.toValueIfBuiltin != null) {
-            build += "??${info.toValueIfBuiltin}";
-          }
-          return build;
-        }).join(", ");
-        sb.write(params);
-        sb.write(',');
-      }
-    }
-
-    sb.writeln(");");
-
-    if (!route.returnsVoid) {
-      if (route.route.statusCode is int) {
-        sb.writeln("request.response.statusCode = " +
-            route.route.statusCode.toString() +
-            ";");
-      }
-
-      if (route.route.headers is Map) {
-        Map<String, String> headers = route.route.headers;
-        for (String key in headers.keys) {
-          sb.write(r'request.response.headers.add("');
-          sb.write(key);
-          sb.write(r'", "');
-          sb.write(headers[key]);
-          sb.writeln(r'");');
-        }
-      }
-
-      if (route.defaultResponseWriter) {
-        sb.writeln("request.response..write(rResponse.toString())..close();");
-      }
+    {
+      DefaultResponseWriter responseWriter = new DefaultResponseWriter(route);
+      sb.write(responseWriter.generate());
     }
   }
 
   void _writePreInterceptors(RouteInfo route) {
     route.interceptors.forEach((InterceptorInfo info) {
       if (info is DualInterceptorInfo) {
-        _writePreInterceptorDual(info);
+        _writePreInterceptorDual(route, info);
       } else if (info is InterceptorFuncInfo) {
         if (!info.isPost) {
           _writePreInterceptorFunc(info);
@@ -183,35 +126,17 @@ class Writer {
     });
   }
 
-  void _writePreInterceptorDual(DualInterceptorInfo info) {
-    sb.write(info.interceptor.displayName + " ");
-    sb.write(info.genInstanceName + " = ");
-    sb.write(info.interceptor.instantiationString);
-    sb.writeln(";");
+  void _writePreInterceptorDual(RouteInfo route, DualInterceptorInfo info) {
+    InterceptorFuncDef pre = info.dual.pre;
 
-    if (info.dual.pre is! InterceptorFuncDef) {
+    sb.write(info.instantiationString);
+
+    if (pre is! InterceptorFuncDef) {
       return;
     }
 
-    if (!info.returns.isVoid) {
-      if (!info.returns.isDartAsyncFuture) {
-        sb.write(info.returns.toString() + " ");
-        sb.write(info.genReturnVarName + " = ");
-      } else {
-        sb.write(info.returns
-                .flattenFutures(info.returns.element.context.typeSystem)
-                .toString() +
-            " ");
-        sb.write(info.genReturnVarName + " = await ");
-      }
-    }
-
-    sb.write(info.genInstanceName);
-    sb.write(".pre(");
-    final String params =
-        info.dual.pre.inputs.map((InputInfo info) => info.genName).join(", ");
-    sb.write(params);
-    sb.writeln(");");
+    DualInterceptorPreWriter preWriter = new DualInterceptorPreWriter(route, info);
+    sb.write(preWriter.generate());
   }
 
   void _writePreInterceptorFunc(InterceptorFuncInfo info) {
@@ -225,7 +150,7 @@ class Writer {
   void _writePostInterceptors(RouteInfo route) {
     route.interceptors.reversed.forEach((InterceptorInfo info) {
       if (info is DualInterceptorInfo) {
-        _writePostInterceptorDual(info);
+        _writePostInterceptorDual(route, info);
       } else if (info is InterceptorFuncInfo) {
         if (info.isPost) {
           _writePostInterceptorFunc(info);
@@ -234,23 +159,13 @@ class Writer {
     });
   }
 
-  void _writePostInterceptorDual(DualInterceptorInfo info) {
+  void _writePostInterceptorDual(RouteInfo route, DualInterceptorInfo info) {
     if (info.dual.post is! InterceptorFuncDef) {
       return;
     }
 
-    if (!info.dual.post.returnsVoid) {
-      if (info.dual.post.returnsFuture) {
-        sb.write("await ");
-      }
-    }
-
-    sb.write(info.genInstanceName);
-    sb.write(".post(");
-    final String params =
-        info.dual.post.inputs.map((InputInfo info) => info.genName).join(", ");
-    sb.write(params);
-    sb.writeln(");");
+    DualInterceptorPostWriter writer = new DualInterceptorPostWriter(route, info);
+    sb.write(writer.generate());
   }
 
   void _writePostInterceptorFunc(InterceptorFuncInfo info) {
@@ -261,4 +176,28 @@ class Writer {
     generateClass();
     return sb.toString();
   }
+}
+
+String _getStringTo(ParameterElementWrap param) {
+  if (!param.type.isBuiltin) {
+    throw new Exception("Can only convert builtin types!");
+  }
+
+  String ret = "stringTo";
+
+  if (param.type.isInt) {
+    ret += "Int";
+  } else if (param.type.isDouble) {
+    ret += "Double";
+  } else if (param.type.isNum) {
+    ret += "Num";
+  } else if (param.type.isBool) {
+    ret += "Bool";
+  } else if (param.type.isString) {
+    ret = "";
+  } else {
+    throw new Exception("Can only convert builtin types!");
+  }
+
+  return ret;
 }

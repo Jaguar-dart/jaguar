@@ -10,10 +10,9 @@ class Jaguar {
 
     Logger.root.onRecord.listen((LogRecord rec) {
       String dateStr = _dateFormatter.format(rec.time);
-      print('@$dateStr ${rec.loggerName}: ${rec.message}');
+      print('[@$dateStr ${rec.loggerName}]: ${rec.message}');
     });
   }
-
 
   final DateFormat _dateFormatter = new DateFormat('MM-dd H:m');
 
@@ -34,9 +33,10 @@ class Jaguar {
         bool result = await apiClass.handleApiRequest(request);
         if (result) break;
       }
-    } catch (e) {
-      print(e);
-      request.response.write(e);
+    } catch (e, stack) {
+      _logRequest.severe(
+          "Method: ${request.method} Url: ${request.uri} E: $e Stack: $stack");
+      writeErrorPage(request.response, request.uri.toString(), e, stack, 500);
     } finally {
       await request.response.close();
     }
@@ -46,8 +46,8 @@ class Jaguar {
     bool share = configuration.multiThread;
     HttpServer server;
     if (configuration.securityContext != null) {
-      server = await HttpServer.bindSecure(
-          configuration.address, configuration.port, configuration.securityContext);
+      server = await HttpServer.bindSecure(configuration.address,
+          configuration.port, configuration.securityContext);
     } else {
       server = await HttpServer.bind(configuration.address, configuration.port,
           shared: share);

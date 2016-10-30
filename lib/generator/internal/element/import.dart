@@ -3,6 +3,7 @@ library jaguar.generator.internal.element;
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/constant/value.dart';
+import 'package:analyzer/src/dart/element/element.dart';
 import 'package:analyzer/src/generated/utilities_dart.dart';
 
 class MethodElementWrap {
@@ -20,6 +21,8 @@ class MethodElementWrap {
   }
 
   final MethodElement _wrapped;
+
+  List<ElementAnnotation> get metadata => _wrapped.metadata;
 
   List<ParameterElement> _requiredParams = <ParameterElement>[];
 
@@ -53,7 +56,7 @@ class MethodElementWrap {
 
       String paramsStr = _optionalParams.map((ParameterElement pel) {
         final str = pel.toString();
-        return str.substring(1, str.length-1);
+        return str.substring(1, str.length - 1);
       }).join(",");
 
       sb.write(paramsStr);
@@ -90,15 +93,15 @@ class DartTypeWrap {
 
   DartTypeWrap(this._wrapped);
 
-  bool get isInt => _compare(kIntTypeName, kCoreLibraryName);
+  bool get isInt => compare(kIntTypeName, kCoreLibraryName);
 
-  bool get isDouble => _compare(kDoubleTypeName, kCoreLibraryName);
+  bool get isDouble => compare(kDoubleTypeName, kCoreLibraryName);
 
-  bool get isNum => _compare(kNumTypeName, kCoreLibraryName);
+  bool get isNum => compare(kNumTypeName, kCoreLibraryName);
 
-  bool get isBool => _compare(kBoolTypeName, kCoreLibraryName);
+  bool get isBool => compare(kBoolTypeName, kCoreLibraryName);
 
-  bool get isString => _compare(kStringTypeName, kCoreLibraryName);
+  bool get isString => compare(kStringTypeName, kCoreLibraryName);
 
   bool get isBuiltin => isInt || isDouble || isNum || isBool || isString;
 
@@ -118,7 +121,8 @@ class DartTypeWrap {
 
   static const String kStringTypeName = 'String';
 
-  bool _compare(String aName, String aLibraryName) => aName == name && aLibraryName == libraryName;
+  bool compare(String aName, String aLibraryName) =>
+      aName == name && aLibraryName == libraryName;
 }
 
 class ParameterElementWrap {
@@ -130,20 +134,22 @@ class ParameterElementWrap {
 
   DartTypeWrap _type;
 
+  DartTypeWrap get type => _type;
+
   dynamic get toValueIfBuiltin {
-    if(!_type.isBuiltin) {
+    if (!_type.isBuiltin) {
       return null;
     }
 
     DartObject value = _wrapped.constantValue;
 
-    if(_type.isInt) {
+    if (_type.isInt) {
       return value.toIntValue();
-    } else if(_type.isDouble) {
+    } else if (_type.isDouble) {
       return value.toDoubleValue();
-    } else if(_type.isString) {
+    } else if (_type.isString) {
       return value.toStringValue();
-    } else if(_type.isBool) {
+    } else if (_type.isBool) {
       return value.toBoolValue();
     }
 
@@ -151,4 +157,22 @@ class ParameterElementWrap {
   }
 
   String get name => _wrapped.name;
+}
+
+class AnnotationElementWrap {
+  final ElementAnnotation _wrapped;
+
+  AnnotationElementWrap(this._wrapped);
+
+  DartObject get constantValue => _wrapped.constantValue;
+
+  String get libraryName => constantValue.type.element.library.displayName;
+
+  String get displayName => constantValue.type.displayName;
+
+  String get instantiationString {
+    String lRet = (_wrapped as ElementAnnotationImpl).annotationAst.toSource();
+    lRet = lRet.substring(1);
+    return ' new ' + lRet;
+  }
 }

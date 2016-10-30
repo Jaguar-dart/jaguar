@@ -24,52 +24,52 @@ abstract class _$JaguarExampleApi {
   String echoQueryParam(String message);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
-    PathParams pathParams = new PathParams({});
+    PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
     match = _routes[0].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse = ping();
+      String rResponse;
+      rResponse = ping();
       request.response.statusCode = 200;
-      request.response
-        ..write(rResponse.toString())
-        ..close();
+      request.response.write(rResponse.toString());
+      await request.response.close();
       return true;
     }
 
     match = _routes[1].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse = pong();
+      String rResponse;
+      rResponse = pong();
       request.response.statusCode = 201;
       request.response.headers.add("pong-header", "silly-pong");
-      request.response
-        ..write(rResponse.toString())
-        ..close();
+      request.response.write(rResponse.toString());
+      await request.response.close();
       return true;
     }
 
     match = _routes[2].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse = echoPathParam(
-        pathParams.getField('message') ?? queryParams.getField('message'),
+      String rResponse;
+      rResponse = echoPathParam(
+        (pathParams.getField('message') ?? queryParams.getField('message')),
       );
       request.response.statusCode = 200;
-      request.response
-        ..write(rResponse.toString())
-        ..close();
+      request.response.write(rResponse.toString());
+      await request.response.close();
       return true;
     }
 
     match = _routes[3].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse = echoQueryParam(
-        pathParams.getField('message') ?? queryParams.getField('message'),
+      String rResponse;
+      rResponse = echoQueryParam(
+        (pathParams.getField('message') ?? queryParams.getField('message')),
       );
       request.response.statusCode = 200;
-      request.response
-        ..write(rResponse.toString())
-        ..close();
+      request.response.write(rResponse.toString());
+      await request.response.close();
       return true;
     }
 

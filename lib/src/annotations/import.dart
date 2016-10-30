@@ -1,5 +1,7 @@
 library jaguar.src.annotations;
 
+import 'dart:io';
+
 ///An annotation to define a route
 class Route {
   final String path;
@@ -12,6 +14,10 @@ class Route {
 
   final Map<String, String> headers;
 
+  final bool validatePathParams;
+
+  final bool validateQueryParams;
+
   const Route(this.path,
       {this.methods: const <String>[
         'GET',
@@ -23,7 +29,9 @@ class Route {
       ],
       this.statusCode: 200,
       this.headers,
-      this.pathRegEx});
+      this.pathRegEx,
+      this.validatePathParams: false,
+      this.validateQueryParams: false});
 
   bool match(String requestPath, String method, Map<String, dynamic> params) {
     params.clear();
@@ -40,7 +48,7 @@ class Route {
   }
 
   bool comparePathSegments(
-      List<String> template, List<String> actual, Map<String, String> args) {
+      List<String> template, List<String> actual, Map<String, dynamic> args) {
     if (template.length != actual.length) {
       return false;
     }
@@ -95,7 +103,7 @@ class Api {
   String get url {
     String prefix = "";
     if (path != null && path.isNotEmpty) {
-      prefix += "${path}";
+      prefix += path;
     }
 
     return prefix;
@@ -146,3 +154,11 @@ class Input {
 
   const Input(this.resultFrom, {this.id});
 }
+
+class ExceptionHandler {
+  final Type exception;
+
+  const ExceptionHandler(this.exception);
+}
+
+typedef dynamic ExceptionHandlerFunc(HttpRequest request, dynamic e, StackTrace trace);

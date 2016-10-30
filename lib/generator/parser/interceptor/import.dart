@@ -7,6 +7,8 @@ import 'package:analyzer/src/dart/element/element.dart';
 import 'package:jaguar/src/annotations/import.dart' as ant;
 import 'package:source_gen/src/annotation.dart';
 
+import 'package:jaguar/generator/internal/element/import.dart';
+
 import 'package:jaguar/generator/parser/import.dart';
 
 part 'func.dart';
@@ -14,7 +16,9 @@ part 'dual.dart';
 part 'type.dart';
 
 abstract class InterceptorInfo {
-  DartType get returns;
+  DartType get result;
+
+  List<InputInfo> get inputs;
 }
 
 bool isAnnotationInterceptDual(ElementAnnotation annot) {

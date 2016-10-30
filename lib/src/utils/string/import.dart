@@ -1,6 +1,6 @@
 library jaguar.src.utils.string;
 
-int stringToInt(String value, {int defaultValue: 0}) {
+int stringToInt(String value, [int defaultValue]) {
   if(value is! String) {
     return defaultValue;
   }
@@ -8,7 +8,7 @@ int stringToInt(String value, {int defaultValue: 0}) {
   return int.parse(value, onError: (_) => defaultValue);
 }
 
-double stringToDouble(String value, {double defaultValue: 0.0}) {
+double stringToDouble(String value, [double defaultValue]) {
   if(value is! String) {
     return defaultValue;
   }
@@ -16,7 +16,15 @@ double stringToDouble(String value, {double defaultValue: 0.0}) {
   return double.parse(value, (_) => defaultValue);
 }
 
-bool stringToBool(String value, {bool defaultValue: false}) {
+num stringToNum(String value, [num defaultValue]) {
+  if(value is! String) {
+    return defaultValue;
+  }
+
+  return num.parse(value, (_) => defaultValue);
+}
+
+bool stringToBool(String value, [bool defaultValue]) {
   if(value is! String) {
     return defaultValue;
   }

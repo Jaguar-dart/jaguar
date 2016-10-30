@@ -12,25 +12,33 @@ class RouteInfo {
 
   final List<InputInfo> inputs;
 
+  final List<ExceptionHandlerInfo> exceptions;
+
   DartType get returnType => _method.returnType;
 
   bool get returnsVoid => returnType.isVoid;
 
   bool get returnsFuture => returnType.isDartAsyncFuture;
 
+  Map<String, bool> _interceptorResultUsed = {};
+
   RouteInfo(MethodElement aMethod, this.route, this.interceptors, this.inputs,
-      this.pathPrefix): _method = new MethodElementWrap(aMethod) {
+      this.exceptions, this.pathPrefix)
+      : _method = new MethodElementWrap(aMethod) {
     if (_method.requiredParameters.length < _allInputsLen) {
       throw new Exception("Inputs and parameters to route does not match!");
     }
 
     for (int index = 0; index < inputs.length; index++) {
-      ParameterElement param = _method.requiredParameters[_numDefaultInputs + index];
+      ParameterElement param =
+          _method.requiredParameters[_numDefaultInputs + index];
       InputInfo input = inputs[index];
+      _interceptorResultUsed[input.genName] = true;
 
       InterceptorInfo interc = interceptors.firstWhere((InterceptorInfo info) {
         if (info is DualInterceptorInfo) {
-          return input.resultFrom.hasType(info.interceptor) && input.id == info.id;
+          return input.resultFrom.hasType(info.interceptor) &&
+              input.id == info.id;
         } else {
           //TODO
         }
@@ -41,11 +49,23 @@ class RouteInfo {
       }
 
       if (interc is DualInterceptorInfo) {
-        if (!interc.matchesReturnType(param.type)) {
+        if (!interc.matchesResultType(param.type)) {
           throw new Exception("Inputs and parameters to route does not match!");
         }
       }
     }
+
+    interceptors.forEach((InterceptorInfo interc) {
+      if (interc is DualInterceptorInfo) {
+        interc.inputs.forEach((InputInfo inp) {
+          _interceptorResultUsed[inp.genName] = true;
+        });
+      } else if (interc is InterceptorFuncInfo) {
+        interc.inputs.forEach((InputInfo inp) {
+          _interceptorResultUsed[inp.genName] = true;
+        });
+      }
+    });
   }
 
   bool get needsHttpRequest {
@@ -53,7 +73,8 @@ class RouteInfo {
       return false;
     }
 
-    return _method.parameters[0].type.name == "HttpRequest";  //TODO check which HttpRequest
+    return _method.parameters[0].type.name ==
+        "HttpRequest"; //TODO check which HttpRequest
   }
 
   String get path => pathPrefix + route.path;
@@ -72,12 +93,12 @@ class RouteInfo {
 
   bool get defaultResponseWriter => _defaultResponseWriter;
 
-  int get _allInputsLen => inputs.length+_numDefaultInputs; //TODO param and query inputs
-
   int get _numDefaultInputs => needsHttpRequest ? 1 : 0;
 
+  int get _allInputsLen => inputs.length + _numDefaultInputs;
+
   List<ParameterElement> get nonInputParams {
-    if(_method.requiredParameters.length <= _allInputsLen) {
+    if (_method.requiredParameters.length <= _allInputsLen) {
       return <ParameterElement>[];
     } else {
       return _method.requiredParameters.sublist(_allInputsLen);
@@ -87,4 +108,21 @@ class RouteInfo {
   List<ParameterElement> get optionalParams => _method.optionalParameters;
 
   bool get areOptionalParamsPositional => _method.areOptionalParamsPositional;
+
+  ParameterElementWrap get pathParamInjectionParam => nonInputParams
+      .map((ParameterElement param) => new ParameterElementWrap(param))
+      .firstWhere((ParameterElementWrap param) => param.name == 'pathParams',
+          orElse: () => null);
+
+  bool get needsPathParamInjection => pathParamInjectionParam != null;
+
+  ParameterElementWrap get queryParamInjectionParam => nonInputParams
+      .map((ParameterElement param) => new ParameterElementWrap(param))
+      .firstWhere((ParameterElementWrap param) => param.name == 'queryParams',
+          orElse: () => null);
+
+  bool get needsQueryParamInjection => queryParamInjectionParam != null;
+
+  bool isDualInterceptorResultUsed(DualInterceptorInfo inter) =>
+      _interceptorResultUsed.containsKey(inter.genReturnVarName);
 }

@@ -7,6 +7,7 @@ import 'package:jaguar/src/annotations/import.dart' as ant;
 
 import 'package:jaguar/generator/parser/route/import.dart';
 import 'package:jaguar/generator/parser/interceptor/import.dart';
+import 'package:jaguar/generator/parser/exception_handler/import.dart';
 
 class GroupInfo {
   final ant.Group group;
@@ -22,13 +23,17 @@ ant.Group parseGroup(Element element) {
       //TODO check what exception and decide accordingly
       return null;
     }
-  }).firstWhere((dynamic instance) => instance is ant.Group, orElse: () => null);
+  }).firstWhere((dynamic instance) => instance is ant.Group,
+      orElse: () => null);
 }
 
-List<RouteInfo> collectAllRoutes(ClassElement classElement, String prefix,
-    List<InterceptorInfo> interceptorsParent) {
+List<RouteInfo> collectAllRoutes(
+    ClassElement classElement,
+    String prefix,
+    List<InterceptorInfo> interceptorsParent,
+    List<ExceptionHandlerInfo> exceptionsParent) {
   List<RouteInfo> routes =
-      collectRoutes(classElement, prefix, interceptorsParent);
+      collectRoutes(classElement, prefix, interceptorsParent, exceptionsParent);
 
   classElement.fields
       .map((FieldElement field) {
@@ -38,8 +43,8 @@ List<RouteInfo> collectAllRoutes(ClassElement classElement, String prefix,
           return null;
         }
 
-        return collectAllRoutes(
-            field.type.element, "$prefix/${group.path}", interceptorsParent);
+        return collectAllRoutes(field.type.element, "$prefix/${group.path}",
+            interceptorsParent, exceptionsParent);
       })
       .where((List<RouteInfo> routes) => routes != null)
       .forEach((List<RouteInfo> val) => routes.addAll(val));

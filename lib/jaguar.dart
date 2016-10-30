@@ -13,3 +13,5 @@ export 'src/error.dart';
 export 'src/serve/import.dart';
 
 export 'src/http/params/import.dart';
+
+export 'src/utils/string/import.dart';

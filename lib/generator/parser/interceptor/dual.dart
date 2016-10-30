@@ -1,4 +1,4 @@
-part of  jaguar.generator.parser.interceptor;
+part of jaguar.generator.parser.interceptor;
 
 /// Holds information about pre and post interceptors in interceptor class
 class InterceptorDualDef {
@@ -12,6 +12,8 @@ class InterceptorDualDef {
   InterceptorFuncDef post;
 
   DartType get returnType => pre?.returnType;
+
+  DartType get returnsFutureFlattened => pre?.returnsFutureFlattened;
 
   /// Default constructor. Constructs [InterceptorDualDef] for a given class
   InterceptorDualDef(this.clazz) {
@@ -38,9 +40,12 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   InterceptorAnnotationInstance interceptor;
 
-  DartType get returns => dual.returnType;
+  @override
+  DartType get result => dual.returnType;
 
-  String get _genBaseName => interceptor.displayName + (id??'');
+  DartType get returnsFutureFlattened => dual.returnsFutureFlattened;
+
+  String get _genBaseName => interceptor.displayName + (id ?? '');
 
   String get genInstanceName => 'i$_genBaseName';
 
@@ -48,11 +53,12 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   String get id => interceptor.id;
 
-  bool matchesReturnType(DartType type) {
-    if(!returns.isDartAsyncFuture) {
-      return type.isSupertypeOf(returns);
+  bool matchesResultType(DartType type) {
+    if (!result.isDartAsyncFuture) {
+      return type.isSupertypeOf(result);
     } else {
-      DartType flattenedType = returns.flattenFutures(elememt.context.typeSystem);
+      DartType flattenedType =
+          result.flattenFutures(elememt.context.typeSystem);
       return type.isSupertypeOf(flattenedType);
     }
   }
@@ -60,12 +66,35 @@ class DualInterceptorInfo implements InterceptorInfo {
   ///Create dual interceptor info for given interceptor usage
   DualInterceptorInfo(this.elememt) {
     final ClassElement clazz =
-    elememt.element.getAncestor((Element el) => el is ClassElement);
+        elememt.element.getAncestor((Element el) => el is ClassElement);
     interceptor = new InterceptorAnnotationInstance(elememt);
     dual = new InterceptorDualDef(clazz);
   }
 
   String toString() {
     return '$_genBaseName{$dual}';
+  }
+
+  List<InputInfo> get inputs {
+    List<InputInfo> ret = <InputInfo>[];
+
+    if (dual.pre != null) {
+      ret.addAll(dual.pre.inputs);
+    }
+
+    if (dual.post != null) {
+      ret.addAll(dual.post.inputs);
+    }
+
+    return ret;
+  }
+
+  String get instantiationString {
+    StringBuffer sb = new StringBuffer();
+    sb.write(interceptor.displayName + " ");
+    sb.write(genInstanceName + " = ");
+    sb.write(interceptor.instantiationString);
+    sb.writeln(";");
+    return sb.toString();
   }
 }

@@ -7,6 +7,7 @@ import 'package:analyzer/dart/element/type.dart';
 export 'package:jaguar/generator/parser/route/import.dart';
 export 'package:jaguar/generator/parser/group/import.dart';
 export 'package:jaguar/generator/parser/interceptor/import.dart';
+export 'package:jaguar/generator/parser/exception_handler/import.dart';
 
 /// Holds information about a single input to an interceptor method or function
 class InputInfo {

@@ -10,6 +10,7 @@ import 'package:jaguar/generator/parser/interceptor/import.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
 import 'package:jaguar/generator/internal/element/import.dart';
+import 'package:jaguar/generator/parser/exception_handler/import.dart';
 
 part 'route_info.dart';
 
@@ -25,7 +26,7 @@ ant.Route parseRoute(MethodElement element) {
 }
 
 List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
-    List<InterceptorInfo> interceptorsParent) {
+    List<InterceptorInfo> interceptorsParent, List<ExceptionHandlerInfo> exceptionHandlersParent) {
   return classElement.methods
       .map((MethodElement method) {
         ant.Route route = parseRoute(method);
@@ -42,7 +43,10 @@ List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
         List<InterceptorInfo> interceptors = parseInterceptor(method);
         interceptors.insertAll(0, interceptorsParent);
 
-        return new RouteInfo(method, route, interceptors, inputs, prefix);
+        List<ExceptionHandlerInfo> exceptions = collectExceptionHandlers(method);
+        exceptions.insertAll(0, exceptionHandlersParent);
+
+        return new RouteInfo(method, route, interceptors, inputs, exceptions, prefix);
       })
       .where((RouteInfo info) => info != null)
       .toList();

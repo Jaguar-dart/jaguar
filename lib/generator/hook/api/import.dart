@@ -38,8 +38,10 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
 
     List<InterceptorInfo> interceptors = parseInterceptor(element);
 
+    List<ExceptionHandlerInfo> exceptions = collectExceptionHandlers(element);
+
     List<RouteInfo> routes =
-        collectAllRoutes(classElement, prefix, interceptors);
+        collectAllRoutes(classElement, prefix, interceptors, exceptions);
 
     writer.addAllRoutes(routes);
 

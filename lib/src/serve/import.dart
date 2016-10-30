@@ -7,22 +7,24 @@ import 'package:intl/intl.dart';
 
 import 'package:logging/logging.dart';
 
+import 'package:jaguar/src/serve/error_writer/import.dart';
+
 part 'config.dart';
 part 'server.dart';
 
+//Sugar to create a Jaguar server instance and serve it
+Future _serveInstance(Configuration configuration) async {
+  Jaguar j = new Jaguar(configuration);
+  await j.serve();
+}
+
 ///Serves the API with given configuration [configuration]
 Future<Null> serve(Configuration configuration) async {
-  //Sugar to create a Jaguar server instance and serve it
-  Function server = (Configuration configuration) async {
-    Jaguar j = new Jaguar(configuration);
-    await j.serve();
-  };
-
   if (configuration.multiThread) {
     for (int i = 0; i < Platform.numberOfProcessors - 1; i++) {
-      await Isolate.spawn(server, configuration);
+      await Isolate.spawn(_serveInstance, configuration);
     }
   }
 
-  await server(configuration);
+  await _serveInstance(configuration);
 }
