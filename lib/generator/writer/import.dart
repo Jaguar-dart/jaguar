@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:analyzer/dart/element/element.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
+import 'package:jaguar/generator/internal/element/import.dart';
 
 class Writer {
   final String className;
@@ -114,11 +115,30 @@ class Writer {
 
     if (route.optionalParams.length > 0) {
       if (route.areOptionalParamsPositional) {
-        //TODO
+        final String params = route.optionalParams
+            .map((ParameterElement info) => new ParameterElementWrap(info))
+            .map((ParameterElementWrap info) {
+          String build = "pathParams.getField('${info.name}')";
+          build += "??queryParams.getField('${info.name}')";
+          if (info.toValueIfBuiltin != null) {
+            build += "??${info.toValueIfBuiltin}";
+          }
+          return build;
+        }).join(", ");
+        sb.write(params);
+        sb.write(',');
       } else {
-        final String params = route.optionalParams.map((ParameterElement info) {
-          return "${info.name}: pathParams.getField('${info
-              .name}')??queryParams.getField('${info.name}')";
+        final String params = route.optionalParams
+            .where((ParameterElement info) =>
+                new DartTypeWrap(info.type).isBuiltin)
+            .map((ParameterElement info) => new ParameterElementWrap(info))
+            .map((ParameterElementWrap info) {
+          String build = "${info.name}: pathParams.getField('${info.name}')";
+          build += "??queryParams.getField('${info.name}')";
+          if (info.toValueIfBuiltin != null) {
+            build += "??${info.toValueIfBuiltin}";
+          }
+          return build;
         }).join(", ");
         sb.write(params);
         sb.write(',');

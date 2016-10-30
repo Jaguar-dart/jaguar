@@ -75,6 +75,8 @@ abstract class _$JaguarForumApi {
         request,
         rMongoDbAdmin,
         pathParams.getField('param1') ?? queryParams.getField('param1'),
+        pathParams.getField('param2') ?? queryParams.getField('param2') ?? 25,
+        pathParams.getField('param3') ?? queryParams.getField('param3') ?? 5,
       );
       request.response.statusCode = 200;
       request.response
@@ -95,8 +97,12 @@ abstract class _$JaguarForumApi {
         request,
         rMongoDbAdmin,
         pathParams.getField('param1') ?? queryParams.getField('param1'),
-        param2: pathParams.getField('param2') ?? queryParams.getField('param2'),
-        param3: pathParams.getField('param3') ?? queryParams.getField('param3'),
+        param2: pathParams.getField('param2') ??
+            queryParams.getField('param2') ??
+            5555,
+        param3: pathParams.getField('param3') ??
+            queryParams.getField('param3') ??
+            55,
       );
       request.response.statusCode = 200;
       request.response
