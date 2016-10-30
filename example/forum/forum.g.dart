@@ -46,13 +46,12 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
+      EncodeObject iEncodeObject = new EncodeObject();
       User rResponse;
       rResponse = await fetch();
       request.response.statusCode = 201;
       request.response.headers.add("sample-header", "made-with.jaguar");
-      request.response.write(rResponse.toString());
-      await request.response.close();
-      iLogin.post();
+      iEncodeObject.post();
       await iMongoDbAdmin.post();
       await iMongoDbTest.post();
       return true;
@@ -70,7 +69,6 @@ abstract class _$JaguarForumApi {
         request,
         rMongoDbAdmin,
       );
-      iLogin.post();
       await iMongoDbAdmin.post();
       return true;
     }
@@ -95,7 +93,6 @@ abstract class _$JaguarForumApi {
       request.response.statusCode = 200;
       request.response.write(rResponse.toString());
       await request.response.close();
-      iLogin.post();
       await iMongoDbAdmin.post();
       return true;
     }
@@ -123,7 +120,6 @@ abstract class _$JaguarForumApi {
       request.response.statusCode = 200;
       request.response.write(rResponse.toString());
       await request.response.close();
-      iLogin.post();
       await iMongoDbAdmin.post();
       return true;
     }
@@ -146,7 +142,6 @@ abstract class _$JaguarForumApi {
       request.response.statusCode = 200;
       request.response.write(rResponse.toString());
       await request.response.close();
-      iLogin.post();
       await iMongoDbAdmin.post();
       return true;
     }
@@ -179,7 +174,6 @@ abstract class _$JaguarForumApi {
       request.response.statusCode = 200;
       request.response.write(rResponse.toString());
       await request.response.close();
-      iLogin.post();
       await iMongoDbAdmin.post();
       return true;
     }

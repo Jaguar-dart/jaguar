@@ -77,6 +77,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @MongoDb('test', id: 'Test')
   @MongoDb('admin', id: 'Admin')
   @Login()
+  @EncodeObject()
   Future<User> fetch() async {
     return new User('dummy@dummy.com', 'Dummy', 'password', 27);
   }

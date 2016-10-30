@@ -75,6 +75,11 @@ class Login extends InterceptorDual {
 
   @Input(MongoDb, id: 'Admin')
   void pre(Db db) {}
+}
+
+@DefineInterceptDual(writesResponse: true)
+class EncodeObject {
+  const EncodeObject();
 
   void post() {
   }

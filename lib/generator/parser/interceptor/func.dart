@@ -81,5 +81,7 @@ class InterceptorFuncInfo implements InterceptorInfo {
 
   List<InputInfo> inputs = <InputInfo>[];
 
+  bool writesResponse;
+
   InterceptorFuncInfo(this.definition, {this.isPost: false});
 }

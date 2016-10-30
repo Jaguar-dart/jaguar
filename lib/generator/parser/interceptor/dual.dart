@@ -36,9 +36,14 @@ class InterceptorDualDef {
 class DualInterceptorInfo implements InterceptorInfo {
   ElementAnnotation elememt;
 
+  ant.DefineInterceptDual _defined;
+
   InterceptorDualDef dual;
 
   InterceptorAnnotationInstance interceptor;
+
+  @override
+  bool get writesResponse => _defined.writesResponse;
 
   @override
   DartType get result => dual.returnType;
@@ -64,7 +69,7 @@ class DualInterceptorInfo implements InterceptorInfo {
   }
 
   ///Create dual interceptor info for given interceptor usage
-  DualInterceptorInfo(this.elememt) {
+  DualInterceptorInfo(this.elememt, this._defined) {
     final ClassElement clazz =
         elememt.element.getAncestor((Element el) => el is ClassElement);
     interceptor = new InterceptorAnnotationInstance(elememt);

@@ -19,23 +19,25 @@ abstract class InterceptorInfo {
   DartType get result;
 
   List<InputInfo> get inputs;
+
+  bool get writesResponse;
 }
 
-bool isAnnotationInterceptDual(ElementAnnotation annot) {
+ant.DefineInterceptDual isAnnotationInterceptDual(ElementAnnotation annot) {
   final ClassElement clazz =
       annot.element.getAncestor((Element el) => el is ClassElement);
 
   if (clazz == null) {
-    return false;
+    return null;
   }
 
   return isClassInterceptDual(clazz);
 }
 
-bool isClassInterceptDual(ClassElement clazz) {
+ant.DefineInterceptDual isClassInterceptDual(ClassElement clazz) {
   clazz.metadata
       .forEach((ElementAnnotation annot) => annot.computeConstantValue());
-  var matchingAnnotations = clazz.metadata
+  List match = clazz.metadata
       .map((ElementAnnotation annot) {
         try {
           return instantiateAnnotation(annot);
@@ -47,24 +49,25 @@ bool isClassInterceptDual(ClassElement clazz) {
       .where((dynamic instance) => instance is ant.DefineInterceptDual)
       .toList();
 
-  if (matchingAnnotations.isEmpty) {
-    return false;
-  } else if (matchingAnnotations.length > 1) {
+  if (match.isEmpty) {
+    return null;
+  } else if (match.length > 1) {
     throw 'Cannot define InterceptDual more than once';
   }
 
-  return true;
+  return match.single;
 }
 
 ///Parse interceptors for a given method or class element
 List<InterceptorInfo> parseInterceptor(Element element) {
   return element.metadata
       .map((ElementAnnotation annot) {
-        if (!isAnnotationInterceptDual(annot)) {
+        ant.DefineInterceptDual dual = isAnnotationInterceptDual(annot);
+        if (dual == null) {
           return null;
         }
 
-        return new DualInterceptorInfo(annot);
+        return new DualInterceptorInfo(annot, dual);
       })
       .where((dynamic val) => val != null)
       .toList();

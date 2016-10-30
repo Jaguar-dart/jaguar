@@ -25,8 +25,11 @@ ant.Route parseRoute(MethodElement element) {
   }).firstWhere((dynamic instance) => instance is ant.Route, orElse: null);
 }
 
-List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
-    List<InterceptorInfo> interceptorsParent, List<ExceptionHandlerInfo> exceptionHandlersParent) {
+List<RouteInfo> collectRoutes(
+    ClassElement classElement,
+    String prefix,
+    List<InterceptorInfo> interceptorsParent,
+    List<ExceptionHandlerInfo> exceptionHandlersParent) {
   return classElement.methods
       .map((MethodElement method) {
         ant.Route route = parseRoute(method);
@@ -43,10 +46,12 @@ List<RouteInfo> collectRoutes(ClassElement classElement, String prefix,
         List<InterceptorInfo> interceptors = parseInterceptor(method);
         interceptors.insertAll(0, interceptorsParent);
 
-        List<ExceptionHandlerInfo> exceptions = collectExceptionHandlers(method);
+        List<ExceptionHandlerInfo> exceptions =
+            collectExceptionHandlers(method);
         exceptions.insertAll(0, exceptionHandlersParent);
 
-        return new RouteInfo(method, route, interceptors, inputs, exceptions, prefix);
+        return new RouteInfo(
+            method, route, interceptors, inputs, exceptions, prefix);
       })
       .where((RouteInfo info) => info != null)
       .toList();

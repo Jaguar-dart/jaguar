@@ -56,14 +56,16 @@ class RouteInfo {
     }
 
     interceptors.forEach((InterceptorInfo interc) {
-      if (interc is DualInterceptorInfo) {
-        interc.inputs.forEach((InputInfo inp) {
-          _interceptorResultUsed[inp.genName] = true;
-        });
-      } else if (interc is InterceptorFuncInfo) {
-        interc.inputs.forEach((InputInfo inp) {
-          _interceptorResultUsed[inp.genName] = true;
-        });
+      interc.inputs.forEach((InputInfo inp) {
+        _interceptorResultUsed[inp.genName] = true;
+      });
+
+      if (interc.writesResponse) {
+        if (_defaultResponseWriter == false) {
+          throw new Exception('Route has more than one response writer!');
+        }
+
+        _defaultResponseWriter = false;
       }
     });
   }
