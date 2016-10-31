@@ -87,11 +87,7 @@ class Writer {
 
   void _writeRouteCall(RouteInfo route) {
     if (!route.returnsVoid) {
-      if (!route.returnsFuture) {
-        sb.write(route.returnType.toString() + " rRouteResponse;");
-      } else {
-        sb.write(route.returnTypeWithoutFuture.toString() + " rRouteResponse;");
-      }
+      sb.write(route.returnTypeIntended.displayName + " rRouteResponse;");
     }
 
     if (route.exceptions.length != 0) {

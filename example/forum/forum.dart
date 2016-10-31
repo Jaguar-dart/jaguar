@@ -127,4 +127,17 @@ class ForumApi extends Object with _$JaguarForumApi {
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
   }
+
+  @Route('/user3', methods: const <String>['PUT'], validatePathParams: true)
+  @MongoDb('admin', id: 'Admin')
+  @Login()
+  @Input(MongoDb, id: 'Admin')
+  @ParamValidationExceptionHandler()
+  @EncodeToJson()
+  Future<Response<User>> update3(
+      HttpRequest request, Db db, ParamCreate pathParams) async {
+    User user =
+        new User(pathParams.email, pathParams.name, "password", pathParams.age);
+    return new Response<User>(user);
+  }
 }
