@@ -111,7 +111,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Login()
   @Input(MongoDb, id: 'Admin')
   String update1(HttpRequest request, Db db, PathParams pathParams) {
-    return pathParams.getField('message');
+    return pathParams.message;
   }
 
   @Route('/user2', methods: const <String>['PUT'], validatePathParams: true)
