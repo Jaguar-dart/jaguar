@@ -108,8 +108,13 @@ class Writer {
       sb.write(exceptWriter.generate());
     }
 
-    {
-      DefaultResponseWriter responseWriter = new DefaultResponseWriter(route);
+    if (route.returnsResponse) {
+      DefaultResponseWriterResponse responseWriter =
+          new DefaultResponseWriterResponse(route);
+      sb.write(responseWriter.generate());
+    } else {
+      DefaultResponseWriterRaw responseWriter =
+          new DefaultResponseWriterRaw(route);
       sb.write(responseWriter.generate());
     }
   }

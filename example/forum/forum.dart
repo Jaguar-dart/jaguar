@@ -110,8 +110,11 @@ class ForumApi extends Object with _$JaguarForumApi {
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
-  String update1(HttpRequest request, Db db, PathParams pathParams) {
-    return pathParams.message;
+  @EncodeToJson()
+  Response<User> update1(HttpRequest request, Db db, PathParams pathParams) {
+    User user =
+        new User(pathParams.email, pathParams.name, "password", pathParams.age);
+    return new Response<User>(user);
   }
 
   @Route('/user2', methods: const <String>['PUT'], validatePathParams: true)
@@ -119,7 +122,9 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Login()
   @Input(MongoDb, id: 'Admin')
   @ParamValidationExceptionHandler()
-  String update2(HttpRequest request, Db db, ParamCreate pathParams) {
-    return pathParams.name;
+  Response<User> update2(HttpRequest request, Db db, ParamCreate pathParams) {
+    User user =
+        new User(pathParams.email, pathParams.name, "password", pathParams.age);
+    return new Response<User>(user);
   }
 }
