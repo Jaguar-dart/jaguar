@@ -1,0 +1,3 @@
+apis:
+  - 'example/forum/forum.dart'
+  - 'example/silly/main.dart'

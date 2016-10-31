@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:build/build.dart';
 import 'package:yaml/yaml.dart';
-import 'package:jaguar/generator/phases.dart';
+import 'package:jaguar/generator/phase/import.dart';
 
 String getBin() {
   File pubspec = new File('./jaguar.yaml');
@@ -35,6 +35,8 @@ main(List<String> args) {
       launchWatch();
     } else if (args[0] == 'build') {
       build(phaseGroup(), deleteFilesByDefault: true);
+    } else {
+      print("Invalid command!");
     }
   }
 }
