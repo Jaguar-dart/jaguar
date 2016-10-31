@@ -46,12 +46,15 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      EncodeObject iEncodeObject = new EncodeObject();
-      User rResponse;
-      rResponse = await fetch();
+      EncodeToJson iEncodeToJson = new EncodeToJson();
+      User rRouteResponse;
+      rRouteResponse = await fetch();
       request.response.statusCode = 201;
       request.response.headers.add("sample-header", "made-with.jaguar");
-      iEncodeObject.post();
+      iEncodeToJson.post(
+        request,
+        rRouteResponse,
+      );
       await iMongoDbAdmin.post();
       await iMongoDbTest.post();
       return true;
@@ -81,8 +84,8 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      User rResponse;
-      rResponse = create(
+      User rRouteResponse;
+      rRouteResponse = create(
         request,
         rMongoDbAdmin,
         (pathParams.getField('email')),
@@ -91,7 +94,7 @@ abstract class _$JaguarForumApi {
         stringToInt(pathParams.getField('age')),
       );
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       await iMongoDbAdmin.post();
       return true;
@@ -105,8 +108,8 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      String rResponse;
-      rResponse = update(
+      String rRouteResponse;
+      rRouteResponse = update(
         request,
         rMongoDbAdmin,
         (pathParams.getField('param1')),
@@ -114,7 +117,7 @@ abstract class _$JaguarForumApi {
         param3: stringToInt(queryParams.getField('param3')) ?? 55,
       );
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       await iMongoDbAdmin.post();
       return true;
@@ -128,15 +131,15 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      String rResponse;
+      String rRouteResponse;
       PathParams injectPathParam = new PathParams.FromPathParam(pathParams);
-      rResponse = update1(
+      rRouteResponse = update1(
         request,
         rMongoDbAdmin,
         injectPathParam,
       );
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       await iMongoDbAdmin.post();
       return true;
@@ -150,13 +153,13 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      String rResponse;
+      String rRouteResponse;
       try {
         ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
         if (injectPathParam is Validatable) {
           injectPathParam.validate();
         }
-        rResponse = update2(
+        rRouteResponse = update2(
           request,
           rMongoDbAdmin,
           injectPathParam,
@@ -168,7 +171,7 @@ abstract class _$JaguarForumApi {
         return true;
       }
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       await iMongoDbAdmin.post();
       return true;

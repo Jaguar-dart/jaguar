@@ -23,12 +23,12 @@ class ParamValidationException {
 class ParamValidationExceptionHandler {
   const ParamValidationExceptionHandler();
 
-  void onRouteException(HttpRequest request, ParamValidationException e,
-      StackTrace trace) {
+  void onRouteException(
+      HttpRequest request, ParamValidationException e, StackTrace trace) {
     request.response.statusCode = e.statusCode;
 
-    request.response.write(
-        '{"Code": 5, "Params": {"${e.param}: ${e.error} } }');
+    request.response
+        .write('{"Code": 5, "Params": {"${e.param}: ${e.error} } }');
   }
 }
 
@@ -77,7 +77,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @MongoDb('test', id: 'Test')
   @MongoDb('admin', id: 'Admin')
   @Login()
-  @EncodeObject()
+  @EncodeToJson()
   Future<User> fetch() async {
     return new User('dummy@dummy.com', 'Dummy', 'password', 27);
   }

@@ -1,11 +1,11 @@
 part of jaguar.generator.writer;
 
-class DualInterceptorPreWriter {
+class InterceptorClassPreWriter {
   final RouteInfo route;
 
-  final DualInterceptorInfo info;
+  final InterceptorClassInfo info;
 
-  DualInterceptorPreWriter(this.route, this.info);
+  InterceptorClassPreWriter(this.route, this.info);
 
   String generate() {
     StringBuffer sb = new StringBuffer();
@@ -39,7 +39,7 @@ class DualInterceptorPreWriter {
 
     if (pre.inputs.length != 0) {
       final String params =
-      pre.inputs.map((InputInfo info) => info.genName).join(", ");
+          pre.inputs.map((InputInfo info) => info.genName).join(", ");
       sb.write(params);
       sb.write(',');
     }

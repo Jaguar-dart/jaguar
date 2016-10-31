@@ -52,9 +52,9 @@ class RouteCallWriter {
 
     if (!route.returnsVoid) {
       if (!route.returnsFuture) {
-        sb.write("rResponse = ");
+        sb.write("rRouteResponse = ");
       } else {
-        sb.write("rResponse = await ");
+        sb.write("rRouteResponse = await ");
       }
     }
 

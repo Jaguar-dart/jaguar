@@ -1,5 +1,3 @@
 library jaguar.src.console;
 
-class Route {
-
-}
+class Route {}

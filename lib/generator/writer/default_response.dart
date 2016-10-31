@@ -27,7 +27,7 @@ class DefaultResponseWriter {
       }
 
       if (route.defaultResponseWriter) {
-        sb.writeln("request.response.write(rResponse.toString());");
+        sb.writeln("request.response.write(rRouteResponse.toString());");
         sb.writeln("await request.response.close();");
       }
     }

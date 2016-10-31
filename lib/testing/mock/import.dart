@@ -9,9 +9,9 @@ import 'dart:io';
 
 class MockHttpHeaders implements HttpHeaders {
   final Map<String, List<String>> _headers =
-  new HashMap<String, List<String>>();
+      new HashMap<String, List<String>>();
 
-  operator[](key) => _headers[key];
+  operator [](key) => _headers[key];
 
   int get contentLength => int.parse(_headers[HttpHeaders.CONTENT_LENGTH][0]);
 
@@ -102,11 +102,13 @@ class MockHttpHeaders implements HttpHeaders {
    * Implemented to remove editor warnings
    */
   dynamic noSuchMethod(Invocation invocation) {
-    print([invocation.memberName,
-    invocation.isGetter,
-    invocation.isSetter,
-    invocation.isMethod,
-    invocation.isAccessor]);
+    print([
+      invocation.memberName,
+      invocation.isGetter,
+      invocation.isSetter,
+      invocation.isMethod,
+      invocation.isAccessor
+    ]);
     return super.noSuchMethod(invocation);
   }
 }
@@ -118,9 +120,9 @@ class MockHttpRequest implements HttpRequest {
   final String method = 'GET';
   final bool followRedirects;
 
-  MockHttpRequest(this.uri, {this.followRedirects: true,
-  DateTime ifModifiedSince}) {
-    if(ifModifiedSince != null) {
+  MockHttpRequest(this.uri,
+      {this.followRedirects: true, DateTime ifModifiedSince}) {
+    if (ifModifiedSince != null) {
       headers.ifModifiedSince = ifModifiedSince;
     }
   }
@@ -128,8 +130,7 @@ class MockHttpRequest implements HttpRequest {
   /*
    * Implemented to remove editor warnings
    */
-  dynamic noSuchMethod(Invocation invocation) =>
-      super.noSuchMethod(invocation);
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class MockHttpResponse implements HttpResponse {
@@ -140,8 +141,7 @@ class MockHttpResponse implements HttpResponse {
   Future _doneFuture;
 
   MockHttpResponse() {
-    _doneFuture = _completer.future
-        .whenComplete(() {
+    _doneFuture = _completer.future.whenComplete(() {
       assert(!_isDone);
       _isDone = true;
     });
@@ -186,8 +186,7 @@ class MockHttpResponse implements HttpResponse {
   /*
    * Implemented to remove editor warnings
    */
-  dynamic noSuchMethod(Invocation invocation) =>
-      super.noSuchMethod(invocation);
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 
   String get mockContent => UTF8.decode(_buffer);
 
@@ -203,8 +202,10 @@ class MockHttpResponse implements HttpResponse {
     }
 
     switch (statusCode) {
-      case HttpStatus.NOT_FOUND: return "Not Found";
-      default: return "Status $statusCode";
+      case HttpStatus.NOT_FOUND:
+        return "Not Found";
+      default:
+        return "Status $statusCode";
     }
   }
 }

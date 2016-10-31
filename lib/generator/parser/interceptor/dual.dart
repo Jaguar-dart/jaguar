@@ -1,7 +1,7 @@
 part of jaguar.generator.parser.interceptor;
 
 /// Holds information about pre and post interceptors in interceptor class
-class InterceptorDualDef {
+class InterceptorClassDef {
   /// The class element of the interceptor
   ClassElement clazz;
 
@@ -15,8 +15,8 @@ class InterceptorDualDef {
 
   DartType get returnsFutureFlattened => pre?.returnsFutureFlattened;
 
-  /// Default constructor. Constructs [InterceptorDualDef] for a given class
-  InterceptorDualDef(this.clazz) {
+  /// Default constructor. Constructs [InterceptorClassDef] for a given class
+  InterceptorClassDef(this.clazz) {
     /// Find pre and post interceptors in class
     clazz.methods.forEach((MethodElement method) {
       if (method.name == 'pre') {
@@ -33,12 +33,12 @@ class InterceptorDualDef {
   }
 }
 
-class DualInterceptorInfo implements InterceptorInfo {
+class InterceptorClassInfo implements InterceptorInfo {
   ElementAnnotation elememt;
 
-  ant.DefineInterceptDual _defined;
+  ant.InterceptorClass _defined;
 
-  InterceptorDualDef dual;
+  InterceptorClassDef dual;
 
   InterceptorAnnotationInstance interceptor;
 
@@ -50,7 +50,7 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   DartType get returnsFutureFlattened => dual.returnsFutureFlattened;
 
-  String get _genBaseName => interceptor.displayName + (id ?? '');
+  String get _genBaseName => interceptor.name + (id ?? '');
 
   String get genInstanceName => 'i$_genBaseName';
 
@@ -69,11 +69,11 @@ class DualInterceptorInfo implements InterceptorInfo {
   }
 
   ///Create dual interceptor info for given interceptor usage
-  DualInterceptorInfo(this.elememt, this._defined) {
+  InterceptorClassInfo(this.elememt, this._defined) {
     final ClassElement clazz =
         elememt.element.getAncestor((Element el) => el is ClassElement);
     interceptor = new InterceptorAnnotationInstance(elememt);
-    dual = new InterceptorDualDef(clazz);
+    dual = new InterceptorClassDef(clazz);
   }
 
   String toString() {
@@ -96,7 +96,7 @@ class DualInterceptorInfo implements InterceptorInfo {
 
   String get instantiationString {
     StringBuffer sb = new StringBuffer();
-    sb.write(interceptor.displayName + " ");
+    sb.write(interceptor.name + " ");
     sb.write(genInstanceName + " = ");
     sb.write(interceptor.instantiationString);
     sb.writeln(";");

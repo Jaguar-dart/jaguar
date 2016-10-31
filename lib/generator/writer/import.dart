@@ -88,9 +88,9 @@ class Writer {
   void _writeRouteCall(RouteInfo route) {
     if (!route.returnsVoid) {
       if (!route.returnsFuture) {
-        sb.write(route.returnType.toString() + " rResponse;");
+        sb.write(route.returnType.toString() + " rRouteResponse;");
       } else {
-        sb.write(route.returnTypeWithoutFuture.toString() + " rResponse;");
+        sb.write(route.returnTypeWithoutFuture.toString() + " rRouteResponse;");
       }
     }
 
@@ -116,8 +116,8 @@ class Writer {
 
   void _writePreInterceptors(RouteInfo route) {
     route.interceptors.forEach((InterceptorInfo info) {
-      if (info is DualInterceptorInfo) {
-        _writePreInterceptorDual(route, info);
+      if (info is InterceptorClassInfo) {
+        _writePreInterceptorClass(route, info);
       } else if (info is InterceptorFuncInfo) {
         if (!info.isPost) {
           _writePreInterceptorFunc(info);
@@ -126,7 +126,7 @@ class Writer {
     });
   }
 
-  void _writePreInterceptorDual(RouteInfo route, DualInterceptorInfo info) {
+  void _writePreInterceptorClass(RouteInfo route, InterceptorClassInfo info) {
     InterceptorFuncDef pre = info.dual.pre;
 
     sb.write(info.instantiationString);
@@ -135,7 +135,8 @@ class Writer {
       return;
     }
 
-    DualInterceptorPreWriter preWriter = new DualInterceptorPreWriter(route, info);
+    InterceptorClassPreWriter preWriter =
+        new InterceptorClassPreWriter(route, info);
     sb.write(preWriter.generate());
   }
 
@@ -149,8 +150,8 @@ class Writer {
 
   void _writePostInterceptors(RouteInfo route) {
     route.interceptors.reversed.forEach((InterceptorInfo info) {
-      if (info is DualInterceptorInfo) {
-        _writePostInterceptorDual(route, info);
+      if (info is InterceptorClassInfo) {
+        _writePostInterceptorClass(route, info);
       } else if (info is InterceptorFuncInfo) {
         if (info.isPost) {
           _writePostInterceptorFunc(info);
@@ -159,12 +160,13 @@ class Writer {
     });
   }
 
-  void _writePostInterceptorDual(RouteInfo route, DualInterceptorInfo info) {
+  void _writePostInterceptorClass(RouteInfo route, InterceptorClassInfo info) {
     if (info.dual.post is! InterceptorFuncDef) {
       return;
     }
 
-    DualInterceptorPostWriter writer = new DualInterceptorPostWriter(route, info);
+    InterceptorClassPostWriter writer =
+        new InterceptorClassPostWriter(route, info);
     sb.write(writer.generate());
   }
 

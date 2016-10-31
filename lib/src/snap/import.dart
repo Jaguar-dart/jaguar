@@ -12,6 +12,4 @@ class Resource<ModelType> {
   Future<List<ModelType>> getAll() async {
     //TODO
   }
-
-
 }

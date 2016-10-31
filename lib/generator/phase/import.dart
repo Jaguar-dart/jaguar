@@ -18,7 +18,8 @@ String getProjectName() {
 List<String> getAnnotations() {
   File pubspec = new File('./jaguar.yaml');
   String content = pubspec.readAsStringSync();
-  Map<String, List<String>> doc = loadYaml(content) as Map<String, List<String>>;
+  Map<String, List<String>> doc =
+      loadYaml(content) as Map<String, List<String>>;
   return doc['apis'];
 }
 

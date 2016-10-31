@@ -23,7 +23,7 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
   @override
   Future<String> generateForAnnotatedElement(
       Element element, ant.Api api, BuildStep buildStep) async {
-    if(element is! ClassElement) {
+    if (element is! ClassElement) {
       throw new Exception("Api annotation can only be defined on a class.");
     }
 

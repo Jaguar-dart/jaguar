@@ -1,11 +1,11 @@
 part of jaguar.generator.writer;
 
-class DualInterceptorPostWriter {
+class InterceptorClassPostWriter {
   final RouteInfo route;
 
-  final DualInterceptorInfo info;
+  final InterceptorClassInfo info;
 
-  DualInterceptorPostWriter(this.route, this.info);
+  InterceptorClassPostWriter(this.route, this.info);
 
   String generate() {
     StringBuffer sb = new StringBuffer();

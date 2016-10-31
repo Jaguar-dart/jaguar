@@ -35,9 +35,13 @@ class RouteInfo {
       InputInfo input = inputs[index];
       _interceptorResultUsed[input.genName] = true;
 
+      if (input.resultFrom.compare('RouteResponse', 'jaguar.src.annotations')) {
+        continue;
+      }
+
       InterceptorInfo interc = interceptors.firstWhere((InterceptorInfo info) {
-        if (info is DualInterceptorInfo) {
-          return input.resultFrom.hasType(info.interceptor) &&
+        if (info is InterceptorClassInfo) {
+          return input.resultFrom.isType(info.interceptor.type) &&
               input.id == info.id;
         } else {
           //TODO
@@ -48,7 +52,7 @@ class RouteInfo {
         throw new Exception("No matching interceptor!");
       }
 
-      if (interc is DualInterceptorInfo) {
+      if (interc is InterceptorClassInfo) {
         if (!interc.matchesResultType(param.type)) {
           throw new Exception("Inputs and parameters to route does not match!");
         }
@@ -125,6 +129,6 @@ class RouteInfo {
 
   bool get needsQueryParamInjection => queryParamInjectionParam != null;
 
-  bool isDualInterceptorResultUsed(DualInterceptorInfo inter) =>
+  bool isDualInterceptorResultUsed(InterceptorClassInfo inter) =>
       _interceptorResultUsed.containsKey(inter.genReturnVarName);
 }

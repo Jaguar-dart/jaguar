@@ -123,27 +123,27 @@ class DefineInterceptorFunc {
 }
 
 ///An annotation to add a function as interceptor to a route
-class InterceptFunction {
+class InterceptorFunction {
   ///Function that contains the implementation of the interceptor
   final Function function;
 
   final bool isPost;
 
-  const InterceptFunction(this.function, {this.isPost: false});
+  const InterceptorFunction(this.function, {this.isPost: false});
 }
 
 /// Defines a dual interceptor
-class DefineInterceptDual {
+class InterceptorClass {
   final bool writesResponse;
 
-  const DefineInterceptDual({this.writesResponse: false});
+  const InterceptorClass({this.writesResponse: false});
 }
 
 /// Base class for dual interceptors
-class InterceptorDual {
+class Interceptor {
   final String id;
 
-  const InterceptorDual({this.id});
+  const Interceptor({this.id});
 }
 
 /// Defines inputs to an interceptor
@@ -161,4 +161,12 @@ class ExceptionHandler {
   const ExceptionHandler(this.exception);
 }
 
-typedef dynamic ExceptionHandlerFunc(HttpRequest request, dynamic e, StackTrace trace);
+typedef dynamic ExceptionHandlerFunc(
+    HttpRequest request, dynamic e, StackTrace trace);
+
+/// Dummy annotation used to request injection of Route's result
+///
+/// Must be only used in post interceptors
+class RouteResponse {
+  const RouteResponse();
+}

@@ -1,7 +1,7 @@
 library jaguar.src.utils.string;
 
 int stringToInt(String value, [int defaultValue]) {
-  if(value is! String) {
+  if (value is! String) {
     return defaultValue;
   }
 
@@ -9,7 +9,7 @@ int stringToInt(String value, [int defaultValue]) {
 }
 
 double stringToDouble(String value, [double defaultValue]) {
-  if(value is! String) {
+  if (value is! String) {
     return defaultValue;
   }
 
@@ -17,7 +17,7 @@ double stringToDouble(String value, [double defaultValue]) {
 }
 
 num stringToNum(String value, [num defaultValue]) {
-  if(value is! String) {
+  if (value is! String) {
     return defaultValue;
   }
 
@@ -25,13 +25,13 @@ num stringToNum(String value, [num defaultValue]) {
 }
 
 bool stringToBool(String value, [bool defaultValue]) {
-  if(value is! String) {
+  if (value is! String) {
     return defaultValue;
   }
 
-  if(value == "true") {
+  if (value == "true") {
     return true;
-  } else if(value == "false") {
+  } else if (value == "false") {
     return false;
   }
 

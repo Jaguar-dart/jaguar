@@ -1,5 +1,6 @@
 library example.forum.interceptor;
 
+import 'dart:io';
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 import 'dart:convert';
@@ -56,8 +57,8 @@ class User implements ViewSerializer, ModelSerializer {
   Map toModelMap() => toMap()..['pwdH'] = passwordHash;
 }
 
-@DefineInterceptDual()
-class MongoDb extends InterceptorDual {
+@InterceptorClass()
+class MongoDb extends Interceptor {
   final String dbName;
 
   const MongoDb(this.dbName, {String id}) : super(id: id);
@@ -69,18 +70,20 @@ class MongoDb extends InterceptorDual {
   Future post() async {}
 }
 
-@DefineInterceptDual()
-class Login extends InterceptorDual {
+@InterceptorClass()
+class Login extends Interceptor {
   const Login();
 
   @Input(MongoDb, id: 'Admin')
   void pre(Db db) {}
 }
 
-@DefineInterceptDual(writesResponse: true)
-class EncodeObject {
-  const EncodeObject();
+@InterceptorClass(writesResponse: true)
+class EncodeToJson {
+  const EncodeToJson();
 
-  void post() {
+  @Input(RouteResponse)
+  void post(HttpRequest request, ViewSerializer result) {
+    request.response.write(JSON.encode(result.toViewMap()));
   }
 }

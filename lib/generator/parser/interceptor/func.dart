@@ -61,10 +61,10 @@ class InterceptorFuncDef {
 
   int get _numDefaultInputs => needsHttpRequest ? 1 : 0;
 
-  int get _allInputsLen => inputs.length+_numDefaultInputs;
+  int get _allInputsLen => inputs.length + _numDefaultInputs;
 
   List<ParameterElement> get nonInputParams {
-    if(_method.requiredParameters.length <= _allInputsLen) {
+    if (_method.requiredParameters.length <= _allInputsLen) {
       return <ParameterElement>[];
     } else {
       return _method.requiredParameters.sublist(_allInputsLen);

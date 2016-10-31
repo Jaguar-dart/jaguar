@@ -6,6 +6,13 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/src/dart/element/element.dart';
 import 'package:analyzer/src/generated/utilities_dart.dart';
 
+/// An element that has a name and library
+abstract class NamedElement {
+  String get name;
+
+  String get libraryName;
+}
+
 class MethodElementWrap {
   MethodElementWrap(this._wrapped) {
     for (ParameterElement param in parameters) {
@@ -108,6 +115,18 @@ class DartTypeWrap {
   String get name => _wrapped.name;
 
   String get libraryName => _wrapped.element.library.name;
+
+  bool isType(DartTypeWrap other) {
+    if (libraryName != other.libraryName) {
+      return false;
+    }
+
+    if (name != other.name) {
+      return false;
+    }
+
+    return true;
+  }
 
   static const String kCoreLibraryName = 'dart.core';
 

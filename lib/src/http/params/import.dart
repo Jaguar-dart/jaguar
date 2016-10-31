@@ -12,7 +12,7 @@ class DottableMap<V> extends DelegatingMap<String, V> {
 
   ///Retrieve a value from this map
   V getField(String key, [V defaultValue]) {
-    if(!containsKey(key)) {
+    if (!containsKey(key)) {
       return defaultValue;
     }
 
@@ -38,17 +38,17 @@ class DynamicDottableMap extends DottableMap<dynamic> {
 
   ///Retrieve a value from this map
   int getFieldAsInt(String key, [int defaultValue]) {
-    if(!containsKey(key)) {
+    if (!containsKey(key)) {
       return defaultValue;
     }
 
     dynamic valueDyn = this[key];
 
-    if(valueDyn is int) {
+    if (valueDyn is int) {
       return valueDyn;
     }
 
-    if(valueDyn is String) {
+    if (valueDyn is String) {
       return stringToInt(valueDyn, defaultValue);
     }
 
@@ -57,17 +57,17 @@ class DynamicDottableMap extends DottableMap<dynamic> {
 
   ///Retrieve a value from this map
   double getFieldAsDouble(String key, [double defaultValue]) {
-    if(!containsKey(key)) {
+    if (!containsKey(key)) {
       return defaultValue;
     }
 
     dynamic valueDyn = this[key];
 
-    if(valueDyn is double) {
+    if (valueDyn is double) {
       return valueDyn;
     }
 
-    if(valueDyn is String) {
+    if (valueDyn is String) {
       return stringToDouble(valueDyn, defaultValue);
     }
 
@@ -76,17 +76,17 @@ class DynamicDottableMap extends DottableMap<dynamic> {
 
   ///Retrieve a value from this map
   num getFieldAsNum(String key, [num defaultValue]) {
-    if(!containsKey(key)) {
+    if (!containsKey(key)) {
       return defaultValue;
     }
 
     dynamic valueDyn = this[key];
 
-    if(valueDyn is num) {
+    if (valueDyn is num) {
       return valueDyn;
     }
 
-    if(valueDyn is String) {
+    if (valueDyn is String) {
       return stringToNum(valueDyn, defaultValue);
     }
 
@@ -95,17 +95,17 @@ class DynamicDottableMap extends DottableMap<dynamic> {
 
   ///Retrieve a value from this map
   bool getFieldAsBool(String key, [bool defaultValue]) {
-    if(!containsKey(key)) {
+    if (!containsKey(key)) {
       return defaultValue;
     }
 
     dynamic valueDyn = this[key];
 
-    if(valueDyn is bool) {
+    if (valueDyn is bool) {
       return valueDyn;
     }
 
-    if(valueDyn is String) {
+    if (valueDyn is String) {
       return stringToBool(valueDyn, defaultValue);
     }
 
@@ -114,22 +114,20 @@ class DynamicDottableMap extends DottableMap<dynamic> {
 }
 
 class PathParams extends DynamicDottableMap {
-  PathParams([Map<String, dynamic> map]): super({}) {
-    if(map is Map) {
+  PathParams([Map<String, dynamic> map]) : super({}) {
+    if (map is Map) {
       addAll(map);
     }
   }
 
-  PathParams.FromPathParam(PathParams param): super(param);
+  PathParams.FromPathParam(PathParams param) : super(param);
 }
 
 class QueryParams extends DynamicDottableMap {
-  QueryParams(Map<String, dynamic> map): super(map);
+  QueryParams(Map<String, dynamic> map) : super(map);
 
-  QueryParams.FromQueryParams(QueryParams param): super(param);
+  QueryParams.FromQueryParams(QueryParams param) : super(param);
 }
-
-
 
 abstract class Validatable {
   /// Validates the model

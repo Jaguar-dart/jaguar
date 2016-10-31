@@ -30,45 +30,45 @@ abstract class _$JaguarExampleApi {
 
     match = _routes[0].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse;
-      rResponse = ping();
+      String rRouteResponse;
+      rRouteResponse = ping();
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }
 
     match = _routes[1].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse;
-      rResponse = pong();
+      String rRouteResponse;
+      rRouteResponse = pong();
       request.response.statusCode = 201;
       request.response.headers.add("pong-header", "silly-pong");
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }
 
     match = _routes[2].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse;
-      rResponse = echoPathParam(
+      String rRouteResponse;
+      rRouteResponse = echoPathParam(
         (pathParams.getField('message')),
       );
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }
 
     match = _routes[3].match(request.uri.path, request.method, pathParams);
     if (match) {
-      String rResponse;
-      rResponse = echoQueryParam(
+      String rRouteResponse;
+      rRouteResponse = echoQueryParam(
         (pathParams.getField('message')),
       );
       request.response.statusCode = 200;
-      request.response.write(rResponse.toString());
+      request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }

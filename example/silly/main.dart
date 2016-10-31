@@ -20,13 +20,11 @@ class ExampleApi extends _$JaguarExampleApi {
       headers: const {"pong-header": "silly-pong"})
   String pong() => "Your silly pongs have no effect on me!";
 
-  @Route('/echo/pathparam/:message',
-      methods: const <String>['POST'])
-  String echoPathParam(String message) => message??'No message :(';
+  @Route('/echo/pathparam/:message', methods: const <String>['POST'])
+  String echoPathParam(String message) => message ?? 'No message :(';
 
-  @Route('/echo/queryparam',
-      methods: const <String>['POST'])
-  String echoQueryParam(String message) => message??'No message :(';
+  @Route('/echo/queryparam', methods: const <String>['POST'])
+  String echoQueryParam(String message) => message ?? 'No message :(';
 }
 
 Future<Null> main(List<String> args) async {

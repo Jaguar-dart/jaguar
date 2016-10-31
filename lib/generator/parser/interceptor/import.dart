@@ -3,6 +3,7 @@ library jaguar.generator.parser.interceptor;
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/element/element.dart';
+import 'package:analyzer/dart/constant/value.dart';
 
 import 'package:jaguar/src/annotations/import.dart' as ant;
 import 'package:source_gen/src/annotation.dart';
@@ -23,7 +24,7 @@ abstract class InterceptorInfo {
   bool get writesResponse;
 }
 
-ant.DefineInterceptDual isAnnotationInterceptDual(ElementAnnotation annot) {
+ant.InterceptorClass isAnnotationInterceptDual(ElementAnnotation annot) {
   final ClassElement clazz =
       annot.element.getAncestor((Element el) => el is ClassElement);
 
@@ -34,7 +35,7 @@ ant.DefineInterceptDual isAnnotationInterceptDual(ElementAnnotation annot) {
   return isClassInterceptDual(clazz);
 }
 
-ant.DefineInterceptDual isClassInterceptDual(ClassElement clazz) {
+ant.InterceptorClass isClassInterceptDual(ClassElement clazz) {
   clazz.metadata
       .forEach((ElementAnnotation annot) => annot.computeConstantValue());
   List match = clazz.metadata
@@ -46,7 +47,7 @@ ant.DefineInterceptDual isClassInterceptDual(ClassElement clazz) {
           return null;
         }
       })
-      .where((dynamic instance) => instance is ant.DefineInterceptDual)
+      .where((dynamic instance) => instance is ant.InterceptorClass)
       .toList();
 
   if (match.isEmpty) {
@@ -62,12 +63,12 @@ ant.DefineInterceptDual isClassInterceptDual(ClassElement clazz) {
 List<InterceptorInfo> parseInterceptor(Element element) {
   return element.metadata
       .map((ElementAnnotation annot) {
-        ant.DefineInterceptDual dual = isAnnotationInterceptDual(annot);
+        ant.InterceptorClass dual = isAnnotationInterceptDual(annot);
         if (dual == null) {
           return null;
         }
 
-        return new DualInterceptorInfo(annot, dual);
+        return new InterceptorClassInfo(annot, dual);
       })
       .where((dynamic val) => val != null)
       .toList();

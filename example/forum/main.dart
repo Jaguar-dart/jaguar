@@ -7,8 +7,7 @@ import 'forum.dart';
 Future<Null> main(List<String> args) async {
   ForumApi tsa = new ForumApi();
 
-  jaguar.Configuration configuration =
-      new jaguar.Configuration();
+  jaguar.Configuration configuration = new jaguar.Configuration();
   configuration.addApi(tsa);
 
   await jaguar.serve(configuration);
