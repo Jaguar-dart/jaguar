@@ -24,9 +24,13 @@ class InterceptorClassPostWriter {
     }
 
     if (info.dual.post.inputs.length != 0) {
-      final String params = info.dual.post.inputs
-          .map((InputInfo info) => info.genName)
-          .join(", ");
+      final String params = info.dual.post.inputs.map((InputInfo info) {
+        if (route.returnsResponse) {
+          return info.genName + '.value';
+        } else {
+          return info.genName;
+        }
+      }).join(", ");
       sb.write(params);
       sb.write(',');
     }

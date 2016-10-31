@@ -21,6 +21,8 @@ class InputInfo {
   String toString() => genName;
 
   String get genName => 'r' + resultFrom.name + (id ?? '');
+
+  bool get isRouteResponse => resultFrom.compare('RouteResponse', 'jaguar.src.annotations');
 }
 
 InputInfo instantiateInputAnnotation(ElementAnnotation annot) {

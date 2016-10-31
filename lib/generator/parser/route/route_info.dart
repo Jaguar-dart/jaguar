@@ -18,6 +18,11 @@ class RouteInfo {
 
   bool get returnsVoid => returnType.isVoid;
 
+  bool get returnsResponse {
+    return new DartTypeWrap(returnType)
+        .compare('Response', 'jaguar.src.http.response');
+  }
+
   bool get returnsFuture => returnType.isDartAsyncFuture;
 
   Map<String, bool> _interceptorResultUsed = {};

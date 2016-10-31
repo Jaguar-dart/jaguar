@@ -27,9 +27,9 @@ abstract class _$JaguarForumApi {
   String update(HttpRequest request, Db db, String param1,
       {int param2: 5555, int param3: 55});
 
-  String update1(HttpRequest request, Db db, PathParams pathParams);
+  Response<User> update1(HttpRequest request, Db db, PathParams pathParams);
 
-  String update2(HttpRequest request, Db db, ParamCreate pathParams);
+  Response<User> update2(HttpRequest request, Db db, ParamCreate pathParams);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -72,6 +72,7 @@ abstract class _$JaguarForumApi {
         request,
         rMongoDbAdmin,
       );
+      request.response.statusCode = 200;
       await iMongoDbAdmin.post();
       return true;
     }
@@ -131,16 +132,24 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      String rRouteResponse;
+      EncodeToJson iEncodeToJson = new EncodeToJson();
+      Response<User> rRouteResponse;
       PathParams injectPathParam = new PathParams.FromPathParam(pathParams);
       rRouteResponse = update1(
         request,
         rMongoDbAdmin,
         injectPathParam,
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      request.response.statusCode = rRouteResponse.statusCode ?? 200;
+      if (rRouteResponse.headers is Map) {
+        for (String key in rRouteResponse.headers.keys) {
+          request.response.headers.add(key, rRouteResponse.headers[key]);
+        }
+      }
+      iEncodeToJson.post(
+        request,
+        rRouteResponse.value,
+      );
       await iMongoDbAdmin.post();
       return true;
     }
@@ -153,7 +162,7 @@ abstract class _$JaguarForumApi {
       iLogin.pre(
         rMongoDbAdmin,
       );
-      String rRouteResponse;
+      Response<User> rRouteResponse;
       try {
         ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
         if (injectPathParam is Validatable) {
@@ -170,8 +179,13 @@ abstract class _$JaguarForumApi {
         handler.onRouteException(request, e, s);
         return true;
       }
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
+      request.response.statusCode = rRouteResponse.statusCode ?? 200;
+      if (rRouteResponse.headers is Map) {
+        for (String key in rRouteResponse.headers.keys) {
+          request.response.headers.add(key, rRouteResponse.headers[key]);
+        }
+      }
+      request.response.write(rRouteResponse.valueAsString);
       await request.response.close();
       await iMongoDbAdmin.post();
       return true;

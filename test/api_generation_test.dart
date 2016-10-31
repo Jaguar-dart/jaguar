@@ -17,7 +17,7 @@ import 'test_utils.dart';
 import 'src/io.dart';
 
 import 'package:jaguar/generator/hook/api/import.dart';
-import 'package:jaguar/jaguar.dart';
+//TODO import 'package:jaguar/jaguar.dart';
 
 const _generator = const ApiGenerator();
 
