@@ -14,14 +14,14 @@ class RouteInfo {
 
   final List<ExceptionHandlerInfo> exceptions;
 
-  DartType get returnType => _method.returnType;
+  DartTypeWrap get returnType => new DartTypeWrap(_method.returnType);
+
+  DartTypeWrap get returnTypeIntended => _method.returnTypeWithoutFuture;
 
   bool get returnsVoid => returnType.isVoid;
 
-  bool get returnsResponse {
-    return new DartTypeWrap(returnType)
-        .compare('Response', 'jaguar.src.http.response');
-  }
+  bool get returnsResponse =>
+      returnTypeIntended.compare('Response', 'jaguar.src.http.response');
 
   bool get returnsFuture => returnType.isDartAsyncFuture;
 
@@ -97,8 +97,6 @@ class RouteInfo {
   String get prototype => _method.prototype;
 
   String get name => _method.name;
-
-  DartType get returnTypeWithoutFuture => _method.returnTypeWithoutFuture;
 
   bool _defaultResponseWriter = true;
 

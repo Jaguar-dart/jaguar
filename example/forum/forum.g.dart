@@ -15,6 +15,7 @@ abstract class _$JaguarForumApi {
     new Route(r"/api/user", methods: ["PUT"]),
     new Route(r"/api/user1", methods: ["PUT"]),
     new Route(r"/api/user2", methods: ["PUT"]),
+    new Route(r"/api/user3", methods: ["PUT"]),
   ];
 
   Future<User> fetch();
@@ -30,6 +31,9 @@ abstract class _$JaguarForumApi {
   Response<User> update1(HttpRequest request, Db db, PathParams pathParams);
 
   Response<User> update2(HttpRequest request, Db db, ParamCreate pathParams);
+
+  Future<Response<User>> update3(
+      HttpRequest request, Db db, ParamCreate pathParams);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -187,6 +191,39 @@ abstract class _$JaguarForumApi {
       }
       request.response.write(rRouteResponse.valueAsString);
       await request.response.close();
+      await iMongoDbAdmin.post();
+      return true;
+    }
+
+    match = _routes[6].match(request.uri.path, request.method, pathParams);
+    if (match) {
+      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+      Login iLogin = new Login();
+      iLogin.pre(
+        rMongoDbAdmin,
+      );
+      EncodeToJson iEncodeToJson = new EncodeToJson();
+      Response<User> rRouteResponse;
+      ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
+      if (injectPathParam is Validatable) {
+        injectPathParam.validate();
+      }
+      rRouteResponse = await update3(
+        request,
+        rMongoDbAdmin,
+        injectPathParam,
+      );
+      request.response.statusCode = rRouteResponse.statusCode ?? 200;
+      if (rRouteResponse.headers is Map) {
+        for (String key in rRouteResponse.headers.keys) {
+          request.response.headers.add(key, rRouteResponse.headers[key]);
+        }
+      }
+      iEncodeToJson.post(
+        request,
+        rRouteResponse.value,
+      );
       await iMongoDbAdmin.post();
       return true;
     }

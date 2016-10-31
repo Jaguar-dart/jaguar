@@ -91,14 +91,18 @@ class MethodElementWrap {
 
   DartType get returnType => _wrapped.returnType;
 
-  DartType get returnTypeWithoutFuture =>
-      returnType.flattenFutures(_wrapped.context.typeSystem);
+  DartTypeWrap get returnTypeWithoutFuture =>
+      new DartTypeWrap(returnType.flattenFutures(_wrapped.context.typeSystem));
 }
 
 class DartTypeWrap {
   final DartType _wrapped;
 
   DartTypeWrap(this._wrapped);
+
+  bool get isVoid => _wrapped.isVoid;
+
+  bool get isDartAsyncFuture => _wrapped.isDartAsyncFuture;
 
   bool get isInt => compare(kIntTypeName, kCoreLibraryName);
 
@@ -111,6 +115,8 @@ class DartTypeWrap {
   bool get isString => compare(kStringTypeName, kCoreLibraryName);
 
   bool get isBuiltin => isInt || isDouble || isNum || isBool || isString;
+
+  String get displayName => _wrapped.displayName;
 
   String get name => _wrapped.name;
 
