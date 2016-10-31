@@ -50,7 +50,8 @@ class DefaultResponseWriterResponse {
 
     sb.writeln('if (rRouteResponse.headers is Map) {');
     sb.writeln('  for (String key in rRouteResponse.headers.keys) {');
-    sb.writeln('    request.response.headers.add(key,rRouteResponse.headers[key]);');
+    sb.writeln(
+        '    request.response.headers.add(key,rRouteResponse.headers[key]);');
     sb.writeln('  }');
     sb.writeln('}');
 

@@ -9,5 +9,5 @@ class Response<ValueType> {
 
   Response(this.value, {this.statusCode: 200, this.headers});
 
-  String get valueAsString => value?.toString()??'';
+  String get valueAsString => value?.toString() ?? '';
 }
