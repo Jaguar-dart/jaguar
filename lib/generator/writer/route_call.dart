@@ -83,9 +83,8 @@ class RouteCallWriter {
           }
           return 'null';
         }
-        String build =
-            _getStringTo(param) + "(pathParams.getField('${param.name}')";
-        build += "??queryParams.getField('${param.name}'))";
+        String build = _getStringTo(param);
+        build += "(pathParams.getField('${param.name}'))";
         return build;
       }).join(", ");
 
@@ -101,9 +100,8 @@ class RouteCallWriter {
           if (!info.type.isBuiltin) {
             return 'null';
           }
-          String build =
-              _getStringTo(info) + "(pathParams.getField('${info.name}')";
-          build += "??queryParams.getField('${info.name}'))";
+          String build = _getStringTo(info);
+          build += "(queryParams.getField('${info.name}'))";
           if (info.toValueIfBuiltin != null) {
             build += "??${info.toValueIfBuiltin}";
           }
@@ -117,10 +115,8 @@ class RouteCallWriter {
                 new DartTypeWrap(info.type).isBuiltin)
             .map((ParameterElement info) => new ParameterElementWrap(info))
             .map((ParameterElementWrap info) {
-          String build = "${info.name}: " +
-              _getStringTo(info) +
-              "(pathParams.getField('${info.name}')";
-          build += "??queryParams.getField('${info.name}'))";
+          String build = "${info.name}: " + _getStringTo(info);
+          build += "(queryParams.getField('${info.name}'))";
           if (info.toValueIfBuiltin != null) {
             build += "??${info.toValueIfBuiltin}";
           }

@@ -85,10 +85,10 @@ abstract class _$JaguarForumApi {
       rResponse = create(
         request,
         rMongoDbAdmin,
-        (pathParams.getField('email') ?? queryParams.getField('email')),
-        (pathParams.getField('name') ?? queryParams.getField('name')),
-        (pathParams.getField('password') ?? queryParams.getField('password')),
-        stringToInt(pathParams.getField('age') ?? queryParams.getField('age')),
+        (pathParams.getField('email')),
+        (pathParams.getField('name')),
+        (pathParams.getField('password')),
+        stringToInt(pathParams.getField('age')),
       );
       request.response.statusCode = 200;
       request.response.write(rResponse.toString());
@@ -109,13 +109,9 @@ abstract class _$JaguarForumApi {
       rResponse = update(
         request,
         rMongoDbAdmin,
-        (pathParams.getField('param1') ?? queryParams.getField('param1')),
-        param2: stringToInt(pathParams.getField('param2') ??
-                queryParams.getField('param2')) ??
-            5555,
-        param3: stringToInt(pathParams.getField('param3') ??
-                queryParams.getField('param3')) ??
-            55,
+        (pathParams.getField('param1')),
+        param2: stringToInt(queryParams.getField('param2')) ?? 5555,
+        param3: stringToInt(queryParams.getField('param3')) ?? 55,
       );
       request.response.statusCode = 200;
       request.response.write(rResponse.toString());
