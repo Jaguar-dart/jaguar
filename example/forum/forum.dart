@@ -3,6 +3,7 @@ library example.forum;
 import 'dart:async';
 import 'dart:io';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar/interceptors.dart';
 import 'interceptor.dart';
 
 part 'forum.g.dart';
@@ -159,5 +160,28 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Input(MongoDb, id: 'Admin')
   Future<String> pathRem(HttpRequest request, Db db, String param1) async {
     return param1;
+  }
+
+  @Route('/test/decodebody/json', methods: const <String>['POST'])
+  @DecodeJsonMap()
+  @Input(DecodeJsonMap)
+  String decodeJson(Map<String, dynamic> json) {
+    return json.toString();
+  }
+
+  @Route('/test/decodebody/formdata', methods: const <String>['POST'])
+  @FormData()
+  @Input(FormData)
+  String decodeFormData(Map<String, FormField> formFields) {
+    print("here");
+    return formFields.toString();
+  }
+
+  @Route('/test/decodebody/xwww', methods: const <String>['POST'])
+  @XWwwFormUrlEncoded()
+  @Input(XWwwFormUrlEncoded)
+  String decodeXwww(Map<String, String> xwww) {
+    print("here");
+    return xwww.toString();
   }
 }
