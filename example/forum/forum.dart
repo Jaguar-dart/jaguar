@@ -148,19 +148,16 @@ class ForumApi extends Object with _$JaguarForumApi {
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
-  Future<String> regex(
-      HttpRequest request, Db db, String param1) async {
+  Future<String> regex(HttpRequest request, Db db, String param1) async {
     return param1;
   }
 
   @Route('/regexrem/:param1*',
-      methods: const <String>['PUT'],
-      validatePathParams: true)
+      methods: const <String>['PUT'], validatePathParams: true)
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
-  Future<String> pathRem(
-      HttpRequest request, Db db, String param1) async {
+  Future<String> pathRem(HttpRequest request, Db db, String param1) async {
     return param1;
   }
 }

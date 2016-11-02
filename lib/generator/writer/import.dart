@@ -41,8 +41,10 @@ class Writer {
 
   void _writeRouteList() {
     sb.writeln("static const List<Route> _routes = const <Route>[");
-    String routeList = routes.map((RouteInfo route) => route.instantiationString)
-        .toList().join(',');
+    String routeList = routes
+        .map((RouteInfo route) => route.instantiationString)
+        .toList()
+        .join(',');
     sb.write(routeList);
     sb.writeln("];");
   }
