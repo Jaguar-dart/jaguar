@@ -40,12 +40,12 @@ class Writer {
   }
 
   void _writeRouteList() {
-    sb.writeln("List<Route> _routes = <Route>[");
-    routes.forEach((RouteInfo route) {
-      final String path = route.path;
-      final String methods = JSON.encode(route.route.methods);
-      sb.writeln('new Route(r\"$path\", methods: $methods),');
-    });
+    sb.writeln("static const List<Route> _routes = const <Route>[");
+    String routeList = routes
+        .map((RouteInfo route) => route.instantiationString)
+        .toList()
+        .join(',');
+    sb.write(routeList);
     sb.writeln("];");
   }
 
@@ -66,7 +66,7 @@ class Writer {
 
     for (int i = 0; i < routes.length; i++) {
       sb.writeln(
-          "match = _routes[$i].match(request.uri.path, request.method, pathParams);");
+          "match = _routes[$i].match(request.uri.path, request.method, '${routes[i].pathPrefix}',pathParams);");
       sb.writeln("if (match) {");
 
       _writePreInterceptors(routes[i]);

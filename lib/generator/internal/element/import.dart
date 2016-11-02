@@ -198,6 +198,6 @@ class AnnotationElementWrap {
   String get instantiationString {
     String lRet = (_wrapped as ElementAnnotationImpl).annotationAst.toSource();
     lRet = lRet.substring(1);
-    return ' new ' + lRet;
+    return lRet;
   }
 }

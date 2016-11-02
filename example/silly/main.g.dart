@@ -8,11 +8,14 @@ part of jaguar.example.silly;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi {
-  List<Route> _routes = <Route>[
-    new Route(r"/api/ping", methods: ["GET"]),
-    new Route(r"/api/pong", methods: ["POST"]),
-    new Route(r"/api/echo/pathparam/:message", methods: ["POST"]),
-    new Route(r"/api/echo/queryparam", methods: ["POST"]),
+  static const List<Route> _routes = const <Route>[
+    const Route('/ping', methods: const <String>['GET']),
+    const Route('/pong',
+        methods: const <String>['POST'],
+        statusCode: 201,
+        headers: const {"pong-header": "silly-pong"}),
+    const Route('/echo/pathparam/:message', methods: const <String>['POST']),
+    const Route('/echo/queryparam', methods: const <String>['POST'])
   ];
 
   String ping();
@@ -28,7 +31,8 @@ abstract class _$JaguarExampleApi {
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
-    match = _routes[0].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[0].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = ping();
@@ -38,7 +42,8 @@ abstract class _$JaguarExampleApi {
       return true;
     }
 
-    match = _routes[1].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[1].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = pong();
@@ -49,7 +54,8 @@ abstract class _$JaguarExampleApi {
       return true;
     }
 
-    match = _routes[2].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[2].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoPathParam(
@@ -61,7 +67,8 @@ abstract class _$JaguarExampleApi {
       return true;
     }
 
-    match = _routes[3].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoQueryParam(

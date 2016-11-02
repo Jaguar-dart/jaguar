@@ -4,6 +4,8 @@ part of jaguar.generator.parser.route;
 class RouteInfo {
   final MethodElementWrap _method;
 
+  final AnnotationElementWrap _annot;
+
   final String pathPrefix;
 
   final ant.Route route;
@@ -27,9 +29,11 @@ class RouteInfo {
 
   Map<String, bool> _interceptorResultUsed = {};
 
-  RouteInfo(MethodElement aMethod, this.route, this.interceptors, this.inputs,
-      this.exceptions, this.pathPrefix)
-      : _method = new MethodElementWrap(aMethod) {
+  RouteInfo(MethodElement aMethod, ElementAnnotation annot, this.interceptors,
+      this.inputs, this.exceptions, this.pathPrefix)
+      : _method = new MethodElementWrap(aMethod),
+        _annot = new AnnotationElementWrap(annot),
+        route = instantiateAnnotation(annot) {
     if (_method.requiredParameters.length < _allInputsLen) {
       throw new Exception("Inputs and parameters to route does not match!");
     }
@@ -134,4 +138,6 @@ class RouteInfo {
 
   bool isDualInterceptorResultUsed(InterceptorClassInfo inter) =>
       _interceptorResultUsed.containsKey(inter.genReturnVarName);
+
+  String get instantiationString => ' const ' + _annot.instantiationString;
 }
