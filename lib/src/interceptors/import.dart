@@ -9,11 +9,11 @@ import 'package:jaguar/jaguar.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mime/mime.dart';
 
-Future<String> getStringFromBody(HttpRequest request) async {
+Future<String> getStringFromBody(HttpRequest request, Encoding encoding) async {
   Completer<String> completer = new Completer<String>();
   String allData = "";
   //  TODO: add error
-  request.transform(UTF8.decoder).listen((String data) => allData += data,
+  request.transform(encoding.decoder).listen((String data) => allData += data,
       onDone: () => completer.complete(allData));
   return completer.future;
 }
@@ -94,11 +94,13 @@ class FormData extends Interceptor {
 
 @InterceptorClass()
 class XWwwFormUrlEncoded extends Interceptor {
-  const XWwwFormUrlEncoded();
+  final Encoding encoding;
+
+  const XWwwFormUrlEncoded({this.encoding: UTF8});
 
   Future<Map<String, String>> pre(HttpRequest request) async {
     print(request.headers);
-    return (await getStringFromBody(request))
+    return (await getStringFromBody(request, encoding))
         .split("&")
         .map((String part) => part.split("="))
         .map((List<String> part) => <String, String>{part.first: part.last})
@@ -109,10 +111,12 @@ class XWwwFormUrlEncoded extends Interceptor {
 
 @InterceptorClass()
 class DecodeJson extends Interceptor {
-  const DecodeJson();
+  final Encoding encoding;
+
+  const DecodeJson({this.encoding: UTF8});
 
   Future<dynamic> pre(HttpRequest request) async {
-    String data = await getStringFromBody(request);
+    String data = await getStringFromBody(request, encoding);
     return JSON.decode(data);
   }
 }
