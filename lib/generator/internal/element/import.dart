@@ -8,8 +8,10 @@ import 'package:analyzer/src/generated/utilities_dart.dart';
 
 /// An element that has a name and library
 abstract class NamedElement {
+  /// Name of the element
   String get name;
 
+  /// Library the element is in
   String get libraryName;
 }
 
