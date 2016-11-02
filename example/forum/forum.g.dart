@@ -26,7 +26,10 @@ abstract class _$JaguarForumApi {
         validatePathParams: true,
         pathRegEx: const {'param1': r'^(hello|fello)$'}),
     const Route('/regexrem/:param1*',
-        methods: const <String>['PUT'], validatePathParams: true)
+        methods: const <String>['PUT'], validatePathParams: true),
+    const Route('/test/decodebody/json', methods: const <String>['POST']),
+    const Route('/test/decodebody/formdata', methods: const <String>['POST']),
+    const Route('/test/decodebody/xwww', methods: const <String>['POST'])
   ];
 
   Future<User> fetch();
@@ -49,6 +52,12 @@ abstract class _$JaguarForumApi {
   Future<String> regex(HttpRequest request, Db db, String param1);
 
   Future<String> pathRem(HttpRequest request, Db db, String param1);
+
+  String decodeJson(Map<String, dynamic> json);
+
+  String decodeFormData(Map<String, FormField> formFields);
+
+  String decodeXwww(Map<String, String> xwww);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -291,6 +300,58 @@ abstract class _$JaguarForumApi {
       request.response.write(rRouteResponse.toString());
       await request.response.close();
       await iMongoDbAdmin.post();
+      return true;
+    }
+
+    match =
+        _routes[9].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      DecodeJson iDecodeJson = new DecodeJson();
+      dynamic rDecodeJson = await iDecodeJson.pre(
+        request,
+      );
+      String rRouteResponse;
+      rRouteResponse = decodeJson(
+        rDecodeJson,
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[10].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      DecodeFormData iDecodeFormData = new DecodeFormData();
+      Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
+        request,
+      );
+      String rRouteResponse;
+      rRouteResponse = decodeFormData(
+        rDecodeFormData,
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[11].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      DecodeUrlEncodedForm iDecodeUrlEncodedForm = new DecodeUrlEncodedForm();
+      Map<String, String> rDecodeUrlEncodedForm =
+          await iDecodeUrlEncodedForm.pre(
+        request,
+      );
+      String rRouteResponse;
+      rRouteResponse = decodeXwww(
+        rDecodeUrlEncodedForm,
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
       return true;
     }
 
