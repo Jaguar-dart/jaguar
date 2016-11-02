@@ -108,20 +108,10 @@ class XWwwFormUrlEncoded extends Interceptor {
 }
 
 @InterceptorClass()
-class DecodeJsonMap extends Interceptor {
-  const DecodeJsonMap();
+class DecodeJson extends Interceptor {
+  const DecodeJson();
 
-  Future<Map<dynamic, dynamic>> pre(HttpRequest request) async {
-    String data = await getStringFromBody(request);
-    return JSON.decode(data);
-  }
-}
-
-@InterceptorClass()
-class DecodeJsonList extends Interceptor {
-  const DecodeJsonList();
-
-  Future<List<dynamic>> pre(HttpRequest request) async {
+  Future<dynamic> pre(HttpRequest request) async {
     String data = await getStringFromBody(request);
     return JSON.decode(data);
   }

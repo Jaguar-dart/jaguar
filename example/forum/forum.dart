@@ -163,8 +163,8 @@ class ForumApi extends Object with _$JaguarForumApi {
   }
 
   @Route('/test/decodebody/json', methods: const <String>['POST'])
-  @DecodeJsonMap()
-  @Input(DecodeJsonMap)
+  @DecodeJson()
+  @Input(DecodeJson)
   String decodeJson(Map<String, dynamic> json) {
     return json.toString();
   }

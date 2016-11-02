@@ -306,13 +306,13 @@ abstract class _$JaguarForumApi {
     match =
         _routes[9].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      DecodeJsonMap iDecodeJsonMap = new DecodeJsonMap();
-      Map<dynamic, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
+      DecodeJson iDecodeJson = new DecodeJson();
+      dynamic rDecodeJson = await iDecodeJson.pre(
         request,
       );
       String rRouteResponse;
       rRouteResponse = decodeJson(
-        rDecodeJsonMap,
+        rDecodeJson,
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
