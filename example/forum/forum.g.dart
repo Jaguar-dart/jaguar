@@ -8,14 +8,25 @@ part of example.forum;
 // **************************************************************************
 
 abstract class _$JaguarForumApi {
-  List<Route> _routes = <Route>[
-    new Route(r"/api/user", methods: ["GET"]),
-    new Route(r"/api/user", methods: ["DELETE"]),
-    new Route(r"/api/user/:param1", methods: ["POST"]),
-    new Route(r"/api/user", methods: ["PUT"]),
-    new Route(r"/api/user1", methods: ["PUT"]),
-    new Route(r"/api/user2", methods: ["PUT"]),
-    new Route(r"/api/user3", methods: ["PUT"]),
+  static const List<Route> _routes = const <Route>[
+    const Route('/user',
+        methods: const <String>['GET'],
+        statusCode: 201,
+        headers: const {"sample-header": "made-with.jaguar"}),
+    const Route('/user', methods: const <String>['DELETE']),
+    const Route('/user/:param1', methods: const <String>['POST']),
+    const Route('/user', methods: const <String>['PUT']),
+    const Route('/user1', methods: const <String>['PUT']),
+    const Route('/user2',
+        methods: const <String>['PUT'], validatePathParams: true),
+    const Route('/user3',
+        methods: const <String>['PUT'], validatePathParams: true),
+    const Route('/regex/:param1',
+        methods: const <String>['PUT'],
+        validatePathParams: true,
+        pathRegEx: const {'param1': r'^(hello|fello)$'}),
+    const Route('/regexrem/:param1*',
+        methods: const <String>['PUT'], validatePathParams: true)
   ];
 
   Future<User> fetch();
@@ -35,12 +46,17 @@ abstract class _$JaguarForumApi {
   Future<Response<User>> update3(
       HttpRequest request, Db db, ParamCreate pathParams);
 
+  Future<String> regex(HttpRequest request, Db db, String param1);
+
+  Future<String> pathRem(HttpRequest request, Db db, String param1);
+
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
-    match = _routes[0].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[0].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbTest = new MongoDb('test', id: 'Test');
       await iMongoDbTest.pre();
@@ -64,7 +80,8 @@ abstract class _$JaguarForumApi {
       return true;
     }
 
-    match = _routes[1].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[1].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
@@ -81,7 +98,8 @@ abstract class _$JaguarForumApi {
       return true;
     }
 
-    match = _routes[2].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[2].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
@@ -105,7 +123,8 @@ abstract class _$JaguarForumApi {
       return true;
     }
 
-    match = _routes[3].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
@@ -128,7 +147,8 @@ abstract class _$JaguarForumApi {
       return true;
     }
 
-    match = _routes[4].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
@@ -158,7 +178,8 @@ abstract class _$JaguarForumApi {
       return true;
     }
 
-    match = _routes[5].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[5].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
@@ -195,7 +216,8 @@ abstract class _$JaguarForumApi {
       return true;
     }
 
-    match = _routes[6].match(request.uri.path, request.method, pathParams);
+    match =
+        _routes[6].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
@@ -224,6 +246,50 @@ abstract class _$JaguarForumApi {
         request,
         rRouteResponse.value,
       );
+      await iMongoDbAdmin.post();
+      return true;
+    }
+
+    match =
+        _routes[7].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+      Login iLogin = new Login();
+      iLogin.pre(
+        rMongoDbAdmin,
+      );
+      String rRouteResponse;
+      rRouteResponse = await regex(
+        request,
+        rMongoDbAdmin,
+        (pathParams.getField('param1')),
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      await iMongoDbAdmin.post();
+      return true;
+    }
+
+    match =
+        _routes[8].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+      Login iLogin = new Login();
+      iLogin.pre(
+        rMongoDbAdmin,
+      );
+      String rRouteResponse;
+      rRouteResponse = await pathRem(
+        request,
+        rMongoDbAdmin,
+        (pathParams.getField('param1')),
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
       await iMongoDbAdmin.post();
       return true;
     }

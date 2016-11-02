@@ -18,7 +18,7 @@ class ExceptionHandlerInfo {
       : _handler = new AnnotationElementWrap(aHandler),
         _exception = new DartTypeWrap(aException);
 
-  String get instantiationString => _handler.instantiationString;
+  String get instantiationString => ' new ' + _handler.instantiationString;
 }
 
 List<ExceptionHandlerInfo> _parseExceptions(ElementAnnotation element) {

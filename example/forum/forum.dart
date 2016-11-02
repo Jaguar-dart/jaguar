@@ -140,4 +140,27 @@ class ForumApi extends Object with _$JaguarForumApi {
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
   }
+
+  @Route('/regex/:param1',
+      methods: const <String>['PUT'],
+      validatePathParams: true,
+      pathRegEx: const {'param1': r'^(hello|fello)$'})
+  @MongoDb('admin', id: 'Admin')
+  @Login()
+  @Input(MongoDb, id: 'Admin')
+  Future<String> regex(
+      HttpRequest request, Db db, String param1) async {
+    return param1;
+  }
+
+  @Route('/regexrem/:param1*',
+      methods: const <String>['PUT'],
+      validatePathParams: true)
+  @MongoDb('admin', id: 'Admin')
+  @Login()
+  @Input(MongoDb, id: 'Admin')
+  Future<String> pathRem(
+      HttpRequest request, Db db, String param1) async {
+    return param1;
+  }
 }

@@ -13,15 +13,15 @@ import 'package:jaguar/generator/parser/exception_handler/import.dart';
 
 part 'route_info.dart';
 
-ant.Route parseRoute(MethodElement element) {
-  return element.metadata.map((ElementAnnotation annot) {
+ElementAnnotation parseRoute(MethodElement element) {
+  return element.metadata.firstWhere((ElementAnnotation annot) {
     try {
-      return instantiateAnnotation(annot);
+      return instantiateAnnotation(annot) is ant.Route;
     } catch (_) {
       //TODO check what exception and decide accordingly
-      return null;
+      return false;
     }
-  }).firstWhere((dynamic instance) => instance is ant.Route, orElse: null);
+  }, orElse: () => null);
 }
 
 List<RouteInfo> collectRoutes(
@@ -31,9 +31,9 @@ List<RouteInfo> collectRoutes(
     List<ExceptionHandlerInfo> exceptionHandlersParent) {
   return classElement.methods
       .map((MethodElement method) {
-        ant.Route route = parseRoute(method);
+        ElementAnnotation routeAnnot = parseRoute(method);
 
-        if (route == null) {
+        if (routeAnnot == null) {
           return null;
         }
 
@@ -50,7 +50,7 @@ List<RouteInfo> collectRoutes(
         exceptions.insertAll(0, exceptionHandlersParent);
 
         return new RouteInfo(
-            method, route, interceptors, inputs, exceptions, prefix);
+            method, routeAnnot, interceptors, inputs, exceptions, prefix);
       })
       .where((RouteInfo info) => info != null)
       .toList();

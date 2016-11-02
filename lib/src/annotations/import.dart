@@ -33,7 +33,8 @@ class Route {
       this.validatePathParams: false,
       this.validateQueryParams: false});
 
-  bool match(String requestPath, String method, Map<String, dynamic> params) {
+  bool match(String requestPath, String method, String prefix,
+      Map<String, dynamic> params) {
     params.clear();
 
     if (!methods.contains(method)) {
@@ -42,14 +43,16 @@ class Route {
 
     List<String> rqSegs = requestPath.split('/');
 
-    List<String> segs = path.split('/');
+    List<String> segs = (prefix + path).split('/');
 
     return comparePathSegments(segs, rqSegs, params);
   }
 
   bool comparePathSegments(
       List<String> template, List<String> actual, Map<String, dynamic> args) {
-    if (template.length != actual.length) {
+    if (template.length != actual.length &&
+        template.length != 0 &&
+        !template.last.endsWith('*')) {
       return false;
     }
 
@@ -61,6 +64,12 @@ class Route {
         }
 
         final String argName = template[index].substring(1);
+
+        if (argName.endsWith('*')) {
+          args[argName.substring(0, argName.length - 1)] =
+              actual.sublist(index).join('/');
+          break;
+        }
 
         //TODO move this to generator side
         {
@@ -153,6 +162,22 @@ class Input {
   final String id;
 
   const Input(this.resultFrom, {this.id});
+}
+
+class InputHeader {
+  final String key;
+
+  const InputHeader(this.key);
+}
+
+class InputHeaders {
+  const InputHeaders();
+}
+
+class InputCookie {
+  final String key;
+
+  const InputCookie(this.key);
 }
 
 class ExceptionHandler {
