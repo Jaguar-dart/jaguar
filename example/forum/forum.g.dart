@@ -323,13 +323,13 @@ abstract class _$JaguarForumApi {
     match =
         _routes[10].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      FormData iFormData = new FormData();
-      Map<String, FormField> rFormData = await iFormData.pre(
+      DecodeFormData iDecodeFormData = new DecodeFormData();
+      Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
         request,
       );
       String rRouteResponse;
       rRouteResponse = decodeFormData(
-        rFormData,
+        rDecodeFormData,
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
@@ -340,13 +340,14 @@ abstract class _$JaguarForumApi {
     match =
         _routes[11].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      XWwwFormUrlEncoded iXWwwFormUrlEncoded = new XWwwFormUrlEncoded();
-      Map<String, String> rXWwwFormUrlEncoded = await iXWwwFormUrlEncoded.pre(
+      DecodeUrlEncodedForm iDecodeUrlEncodedForm = new DecodeUrlEncodedForm();
+      Map<String, String> rDecodeUrlEncodedForm =
+          await iDecodeUrlEncodedForm.pre(
         request,
       );
       String rRouteResponse;
       rRouteResponse = decodeXwww(
-        rXWwwFormUrlEncoded,
+        rDecodeUrlEncodedForm,
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());

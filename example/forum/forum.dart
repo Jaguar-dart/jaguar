@@ -170,18 +170,16 @@ class ForumApi extends Object with _$JaguarForumApi {
   }
 
   @Route('/test/decodebody/formdata', methods: const <String>['POST'])
-  @FormData()
-  @Input(FormData)
+  @DecodeFormData()
+  @Input(DecodeFormData)
   String decodeFormData(Map<String, FormField> formFields) {
-    print("here");
     return formFields.toString();
   }
 
   @Route('/test/decodebody/xwww', methods: const <String>['POST'])
-  @XWwwFormUrlEncoded()
-  @Input(XWwwFormUrlEncoded)
+  @DecodeUrlEncodedForm()
+  @Input(DecodeUrlEncodedForm)
   String decodeXwww(Map<String, String> xwww) {
-    print("here");
     return xwww.toString();
   }
 }

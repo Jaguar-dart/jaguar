@@ -47,11 +47,10 @@ class FormField {
 }
 
 @InterceptorClass()
-class FormData extends Interceptor {
-  const FormData();
+class DecodeFormData extends Interceptor {
+  const DecodeFormData();
 
   Future<Map<String, FormField>> pre(HttpRequest request) {
-    print(request.headers.contentType.parameters);
     if (!request.headers.contentType.parameters.containsKey('boundary')) {
       return null;
     }
@@ -93,13 +92,12 @@ class FormData extends Interceptor {
 }
 
 @InterceptorClass()
-class XWwwFormUrlEncoded extends Interceptor {
+class DecodeUrlEncodedForm extends Interceptor {
   final Encoding encoding;
 
-  const XWwwFormUrlEncoded({this.encoding: UTF8});
+  const DecodeUrlEncodedForm({this.encoding: UTF8});
 
   Future<Map<String, String>> pre(HttpRequest request) async {
-    print(request.headers);
     return (await getStringFromBody(request, encoding))
         .split("&")
         .map((String part) => part.split("="))
