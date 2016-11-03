@@ -40,6 +40,7 @@ ant.InterceptorClass isClassInterceptDual(ClassElement clazz) {
       .forEach((ElementAnnotation annot) => annot.computeConstantValue());
   List match = clazz.metadata
       .map((ElementAnnotation annot) {
+        annot.computeConstantValue();
         try {
           return instantiateAnnotation(annot);
         } catch (_) {

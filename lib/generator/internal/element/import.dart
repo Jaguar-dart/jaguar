@@ -150,6 +150,8 @@ class DartTypeWrap {
 
   bool compare(String aName, String aLibraryName) =>
       aName == name && aLibraryName == libraryName;
+
+  String toString() => _wrapped.toString();
 }
 
 class ParameterElementWrap {

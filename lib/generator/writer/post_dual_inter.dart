@@ -25,7 +25,7 @@ class InterceptorClassPostWriter {
 
     if (info.dual.post.inputs.length != 0) {
       final String params = info.dual.post.inputs.map((InputInfo info) {
-        if (route.returnsResponse) {
+        if (route.returnsResponse && info.isRouteResponse) {
           return info.genName + '.value';
         } else {
           return info.genName;

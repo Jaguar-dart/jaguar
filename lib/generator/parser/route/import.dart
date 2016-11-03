@@ -15,6 +15,7 @@ part 'route_info.dart';
 
 ElementAnnotation parseRoute(MethodElement element) {
   return element.metadata.firstWhere((ElementAnnotation annot) {
+    annot.computeConstantValue();
     try {
       return instantiateAnnotation(annot) is ant.Route;
     } catch (_) {
@@ -28,7 +29,8 @@ List<RouteInfo> collectRoutes(
     ClassElement classElement,
     String prefix,
     List<InterceptorInfo> interceptorsParent,
-    List<ExceptionHandlerInfo> exceptionHandlersParent) {
+    List<ExceptionHandlerInfo> exceptionHandlersParent,
+    List<String> groupNames) {
   return classElement.methods
       .map((MethodElement method) {
         ElementAnnotation routeAnnot = parseRoute(method);
@@ -49,8 +51,8 @@ List<RouteInfo> collectRoutes(
             collectExceptionHandlers(method);
         exceptions.insertAll(0, exceptionHandlersParent);
 
-        return new RouteInfo(
-            method, routeAnnot, interceptors, inputs, exceptions, prefix);
+        return new RouteInfo(method, routeAnnot, interceptors, inputs,
+            exceptions, prefix, groupNames);
       })
       .where((RouteInfo info) => info != null)
       .toList();

@@ -58,6 +58,11 @@ class RouteCallWriter {
       }
     }
 
+    if (route.groupNames.length > 0) {
+      sb.write(route.groupNames.join('.'));
+      sb.write('.');
+    }
+
     sb.write(route.name + "(");
 
     if (route.needsHttpRequest) {
@@ -65,8 +70,9 @@ class RouteCallWriter {
     }
 
     if (route.inputs.length != 0) {
-      final String params =
-          route.inputs.map((InputInfo info) => info.genName).join(", ");
+      final String params = route.inputs.map((InputInfo info) {
+        return info.genName;
+      }).join(", ");
       sb.write(params);
       sb.write(',');
     }

@@ -9,14 +9,11 @@ import 'package:jaguar/generator/parser/route/import.dart';
 import 'package:jaguar/generator/parser/interceptor/import.dart';
 import 'package:jaguar/generator/parser/exception_handler/import.dart';
 
-class GroupInfo {
-  final ant.Group group;
-
-  GroupInfo(this.group);
-}
+import 'package:jaguar/generator/internal/element/import.dart';
 
 ant.Group parseGroup(Element element) {
   return element.metadata.map((ElementAnnotation annot) {
+    annot.computeConstantValue();
     try {
       return instantiateAnnotation(annot);
     } catch (_) {
@@ -31,9 +28,10 @@ List<RouteInfo> collectAllRoutes(
     ClassElement classElement,
     String prefix,
     List<InterceptorInfo> interceptorsParent,
-    List<ExceptionHandlerInfo> exceptionsParent) {
-  List<RouteInfo> routes =
-      collectRoutes(classElement, prefix, interceptorsParent, exceptionsParent);
+    List<ExceptionHandlerInfo> exceptionsParent,
+    List<String> groupNames) {
+  List<RouteInfo> routes = collectRoutes(
+      classElement, prefix, interceptorsParent, exceptionsParent, groupNames);
 
   classElement.fields
       .map((FieldElement field) {
@@ -43,11 +41,37 @@ List<RouteInfo> collectAllRoutes(
           return null;
         }
 
-        return collectAllRoutes(field.type.element, "$prefix/${group.path}",
-            interceptorsParent, exceptionsParent);
+        return collectAllRoutes(
+            field.type.element,
+            "$prefix${group.path}",
+            interceptorsParent,
+            exceptionsParent,
+            groupNames.toList()..add(field.name));
       })
       .where((List<RouteInfo> routes) => routes != null)
       .forEach((List<RouteInfo> val) => routes.addAll(val));
 
   return routes;
+}
+
+class GroupInfo {
+  final ant.Group group;
+
+  final DartTypeWrap type;
+
+  final String name;
+
+  GroupInfo(this.group, this.type, this.name);
+}
+
+List<GroupInfo> collectGroups(ClassElement classElement) {
+  return classElement.fields.map((FieldElement field) {
+    ant.Group group = parseGroup(field);
+
+    if (group == null) {
+      return null;
+    }
+
+    return new GroupInfo(group, new DartTypeWrap(field.type), field.name);
+  }).toList();
 }

@@ -16,6 +16,8 @@ class RouteInfo {
 
   final List<ExceptionHandlerInfo> exceptions;
 
+  final List<String> groupNames;
+
   DartTypeWrap get returnType => new DartTypeWrap(_method.returnType);
 
   DartTypeWrap get returnTypeIntended => _method.returnTypeWithoutFuture;
@@ -30,7 +32,7 @@ class RouteInfo {
   Map<String, bool> _interceptorResultUsed = {};
 
   RouteInfo(MethodElement aMethod, ElementAnnotation annot, this.interceptors,
-      this.inputs, this.exceptions, this.pathPrefix)
+      this.inputs, this.exceptions, this.pathPrefix, this.groupNames)
       : _method = new MethodElementWrap(aMethod),
         _annot = new AnnotationElementWrap(annot),
         route = instantiateAnnotation(annot) {

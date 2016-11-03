@@ -1,7 +1,9 @@
-//TODO import 'package:test/test.dart';
+import 'package:test/test.dart';
 
-//TODO import 'api_generation_test.dart' as api_generator;
+import 'jaguar/route/route.dart' as route;
+import 'jaguar/group/main.dart' as groupNormal;
 
 void main() {
-  //TODO group('api', api_generator.main);
+  route.main();
+  groupNormal.main();
 }
