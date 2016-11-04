@@ -7,7 +7,7 @@ part of example.forum;
 // Target: class ForumApi
 // **************************************************************************
 
-abstract class _$JaguarForumApi {
+abstract class _$JaguarForumApi implements ApiInterface {
   static const List<Route> _routes = const <Route>[
     const Route('/user',
         methods: const <String>['GET'],

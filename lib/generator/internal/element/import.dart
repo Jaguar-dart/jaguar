@@ -8,8 +8,10 @@ import 'package:analyzer/src/generated/utilities_dart.dart';
 
 /// An element that has a name and library
 abstract class NamedElement {
+  /// Name of the element
   String get name;
 
+  /// Library the element is in
   String get libraryName;
 }
 
@@ -104,6 +106,8 @@ class DartTypeWrap {
 
   bool get isDartAsyncFuture => _wrapped.isDartAsyncFuture;
 
+  bool get isDynamic => _wrapped.isDynamic;
+
   bool get isInt => compare(kIntTypeName, kCoreLibraryName);
 
   bool get isDouble => compare(kDoubleTypeName, kCoreLibraryName);
@@ -148,6 +152,8 @@ class DartTypeWrap {
 
   bool compare(String aName, String aLibraryName) =>
       aName == name && aLibraryName == libraryName;
+
+  String toString() => _wrapped.toString();
 }
 
 class ParameterElementWrap {

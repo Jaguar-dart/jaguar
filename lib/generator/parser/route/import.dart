@@ -15,10 +15,10 @@ part 'route_info.dart';
 
 ElementAnnotation parseRoute(MethodElement element) {
   return element.metadata.firstWhere((ElementAnnotation annot) {
+    annot.computeConstantValue();
     try {
       return instantiateAnnotation(annot) is ant.Route;
     } catch (_) {
-      //TODO check what exception and decide accordingly
       return false;
     }
   }, orElse: () => null);
@@ -28,7 +28,8 @@ List<RouteInfo> collectRoutes(
     ClassElement classElement,
     String prefix,
     List<InterceptorInfo> interceptorsParent,
-    List<ExceptionHandlerInfo> exceptionHandlersParent) {
+    List<ExceptionHandlerInfo> exceptionHandlersParent,
+    List<String> groupNames) {
   return classElement.methods
       .map((MethodElement method) {
         ElementAnnotation routeAnnot = parseRoute(method);
@@ -37,9 +38,9 @@ List<RouteInfo> collectRoutes(
           return null;
         }
 
-        List<InputInfo> inputs = method.metadata
-            .map(instantiateInputAnnotation)
-            .where((InputInfo instance) => instance is InputInfo)
+        List<Input> inputs = method.metadata
+            .map(createInput)
+            .where((Input instance) => instance is Input)
             .toList();
 
         List<InterceptorInfo> interceptors = parseInterceptor(method);
@@ -49,8 +50,8 @@ List<RouteInfo> collectRoutes(
             collectExceptionHandlers(method);
         exceptions.insertAll(0, exceptionHandlersParent);
 
-        return new RouteInfo(
-            method, routeAnnot, interceptors, inputs, exceptions, prefix);
+        return new RouteInfo(method, routeAnnot, interceptors, inputs,
+            exceptions, prefix, groupNames);
       })
       .where((RouteInfo info) => info != null)
       .toList();

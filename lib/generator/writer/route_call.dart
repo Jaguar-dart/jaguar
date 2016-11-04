@@ -9,11 +9,14 @@ class RouteCallWriter {
     StringBuffer sb = new StringBuffer();
 
     if (route.needsPathParamInjection) {
-      //TODO what if it is dynamic?
-      sb.write(route.pathParamInjectionParam.type.name);
-      sb.write(" injectPathParam = new ");
-      sb.writeln(route.pathParamInjectionParam.type.name +
-          '.FromPathParam(pathParams);');
+      if (!route.pathParamInjectionParam.type.isDynamic) {
+        sb.write(route.pathParamInjectionParam.type.name);
+        sb.write(" injectPathParam = new ");
+        sb.writeln(route.pathParamInjectionParam.type.name +
+            '.FromPathParam(pathParams);');
+      } else {
+        sb.writeln('final injectPathParam = pathParams;');
+      }
 
       if (route.route.validatePathParams) {
         sb.writeln(
@@ -28,11 +31,14 @@ class RouteCallWriter {
     StringBuffer sb = new StringBuffer();
 
     if (route.needsQueryParamInjection) {
-      //TODO what if it is dynamic?
-      sb.write(route.queryParamInjectionParam.type.name);
-      sb.write(" injectQueryParam = new ");
-      sb.write(route.pathParamInjectionParam.type.name +
-          '.FromQueryParam(pathParams);');
+      if (!route.queryParamInjectionParam.type.isDynamic) {
+        sb.write(route.queryParamInjectionParam.type.name);
+        sb.write(" injectQueryParam = new ");
+        sb.write(route.pathParamInjectionParam.type.name +
+            '.FromQueryParam(queryParams);');
+      } else {
+        sb.writeln('final injectQueryParam = queryParams;');
+      }
 
       if (route.route.validateQueryParams) {
         sb.writeln(
@@ -58,6 +64,11 @@ class RouteCallWriter {
       }
     }
 
+    if (route.groupNames.length > 0) {
+      sb.write(route.groupNames.join('.'));
+      sb.write('.');
+    }
+
     sb.write(route.name + "(");
 
     if (route.needsHttpRequest) {
@@ -65,8 +76,19 @@ class RouteCallWriter {
     }
 
     if (route.inputs.length != 0) {
-      final String params =
-          route.inputs.map((InputInfo info) => info.genName).join(", ");
+      final String params = route.inputs.map((Input inp) {
+        if (inp is InputInterceptor) {
+          return inp.genName;
+        } else if (inp is InputCookie) {
+          return "request.cookies.firstWhere((cookie) => cookie.name == '${inp.key}', orElse: () => null)?.value";
+        } else if (inp is InputCookies) {
+          return 'request.cookies';
+        } else if (inp is InputHeader) {
+          return "request.headers.value('${inp.key}')";
+        } else if (inp is InputHeaders) {
+          return 'request.headers';
+        }
+      }).join(", ");
       sb.write(params);
       sb.write(',');
     }

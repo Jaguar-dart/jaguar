@@ -19,7 +19,7 @@ part 'type.dart';
 abstract class InterceptorInfo {
   DartType get result;
 
-  List<InputInfo> get inputs;
+  List<Input> get inputs;
 
   bool get writesResponse;
 }
@@ -40,10 +40,10 @@ ant.InterceptorClass isClassInterceptDual(ClassElement clazz) {
       .forEach((ElementAnnotation annot) => annot.computeConstantValue());
   List match = clazz.metadata
       .map((ElementAnnotation annot) {
+        annot.computeConstantValue();
         try {
           return instantiateAnnotation(annot);
         } catch (_) {
-          //TODO check what exception and decide accordingly
           return null;
         }
       })

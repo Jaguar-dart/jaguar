@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of jaguar.example.silly;
+part of test.jaguar.route;
 
 // **************************************************************************
 // Generator: ApiGenerator
@@ -9,22 +9,25 @@ part of jaguar.example.silly;
 
 abstract class _$JaguarExampleApi implements ApiInterface {
   static const List<Route> _routes = const <Route>[
-    const Route('/ping', methods: const <String>['GET']),
-    const Route('/pong',
-        methods: const <String>['POST'],
-        statusCode: 201,
-        headers: const {"pong-header": "silly-pong"}),
-    const Route('/echo/pathparam/:message', methods: const <String>['POST']),
-    const Route('/echo/queryparam', methods: const <String>['POST'])
+    const Route('/user', methods: const <String>['GET']),
+    const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
+    const Route('/input/header', methods: const <String>['GET']),
+    const Route('/input/headers', methods: const <String>['GET']),
+    const Route('/input/cookie', methods: const <String>['GET']),
+    const Route('/input/cookies', methods: const <String>['GET'])
   ];
 
-  String ping();
+  String getUser();
 
-  String pong();
+  String statusCode();
 
-  String echoPathParam(String message);
+  String inputHeader(String user);
 
-  String echoQueryParam(String message);
+  String inputHeaders(HttpHeaders headers);
+
+  String inputCookie(String user);
+
+  String inputCookies(List<Cookie> cookies);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -35,7 +38,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
         _routes[0].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = ping();
+      rRouteResponse = getUser();
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
@@ -46,9 +49,8 @@ abstract class _$JaguarExampleApi implements ApiInterface {
         _routes[1].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = pong();
+      rRouteResponse = statusCode();
       request.response.statusCode = 201;
-      request.response.headers.add("pong-header", "silly-pong");
       request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
@@ -58,8 +60,8 @@ abstract class _$JaguarExampleApi implements ApiInterface {
         _routes[2].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = echoPathParam(
-        (pathParams.getField('message')),
+      rRouteResponse = inputHeader(
+        request.headers.value('user'),
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
@@ -71,8 +73,36 @@ abstract class _$JaguarExampleApi implements ApiInterface {
         _routes[3].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = echoQueryParam(
-        (pathParams.getField('message')),
+      rRouteResponse = inputHeaders(
+        request.headers,
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      String rRouteResponse;
+      rRouteResponse = inputCookie(
+        request.cookies
+            .firstWhere((cookie) => cookie.name == 'user', orElse: () => null)
+            ?.value,
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[5].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      String rRouteResponse;
+      rRouteResponse = inputCookies(
+        request.cookies,
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());

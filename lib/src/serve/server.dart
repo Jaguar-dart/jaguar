@@ -1,5 +1,9 @@
 part of jaguar.src.serve;
 
+abstract class ApiInterface {
+  Future handleApiRequest(HttpRequest request);
+}
+
 //  TODO(kleak): add doc
 class Jaguar {
   Configuration configuration;

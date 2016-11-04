@@ -7,7 +7,7 @@ class Configuration {
   final SecurityContext securityContext;
   final bool multiThread;
   final bool log;
-  List<dynamic> apis = <dynamic>[];
+  List<ApiInterface> apis = <ApiInterface>[];
 
   Configuration(
       {this.address: "0.0.0.0",
@@ -16,7 +16,7 @@ class Configuration {
       this.securityContext: null,
       this.log: false});
 
-  void addApi(dynamic apiClass) {
+  void addApi(ApiInterface apiClass) {
     apis.add(apiClass);
   }
 

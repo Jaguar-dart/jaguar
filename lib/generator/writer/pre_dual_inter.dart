@@ -38,8 +38,19 @@ class InterceptorClassPreWriter {
     }
 
     if (pre.inputs.length != 0) {
-      final String params =
-          pre.inputs.map((InputInfo info) => info.genName).join(", ");
+      final String params = pre.inputs.map((Input inp) {
+        if (inp is InputInterceptor) {
+          return inp.genName;
+        } else if (inp is InputCookie) {
+          return "request.cookies.firstWhere((cookie) => cookie.name == '${inp.key}', orElse: () => null)?.value";
+        } else if (inp is InputCookies) {
+          return 'request.cookies';
+        } else if (inp is InputHeader) {
+          return "request.headers.value('${inp.key}')";
+        } else if (inp is InputHeaders) {
+          return 'request.headers';
+        }
+      }).join(", ");
       sb.write(params);
       sb.write(',');
     }

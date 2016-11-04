@@ -180,6 +180,10 @@ class InputCookie {
   const InputCookie(this.key);
 }
 
+class InputCookies {
+  const InputCookies();
+}
+
 class ExceptionHandler {
   final Type exception;
 

@@ -1,6 +1,5 @@
 library jaguar.generator.writer;
 
-import 'dart:convert';
 import 'package:analyzer/dart/element/element.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
@@ -19,16 +18,23 @@ class Writer {
 
   final List<RouteInfo> routes = new List<RouteInfo>();
 
+  final List<GroupInfo> groups = new List<GroupInfo>();
+
   Writer(this.className);
 
   void addAllRoutes(List<RouteInfo> newRoutes) {
     routes.addAll(newRoutes);
   }
 
+  void addGroups(List<GroupInfo> groupList) => groups.addAll(groupList);
+
   void generateClass() {
-    sb.writeln("abstract class _\$Jaguar$className {");
+    sb.writeln("abstract class _\$Jaguar$className implements ApiInterface {");
 
     _writeRouteList();
+    sb.writeln('');
+
+    _writeGroupDecl();
     sb.writeln('');
 
     _writeRoutePrototype();
@@ -50,9 +56,17 @@ class Writer {
   }
 
   void _writeRoutePrototype() {
-    routes.forEach((RouteInfo route) {
+    routes
+        .where((RouteInfo route) => route.groupNames.length == 0)
+        .forEach((RouteInfo route) {
       sb.writeln(route.prototype);
       sb.writeln('');
+    });
+  }
+
+  void _writeGroupDecl() {
+    groups.forEach((GroupInfo group) {
+      sb.writeln('${group.type} get ${group.name};');
     });
   }
 

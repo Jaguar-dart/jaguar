@@ -15,11 +15,7 @@ import 'package:jaguar/generator/parser/import.dart';
 class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
   const ApiGenerator();
 
-  /// This method is called when build finds an element with
-  /// [Api] annotation.
-  ///
-  /// [element] is the element annotated with [Api]
-  /// [api] is an instantiation of the [Api] annotation
+  /// Generator
   @override
   Future<String> generateForAnnotatedElement(
       Element element, ant.Api api, BuildStep buildStep) async {
@@ -41,7 +37,9 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
     List<ExceptionHandlerInfo> exceptions = collectExceptionHandlers(element);
 
     List<RouteInfo> routes =
-        collectAllRoutes(classElement, prefix, interceptors, exceptions);
+        collectAllRoutes(classElement, prefix, interceptors, exceptions, []);
+
+    writer.addGroups(collectGroups(classElement));
 
     writer.addAllRoutes(routes);
 
