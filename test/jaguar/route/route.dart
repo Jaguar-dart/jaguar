@@ -16,6 +16,9 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   @Route('/statuscode', methods: const <String>['GET'], statusCode: 201)
   String statusCode() => 'status code';
 
+  @Route('/paramandquery/:param', methods: const <String>['GET'])
+  String paramAndQuery(String param, [String query]) => '$param $query';
+
   @Route('/input/header', methods: const <String>['GET'])
   @InputHeader('user')
   String inputHeader(String user) => user;
@@ -66,6 +69,17 @@ void main() {
       expect(response.mockContent, 'status code');
       expect(response.headers.toMap, {});
       expect(response.statusCode, 201);
+    });
+
+    test('ParamAndQuery', () async {
+      Uri uri = new Uri.http(
+          'localhost:8080', '/api/paramandquery/hello', {'query': 'world'});
+      MockHttpRequest rq = new MockHttpRequest(uri);
+      MockHttpResponse response = await mock.handleRequest(rq);
+
+      expect(response.mockContent, 'hello world');
+      expect(response.headers.toMap, {});
+      expect(response.statusCode, 200);
     });
 
     test('InputHeader', () async {

@@ -160,6 +160,7 @@ class ParameterElementWrap {
   final ParameterElement _wrapped;
 
   ParameterElementWrap(this._wrapped) {
+    _wrapped.computeConstantValue();
     _type = new DartTypeWrap(_wrapped.type);
   }
 
@@ -173,6 +174,10 @@ class ParameterElementWrap {
     }
 
     DartObject value = _wrapped.constantValue;
+
+    if (value == null) {
+      return null;
+    }
 
     if (_type.isInt) {
       return value.toIntValue();

@@ -53,6 +53,7 @@ class InputInterceptor implements Input {
 }
 
 InputInterceptor instantiateInputAnnotation(ElementAnnotation annot) {
+  annot.computeConstantValue();
   final ParameterizedType type = annot.constantValue.type;
   if (type.displayName != "Input") {
     return null;
