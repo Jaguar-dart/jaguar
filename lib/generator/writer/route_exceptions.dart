@@ -13,7 +13,7 @@ class RouteExceptionWriter {
       sb.write(exception.handlerName + ' handler = ');
       sb.writeln(exception.instantiationString + ';');
 
-      //TODO what if its return type is
+      //TODO what if its return type is Future
       sb.writeln('handler.onRouteException(request, e, s);');
 
       sb.write('return true;');

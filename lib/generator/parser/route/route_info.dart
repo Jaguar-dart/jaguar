@@ -12,7 +12,7 @@ class RouteInfo {
 
   final List<InterceptorInfo> interceptors;
 
-  final List<InputInfo> inputs;
+  final List<Input> inputs;
 
   final List<ExceptionHandlerInfo> exceptions;
 
@@ -43,36 +43,46 @@ class RouteInfo {
     for (int index = 0; index < inputs.length; index++) {
       ParameterElement param =
           _method.requiredParameters[_numDefaultInputs + index];
-      InputInfo input = inputs[index];
-      _interceptorResultUsed[input.genName] = true;
+      Input input = inputs[index];
 
-      if (input.resultFrom.compare('RouteResponse', 'jaguar.src.annotations')) {
-        continue;
-      }
+      if (input is InputInterceptor) {
+        //Find that corresponding interceptor exists and has correct return type
 
-      InterceptorInfo interc = interceptors.firstWhere((InterceptorInfo info) {
-        if (info is InterceptorClassInfo) {
-          return input.resultFrom.isType(info.interceptor.type) &&
-              input.id == info.id;
-        } else {
-          //TODO
+        _interceptorResultUsed[input.genName] = true;
+
+        if (input.resultFrom
+            .compare('RouteResponse', 'jaguar.src.annotations')) {
+          continue;
         }
-      }, orElse: () => null);
 
-      if (interc == null) {
-        throw new Exception("No matching interceptor!");
-      }
+        InterceptorInfo interc =
+            interceptors.firstWhere((InterceptorInfo info) {
+          if (info is InterceptorClassInfo) {
+            return input.resultFrom.isType(info.interceptor.type) &&
+                input.id == info.id;
+          } else {
+            //TODO handle function interceptors
+          }
+        }, orElse: () => null);
 
-      if (interc is InterceptorClassInfo) {
-        if (!interc.matchesResultType(param.type)) {
-          throw new Exception("Inputs and parameters to route does not match!");
+        if (interc == null) {
+          throw new Exception("No matching interceptor!");
+        }
+
+        if (interc is InterceptorClassInfo) {
+          if (!interc.matchesResultType(param.type)) {
+            throw new Exception(
+                "Inputs and parameters to route does not match!");
+          }
         }
       }
     }
 
     interceptors.forEach((InterceptorInfo interc) {
-      interc.inputs.forEach((InputInfo inp) {
-        _interceptorResultUsed[inp.genName] = true;
+      interc.inputs.forEach((Input inp) {
+        if (inp is InputInterceptor) {
+          _interceptorResultUsed[inp.genName] = true;
+        }
       });
 
       if (interc.writesResponse) {

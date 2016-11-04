@@ -17,7 +17,6 @@ ant.Group parseGroup(Element element) {
     try {
       return instantiateAnnotation(annot);
     } catch (_) {
-      //TODO check what exception and decide accordingly
       return null;
     }
   }).firstWhere((dynamic instance) => instance is ant.Group,
@@ -65,13 +64,16 @@ class GroupInfo {
 }
 
 List<GroupInfo> collectGroups(ClassElement classElement) {
-  return classElement.fields.map((FieldElement field) {
-    ant.Group group = parseGroup(field);
+  return classElement.fields
+      .map((FieldElement field) {
+        ant.Group group = parseGroup(field);
 
-    if (group == null) {
-      return null;
-    }
+        if (group == null) {
+          return null;
+        }
 
-    return new GroupInfo(group, new DartTypeWrap(field.type), field.name);
-  }).toList();
+        return new GroupInfo(group, new DartTypeWrap(field.type), field.name);
+      })
+      .where((GroupInfo group) => group is GroupInfo)
+      .toList();
 }

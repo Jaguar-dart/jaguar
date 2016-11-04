@@ -1,6 +1,5 @@
 library jaguar.generator.writer;
 
-import 'dart:convert';
 import 'package:analyzer/dart/element/element.dart';
 
 import 'package:jaguar/generator/parser/import.dart';

@@ -2,4 +2,4 @@ apis:
 - 'example/forum/forum.dart'
 - 'example/silly/main.dart'
 - 'test/jaguar/route/route.dart'
-- 'test/jaguar/group/normal/main.dart'
+- 'test/jaguar/group/main.dart'

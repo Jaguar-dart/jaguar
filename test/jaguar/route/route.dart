@@ -15,6 +15,26 @@ class ExampleApi extends Object with _$JaguarExampleApi {
 
   @Route('/statuscode', methods: const <String>['GET'], statusCode: 201)
   String statusCode() => 'status code';
+
+  @Route('/input/header', methods: const <String>['GET'])
+  @InputHeader('user')
+  String inputHeader(String user) => user;
+
+  @Route('/input/headers', methods: const <String>['GET'])
+  @InputHeaders()
+  String inputHeaders(HttpHeaders headers) {
+    return headers.value('user');
+  }
+
+  @Route('/input/cookie', methods: const <String>['GET'])
+  @InputCookie('user')
+  String inputCookie(String user) => user;
+
+  @Route('/input/cookies', methods: const <String>['GET'])
+  @InputCookies()
+  String inputCookies(List<Cookie> cookies) {
+    return cookies.firstWhere((Cookie cook) => cook.name == 'user')?.value;
+  }
 }
 
 void main() {
@@ -46,6 +66,55 @@ void main() {
       expect(response.mockContent, 'status code');
       expect(response.headers.toMap, {});
       expect(response.statusCode, 201);
+    });
+
+    test('InputHeader', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/input/header');
+      MockHttpHeaders headers = new MockHttpHeaders();
+      headers.set('user', 'teja');
+      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
+      MockHttpResponse response = await mock.handleRequest(rq);
+
+      expect(response.mockContent, 'teja');
+      expect(response.headers.toMap, {});
+      expect(response.statusCode, 200);
+    });
+
+    test('InputHeaders', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/input/headers');
+      MockHttpHeaders headers = new MockHttpHeaders();
+      headers.set('user', 'kleak');
+      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
+      MockHttpResponse response = await mock.handleRequest(rq);
+
+      expect(response.mockContent, 'kleak');
+      expect(response.headers.toMap, {});
+      expect(response.statusCode, 200);
+    });
+
+    test('InputCookie', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/input/cookie');
+      MockHttpHeaders headers = new MockHttpHeaders();
+      headers.set('cookie', 'user=teja');
+
+      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
+      MockHttpResponse response = await mock.handleRequest(rq);
+
+      expect(response.mockContent, 'teja');
+      expect(response.headers.toMap, {});
+      expect(response.statusCode, 200);
+    });
+
+    test('InputCookies', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/input/cookies');
+      MockHttpHeaders headers = new MockHttpHeaders();
+      headers.set('cookie', 'user=kleak');
+      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
+      MockHttpResponse response = await mock.handleRequest(rq);
+
+      expect(response.mockContent, 'kleak');
+      expect(response.headers.toMap, {});
+      expect(response.statusCode, 200);
     });
   });
 }

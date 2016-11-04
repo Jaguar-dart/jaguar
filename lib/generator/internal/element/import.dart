@@ -106,6 +106,8 @@ class DartTypeWrap {
 
   bool get isDartAsyncFuture => _wrapped.isDartAsyncFuture;
 
+  bool get isDynamic => _wrapped.isDynamic;
+
   bool get isInt => compare(kIntTypeName, kCoreLibraryName);
 
   bool get isDouble => compare(kDoubleTypeName, kCoreLibraryName);

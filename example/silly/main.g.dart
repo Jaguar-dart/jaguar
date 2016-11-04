@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.jaguar.group;
+part of jaguar.example.silly;
 
 // **************************************************************************
 // Generator: ApiGenerator
@@ -9,17 +9,22 @@ part of test.jaguar.group;
 
 abstract class _$JaguarExampleApi implements ApiInterface {
   static const List<Route> _routes = const <Route>[
-    const Route('/version', methods: const <String>['GET']),
-    const Route('', methods: const <String>['GET']),
-    const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
-    const Route('', methods: const <String>['GET']),
-    const Route('/some/:param1', methods: const <String>['POST'])
+    const Route('/ping', methods: const <String>['GET']),
+    const Route('/pong',
+        methods: const <String>['POST'],
+        statusCode: 201,
+        headers: const {"pong-header": "silly-pong"}),
+    const Route('/echo/pathparam/:message', methods: const <String>['POST']),
+    const Route('/echo/queryparam', methods: const <String>['POST'])
   ];
 
-  UserApi get user;
-  BookApi get book;
+  String ping();
 
-  String statusCode();
+  String pong();
+
+  String echoPathParam(String message);
+
+  String echoQueryParam(String message);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -30,52 +35,44 @@ abstract class _$JaguarExampleApi implements ApiInterface {
         _routes[0].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = statusCode();
+      rRouteResponse = ping();
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }
 
-    match = _routes[1]
-        .match(request.uri.path, request.method, '/api/user', pathParams);
+    match =
+        _routes[1].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = user.getUser();
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
-      return true;
-    }
-
-    match = _routes[2]
-        .match(request.uri.path, request.method, '/api/user', pathParams);
-    if (match) {
-      String rRouteResponse;
-      rRouteResponse = user.statusCode();
+      rRouteResponse = pong();
       request.response.statusCode = 201;
+      request.response.headers.add("pong-header", "silly-pong");
       request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }
 
-    match = _routes[3]
-        .match(request.uri.path, request.method, '/api/book', pathParams);
+    match =
+        _routes[2].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = book.getBook();
+      rRouteResponse = echoPathParam(
+        (pathParams.getField('message')),
+      );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
     }
 
-    match = _routes[4]
-        .match(request.uri.path, request.method, '/api/book', pathParams);
+    match =
+        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
-      rRouteResponse = book.some(
-        (pathParams.getField('param1')),
+      rRouteResponse = echoQueryParam(
+        (pathParams.getField('message')),
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());

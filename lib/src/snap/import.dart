@@ -1,5 +1,6 @@
 library jaguar.src.snap;
 
+/* TODO
 import 'dart:async';
 
 class Resource<ModelType> {
@@ -13,3 +14,4 @@ class Resource<ModelType> {
     //TODO
   }
 }
+*/

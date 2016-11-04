@@ -80,8 +80,8 @@ class InterceptorClassInfo implements InterceptorInfo {
     return '$_genBaseName{$dual}';
   }
 
-  List<InputInfo> get inputs {
-    List<InputInfo> ret = <InputInfo>[];
+  List<Input> get inputs {
+    List<Input> ret = <Input>[];
 
     if (dual.pre != null) {
       ret.addAll(dual.pre.inputs);

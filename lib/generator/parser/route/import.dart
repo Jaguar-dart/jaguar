@@ -19,7 +19,6 @@ ElementAnnotation parseRoute(MethodElement element) {
     try {
       return instantiateAnnotation(annot) is ant.Route;
     } catch (_) {
-      //TODO check what exception and decide accordingly
       return false;
     }
   }, orElse: () => null);
@@ -39,9 +38,9 @@ List<RouteInfo> collectRoutes(
           return null;
         }
 
-        List<InputInfo> inputs = method.metadata
-            .map(instantiateInputAnnotation)
-            .where((InputInfo instance) => instance is InputInfo)
+        List<Input> inputs = method.metadata
+            .map(createInput)
+            .where((Input instance) => instance is Input)
             .toList();
 
         List<InterceptorInfo> interceptors = parseInterceptor(method);

@@ -24,7 +24,7 @@ class InterceptorFuncDef {
   }
 
   /// Inputs declared on the interceptor
-  List<InputInfo> inputs = <InputInfo>[];
+  List<Input> inputs = <Input>[];
 
   /// Default constructor. Constructs [InterceptorFuncDef] from the given
   /// method element
@@ -36,18 +36,9 @@ class InterceptorFuncDef {
 
     /// Find and collect Inputs to the interceptor
     _method.metadata
-        .map(instantiateInputAnnotation)
-        .where((InputInfo instance) => instance is InputInfo)
-        .forEach((InputInfo inp) => inputs.add(inp));
-  }
-
-  /// Debug printer
-  String toString() {
-    String lRet = _method.name +
-        '(' +
-        inputs.map((InputInfo inp) => '$inp}').join(',') +
-        ')';
-    return lRet;
+        .map(createInput)
+        .where((Input instance) => instance is Input)
+        .forEach((Input inp) => inputs.add(inp));
   }
 
   bool get needsHttpRequest {
@@ -79,7 +70,7 @@ class InterceptorFuncInfo implements InterceptorInfo {
 
   DartType result;
 
-  List<InputInfo> inputs = <InputInfo>[];
+  List<Input> inputs = <Input>[];
 
   bool writesResponse;
 
