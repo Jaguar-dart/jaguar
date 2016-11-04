@@ -11,6 +11,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
   static const List<Route> _routes = const <Route>[
     const Route('/user', methods: const <String>['GET']),
     const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
+    const Route('/paramandquery/:param', methods: const <String>['GET']),
     const Route('/input/header', methods: const <String>['GET']),
     const Route('/input/headers', methods: const <String>['GET']),
     const Route('/input/cookie', methods: const <String>['GET']),
@@ -20,6 +21,8 @@ abstract class _$JaguarExampleApi implements ApiInterface {
   String getUser();
 
   String statusCode();
+
+  String paramAndQuery(String param, [String query]);
 
   String inputHeader(String user);
 
@@ -60,6 +63,20 @@ abstract class _$JaguarExampleApi implements ApiInterface {
         _routes[2].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
+      rRouteResponse = paramAndQuery(
+        (pathParams.getField('param')),
+        (queryParams.getField('query')),
+      );
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      String rRouteResponse;
       rRouteResponse = inputHeader(
         request.headers.value('user'),
       );
@@ -70,7 +87,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputHeaders(
@@ -83,7 +100,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[5].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputCookie(
@@ -98,7 +115,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[5].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[6].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputCookies(

@@ -24,7 +24,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
 
   String echoPathParam(String message);
 
-  String echoQueryParam(String message);
+  String echoQueryParam({String message});
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -72,7 +72,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoQueryParam(
-        (pathParams.getField('message')),
+        message: (queryParams.getField('message')),
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
