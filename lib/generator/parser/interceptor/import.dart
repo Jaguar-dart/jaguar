@@ -22,6 +22,8 @@ abstract class InterceptorInfo {
   List<Input> get inputs;
 
   bool get writesResponse;
+
+  bool get shouldKeepQueryParam;
 }
 
 ant.InterceptorClass isAnnotationInterceptDual(ElementAnnotation annot) {

@@ -23,7 +23,6 @@ abstract class _$JaguarExampleApi implements ApiInterface {
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
     match =

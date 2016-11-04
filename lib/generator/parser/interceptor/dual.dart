@@ -102,4 +102,16 @@ class InterceptorClassInfo implements InterceptorInfo {
     sb.writeln(";");
     return sb.toString();
   }
+
+  bool get shouldKeepQueryParam {
+    if (dual.pre != null && dual.pre.shouldKeepQueryParam) {
+      return true;
+    }
+
+    if (dual.post != null && dual.post.shouldKeepQueryParam) {
+      return true;
+    }
+
+    return false;
+  }
 }

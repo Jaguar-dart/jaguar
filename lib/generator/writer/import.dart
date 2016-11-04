@@ -73,8 +73,10 @@ class Writer {
   void _writeRequestHandler() {
     sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
     sb.writeln("PathParams pathParams = new PathParams();");
-    sb.writeln(
-        "QueryParams queryParams = new QueryParams(request.uri.queryParameters);");
+    if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
+      sb.writeln(
+          "QueryParams queryParams = new QueryParams(request.uri.queryParameters);");
+    }
     sb.writeln("bool match = false;");
     sb.writeln("");
 
