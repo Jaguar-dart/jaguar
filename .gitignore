@@ -4,7 +4,6 @@
 packages
 # Remove the following pattern if you wish to check in your lock file
 pubspec.lock
-
-.dart_tool
 .idea/
 .atom/
+.dart_tool

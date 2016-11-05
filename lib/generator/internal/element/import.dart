@@ -198,7 +198,9 @@ class ParameterElementWrap {
 class AnnotationElementWrap {
   final ElementAnnotation _wrapped;
 
-  AnnotationElementWrap(this._wrapped);
+  AnnotationElementWrap(this._wrapped) {
+    _wrapped.computeConstantValue();
+  }
 
   DartObject get constantValue => _wrapped.constantValue;
 

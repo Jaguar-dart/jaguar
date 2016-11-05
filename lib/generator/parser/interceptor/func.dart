@@ -54,12 +54,33 @@ class InterceptorFuncDef {
 
   int get _allInputsLen => inputs.length + _numDefaultInputs;
 
+  List<ParameterElement> get optionalParams => _method.optionalParameters;
+
   List<ParameterElement> get nonInputParams {
     if (_method.requiredParameters.length <= _allInputsLen) {
       return <ParameterElement>[];
     } else {
       return _method.requiredParameters.sublist(_allInputsLen);
     }
+  }
+
+  ParameterElementWrap get queryParamInjectionParam => nonInputParams
+      .map((ParameterElement param) => new ParameterElementWrap(param))
+      .firstWhere((ParameterElementWrap param) => param.name == 'queryParams',
+          orElse: () => null);
+
+  bool get needsQueryParamInjection => queryParamInjectionParam != null;
+
+  bool get shouldKeepQueryParam {
+    if (needsQueryParamInjection) {
+      return true;
+    }
+
+    if (optionalParams.length != 0) {
+      return true;
+    }
+
+    return false;
   }
 }
 
@@ -73,6 +94,8 @@ class InterceptorFuncInfo implements InterceptorInfo {
   List<Input> inputs = <Input>[];
 
   bool writesResponse;
+
+  bool shouldKeepQueryParam;
 
   InterceptorFuncInfo(this.definition, {this.isPost: false});
 }

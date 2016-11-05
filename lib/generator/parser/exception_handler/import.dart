@@ -22,6 +22,7 @@ class ExceptionHandlerInfo {
 }
 
 List<ExceptionHandlerInfo> _parseExceptions(ElementAnnotation element) {
+  element.computeConstantValue();
   return element.constantValue.type.element.metadata
       .where((ElementAnnotation annot) {
     final typeWrapped = new DartTypeWrap(annot.constantValue.type);

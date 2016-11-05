@@ -148,6 +148,22 @@ class RouteInfo {
 
   bool get needsQueryParamInjection => queryParamInjectionParam != null;
 
+  bool get shouldKeepQueryParam {
+    if (needsQueryParamInjection) {
+      return true;
+    }
+
+    if (optionalParams.length != 0) {
+      return true;
+    }
+
+    if (interceptors.any((InterceptorInfo info) => info.shouldKeepQueryParam)) {
+      return true;
+    }
+
+    return false;
+  }
+
   bool isDualInterceptorResultUsed(InterceptorClassInfo inter) =>
       _interceptorResultUsed.containsKey(inter.genReturnVarName);
 
