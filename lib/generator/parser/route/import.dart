@@ -17,7 +17,8 @@ ElementAnnotation parseRoute(MethodElement element) {
   return element.metadata.firstWhere((ElementAnnotation annot) {
     annot.computeConstantValue();
     try {
-      return instantiateAnnotation(annot) is ant.Route;
+      dynamic instantiated = instantiateAnnotation(annot);
+      return instantiated is ant.RouteBase;
     } catch (_) {
       return false;
     }

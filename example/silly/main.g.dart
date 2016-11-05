@@ -8,12 +8,10 @@ part of jaguar.example.silly;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements ApiInterface {
-  static const List<Route> _routes = const <Route>[
+  static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/ping', methods: const <String>['GET']),
-    const Route('/pong',
-        methods: const <String>['POST'],
-        statusCode: 201,
-        headers: const {"pong-header": "silly-pong"}),
+    const Put('/pong',
+        statusCode: 201, headers: const {"pong-header": "silly-pong"}),
     const Route('/echo/pathparam/:message', methods: const <String>['POST']),
     const Route('/echo/queryparam', methods: const <String>['POST'])
   ];

@@ -6,7 +6,7 @@ set -e
 $(dirname -- "$0")/ensure_dartfmt.sh
 
 # Run the tests.
-pub run test
+pub run test/test_all.dart
 
 # Run the build.dart file - just to make sure it works
 dart --checked tool/build.dart

@@ -46,7 +46,7 @@ class Writer {
   }
 
   void _writeRouteList() {
-    sb.writeln("static const List<Route> _routes = const <Route>[");
+    sb.writeln("static const List<RouteBase> _routes = const <RouteBase>[");
     String routeList = routes
         .map((RouteInfo route) => route.instantiationString)
         .toList()
