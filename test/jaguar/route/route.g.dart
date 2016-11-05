@@ -8,7 +8,7 @@ part of test.jaguar.route;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements ApiInterface {
-  static const List<Route> _routes = const <Route>[
+  static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/user', methods: const <String>['GET']),
     const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
     const Route('/paramandquery/:param', methods: const <String>['GET']),

@@ -8,7 +8,7 @@ part of example.forum;
 // **************************************************************************
 
 abstract class _$JaguarForumApi implements ApiInterface {
-  static const List<Route> _routes = const <Route>[
+  static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/user',
         methods: const <String>['GET'],
         statusCode: 201,
@@ -19,8 +19,7 @@ abstract class _$JaguarForumApi implements ApiInterface {
     const Route('/user1', methods: const <String>['PUT']),
     const Route('/user2',
         methods: const <String>['PUT'], validatePathParams: true),
-    const Route('/user3',
-        methods: const <String>['PUT'], validatePathParams: true),
+    const Put('/user3', validatePathParams: true),
     const Route('/regex/:param1',
         methods: const <String>['PUT'],
         validatePathParams: true,

@@ -8,7 +8,7 @@ class RouteInfo {
 
   final String pathPrefix;
 
-  final ant.Route route;
+  final ant.RouteBase route;
 
   final List<InterceptorInfo> interceptors;
 

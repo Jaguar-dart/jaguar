@@ -129,7 +129,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Route('/user3', methods: const <String>['PUT'], validatePathParams: true)
+  @Put('/user3', validatePathParams: true)
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
