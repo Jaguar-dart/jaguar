@@ -8,6 +8,8 @@ class DefaultResponseWriterRaw {
   String generate() {
     StringBuffer sb = new StringBuffer();
 
+    if (route.isWebSocket) return "";
+
     if (route.route.statusCode is int) {
       sb.writeln("request.response.statusCode = " +
           route.route.statusCode.toString() +

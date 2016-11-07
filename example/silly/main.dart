@@ -27,6 +27,11 @@ class ExampleApi extends _$JaguarExampleApi {
   /// Example of getting query parameter in route handler arguments
   @Route('/echo/queryparam', methods: const <String>['POST'])
   String echoQueryParam({String message}) => message ?? 'No message :(';
+
+  @Ws('/ws')
+  Future websocket(WebSocket ws) async {
+    ws.listen((data) => ws.add(data));
+  }
 }
 
 Future<Null> main(List<String> args) async {

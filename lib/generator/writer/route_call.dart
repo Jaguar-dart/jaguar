@@ -52,6 +52,10 @@ class RouteCallWriter {
   String generate() {
     StringBuffer sb = new StringBuffer();
 
+    if (route.isWebSocket) {
+      sb.write("WebSocket ws = await WebSocketTransformer.upgrade(request);");
+    }
+
     sb.write(_generatePathParamInjector());
 
     sb.write(_generateQueryParamInjector());
@@ -73,6 +77,10 @@ class RouteCallWriter {
 
     if (route.needsHttpRequest) {
       sb.write("request, ");
+    }
+
+    if (route.isWebSocket) {
+      sb.write("ws, ");
     }
 
     if (route.inputs.length != 0) {
