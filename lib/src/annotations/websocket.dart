@@ -3,9 +3,9 @@ part of jaguar.src.annotations;
 class Ws extends RouteBase {
   final String path;
 
-  final List<String> methods;
+  final List<String> methods = _methods;
 
-  final int statusCode;
+  final int statusCode = 200;
 
   final Map<String, String> headers;
 
@@ -16,17 +16,10 @@ class Ws extends RouteBase {
   final bool validateQueryParams;
 
   const Ws(this.path,
-      {this.methods: const <String>[
-        'GET',
-        'POST',
-        'PUT',
-        'PATCH',
-        'DELETE',
-        'OPTIONS'
-      ],
-      this.statusCode: 200,
-      this.headers,
+      {this.headers,
       this.pathRegEx,
       this.validatePathParams: false,
       this.validateQueryParams: false});
+
+  static const List<String> _methods = const <String>['GET'];
 }
