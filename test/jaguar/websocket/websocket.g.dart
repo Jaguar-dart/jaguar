@@ -19,9 +19,8 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     match =
         _routes[0].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      dynamic rRouteResponse;
       WebSocket ws = await WebSocketTransformer.upgrade(request);
-      rRouteResponse = await websocket(
+      await websocket(
         ws,
       );
       return true;

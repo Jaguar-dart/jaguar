@@ -60,11 +60,15 @@ class RouteCallWriter {
 
     sb.write(_generateQueryParamInjector());
 
-    if (!route.returnsVoid) {
-      if (!route.returnsFuture) {
+    if (!route.isWebSocket) {
+      if (!route.returnsVoid) {
         sb.write("rRouteResponse = ");
-      } else {
-        sb.write("rRouteResponse = await ");
+      }
+    }
+
+    if (!route.returnsVoid) {
+      if (route.returnsFuture) {
+        sb.write("await ");
       }
     }
 

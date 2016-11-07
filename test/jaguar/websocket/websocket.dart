@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
+//TODO import 'package:jaguar/testing.dart';
 
 part 'websocket.g.dart';
 
@@ -18,6 +18,7 @@ class ExampleApi extends Object with _$JaguarExampleApi {
 
 void main() {
   group('route', () {
+    /* TODO
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
@@ -26,5 +27,6 @@ void main() {
     });
 
     tearDown(() {});
+    */
   });
 }

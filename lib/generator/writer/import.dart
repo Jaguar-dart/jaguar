@@ -10,6 +10,7 @@ part 'post_dual_inter.dart';
 part 'route_call.dart';
 part 'route_exceptions.dart';
 part 'default_response.dart';
+part 'interceptor_class_instantiator.dart';
 
 class Writer {
   final String className;
@@ -102,8 +103,10 @@ class Writer {
   }
 
   void _writeRouteCall(RouteInfo route) {
-    if (!route.returnsVoid) {
-      sb.write(route.returnTypeIntended.displayName + " rRouteResponse;");
+    if(!route.isWebSocket) {
+      if (!route.returnsVoid) {
+        sb.write(route.returnTypeIntended.displayName + " rRouteResponse;");
+      }
     }
 
     if (route.exceptions.length != 0) {
@@ -144,9 +147,11 @@ class Writer {
   }
 
   void _writePreInterceptorClass(RouteInfo route, InterceptorClassInfo info) {
-    InterceptorFuncDef pre = info.dual.pre;
+    InterceptorClassDecl declWriter = new InterceptorClassDecl(route, info);
 
-    sb.write(info.instantiationString);
+    sb.write(declWriter.code);
+
+    InterceptorFuncDef pre = info.dual.pre;
 
     if (pre is! InterceptorFuncDef) {
       return;
