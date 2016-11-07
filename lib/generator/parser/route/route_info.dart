@@ -118,7 +118,8 @@ class RouteInfo {
 
   bool get defaultResponseWriter => _defaultResponseWriter;
 
-  int get _numDefaultInputs => needsHttpRequest ? 1 : 0;
+  int get _numDefaultInputs =>
+      (needsHttpRequest ? 1 : 0) + (isWebSocket ? 1 : 0);
 
   int get _allInputsLen => inputs.length + _numDefaultInputs;
 
@@ -168,4 +169,6 @@ class RouteInfo {
       _interceptorResultUsed.containsKey(inter.genReturnVarName);
 
   String get instantiationString => ' const ' + _annot.instantiationString;
+
+  bool get isWebSocket => route is ant.Ws;
 }
