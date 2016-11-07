@@ -46,7 +46,7 @@ class FormField {
   }
 }
 
-@InterceptorClass()
+@InterceptorClass(writesResponse: true)
 class DecodeFormData extends Interceptor {
   const DecodeFormData();
 
@@ -91,7 +91,7 @@ class DecodeFormData extends Interceptor {
   }
 }
 
-@InterceptorClass()
+@InterceptorClass(writesResponse: true)
 class DecodeUrlEncodedForm extends Interceptor {
   final Encoding encoding;
 
@@ -107,7 +107,7 @@ class DecodeUrlEncodedForm extends Interceptor {
   }
 }
 
-@InterceptorClass()
+@InterceptorClass(writesResponse: true)
 class DecodeJson extends Interceptor {
   final Encoding encoding;
 
