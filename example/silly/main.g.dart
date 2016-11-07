@@ -13,7 +13,8 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     const Put('/pong',
         statusCode: 201, headers: const {"pong-header": "silly-pong"}),
     const Route('/echo/pathparam/:message', methods: const <String>['POST']),
-    const Route('/echo/queryparam', methods: const <String>['POST'])
+    const Route('/echo/queryparam', methods: const <String>['POST']),
+    const Ws('/ws')
   ];
 
   String ping();
@@ -23,6 +24,8 @@ abstract class _$JaguarExampleApi implements ApiInterface {
   String echoPathParam(String message);
 
   String echoQueryParam({String message});
+
+  Future<dynamic> websocket(WebSocket ws);
 
   Future<bool> handleApiRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
@@ -75,6 +78,17 @@ abstract class _$JaguarExampleApi implements ApiInterface {
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
+    if (match) {
+      dynamic rRouteResponse;
+      WebSocket ws = await WebSocketTransformer.upgrade(request);
+      rRouteResponse = await websocket(
+        ws,
+      );
       return true;
     }
 

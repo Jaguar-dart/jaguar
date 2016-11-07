@@ -5,6 +5,7 @@ import 'dart:io';
 part 'routes.dart';
 part 'interceptors.dart';
 part 'inputs.dart';
+part 'websocket.dart';
 
 ///An annotation to define an API class
 class Api {
