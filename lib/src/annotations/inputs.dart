@@ -24,7 +24,6 @@ class InputHeaders {
   const InputHeaders();
 }
 
-
 /// Annotation to request input of cookie
 class InputCookie {
   /// Key of the cookie

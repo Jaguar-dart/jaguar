@@ -1,6 +1,9 @@
 library jaguar.generator.writer;
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/src/dart/element/element.dart';
+import 'package:analyzer/src/dart/ast/ast.dart';
+import 'package:analyzer/src/generated/utilities_dart.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
 import 'package:jaguar/generator/internal/element/import.dart';
@@ -103,7 +106,7 @@ class Writer {
   }
 
   void _writeRouteCall(RouteInfo route) {
-    if(!route.isWebSocket) {
+    if (!route.isWebSocket) {
       if (!route.returnsVoid) {
         sb.write(route.returnTypeIntended.displayName + " rRouteResponse;");
       }
