@@ -57,11 +57,21 @@ class User implements ViewSerializer, ModelSerializer {
   Map toModelMap() => toMap()..['pwdH'] = passwordHash;
 }
 
+class MongoDbState {
+  final String whatever;
+
+  const MongoDbState({this.whatever});
+}
+
 @InterceptorClass()
 class MongoDb extends Interceptor {
   final String dbName;
 
-  const MongoDb(this.dbName, {String id}) : super(id: id);
+  final MongoDbState state;
+
+  const MongoDb(this.dbName, {String id, this.state}) : super(id: id);
+
+  static MongoDbState createState() => new MongoDbState();
 
   Future<Db> pre() async {
     return new Db();
@@ -70,9 +80,17 @@ class MongoDb extends Interceptor {
   Future post() async {}
 }
 
+class LoginState {
+  final String whatever;
+
+  const LoginState({this.whatever});
+}
+
 @InterceptorClass()
 class Login extends Interceptor {
-  const Login();
+  final LoginState state;
+
+  const Login([this.state]);
 
   @Input(MongoDb, id: 'Admin')
   void pre(Db db) {}

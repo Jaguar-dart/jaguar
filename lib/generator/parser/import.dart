@@ -1,6 +1,6 @@
 library jaguar.generator.info;
 
-import 'package:jaguar/generator/internal/element/import.dart';
+import 'package:source_gen_help/import.dart';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';

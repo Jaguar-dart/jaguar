@@ -66,9 +66,14 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[0].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbTest = new MongoDb('test', id: 'Test');
+      MongoDb iMongoDbTest = new MongoDb(
+        'test',
+        id: 'Test',
+        state: const MongoDbState(),
+      );
       await iMongoDbTest.pre();
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -91,7 +96,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[1].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -109,7 +115,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[2].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -134,7 +141,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[3].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -158,7 +166,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[4].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -189,7 +198,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[5].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -227,7 +237,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[6].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -261,7 +272,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[7].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(
@@ -283,7 +295,8 @@ abstract class _$JaguarForumApi implements ApiInterface {
     match =
         _routes[8].match(request.uri.path, request.method, '/api', pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin = new MongoDb('admin', id: 'Admin');
+      MongoDb iMongoDbAdmin =
+          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login();
       iLogin.pre(

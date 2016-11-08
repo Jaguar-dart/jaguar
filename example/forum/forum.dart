@@ -75,9 +75,9 @@ class ForumApi extends Object with _$JaguarForumApi {
       methods: const <String>['GET'],
       statusCode: 201,
       headers: const {"sample-header": "made-with.jaguar"})
-  @MongoDb('test', id: 'Test')
+  @MongoDb('test', id: 'Test', state: const MongoDbState())
   @MongoDb('admin', id: 'Admin')
-  @Login()
+  @Login(const LoginState())
   @EncodeToJson()
   Future<User> fetch() async {
     return new User('dummy@dummy.com', 'Dummy', 'password', 27);

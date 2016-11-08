@@ -1,5 +1,6 @@
 library jaguar.generator.parser.interceptor;
 
+import 'dart:mirrors';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/element/element.dart';
@@ -8,12 +9,14 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:jaguar/src/annotations/import.dart' as ant;
 import 'package:source_gen/src/annotation.dart';
 
-import 'package:jaguar/generator/internal/element/import.dart';
+import 'package:source_gen_help/import.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
 
-part 'func.dart';
-part 'dual.dart';
+part 'clazz/clazz_info.dart';
+part 'clazz/clazz_def.dart';
+part 'func/func_def.dart';
+part 'func/func_info.dart';
 part 'type.dart';
 
 abstract class InterceptorInfo {
