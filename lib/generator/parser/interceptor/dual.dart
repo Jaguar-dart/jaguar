@@ -27,6 +27,10 @@ class InterceptorClassDef {
     });
   }
 
+  //TODO check in unnamedConstructor is null?
+  ConstructorElementWrap get constructor =>
+      new ConstructorElementWrap(clazz.unnamedConstructor);
+
   /// Debug printer
   String toString() {
     return "$pre $post";
@@ -113,5 +117,40 @@ class InterceptorClassInfo implements InterceptorInfo {
     }
 
     return false;
+  }
+
+  bool get canCreateState {
+    MethodElement meth = dual.clazz.getMethod('createState');
+
+    if (meth == null) {
+      return false;
+    }
+
+    MethodElementWrap methWrapped = new MethodElementWrap(meth);
+
+    if (!methWrapped.isStatic) {
+      return false;
+    }
+
+    if (methWrapped.requiredParameters.length != 0) {
+      //TODO warn? throw error?
+      return false;
+    }
+
+    if (methWrapped.returnType.isVoid) {
+      //TODO warn? throw error?
+      return false;
+    }
+
+    return true;
+  }
+
+  bool get needsState {
+    //TODO right now, we don't allow positional parameters
+    if (dual.constructor.areOptionalParamsPositional) {
+      return false;
+    }
+
+    return dual.constructor.findOptionalParamByName('state') != null;
   }
 }

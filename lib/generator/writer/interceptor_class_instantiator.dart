@@ -77,10 +77,9 @@ class InterceptorClassDecl {
 
     if (!hasAssignedState) {
       //Check if interceptor has state and can be assigned
-      print('check');
-      //TODO
-    } else {
-      print('no check');
+      if (_i.canCreateState && _i.needsState) {
+        _w.write('state: ${_i.interceptor.name}.createState()');
+      }
     }
 
     //TODO

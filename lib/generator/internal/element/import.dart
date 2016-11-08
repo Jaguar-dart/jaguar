@@ -6,6 +6,8 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/src/dart/element/element.dart';
 import 'package:analyzer/src/generated/utilities_dart.dart';
 
+part 'constructor_element.dart';
+
 /// An element that has a name and library
 abstract class NamedElement {
   /// Name of the element
@@ -30,6 +32,8 @@ class MethodElementWrap {
   }
 
   final MethodElement _wrapped;
+
+  bool get isStatic => _wrapped.isStatic;
 
   List<ElementAnnotation> get metadata => _wrapped.metadata;
 
