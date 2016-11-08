@@ -3,7 +3,7 @@ library jaguar.generator.parser.exception_handler;
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 
-import 'package:jaguar/generator/internal/element/import.dart';
+import 'package:source_gen_help/import.dart';
 
 class ExceptionHandlerInfo {
   final AnnotationElementWrap _handler;

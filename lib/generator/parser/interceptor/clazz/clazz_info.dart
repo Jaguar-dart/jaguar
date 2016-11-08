@@ -1,44 +1,7 @@
 part of jaguar.generator.parser.interceptor;
 
-/// Holds information about pre and post interceptors in interceptor class
-class InterceptorClassDef {
-  /// The class element of the interceptor
-  ClassElement clazz;
-
-  /// Pre interceptor info
-  InterceptorFuncDef pre;
-
-  /// Post interceptor info
-  InterceptorFuncDef post;
-
-  DartType get returnType => pre?.returnType;
-
-  DartType get returnsFutureFlattened => pre?.returnsFutureFlattened;
-
-  /// Default constructor. Constructs [InterceptorClassDef] for a given class
-  InterceptorClassDef(this.clazz) {
-    /// Find pre and post interceptors in class
-    clazz.methods.forEach((MethodElement method) {
-      if (method.name == 'pre') {
-        pre = new InterceptorFuncDef(method);
-      } else if (method.name == 'post') {
-        post = new InterceptorFuncDef(method);
-      }
-    });
-  }
-
-  //TODO check in unnamedConstructor is null?
-  ConstructorElementWrap get constructor =>
-      new ConstructorElementWrap(clazz.unnamedConstructor);
-
-  /// Debug printer
-  String toString() {
-    return "$pre $post";
-  }
-}
-
 class InterceptorClassInfo implements InterceptorInfo {
-  ElementAnnotation elememt;
+  ElementAnnotation element;
 
   ant.InterceptorClass _defined;
 
@@ -67,17 +30,33 @@ class InterceptorClassInfo implements InterceptorInfo {
       return type.isSupertypeOf(result);
     } else {
       DartType flattenedType =
-          result.flattenFutures(elememt.context.typeSystem);
+          result.flattenFutures(element.context.typeSystem);
       return type.isSupertypeOf(flattenedType);
     }
   }
 
   ///Create dual interceptor info for given interceptor usage
-  InterceptorClassInfo(this.elememt, this._defined) {
+  InterceptorClassInfo(this.element, this._defined) {
     final ClassElement clazz =
-        elememt.element.getAncestor((Element el) => el is ClassElement);
-    interceptor = new InterceptorAnnotationInstance(elememt);
+        element.element.getAncestor((Element el) => el is ClassElement);
+    interceptor = new InterceptorAnnotationInstance(element);
     dual = new InterceptorClassDef(clazz);
+
+    _validate();
+  }
+
+  void _validate() {
+    interceptor.params.forEach((String key, DartTypeWrap type) {
+      ParameterElement param = dual.constructor.findOptionalParamByName(key);
+      if (param == null) {
+        throw new Exception('Unknown interceptor param $key!');
+      }
+
+      if (!type.isAssignableTo(new DartTypeWrap(param.type))) {
+        throw new Exception(
+            'Cannot assign ${type.displayName} to ${param.type.displayName}!');
+      }
+    });
   }
 
   String toString() {

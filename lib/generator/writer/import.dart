@@ -6,7 +6,7 @@ import 'package:analyzer/src/dart/ast/ast.dart';
 import 'package:analyzer/src/generated/utilities_dart.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
-import 'package:jaguar/generator/internal/element/import.dart';
+import 'package:source_gen_help/import.dart';
 
 part 'pre_dual_inter.dart';
 part 'post_dual_inter.dart';

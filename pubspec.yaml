@@ -17,7 +17,9 @@ dependencies:
   mime: ">=0.9.3 <0.10.0"
   logging:
   intl:
+  cookies:
+  source_gen_help:
+    git: https://github.com/Jaguar-dart/source_gen_help.git
 
 dev_dependencies:
   test: 0.12.15+10
-  cookies:

@@ -8,7 +8,7 @@ import 'package:jaguar/src/annotations/import.dart' as ant;
 import 'package:jaguar/generator/parser/interceptor/import.dart';
 
 import 'package:jaguar/generator/parser/import.dart';
-import 'package:jaguar/generator/internal/element/import.dart';
+import 'package:source_gen_help/import.dart';
 import 'package:jaguar/generator/parser/exception_handler/import.dart';
 
 part 'route_info.dart';

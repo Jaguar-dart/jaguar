@@ -75,9 +75,7 @@ abstract class _$JaguarForumApi implements ApiInterface {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login(
-        const LoginState(),
-      );
+      Login iLogin = new Login();
       iLogin.pre(
         rMongoDbAdmin,
       );

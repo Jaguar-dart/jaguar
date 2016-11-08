@@ -11,7 +11,9 @@ Jaguar, a server framework built for **speed, simplicity and extensiblity**.
 3. Extensible interceptor infrastructure
 4. Generates API console client to try your server without writing single 
 line of client code
-5. Mock HTTP requests and use dependency injection to test your API
+5. Tests are first class citizens in jaguar
+i. Mock HTTP requests and Websocket requests 
+ii. Use dependency injection to test your API
 6. Optional Firebase/Parse like no code or little code servers
 
 Even though Jaguar is feature rich, it is simpler and easy to get started.

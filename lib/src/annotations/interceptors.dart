@@ -30,5 +30,7 @@ class Interceptor {
   /// Id of the interceptor
   final String id;
 
-  const Interceptor({this.id});
+  final Map<Symbol, Type> params;
+
+  const Interceptor({this.id, this.params});
 }
