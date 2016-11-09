@@ -7,6 +7,7 @@ import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
 import 'package:jaguar/generator/hook/api/import.dart';
+import 'package:jaguar/generator/hook/route_group/import.dart';
 
 String getProjectName() {
   File pubspec = new File('./pubspec.yaml');
@@ -26,9 +27,8 @@ List<String> getAnnotations() {
 Phase apisPhase(String projectName, List<String> apis) {
   return new Phase()
     ..addAction(
-        new GeneratorBuilder(const [
-          const ApiGenerator(),
-        ]),
+        new GeneratorBuilder(
+            const [const ApiGenerator(), const RouteGroupGenerator()]),
         new InputSet(projectName, apis));
 }
 

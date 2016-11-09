@@ -13,6 +13,7 @@ part 'default_response.dart';
 
 class Writer {
   final String className;
+  final bool forGroupRoute;
 
   StringBuffer sb = new StringBuffer();
 
@@ -20,7 +21,7 @@ class Writer {
 
   final List<GroupInfo> groups = new List<GroupInfo>();
 
-  Writer(this.className);
+  Writer(this.className, {this.forGroupRoute: false});
 
   void addAllRoutes(List<RouteInfo> newRoutes) {
     routes.addAll(newRoutes);
@@ -29,7 +30,8 @@ class Writer {
   void addGroups(List<GroupInfo> groupList) => groups.addAll(groupList);
 
   void generateClass() {
-    sb.writeln("abstract class _\$Jaguar$className implements ApiInterface {");
+    sb.writeln(
+        "abstract class _\$Jaguar$className implements HandleRequestInterface {");
 
     _writeRouteList();
     sb.writeln('');
@@ -71,7 +73,7 @@ class Writer {
   }
 
   void _writeRequestHandler() {
-    sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
+    sb.writeln("Future<bool> handleRequest(HttpRequest request) async {");
     sb.writeln("PathParams pathParams = new PathParams();");
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
       sb.writeln(
@@ -94,6 +96,18 @@ class Writer {
       sb.writeln("return true;");
       sb.writeln("}");
       sb.writeln("");
+    }
+
+    if (forGroupRoute) {
+      if (groups.isNotEmpty) {
+        sb.write("bool groupeResult;");
+      }
+      groups.forEach((GroupInfo groupeInfo) {
+        sb.write(
+            "groupeResult = await ${groupeInfo.name}.handleRequest(request);");
+        sb.writeln("if (groupeResult) return true;");
+        sb.writeln("");
+      });
     }
 
     sb.writeln("return false;");

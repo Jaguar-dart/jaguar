@@ -7,8 +7,14 @@ import 'package:jaguar/jaguar.dart';
 
 part 'main.g.dart';
 
+@RouteGroup(path: '/myGroup')
+class MyGroup extends _$JaguarMyGroup {
+  @Get('/')
+  String get() => "get my group";
+}
+
 /// Example of basic API class
-@Api(path: '/api')
+@RouteGroup()
 class ExampleApi extends _$JaguarExampleApi {
   int _pingCount = 0;
 
@@ -32,6 +38,9 @@ class ExampleApi extends _$JaguarExampleApi {
   Future websocket(WebSocket ws) async {
     ws.listen((data) => ws.add(data));
   }
+
+  @Group(path: '/myGroup')
+  MyGroup myGroup = new MyGroup();
 }
 
 Future<Null> main(List<String> args) async {

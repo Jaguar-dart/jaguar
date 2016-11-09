@@ -7,7 +7,7 @@ part of test.jaguar.route;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements ApiInterface {
+abstract class _$JaguarExampleApi implements HandleRequestInterface {
   static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/user', methods: const <String>['GET']),
     const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
@@ -32,7 +32,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
 
   String inputCookies(List<Cookie> cookies);
 
-  Future<bool> handleApiRequest(HttpRequest request) async {
+  Future<bool> handleRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;

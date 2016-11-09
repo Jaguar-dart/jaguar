@@ -19,9 +19,7 @@ class UserApi {
 }
 
 @Api(path: '/api')
-class ExampleApi extends Object
-    with _$JaguarExampleApi
-    implements ApiInterface {
+class ExampleApi extends Object with _$JaguarExampleApi {
   @Group(path: '/user')
   UserApi user = new UserApi();
 

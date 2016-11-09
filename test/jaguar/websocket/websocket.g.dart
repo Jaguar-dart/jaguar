@@ -7,12 +7,12 @@ part of test.jaguar.websocket;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements ApiInterface {
+abstract class _$JaguarExampleApi implements HandleRequestInterface {
   static const List<RouteBase> _routes = const <RouteBase>[const Ws('/ws')];
 
   Future<dynamic> websocket(WebSocket ws);
 
-  Future<bool> handleApiRequest(HttpRequest request) async {
+  Future<bool> handleRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 

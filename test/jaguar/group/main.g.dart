@@ -7,7 +7,7 @@ part of test.jaguar.group;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements ApiInterface {
+abstract class _$JaguarExampleApi implements HandleRequestInterface {
   static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/version', methods: const <String>['GET']),
     const Route('', methods: const <String>['GET']),
@@ -21,7 +21,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
 
   String statusCode();
 
-  Future<bool> handleApiRequest(HttpRequest request) async {
+  Future<bool> handleRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 
