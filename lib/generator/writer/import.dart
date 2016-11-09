@@ -99,13 +99,10 @@ class Writer {
     }
 
     if (forGroupRoute) {
-      if (groups.isNotEmpty) {
-        sb.write("bool groupeResult;");
-      }
       groups.forEach((GroupInfo groupeInfo) {
-        sb.write(
-            "groupeResult = await ${groupeInfo.name}.handleRequest(request);");
-        sb.writeln("if (groupeResult) return true;");
+        sb.writeln("if (await ${groupeInfo.name}.handleRequest(request)) {");
+        sb.writeln("return true;");
+        sb.writeln("}");
         sb.writeln("");
       });
     }

@@ -33,6 +33,35 @@ abstract class _$JaguarMyGroup implements HandleRequestInterface {
 
 // **************************************************************************
 // Generator: RouteGroupGenerator
+// Target: class MySecondGroup
+// **************************************************************************
+
+abstract class _$JaguarMySecondGroup implements HandleRequestInterface {
+  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+
+  String get();
+
+  Future<bool> handleRequest(HttpRequest request) async {
+    PathParams pathParams = new PathParams();
+    bool match = false;
+
+    match = _routes[0]
+        .match(request.uri.path, request.method, '/mySecondGroup', pathParams);
+    if (match) {
+      String rRouteResponse;
+      rRouteResponse = get();
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: RouteGroupGenerator
 // Target: class ExampleApi
 // **************************************************************************
 
@@ -47,6 +76,7 @@ abstract class _$JaguarExampleApi implements HandleRequestInterface {
   ];
 
   MyGroup get myGroup;
+  MySecondGroup get mysGroup;
 
   String ping();
 
@@ -120,6 +150,9 @@ abstract class _$JaguarExampleApi implements HandleRequestInterface {
 
     bool groupeResult;
     groupeResult = await myGroup.handleRequest(request);
+    if (groupeResult) return true;
+
+    groupeResult = await mysGroup.handleRequest(request);
     if (groupeResult) return true;
 
     return false;

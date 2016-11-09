@@ -13,6 +13,12 @@ class MyGroup extends _$JaguarMyGroup {
   String get() => "get my group";
 }
 
+@RouteGroup(path: '/mySecondGroup')
+class MySecondGroup extends _$JaguarMySecondGroup {
+  @Get('/')
+  String get() => "get mys second group";
+}
+
 /// Example of basic API class
 @RouteGroup()
 class ExampleApi extends _$JaguarExampleApi {
@@ -21,6 +27,9 @@ class ExampleApi extends _$JaguarExampleApi {
   /// Example of basic route
   @Route('/ping', methods: const <String>['GET'])
   String ping() => "You pinged me ${++_pingCount} times, silly!";
+
+  @Group()
+  MyGroup myGroup = new MyGroup();
 
   /// Example of setting default status code and headers in response
   @Put('/pong', statusCode: 201, headers: const {"pong-header": "silly-pong"})
@@ -39,8 +48,8 @@ class ExampleApi extends _$JaguarExampleApi {
     ws.listen((data) => ws.add(data));
   }
 
-  @Group(path: '/myGroup')
-  MyGroup myGroup = new MyGroup();
+  @Group()
+  MySecondGroup mysGroup = new MySecondGroup();
 }
 
 Future<Null> main(List<String> args) async {
