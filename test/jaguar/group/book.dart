@@ -2,7 +2,10 @@ library test.jaguar.group.normal.book;
 
 import 'package:jaguar/jaguar.dart';
 
-class BookApi {
+part 'book.g.dart';
+
+@RouteGroup()
+class BookApi extends Object with _$JaguarBookApi {
   @Route('', methods: const <String>['GET'])
   String getBook() => 'Get book';
 

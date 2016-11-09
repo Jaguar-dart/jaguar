@@ -1,35 +1,43 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.interceptor.param;
+part of test.jaguar.group.normal.book;
 
 // **************************************************************************
-// Generator: ApiGenerator
-// Target: class ExampleApi
+// Generator: RouteGroupGenerator
+// Target: class BookApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+abstract class _$JaguarBookApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
-    const Route('/user', methods: const <String>['GET'])
+    const Route('', methods: const <String>['GET']),
+    const Route('/some/:param1', methods: const <String>['POST'])
   ];
 
-  String getUser(String who);
+  String getBook();
+
+  String some(String param1);
 
   Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
-    prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
 
     match =
         _routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      WithParam iWithParam = new WithParam(
-        params: const {#checker: CheckerImpl},
-        checker: new CheckerImpl(),
-      );
-      String rWithParam = iWithParam.pre();
       String rRouteResponse;
-      rRouteResponse = getUser(
-        rWithParam,
+      rRouteResponse = getBook();
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    match =
+        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      String rRouteResponse;
+      rRouteResponse = some(
+        (pathParams.getField('param1')),
       );
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());

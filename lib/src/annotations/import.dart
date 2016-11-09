@@ -23,12 +23,18 @@ class Api {
   }
 }
 
+class RouteGroup {
+  final String path;
+
+  const RouteGroup({this.path: ''});
+}
+
 ///An annotation to define an API group in API class
 class Group {
   ///Path prefix to the group
   final String path;
 
-  const Group({this.path});
+  const Group({this.path: ''});
 }
 
 class ExceptionHandler {

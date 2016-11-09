@@ -1,4 +1,4 @@
-library jaguar.generator.hook.api;
+library jaguar.generator.hook.route_group;
 
 import 'dart:async';
 
@@ -12,13 +12,13 @@ import 'package:jaguar/src/annotations/import.dart' as ant;
 
 import 'package:jaguar/generator/parser/import.dart';
 
-class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
-  const ApiGenerator();
+class RouteGroupGenerator extends GeneratorForAnnotation<ant.RouteGroup> {
+  const RouteGroupGenerator();
 
   /// Generator
   @override
   Future<String> generateForAnnotatedElement(
-      Element element, ant.Api api, BuildStep buildStep) async {
+      Element element, ant.RouteGroup routeGroup, BuildStep buildStep) async {
     if (element is! ClassElement) {
       throw new Exception("Api annotation can only be defined on a class.");
     }
@@ -26,11 +26,11 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
     ClassElement classElement = element;
     String className = classElement.name;
 
-    print("Generating for Api class $className ...");
+    print("Generating for RouteGroup class $className ...");
 
-    Writer writer = new Writer(className);
+    Writer writer = new Writer(className, forGroupRoute: true);
 
-    final String prefix = api.url;
+    final String prefix = routeGroup.path;
 
     List<InterceptorInfo> interceptors = parseInterceptor(element);
 

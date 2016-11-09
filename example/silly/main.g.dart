@@ -3,11 +3,71 @@
 part of jaguar.example.silly;
 
 // **************************************************************************
-// Generator: ApiGenerator
+// Generator: RouteGroupGenerator
+// Target: class MyGroup
+// **************************************************************************
+
+abstract class _$JaguarMyGroup implements RequestHandler {
+  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+
+  String get();
+
+  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+    prefix += '/myGroup';
+    PathParams pathParams = new PathParams();
+    bool match = false;
+
+    match =
+        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      String rRouteResponse;
+      rRouteResponse = get();
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: RouteGroupGenerator
+// Target: class MySecondGroup
+// **************************************************************************
+
+abstract class _$JaguarMySecondGroup implements RequestHandler {
+  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+
+  String get();
+
+  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+    prefix += '/mySecondGroup';
+    PathParams pathParams = new PathParams();
+    bool match = false;
+
+    match =
+        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      String rRouteResponse;
+      rRouteResponse = get();
+      request.response.statusCode = 200;
+      request.response.write(rRouteResponse.toString());
+      await request.response.close();
+      return true;
+    }
+
+    return false;
+  }
+}
+
+// **************************************************************************
+// Generator: RouteGroupGenerator
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements ApiInterface {
+abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/ping', methods: const <String>['GET']),
     const Put('/pong',
@@ -16,6 +76,9 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     const Route('/echo/queryparam', methods: const <String>['POST']),
     const Ws('/ws')
   ];
+
+  MyGroup get myGroup;
+  MySecondGroup get mySecondGroup;
 
   String ping();
 
@@ -27,13 +90,14 @@ abstract class _$JaguarExampleApi implements ApiInterface {
 
   Future<dynamic> websocket(WebSocket ws);
 
-  Future<bool> handleApiRequest(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+    prefix += '/api';
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = ping();
@@ -44,7 +108,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = pong();
@@ -56,7 +120,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[2].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoPathParam(
@@ -69,7 +133,7 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoQueryParam(
@@ -82,12 +146,20 @@ abstract class _$JaguarExampleApi implements ApiInterface {
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       WebSocket ws = await WebSocketTransformer.upgrade(request);
       await websocket(
         ws,
       );
+      return true;
+    }
+
+    if (await myGroup.requestHandler(request)) {
+      return true;
+    }
+
+    if (await mySecondGroup.requestHandler(request)) {
       return true;
     }
 
