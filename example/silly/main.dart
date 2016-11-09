@@ -7,9 +7,21 @@ import 'package:jaguar/jaguar.dart';
 
 part 'main.g.dart';
 
+@RouteGroup(path: '/myGroup')
+class MyGroup extends Object with _$JaguarMyGroup {
+  @Get('/')
+  String get() => "get my group";
+}
+
+@RouteGroup(path: '/mySecondGroup')
+class MySecondGroup extends Object with _$JaguarMySecondGroup {
+  @Get('/')
+  String get() => "get mys second group";
+}
+
 /// Example of basic API class
-@Api(path: '/api')
-class ExampleApi extends _$JaguarExampleApi {
+@RouteGroup(path: '/api')
+class ExampleApi extends Object with _$JaguarExampleApi {
   int _pingCount = 0;
 
   /// Example of basic route
@@ -32,6 +44,12 @@ class ExampleApi extends _$JaguarExampleApi {
   Future websocket(WebSocket ws) async {
     ws.listen((data) => ws.add(data));
   }
+
+  @Group()
+  MyGroup myGroup = new MyGroup();
+
+  @Group()
+  MySecondGroup mySecondGroup = new MySecondGroup();
 }
 
 Future<Null> main(List<String> args) async {

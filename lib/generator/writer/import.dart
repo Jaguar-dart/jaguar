@@ -17,6 +17,7 @@ part 'interceptor_class_instantiator.dart';
 
 class Writer {
   final String className;
+  final bool forGroupRoute;
 
   StringBuffer sb = new StringBuffer();
 
@@ -24,7 +25,7 @@ class Writer {
 
   final List<GroupInfo> groups = new List<GroupInfo>();
 
-  Writer(this.className);
+  Writer(this.className, {this.forGroupRoute: false});
 
   void addAllRoutes(List<RouteInfo> newRoutes) {
     routes.addAll(newRoutes);
@@ -33,7 +34,8 @@ class Writer {
   void addGroups(List<GroupInfo> groupList) => groups.addAll(groupList);
 
   void generateClass() {
-    sb.writeln("abstract class _\$Jaguar$className implements ApiInterface {");
+    sb.writeln(
+        "abstract class _\$Jaguar$className implements RequestHandler {");
 
     _writeRouteList();
     sb.writeln('');
@@ -75,7 +77,11 @@ class Writer {
   }
 
   void _writeRequestHandler() {
-    sb.writeln("Future<bool> handleApiRequest(HttpRequest request) async {");
+    sb.writeln(
+        "Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {");
+    if (routes.first.pathPrefix.isNotEmpty) {
+      sb.write("prefix += '${routes.first.pathPrefix}';");
+    }
     sb.writeln("PathParams pathParams = new PathParams();");
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
       sb.writeln(
@@ -86,7 +92,7 @@ class Writer {
 
     for (int i = 0; i < routes.length; i++) {
       sb.writeln(
-          "match = _routes[$i].match(request.uri.path, request.method, '${routes[i].pathPrefix}',pathParams);");
+          "match = _routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
       sb.writeln("if (match) {");
 
       _writePreInterceptors(routes[i]);
@@ -99,6 +105,17 @@ class Writer {
       sb.writeln("}");
       sb.writeln("");
     }
+
+    groups.forEach((GroupInfo groupeInfo) {
+      sb.write("if (await ${groupeInfo.name}.requestHandler(request");
+      if (groupeInfo.group.path.isNotEmpty) {
+        sb.write(",prefix: prefix + '${groupeInfo.group.path}'");
+      }
+      sb.write(")) {");
+      sb.writeln("return true;");
+      sb.writeln("}");
+      sb.writeln("");
+    });
 
     sb.writeln("return false;");
     sb.writeln("}");

@@ -7,7 +7,7 @@ class Configuration {
   final SecurityContext securityContext;
   final bool multiThread;
   final bool log;
-  List<ApiInterface> apis = <ApiInterface>[];
+  List<RequestHandler> apis = <RequestHandler>[];
 
   Configuration(
       {this.address: "0.0.0.0",
@@ -16,8 +16,8 @@ class Configuration {
       this.securityContext: null,
       this.log: false});
 
-  void addApi(ApiInterface apiClass) {
-    apis.add(apiClass);
+  void addApi(RequestHandler clazz) {
+    apis.add(clazz);
   }
 
   String get protocolStr => securityContext == null ? 'http' : 'https';
