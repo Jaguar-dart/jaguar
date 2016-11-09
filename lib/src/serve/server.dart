@@ -1,7 +1,7 @@
 part of jaguar.src.serve;
 
-abstract class HandleRequestInterface {
-  Future handleRequest(HttpRequest request);
+abstract class RequestHandler {
+  Future requestHandler(HttpRequest request);
 }
 
 //  TODO(kleak): add doc
@@ -34,7 +34,7 @@ class Jaguar {
     try {
       for (int i = 0; i < configuration.apis.length; i++) {
         var apiClass = configuration.apis[i];
-        bool result = await apiClass.handleRequest(request);
+        bool result = await apiClass.requestHandler(request);
         if (result) break;
       }
     } catch (e, stack) {

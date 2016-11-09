@@ -7,12 +7,12 @@ part of jaguar.example.silly;
 // Target: class MyGroup
 // **************************************************************************
 
-abstract class _$JaguarMyGroup implements HandleRequestInterface {
+abstract class _$JaguarMyGroup implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
 
   String get();
 
-  Future<bool> handleRequest(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 
@@ -36,12 +36,12 @@ abstract class _$JaguarMyGroup implements HandleRequestInterface {
 // Target: class MySecondGroup
 // **************************************************************************
 
-abstract class _$JaguarMySecondGroup implements HandleRequestInterface {
+abstract class _$JaguarMySecondGroup implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
 
   String get();
 
-  Future<bool> handleRequest(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 
@@ -65,7 +65,7 @@ abstract class _$JaguarMySecondGroup implements HandleRequestInterface {
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements HandleRequestInterface {
+abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/ping', methods: const <String>['GET']),
     const Put('/pong',
@@ -76,7 +76,7 @@ abstract class _$JaguarExampleApi implements HandleRequestInterface {
   ];
 
   MyGroup get myGroup;
-  MySecondGroup get mysGroup;
+  MySecondGroup get mySecondGroup;
 
   String ping();
 
@@ -88,7 +88,7 @@ abstract class _$JaguarExampleApi implements HandleRequestInterface {
 
   Future<dynamic> websocket(WebSocket ws);
 
-  Future<bool> handleRequest(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
@@ -151,7 +151,7 @@ abstract class _$JaguarExampleApi implements HandleRequestInterface {
       return true;
     }
 
-    if (await mysGroup.handleRequest(request)) {
+    if (await mySecondGroup.handleRequest(request)) {
       return true;
     }
 

@@ -7,7 +7,7 @@ part of example.forum;
 // Target: class ForumApi
 // **************************************************************************
 
-abstract class _$JaguarForumApi implements HandleRequestInterface {
+abstract class _$JaguarForumApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/user',
         methods: const <String>['GET'],
@@ -58,7 +58,7 @@ abstract class _$JaguarForumApi implements HandleRequestInterface {
 
   String decodeXwww(Map<String, String> xwww);
 
-  Future<bool> handleRequest(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;

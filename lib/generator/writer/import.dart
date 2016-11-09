@@ -35,7 +35,7 @@ class Writer {
 
   void generateClass() {
     sb.writeln(
-        "abstract class _\$Jaguar$className implements HandleRequestInterface {");
+        "abstract class _\$Jaguar$className implements RequestHandler {");
 
     _writeRouteList();
     sb.writeln('');
@@ -77,7 +77,7 @@ class Writer {
   }
 
   void _writeRequestHandler() {
-    sb.writeln("Future<bool> handleRequest(HttpRequest request) async {");
+    sb.writeln("Future<bool> requestHandler(HttpRequest request) async {");
     sb.writeln("PathParams pathParams = new PathParams();");
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
       sb.writeln(

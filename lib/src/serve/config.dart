@@ -7,7 +7,7 @@ class Configuration {
   final SecurityContext securityContext;
   final bool multiThread;
   final bool log;
-  List<HandleRequestInterface> apis = <HandleRequestInterface>[];
+  List<RequestHandler> apis = <RequestHandler>[];
 
   Configuration(
       {this.address: "0.0.0.0",
@@ -16,7 +16,7 @@ class Configuration {
       this.securityContext: null,
       this.log: false});
 
-  void addApi(HandleRequestInterface clazz) {
+  void addApi(RequestHandler clazz) {
     apis.add(clazz);
   }
 

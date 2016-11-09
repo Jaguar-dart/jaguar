@@ -28,9 +28,6 @@ class ExampleApi extends _$JaguarExampleApi {
   @Route('/ping', methods: const <String>['GET'])
   String ping() => "You pinged me ${++_pingCount} times, silly!";
 
-  @Group()
-  MyGroup myGroup = new MyGroup();
-
   /// Example of setting default status code and headers in response
   @Put('/pong', statusCode: 201, headers: const {"pong-header": "silly-pong"})
   String pong() => "Your silly pongs have no effect on me!";
@@ -49,7 +46,10 @@ class ExampleApi extends _$JaguarExampleApi {
   }
 
   @Group()
-  MySecondGroup mysGroup = new MySecondGroup();
+  MyGroup myGroup = new MyGroup();
+
+  @Group()
+  MySecondGroup mySecondGroup = new MySecondGroup();
 }
 
 Future<Null> main(List<String> args) async {
