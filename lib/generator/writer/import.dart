@@ -77,7 +77,9 @@ class Writer {
   }
 
   void _writeRequestHandler() {
-    sb.writeln("Future<bool> requestHandler(HttpRequest request) async {");
+    sb.writeln(
+        "Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {");
+    sb.write("prefix += '${routes.first.pathPrefix}';");
     sb.writeln("PathParams pathParams = new PathParams();");
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
       sb.writeln(
@@ -88,7 +90,7 @@ class Writer {
 
     for (int i = 0; i < routes.length; i++) {
       sb.writeln(
-          "match = _routes[$i].match(request.uri.path, request.method, '${routes[i].pathPrefix}',pathParams);");
+          "match = _routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
       sb.writeln("if (match) {");
 
       _writePreInterceptors(routes[i]);
@@ -104,7 +106,8 @@ class Writer {
 
     if (forGroupRoute) {
       groups.forEach((GroupInfo groupeInfo) {
-        sb.writeln("if (await ${groupeInfo.name}.handleRequest(request)) {");
+        sb.writeln(
+            "if (await ${groupeInfo.name}.requestHandler(request, prefix: prefix + '${groupeInfo.group.path}')) {");
         sb.writeln("return true;");
         sb.writeln("}");
         sb.writeln("");

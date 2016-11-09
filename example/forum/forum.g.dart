@@ -58,13 +58,14 @@ abstract class _$JaguarForumApi implements RequestHandler {
 
   String decodeXwww(Map<String, String> xwww);
 
-  Future<bool> requestHandler(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+    prefix += '/api';
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbTest = new MongoDb(
         'test',
@@ -94,7 +95,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -113,7 +114,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[2].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -139,7 +140,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -164,7 +165,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -196,7 +197,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[5].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -235,7 +236,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[6].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -270,7 +271,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[7].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[7].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -293,7 +294,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[8].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[8].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -316,7 +317,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[9].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[9].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       DecodeJson iDecodeJson = new DecodeJson();
       dynamic rDecodeJson = await iDecodeJson.pre(
@@ -333,7 +334,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[10].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[10].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       DecodeFormData iDecodeFormData = new DecodeFormData();
       Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
@@ -350,7 +351,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[11].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[11].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       DecodeUrlEncodedForm iDecodeUrlEncodedForm = new DecodeUrlEncodedForm();
       Map<String, String> rDecodeUrlEncodedForm =

@@ -1,7 +1,7 @@
 part of jaguar.src.serve;
 
 abstract class RequestHandler {
-  Future requestHandler(HttpRequest request);
+  Future requestHandler(HttpRequest request, {String prefix});
 }
 
 //  TODO(kleak): add doc

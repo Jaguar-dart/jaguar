@@ -14,12 +14,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String getUser(String who);
 
-  Future<bool> requestHandler(HttpRequest request) async {
+  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+    prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, '/api', pathParams);
+        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       WithParam iWithParam = new WithParam(
         params: const {#checker: CheckerImpl},

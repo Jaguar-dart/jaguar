@@ -34,7 +34,7 @@ class Group {
   ///Path prefix to the group
   final String path;
 
-  const Group({this.path});
+  const Group({this.path: ''});
 }
 
 class ExceptionHandler {
