@@ -18,7 +18,6 @@ abstract class _$JaguarUserApi implements RequestHandler {
   String statusCode();
 
   Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
-    prefix += '';
     PathParams pathParams = new PathParams();
     bool match = false;
 

@@ -18,7 +18,6 @@ abstract class _$JaguarBookApi implements RequestHandler {
   String some(String param1);
 
   Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
-    prefix += '';
     PathParams pathParams = new PathParams();
     bool match = false;
 
