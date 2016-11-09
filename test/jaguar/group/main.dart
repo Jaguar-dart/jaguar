@@ -31,7 +31,7 @@ class ExampleApi extends Object with _$JaguarExampleApi {
 }
 
 void main() {
-  group('route', () {
+  group('Group', () {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
