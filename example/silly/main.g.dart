@@ -148,12 +148,13 @@ abstract class _$JaguarExampleApi implements HandleRequestInterface {
       return true;
     }
 
-    bool groupeResult;
-    groupeResult = await myGroup.handleRequest(request);
-    if (groupeResult) return true;
+    if (await myGroup.handleRequest(request)) {
+      return true;
+    }
 
-    groupeResult = await mysGroup.handleRequest(request);
-    if (groupeResult) return true;
+    if (await mysGroup.handleRequest(request)) {
+      return true;
+    }
 
     return false;
   }
