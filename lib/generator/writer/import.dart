@@ -106,7 +106,6 @@ class Writer {
       sb.writeln("");
     }
 
-    // if (forGroupRoute) {
     groups.forEach((GroupInfo groupeInfo) {
       sb.write("if (await ${groupeInfo.name}.requestHandler(request");
       if (groupeInfo.group.path.isNotEmpty) {
@@ -117,7 +116,6 @@ class Writer {
       sb.writeln("}");
       sb.writeln("");
     });
-    // }
 
     sb.writeln("return false;");
     sb.writeln("}");
