@@ -104,15 +104,15 @@ class Writer {
       sb.writeln("");
     }
 
-    if (forGroupRoute) {
-      groups.forEach((GroupInfo groupeInfo) {
-        sb.writeln(
-            "if (await ${groupeInfo.name}.requestHandler(request, prefix: prefix + '${groupeInfo.group.path}')) {");
-        sb.writeln("return true;");
-        sb.writeln("}");
-        sb.writeln("");
-      });
-    }
+    // if (forGroupRoute) {
+    groups.forEach((GroupInfo groupeInfo) {
+      sb.writeln(
+          "if (await ${groupeInfo.name}.requestHandler(request, prefix: prefix + '${groupeInfo.group.path}')) {");
+      sb.writeln("return true;");
+      sb.writeln("}");
+      sb.writeln("");
+    });
+    // }
 
     sb.writeln("return false;");
     sb.writeln("}");

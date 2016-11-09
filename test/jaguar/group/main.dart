@@ -10,7 +10,8 @@ import 'book.dart';
 
 part 'main.g.dart';
 
-class UserApi {
+@RouteGroup()
+class UserApi extends Object with _$JaguarUserApi {
   @Route('', methods: const <String>['GET'])
   String getUser() => 'Get user';
 

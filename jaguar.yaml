@@ -3,5 +3,6 @@ apis:
 - 'example/silly/main.dart'
 - 'test/jaguar/route/route.dart'
 - 'test/jaguar/group/main.dart'
+- 'test/jaguar/group/book.dart'
 - 'test/jaguar/websocket/websocket.dart'
 - 'test/interceptor/param/param.dart'
