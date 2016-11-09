@@ -7,14 +7,14 @@ part of test.interceptor.param;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements ApiInterface {
+abstract class _$JaguarExampleApi implements HandleRequestInterface {
   static const List<RouteBase> _routes = const <RouteBase>[
     const Route('/user', methods: const <String>['GET'])
   ];
 
   String getUser(String who);
 
-  Future<bool> handleApiRequest(HttpRequest request) async {
+  Future<bool> handleRequest(HttpRequest request) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 
