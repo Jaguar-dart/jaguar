@@ -53,15 +53,13 @@ class Writer {
   }
 
   void _writeRouteList() {
-    if (routes.isNotEmpty) {
-      sb.writeln("static const List<RouteBase> routes = const <RouteBase>[");
-      String routeList = routes
-          .map((RouteInfo route) => route.instantiationString)
-          .toList()
-          .join(',');
-      sb.write(routeList);
-      sb.writeln("];");
-    }
+    sb.writeln("static const List<RouteBase> routes = const <RouteBase>[");
+    String routeList = routes
+        .map((RouteInfo route) => route.instantiationString)
+        .toList()
+        .join(',');
+    sb.write(routeList);
+    sb.writeln("];");
   }
 
   void _writeRoutePrototype() {
