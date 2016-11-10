@@ -8,8 +8,7 @@ class CustomException {
   CustomException(this.code, this.message);
 }
 
-@ExceptionHandler(CustomException)
-class CustomExceptionHandler {
+class CustomExceptionHandler implements ExceptionHandler<CustomException> {
   const CustomExceptionHandler();
 
   void onRouteException(

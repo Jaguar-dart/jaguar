@@ -238,35 +238,42 @@ abstract class _$JaguarForumApi implements RequestHandler {
     match =
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
-      EncodeToJson iEncodeToJson = new EncodeToJson();
-      Response<User> rRouteResponse;
-      ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
-      if (injectPathParam is Validatable) {
-        injectPathParam.validate();
-      }
-      rRouteResponse = await update3(
-        request,
-        rMongoDbAdmin,
-        injectPathParam,
-      );
-      request.response.statusCode = rRouteResponse.statusCode ?? 200;
-      if (rRouteResponse.headers is Map) {
-        for (String key in rRouteResponse.headers.keys) {
-          request.response.headers.add(key, rRouteResponse.headers[key]);
+      try {
+        MongoDb iMongoDbAdmin =
+            new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        Login iLogin = new Login();
+        iLogin.pre(
+          rMongoDbAdmin,
+        );
+        EncodeToJson iEncodeToJson = new EncodeToJson();
+        Response<User> rRouteResponse;
+        ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
+        if (injectPathParam is Validatable) {
+          injectPathParam.validate();
         }
+        rRouteResponse = await update3(
+          request,
+          rMongoDbAdmin,
+          injectPathParam,
+        );
+        request.response.statusCode = rRouteResponse.statusCode ?? 200;
+        if (rRouteResponse.headers is Map) {
+          for (String key in rRouteResponse.headers.keys) {
+            request.response.headers.add(key, rRouteResponse.headers[key]);
+          }
+        }
+        iEncodeToJson.post(
+          request,
+          rRouteResponse.value,
+        );
+        await iMongoDbAdmin.post();
+      } on ParamValidationException catch (e, s) {
+        ParamValidationExceptionHandler handler =
+            new ParamValidationExceptionHandler();
+        handler.onRouteException(request, e, s);
+        return true;
       }
-      iEncodeToJson.post(
-        request,
-        rRouteResponse.value,
-      );
-      await iMongoDbAdmin.post();
       return true;
     }
 
