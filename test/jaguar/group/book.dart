@@ -1,5 +1,8 @@
 library test.jaguar.group.normal.book;
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:jaguar/jaguar.dart';
 
 part 'book.g.dart';
