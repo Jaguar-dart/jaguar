@@ -12,7 +12,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 
   String get();
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/myGroup';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -42,7 +42,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 
   String get();
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/mySecondGroup';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -90,7 +90,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   Future<dynamic> websocket(WebSocket ws);
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
@@ -155,11 +155,11 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
-    if (await myGroup.requestHandler(request)) {
+    if (await myGroup.handleRequest(request)) {
       return true;
     }
 
-    if (await mySecondGroup.requestHandler(request)) {
+    if (await mySecondGroup.handleRequest(request)) {
       return true;
     }
 

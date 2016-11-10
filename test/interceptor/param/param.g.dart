@@ -14,7 +14,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String getUser(String who);
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;

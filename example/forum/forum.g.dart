@@ -58,7 +58,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
 
   String decodeXwww(Map<String, String> xwww);
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
