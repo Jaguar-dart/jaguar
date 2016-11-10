@@ -8,7 +8,7 @@ part of jaguar.example.silly;
 // **************************************************************************
 
 abstract class _$JaguarMyGroup implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+  static const List<RouteBase> routes = const <RouteBase>[const Get('/')];
 
   String get();
 
@@ -18,7 +18,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = get();
@@ -38,7 +38,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarMySecondGroup implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+  static const List<RouteBase> routes = const <RouteBase>[const Get('/')];
 
   String get();
 
@@ -48,7 +48,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = get();
@@ -68,7 +68,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route('/ping', methods: const <String>['GET']),
     const Put('/pong',
         statusCode: 201, headers: const {"pong-header": "silly-pong"}),
@@ -93,11 +93,11 @@ abstract class _$JaguarExampleApi implements RequestHandler {
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
+    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = ping();
@@ -108,7 +108,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+        routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = pong();
@@ -120,7 +120,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[2].match(request.uri.path, request.method, prefix, pathParams);
+        routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoPathParam(
@@ -133,7 +133,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, prefix, pathParams);
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = echoQueryParam(
@@ -146,7 +146,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, prefix, pathParams);
+        routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       WebSocket ws = await WebSocketTransformer.upgrade(request);
       await websocket(

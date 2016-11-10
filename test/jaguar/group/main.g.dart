@@ -8,7 +8,7 @@ part of test.jaguar.group;
 // **************************************************************************
 
 abstract class _$JaguarUserApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route('', methods: const <String>['GET']),
     const Route('/statuscode', methods: const <String>['GET'], statusCode: 201)
   ];
@@ -22,7 +22,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = getUser();
@@ -33,7 +33,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+        routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = statusCode();
@@ -53,7 +53,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route('/version', methods: const <String>['GET'])
   ];
 
@@ -68,7 +68,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = statusCode();

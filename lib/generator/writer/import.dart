@@ -53,15 +53,13 @@ class Writer {
   }
 
   void _writeRouteList() {
-    if (routes.isNotEmpty) {
-      sb.writeln("static const List<RouteBase> _routes = const <RouteBase>[");
-      String routeList = routes
-          .map((RouteInfo route) => route.instantiationString)
-          .toList()
-          .join(',');
-      sb.write(routeList);
-      sb.writeln("];");
-    }
+    sb.writeln("static const List<RouteBase> routes = const <RouteBase>[");
+    String routeList = routes
+        .map((RouteInfo route) => route.instantiationString)
+        .toList()
+        .join(',');
+    sb.write(routeList);
+    sb.writeln("];");
   }
 
   void _writeRoutePrototype() {
@@ -97,14 +95,25 @@ class Writer {
 
     for (int i = 0; i < routes.length; i++) {
       sb.writeln(
-          "match = _routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
+          "match = routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
       sb.writeln("if (match) {");
+
+      if (routes[i].exceptions.length != 0) {
+        sb.writeln("try {");
+      }
 
       _writePreInterceptors(routes[i]);
 
       _writeRouteCall(routes[i]);
 
       _writePostInterceptors(routes[i]);
+
+      if (routes[i].exceptions.length != 0) {
+        sb.write('} ');
+
+        RouteExceptionWriter exceptWriter = new RouteExceptionWriter(routes[i]);
+        sb.write(exceptWriter.generate());
+      }
 
       sb.writeln("return true;");
       sb.writeln("}");
@@ -134,19 +143,8 @@ class Writer {
       }
     }
 
-    if (route.exceptions.length != 0) {
-      sb.writeln("try {");
-    }
-
     RouteCallWriter callWriter = new RouteCallWriter(route);
     sb.write(callWriter.generate());
-
-    if (route.exceptions.length != 0) {
-      sb.write('} ');
-
-      RouteExceptionWriter exceptWriter = new RouteExceptionWriter(route);
-      sb.write(exceptWriter.generate());
-    }
 
     if (route.returnsResponse) {
       DefaultResponseWriterResponse responseWriter =
