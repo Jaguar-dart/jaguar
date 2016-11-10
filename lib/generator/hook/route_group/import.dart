@@ -28,9 +28,9 @@ class RouteGroupGenerator extends GeneratorForAnnotation<ant.RouteGroup> {
 
     print("Generating for RouteGroup class $className ...");
 
-    Writer writer = new Writer(className, forGroupRoute: true);
-
     final String prefix = routeGroup.path;
+
+    Writer writer = new Writer(className, forGroupRoute: true, prefix: prefix);
 
     List<InterceptorInfo> interceptors = parseInterceptor(element);
 

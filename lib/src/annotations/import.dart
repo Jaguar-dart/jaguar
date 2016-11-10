@@ -10,13 +10,17 @@ part 'websocket.dart';
 ///An annotation to define an API class
 class Api {
   final String path;
+  final String version;
 
-  const Api({this.path: ''});
+  const Api({this.path: '', this.version: ''});
 
   String get url {
     String prefix = "";
     if (path != null && path.isNotEmpty) {
       prefix += path;
+    }
+    if (version != null && version.isNotEmpty) {
+      prefix += version;
     }
 
     return prefix;
