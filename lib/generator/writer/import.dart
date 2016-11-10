@@ -18,6 +18,7 @@ part 'interceptor_class_instantiator.dart';
 class Writer {
   final String className;
   final bool forGroupRoute;
+  final String prefix;
 
   StringBuffer sb = new StringBuffer();
 
@@ -25,7 +26,7 @@ class Writer {
 
   final List<GroupInfo> groups = new List<GroupInfo>();
 
-  Writer(this.className, {this.forGroupRoute: false});
+  Writer(this.className, {this.prefix: '', this.forGroupRoute: false});
 
   void addAllRoutes(List<RouteInfo> newRoutes) {
     routes.addAll(newRoutes);
@@ -79,8 +80,8 @@ class Writer {
   void _writeRequestHandler() {
     sb.writeln(
         "Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {");
-    if (routes.first.pathPrefix.isNotEmpty) {
-      sb.write("prefix += '${routes.first.pathPrefix}';");
+    if (prefix.isNotEmpty) {
+      sb.write("prefix += '${prefix}';");
     }
     sb.writeln("PathParams pathParams = new PathParams();");
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
