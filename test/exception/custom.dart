@@ -16,7 +16,6 @@ class CustomExceptionHandler {
       HttpRequest request, CustomException e, StackTrace trace) {
     request.response.statusCode = 400;
 
-    request.response
-        .write('{"Code": ${e.code}, "Message": "${e.message} }');
+    request.response.write('{"Code": ${e.code}, "Message": "${e.message} }');
   }
 }

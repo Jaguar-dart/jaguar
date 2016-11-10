@@ -68,7 +68,8 @@ void main() {
       MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, r'{"Field": age, "Message": "Is required! }');
+      expect(
+          response.mockContent, r'{"Field": age, "Message": "Is required! }');
       expect(response.headers.toMap, {});
       expect(response.statusCode, 400);
     });
@@ -78,7 +79,8 @@ void main() {
       MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, r'{"Field": name, "Message": "is required! }');
+      expect(
+          response.mockContent, r'{"Field": name, "Message": "is required! }');
       expect(response.headers.toMap, {});
       expect(response.statusCode, 400);
     });
@@ -88,7 +90,8 @@ void main() {
       MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, r'{"Field": name, "Message": "Cannot be empty! }');
+      expect(response.mockContent,
+          r'{"Field": name, "Message": "Cannot be empty! }');
       expect(response.headers.toMap, {});
       expect(response.statusCode, 400);
     });

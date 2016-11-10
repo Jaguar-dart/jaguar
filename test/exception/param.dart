@@ -24,8 +24,7 @@ class ValidationExceptionHandler {
       HttpRequest request, ValidationException e, StackTrace trace) {
     request.response.statusCode = 400;
 
-    request.response
-        .write('{"Field": ${e.field}, "Message": "${e.message} }');
+    request.response.write('{"Field": ${e.field}, "Message": "${e.message} }');
   }
 }
 
@@ -34,22 +33,22 @@ class UserParser extends Interceptor {
   const UserParser();
 
   User pre(QueryParams queryParams) {
-    if(queryParams.name is! String) {
+    if (queryParams.name is! String) {
       throw new ValidationException('name', 'is required!');
     } else {
       String value = queryParams.name;
 
-      if(value.isEmpty) {
+      if (value.isEmpty) {
         throw new ValidationException('name', 'Cannot be empty!');
       }
     }
 
-    if(queryParams.age is! String) {
+    if (queryParams.age is! String) {
       throw new ValidationException('age', 'Is required!');
     } else {
       int value = queryParams.age;
 
-      if(value <= 0) {
+      if (value <= 0) {
         throw new ValidationException('age', 'Must be positive!');
       }
     }
