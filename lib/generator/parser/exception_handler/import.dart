@@ -14,29 +14,39 @@ class ExceptionHandlerInfo {
 
   String get exceptionName => _exception.name;
 
-  ExceptionHandlerInfo(ElementAnnotation aHandler, DartType aException)
-      : _handler = new AnnotationElementWrap(aHandler),
-        _exception = new DartTypeWrap(aException);
+  ExceptionHandlerInfo(ElementAnnotation aHandler, this._exception)
+      : _handler = new AnnotationElementWrap(aHandler);
 
   String get instantiationString => ' new ' + _handler.instantiationString;
 }
 
-List<ExceptionHandlerInfo> _parseExceptions(ElementAnnotation element) {
+ExceptionHandlerInfo _parseExceptions(ElementAnnotation element) {
   element.computeConstantValue();
-  return element.constantValue.type.element.metadata
-      .where((ElementAnnotation annot) {
-    final typeWrapped = new DartTypeWrap(annot.constantValue.type);
-    return typeWrapped.compare('ExceptionHandler', 'jaguar.src.annotations');
-  }).map((ElementAnnotation annot) {
-    DartType exception =
-        annot.constantValue.getField('exception').toTypeValue();
-    return new ExceptionHandlerInfo(element, exception);
-  }).toList();
+
+  if (element.constantValue.type.element is! ClassElement) {
+    return null;
+  }
+
+  ClassElementWrap clazz =
+      new ClassElementWrap(element.constantValue.type.element);
+
+  const NamedElement kExceptionHandler =
+      const NamedElementImpl.Make('ExceptionHandler', 'jaguar.src.annotations');
+  InterfaceTypeWrap interface = clazz.getSubtypeOf(kExceptionHandler);
+  if (interface is! InterfaceTypeWrap) {
+    return null;
+  }
+
+  if (interface.typeArguments.length == 0) {
+    return null; //TODO throw?
+  }
+
+  return new ExceptionHandlerInfo(element, interface.typeArguments[0]);
 }
 
 List<ExceptionHandlerInfo> collectExceptionHandlers(Element element) {
-  return element.metadata.fold(<ExceptionHandlerInfo>[],
-      (List<ExceptionHandlerInfo> list, ElementAnnotation annot) {
-    return _parseExceptions(annot);
-  });
+  return element.metadata
+      .map((ElementAnnotation annot) => _parseExceptions(annot))
+      .where((value) => value is ExceptionHandlerInfo)
+      .toList();
 }
