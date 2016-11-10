@@ -8,7 +8,7 @@ part of test.jaguar.route;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route('/user', methods: const <String>['GET']),
     const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
     const Route('/paramandquery/:param', methods: const <String>['GET']),
@@ -35,11 +35,11 @@ abstract class _$JaguarExampleApi implements RequestHandler {
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
+    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = getUser();
@@ -50,7 +50,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+        routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = statusCode();
@@ -61,7 +61,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[2].match(request.uri.path, request.method, prefix, pathParams);
+        routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = paramAndQuery(
@@ -75,7 +75,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, prefix, pathParams);
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputHeader(
@@ -88,7 +88,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, prefix, pathParams);
+        routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputHeaders(
@@ -101,7 +101,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[5].match(request.uri.path, request.method, prefix, pathParams);
+        routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputCookie(
@@ -116,7 +116,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     match =
-        _routes[6].match(request.uri.path, request.method, prefix, pathParams);
+        routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = inputCookies(

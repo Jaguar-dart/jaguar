@@ -8,7 +8,7 @@ part of test.jaguar.group.normal.book;
 // **************************************************************************
 
 abstract class _$JaguarBookApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route('', methods: const <String>['GET']),
     const Route('/some/:param1', methods: const <String>['POST'])
   ];
@@ -22,7 +22,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = getBook();
@@ -33,7 +33,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+        routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       String rRouteResponse;
       rRouteResponse = some(

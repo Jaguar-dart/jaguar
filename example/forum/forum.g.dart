@@ -8,7 +8,7 @@ part of example.forum;
 // **************************************************************************
 
 abstract class _$JaguarForumApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route('/user',
         methods: const <String>['GET'],
         statusCode: 201,
@@ -61,11 +61,11 @@ abstract class _$JaguarForumApi implements RequestHandler {
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
+    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbTest = new MongoDb(
         'test',
@@ -95,7 +95,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+        routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -114,7 +114,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[2].match(request.uri.path, request.method, prefix, pathParams);
+        routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -140,7 +140,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, prefix, pathParams);
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -165,7 +165,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, prefix, pathParams);
+        routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -197,7 +197,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[5].match(request.uri.path, request.method, prefix, pathParams);
+        routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -236,7 +236,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[6].match(request.uri.path, request.method, prefix, pathParams);
+        routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -271,7 +271,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[7].match(request.uri.path, request.method, prefix, pathParams);
+        routes[7].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -294,7 +294,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[8].match(request.uri.path, request.method, prefix, pathParams);
+        routes[8].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       MongoDb iMongoDbAdmin =
           new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
@@ -317,7 +317,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[9].match(request.uri.path, request.method, prefix, pathParams);
+        routes[9].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       DecodeJson iDecodeJson = new DecodeJson();
       dynamic rDecodeJson = await iDecodeJson.pre(
@@ -334,7 +334,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[10].match(request.uri.path, request.method, prefix, pathParams);
+        routes[10].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       DecodeFormData iDecodeFormData = new DecodeFormData();
       Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
@@ -351,7 +351,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
     }
 
     match =
-        _routes[11].match(request.uri.path, request.method, prefix, pathParams);
+        routes[11].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       DecodeUrlEncodedForm iDecodeUrlEncodedForm = new DecodeUrlEncodedForm();
       Map<String, String> rDecodeUrlEncodedForm =

@@ -54,7 +54,7 @@ class Writer {
 
   void _writeRouteList() {
     if (routes.isNotEmpty) {
-      sb.writeln("static const List<RouteBase> _routes = const <RouteBase>[");
+      sb.writeln("static const List<RouteBase> routes = const <RouteBase>[");
       String routeList = routes
           .map((RouteInfo route) => route.instantiationString)
           .toList()
@@ -97,7 +97,7 @@ class Writer {
 
     for (int i = 0; i < routes.length; i++) {
       sb.writeln(
-          "match = _routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
+          "match = routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
       sb.writeln("if (match) {");
 
       _writePreInterceptors(routes[i]);
