@@ -6,6 +6,7 @@ part 'routes.dart';
 part 'interceptors.dart';
 part 'inputs.dart';
 part 'websocket.dart';
+part 'exception.dart';
 
 ///An annotation to define an API class
 class Api {
@@ -40,12 +41,3 @@ class Group {
 
   const Group({this.path: ''});
 }
-
-class ExceptionHandler {
-  final Type exception;
-
-  const ExceptionHandler(this.exception);
-}
-
-typedef dynamic ExceptionHandlerFunc(
-    HttpRequest request, dynamic e, StackTrace trace);

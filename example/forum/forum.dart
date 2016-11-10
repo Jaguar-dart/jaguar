@@ -20,8 +20,8 @@ class ParamValidationException {
   String toString() => 'ParamException($statusCode, $param)';
 }
 
-@ExceptionHandler(ParamValidationException)
-class ParamValidationExceptionHandler {
+class ParamValidationExceptionHandler
+    implements ExceptionHandler<ParamValidationException> {
   const ParamValidationExceptionHandler();
 
   void onRouteException(

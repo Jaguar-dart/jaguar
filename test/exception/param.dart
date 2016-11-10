@@ -16,8 +16,8 @@ class ValidationException {
   ValidationException(this.field, this.message);
 }
 
-@ExceptionHandler(ValidationException)
-class ValidationExceptionHandler {
+class ValidationExceptionHandler
+    implements ExceptionHandler<ValidationException> {
   const ValidationExceptionHandler();
 
   void onRouteException(
