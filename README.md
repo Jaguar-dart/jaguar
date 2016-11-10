@@ -9,7 +9,7 @@ Jaguar, a server framework built for **speed, simplicity and extensiblity**.
 1. Keeps your route handlers concise and clean
 2. Bare metal speed achieved through code generation
 3. Extensible interceptor infrastructure
-4. Generates API console client to try your server without writing single 
+4. Generates API console client to try your server without writing single
 line of client code
 5. Tests are first class citizens in jaguar
 i. Mock HTTP requests and Websocket requests 

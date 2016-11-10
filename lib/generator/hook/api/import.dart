@@ -28,9 +28,9 @@ class ApiGenerator extends GeneratorForAnnotation<ant.Api> {
 
     print("Generating for Api class $className ...");
 
-    Writer writer = new Writer(className);
-
     final String prefix = api.url;
+
+    Writer writer = new Writer(className, prefix: prefix);
 
     List<InterceptorInfo> interceptors = parseInterceptor(element);
 
