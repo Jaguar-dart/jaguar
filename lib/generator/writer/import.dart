@@ -81,7 +81,7 @@ class Writer {
     sb.writeln(
         "Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {");
     if (prefix.isNotEmpty) {
-      sb.write("prefix += '${prefix}';");
+      sb.write("prefix += '$prefix';");
     }
     sb.writeln("PathParams pathParams = new PathParams();");
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
