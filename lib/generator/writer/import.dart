@@ -53,13 +53,15 @@ class Writer {
   }
 
   void _writeRouteList() {
-    sb.writeln("static const List<RouteBase> _routes = const <RouteBase>[");
-    String routeList = routes
-        .map((RouteInfo route) => route.instantiationString)
-        .toList()
-        .join(',');
-    sb.write(routeList);
-    sb.writeln("];");
+    if (routes.isNotEmpty) {
+      sb.writeln("static const List<RouteBase> _routes = const <RouteBase>[");
+      String routeList = routes
+          .map((RouteInfo route) => route.instantiationString)
+          .toList()
+          .join(',');
+      sb.write(routeList);
+      sb.writeln("];");
+    }
   }
 
   void _writeRoutePrototype() {
@@ -83,12 +85,14 @@ class Writer {
     if (prefix.isNotEmpty) {
       sb.write("prefix += '$prefix';");
     }
-    sb.writeln("PathParams pathParams = new PathParams();");
+    if (routes.isNotEmpty) {
+      sb.writeln("PathParams pathParams = new PathParams();");
+      sb.writeln("bool match = false;");
+    }
     if (routes.any((RouteInfo route) => route.shouldKeepQueryParam)) {
       sb.writeln(
           "QueryParams queryParams = new QueryParams(request.uri.queryParameters);");
     }
-    sb.writeln("bool match = false;");
     sb.writeln("");
 
     for (int i = 0; i < routes.length; i++) {
