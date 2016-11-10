@@ -199,15 +199,15 @@ abstract class _$JaguarForumApi implements RequestHandler {
     match =
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
-      Response<User> rRouteResponse;
       try {
+        MongoDb iMongoDbAdmin =
+            new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        Login iLogin = new Login();
+        iLogin.pre(
+          rMongoDbAdmin,
+        );
+        Response<User> rRouteResponse;
         ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
         if (injectPathParam is Validatable) {
           injectPathParam.validate();
@@ -217,21 +217,21 @@ abstract class _$JaguarForumApi implements RequestHandler {
           rMongoDbAdmin,
           injectPathParam,
         );
+        request.response.statusCode = rRouteResponse.statusCode ?? 200;
+        if (rRouteResponse.headers is Map) {
+          for (String key in rRouteResponse.headers.keys) {
+            request.response.headers.add(key, rRouteResponse.headers[key]);
+          }
+        }
+        request.response.write(rRouteResponse.valueAsString);
+        await request.response.close();
+        await iMongoDbAdmin.post();
       } on ParamValidationException catch (e, s) {
         ParamValidationExceptionHandler handler =
             new ParamValidationExceptionHandler();
         handler.onRouteException(request, e, s);
         return true;
       }
-      request.response.statusCode = rRouteResponse.statusCode ?? 200;
-      if (rRouteResponse.headers is Map) {
-        for (String key in rRouteResponse.headers.keys) {
-          request.response.headers.add(key, rRouteResponse.headers[key]);
-        }
-      }
-      request.response.write(rRouteResponse.valueAsString);
-      await request.response.close();
-      await iMongoDbAdmin.post();
       return true;
     }
 

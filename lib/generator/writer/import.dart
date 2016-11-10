@@ -98,11 +98,22 @@ class Writer {
           "match = routes[$i].match(request.uri.path, request.method, prefix, pathParams);");
       sb.writeln("if (match) {");
 
+      if (routes[i].exceptions.length != 0) {
+        sb.writeln("try {");
+      }
+
       _writePreInterceptors(routes[i]);
 
       _writeRouteCall(routes[i]);
 
       _writePostInterceptors(routes[i]);
+
+      if (routes[i].exceptions.length != 0) {
+        sb.write('} ');
+
+        RouteExceptionWriter exceptWriter = new RouteExceptionWriter(routes[i]);
+        sb.write(exceptWriter.generate());
+      }
 
       sb.writeln("return true;");
       sb.writeln("}");
@@ -132,19 +143,8 @@ class Writer {
       }
     }
 
-    if (route.exceptions.length != 0) {
-      sb.writeln("try {");
-    }
-
     RouteCallWriter callWriter = new RouteCallWriter(route);
     sb.write(callWriter.generate());
-
-    if (route.exceptions.length != 0) {
-      sb.write('} ');
-
-      RouteExceptionWriter exceptWriter = new RouteExceptionWriter(route);
-      sb.write(exceptWriter.generate());
-    }
 
     if (route.returnsResponse) {
       DefaultResponseWriterResponse responseWriter =
