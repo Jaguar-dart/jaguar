@@ -12,7 +12,6 @@ import 'package:mime/mime.dart';
 Future<String> getStringFromBody(HttpRequest request, Encoding encoding) async {
   Completer<String> completer = new Completer<String>();
   String allData = "";
-  //  TODO: add error
   request.transform(encoding.decoder).listen((String data) => allData += data,
       onDone: () => completer.complete(allData));
   return completer.future;
@@ -115,6 +114,9 @@ class DecodeJson extends Interceptor {
 
   Future<dynamic> pre(HttpRequest request) async {
     String data = await getStringFromBody(request, encoding);
-    return JSON.decode(data);
+    if (data.isNotEmpty) {
+      return JSON.decode(data);
+    }
+    return null;
   }
 }
