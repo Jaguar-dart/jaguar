@@ -78,7 +78,7 @@ class Writer {
 
   void _writeRequestHandler() {
     sb.writeln(
-        "Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {");
+        "Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {");
     if (routes.first.pathPrefix.isNotEmpty) {
       sb.write("prefix += '${routes.first.pathPrefix}';");
     }
@@ -107,7 +107,7 @@ class Writer {
     }
 
     groups.forEach((GroupInfo groupeInfo) {
-      sb.write("if (await ${groupeInfo.name}.requestHandler(request");
+      sb.write("if (await ${groupeInfo.name}.handleRequest(request");
       if (groupeInfo.group.path.isNotEmpty) {
         sb.write(",prefix: prefix + '${groupeInfo.group.path}'");
       }

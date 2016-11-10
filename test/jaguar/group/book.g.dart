@@ -17,7 +17,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
 
   String some(String param1);
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 

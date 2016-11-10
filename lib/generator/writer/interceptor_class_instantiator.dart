@@ -14,10 +14,6 @@ class InterceptorClassDecl {
     _generateExperimental();
   }
 
-  void _generate() {
-    _w.write(_i.instantiationString);
-  }
-
   void _generateExperimental() {
     _w.write(_i.interceptor.name + " ");
     _w.write(_i.genInstanceName + " = new ");

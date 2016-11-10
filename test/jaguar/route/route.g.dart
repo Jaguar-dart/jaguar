@@ -32,7 +32,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String inputCookies(List<Cookie> cookies);
 
-  Future<bool> requestHandler(HttpRequest request, {String prefix: ''}) async {
+  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);

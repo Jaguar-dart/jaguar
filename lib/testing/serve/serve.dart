@@ -17,7 +17,7 @@ class JaguarMock {
     try {
       for (int i = 0; i < config.apis.length; i++) {
         var apiClass = config.apis[i];
-        bool result = await apiClass.requestHandler(request);
+        bool result = await apiClass.handleRequest(request);
         if (result) break;
       }
     } catch (e, stack) {
