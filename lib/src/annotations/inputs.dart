@@ -43,3 +43,11 @@ class InputCookies {
 class RouteResponse {
   const RouteResponse();
 }
+
+class InputPathParams {
+  const InputPathParams();
+}
+
+class InputQueryParams {
+  const InputQueryParams();
+}
