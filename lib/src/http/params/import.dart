@@ -126,7 +126,7 @@ class PathParams extends DynamicDottableMap {
 class QueryParams extends DynamicDottableMap {
   QueryParams(Map<String, dynamic> map) : super(map);
 
-  QueryParams.FromQueryParams(QueryParams param) : super(param);
+  QueryParams.FromQueryParam(QueryParams param) : super(param);
 }
 
 abstract class Validatable {
