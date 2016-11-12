@@ -81,13 +81,17 @@ abstract class _$JaguarForumApi implements RequestHandler {
       User rRouteResponse;
       rRouteResponse = await fetch();
       request.response.statusCode = 201;
-      request.response.headers.add("sample-header", "made-with.jaguar");
+      request.response.headers.set("sample-header", "made-with.jaguar");
       iEncodeToJson.post(
         request,
         rRouteResponse,
       );
-      await iMongoDbAdmin.post();
-      await iMongoDbTest.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
+      await iMongoDbTest.post(
+        request,
+      );
       return true;
     }
 
@@ -106,7 +110,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rMongoDbAdmin,
       );
       request.response.statusCode = 200;
-      await iMongoDbAdmin.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
       return true;
     }
 
@@ -132,7 +138,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
-      await iMongoDbAdmin.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
       return true;
     }
 
@@ -157,7 +165,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
-      await iMongoDbAdmin.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
       return true;
     }
 
@@ -181,14 +191,16 @@ abstract class _$JaguarForumApi implements RequestHandler {
       request.response.statusCode = rRouteResponse.statusCode ?? 200;
       if (rRouteResponse.headers is Map) {
         for (String key in rRouteResponse.headers.keys) {
-          request.response.headers.add(key, rRouteResponse.headers[key]);
+          request.response.headers.set(key, rRouteResponse.headers[key]);
         }
       }
       iEncodeToJson.post(
         request,
         rRouteResponse.value,
       );
-      await iMongoDbAdmin.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
       return true;
     }
 
@@ -212,12 +224,14 @@ abstract class _$JaguarForumApi implements RequestHandler {
         request.response.statusCode = rRouteResponse.statusCode ?? 200;
         if (rRouteResponse.headers is Map) {
           for (String key in rRouteResponse.headers.keys) {
-            request.response.headers.add(key, rRouteResponse.headers[key]);
+            request.response.headers.set(key, rRouteResponse.headers[key]);
           }
         }
         request.response.write(rRouteResponse.valueAsString);
         await request.response.close();
-        await iMongoDbAdmin.post();
+        await iMongoDbAdmin.post(
+          request,
+        );
       } on ParamValidationException catch (e, s) {
         ParamValidationExceptionHandler handler =
             new ParamValidationExceptionHandler();
@@ -248,14 +262,16 @@ abstract class _$JaguarForumApi implements RequestHandler {
         request.response.statusCode = rRouteResponse.statusCode ?? 200;
         if (rRouteResponse.headers is Map) {
           for (String key in rRouteResponse.headers.keys) {
-            request.response.headers.add(key, rRouteResponse.headers[key]);
+            request.response.headers.set(key, rRouteResponse.headers[key]);
           }
         }
         iEncodeToJson.post(
           request,
           rRouteResponse.value,
         );
-        await iMongoDbAdmin.post();
+        await iMongoDbAdmin.post(
+          request,
+        );
       } on ParamValidationException catch (e, s) {
         ParamValidationExceptionHandler handler =
             new ParamValidationExceptionHandler();
@@ -284,7 +300,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
-      await iMongoDbAdmin.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
       return true;
     }
 
@@ -307,7 +325,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
       request.response.statusCode = 200;
       request.response.write(rRouteResponse.toString());
       await request.response.close();
-      await iMongoDbAdmin.post();
+      await iMongoDbAdmin.post(
+        request,
+      );
       return true;
     }
 

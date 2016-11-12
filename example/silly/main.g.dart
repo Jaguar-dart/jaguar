@@ -113,7 +113,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       String rRouteResponse;
       rRouteResponse = pong();
       request.response.statusCode = 201;
-      request.response.headers.add("pong-header", "silly-pong");
+      request.response.headers.set("pong-header", "silly-pong");
       request.response.write(rRouteResponse.toString());
       await request.response.close();
       return true;
