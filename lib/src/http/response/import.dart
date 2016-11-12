@@ -28,12 +28,12 @@ class Response<ValueType> {
     }
 
     if (headers is Map<String, String>) {
-      resp.headers;
+      headers.forEach((String key, String val) {
+        resp.headers.set(key,val);
+      });
     }
 
     resp.write(valueAsString);
-
-    await resp.close();
   }
 }
 
