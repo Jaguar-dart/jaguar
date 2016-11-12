@@ -32,6 +32,7 @@ class ValidationExceptionHandler
 class UserParser extends Interceptor {
   const UserParser();
 
+  @InputQueryParams()
   User pre(QueryParams queryParams) {
     if (queryParams.name is! String) {
       throw new ValidationException('name', 'is required!');

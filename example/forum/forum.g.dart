@@ -17,15 +17,12 @@ abstract class _$JaguarForumApi implements RequestHandler {
     const Route('/user/:param1', methods: const <String>['POST']),
     const Route('/user', methods: const <String>['PUT']),
     const Route('/user1', methods: const <String>['PUT']),
-    const Route('/user2',
-        methods: const <String>['PUT'], validatePathParams: true),
-    const Put('/user3', validatePathParams: true),
+    const Route('/user2', methods: const <String>['PUT']),
+    const Put('/user3'),
     const Route('/regex/:param1',
         methods: const <String>['PUT'],
-        validatePathParams: true,
         pathRegEx: const {'param1': r'^(hello|fello)$'}),
-    const Route('/regexrem/:param1*',
-        methods: const <String>['PUT'], validatePathParams: true),
+    const Route('/regexrem/:param1*', methods: const <String>['PUT']),
     const Route('/test/decodebody/json', methods: const <String>['POST']),
     const Route('/test/decodebody/formdata', methods: const <String>['POST']),
     const Route('/test/decodebody/xwww', methods: const <String>['POST'])
@@ -176,11 +173,10 @@ abstract class _$JaguarForumApi implements RequestHandler {
       );
       EncodeToJson iEncodeToJson = new EncodeToJson();
       Response<User> rRouteResponse;
-      PathParams injectPathParam = new PathParams.FromPathParam(pathParams);
       rRouteResponse = update1(
         request,
         rMongoDbAdmin,
-        injectPathParam,
+        null,
       );
       request.response.statusCode = rRouteResponse.statusCode ?? 200;
       if (rRouteResponse.headers is Map) {
@@ -208,14 +204,10 @@ abstract class _$JaguarForumApi implements RequestHandler {
           rMongoDbAdmin,
         );
         Response<User> rRouteResponse;
-        ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
-        if (injectPathParam is Validatable) {
-          injectPathParam.validate();
-        }
         rRouteResponse = update2(
           request,
           rMongoDbAdmin,
-          injectPathParam,
+          new ParamCreate.FromPathParam(pathParams),
         );
         request.response.statusCode = rRouteResponse.statusCode ?? 200;
         if (rRouteResponse.headers is Map) {
@@ -248,14 +240,10 @@ abstract class _$JaguarForumApi implements RequestHandler {
         );
         EncodeToJson iEncodeToJson = new EncodeToJson();
         Response<User> rRouteResponse;
-        ParamCreate injectPathParam = new ParamCreate.FromPathParam(pathParams);
-        if (injectPathParam is Validatable) {
-          injectPathParam.validate();
-        }
         rRouteResponse = await update3(
           request,
           rMongoDbAdmin,
-          injectPathParam,
+          new ParamCreate.FromPathParam(pathParams),
         );
         request.response.statusCode = rRouteResponse.statusCode ?? 200;
         if (rRouteResponse.headers is Map) {

@@ -52,7 +52,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       try {
         UserParser iUserParser = new UserParser();
         User rUserParser = iUserParser.pre(
-          queryParams,
+          new QueryParams.FromQueryParam(queryParams),
         );
         User rRouteResponse;
         rRouteResponse = post(

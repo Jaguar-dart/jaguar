@@ -45,9 +45,13 @@ class RouteResponse {
 }
 
 class InputPathParams {
-  const InputPathParams();
+  final bool validate;
+
+  const InputPathParams([this.validate = false]);
 }
 
 class InputQueryParams {
-  const InputQueryParams();
+  final bool validate;
+
+  const InputQueryParams([this.validate = false]);
 }
