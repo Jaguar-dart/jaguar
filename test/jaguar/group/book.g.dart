@@ -24,24 +24,22 @@ abstract class _$JaguarBookApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = getBook();
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = getBook();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = some(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = some(
         (pathParams.getField('param1')),
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
