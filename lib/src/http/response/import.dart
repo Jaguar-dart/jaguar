@@ -29,7 +29,7 @@ class Response<ValueType> {
 
     if (headers is Map<String, String>) {
       headers.forEach((String key, String val) {
-        resp.headers.set(key,val);
+        resp.headers.set(key, val);
       });
     }
 
