@@ -26,14 +26,12 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
+      Response rRouteResponse = new Response(null);
       try {
-        String rRouteResponse;
-        rRouteResponse = getUser(
+        rRouteResponse.statusCode = 200;
+        rRouteResponse.value = getUser(
           who: (queryParams.getField('who')),
         );
-        request.response.statusCode = 200;
-        request.response.write(rRouteResponse.toString());
-        await request.response.close();
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         handler.onRouteException(request, e, s);
@@ -43,29 +41,29 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         handler.onRouteException(request, e, s);
         return true;
       }
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
+      Response rRouteResponse = new Response(null);
       try {
         UserParser iUserParser = new UserParser();
         User rUserParser = iUserParser.pre(
           new QueryParams.FromQueryParam(queryParams),
         );
-        User rRouteResponse;
-        rRouteResponse = post(
+        rRouteResponse.statusCode = 200;
+        rRouteResponse.value = post(
           rUserParser,
         );
-        request.response.statusCode = 200;
-        request.response.write(rRouteResponse.toString());
-        await request.response.close();
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         handler.onRouteException(request, e, s);
         return true;
       }
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 

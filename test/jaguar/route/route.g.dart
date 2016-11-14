@@ -41,90 +41,83 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = getUser();
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = getUser();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = statusCode();
-      request.response.statusCode = 201;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 201;
+      rRouteResponse.value = statusCode();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = paramAndQuery(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = paramAndQuery(
         (pathParams.getField('param')),
         (queryParams.getField('query')),
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = inputHeader(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = inputHeader(
         request.headers.value('user'),
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = inputHeaders(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = inputHeaders(
         request.headers,
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = inputCookie(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = inputCookie(
         request.cookies
             .firstWhere((cookie) => cookie.name == 'user', orElse: () => null)
             ?.value,
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = inputCookies(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = inputCookies(
         request.cookies,
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
