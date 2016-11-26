@@ -20,8 +20,8 @@ class ParamValidationException {
   String toString() => 'ParamException($statusCode, $param)';
 }
 
-@ExceptionHandler(ParamValidationException)
-class ParamValidationExceptionHandler {
+class ParamValidationExceptionHandler
+    implements ExceptionHandler<ParamValidationException> {
   const ParamValidationExceptionHandler();
 
   void onRouteException(
@@ -118,23 +118,23 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Route(path: '/user2', methods: const <String>['PUT'], validatePathParams: true)
+  @Route(path: '/user2', methods: const <String>['PUT'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
-  @ParamValidationExceptionHandler()
+  @InputPathParams(true)
   Response<User> update2(HttpRequest request, Db db, ParamCreate pathParams) {
     User user =
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
   }
 
-  @Put(path: '/user3', validatePathParams: true)
+  @Put(path: '/user3')
   @MongoDb('admin', id: 'Admin')
   @Login()
-  @Input(MongoDb, id: 'Admin')
-  @ParamValidationExceptionHandler()
   @EncodeToJson()
+  @Input(MongoDb, id: 'Admin')
+  @InputPathParams(true)
   Future<Response<User>> update3(
       HttpRequest request, Db db, ParamCreate pathParams) async {
     User user =
@@ -144,7 +144,6 @@ class ForumApi extends Object with _$JaguarForumApi {
 
   @Route(path: '/regex/:param1',
       methods: const <String>['PUT'],
-      validatePathParams: true,
       pathRegEx: const {'param1': r'^(hello|fello)$'})
   @MongoDb('admin', id: 'Admin')
   @Login()
@@ -154,7 +153,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   }
 
   @Route(path: '/regexrem/:param1*',
-      methods: const <String>['PUT'], validatePathParams: true)
+      methods: const <String>['PUT'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')

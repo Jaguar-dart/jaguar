@@ -8,7 +8,7 @@ part of test.jaguar.websocket;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Ws('/ws')];
+  static const List<RouteBase> routes = const <RouteBase>[const Ws('/ws')];
 
   Future<dynamic> websocket(WebSocket ws);
 
@@ -18,7 +18,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       WebSocket ws = await WebSocketTransformer.upgrade(request);
       await websocket(

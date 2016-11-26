@@ -8,7 +8,7 @@ part of test.interceptor.param;
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/user', methods: const <String>['GET'])
   ];
 
@@ -20,20 +20,19 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
+      Response rRouteResponse = new Response(null);
       WithParam iWithParam = new WithParam(
         params: const {#checker: CheckerImpl},
         checker: new CheckerImpl(),
       );
       String rWithParam = iWithParam.pre();
-      String rRouteResponse;
-      rRouteResponse = getUser(
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = getUser(
         rWithParam,
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 

@@ -8,7 +8,7 @@ part of jaguar.example.silly;
 // **************************************************************************
 
 abstract class _$JaguarMyGroup implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Get(path: '/')];
+  static const List<RouteBase> routes = const <RouteBase>[const Get(path: '/')];
 
   String get();
 
@@ -18,13 +18,12 @@ abstract class _$JaguarMyGroup implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = get();
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = get();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
@@ -38,7 +37,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarMySecondGroup implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Get(path: '/')];
+  static const List<RouteBase> routes = const <RouteBase>[const Get(path: '/')];
 
   String get();
 
@@ -48,13 +47,12 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
     bool match = false;
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = get();
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = get();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
@@ -68,7 +66,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[
+  static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/ping', methods: const <String>['GET']),
     const Put(path: '/pong',
         statusCode: 201, headers: const {"pong-header": "silly-pong"}),
@@ -93,60 +91,56 @@ abstract class _$JaguarExampleApi implements RequestHandler {
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
     bool match = false;
+    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
     match =
-        _routes[0].match(request.uri.path, request.method, prefix, pathParams);
+        routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = ping();
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = ping();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
-        _routes[1].match(request.uri.path, request.method, prefix, pathParams);
+        routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = pong();
-      request.response.statusCode = 201;
-      request.response.headers.add("pong-header", "silly-pong");
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 201;
+      rRouteResponse.headers['pong-header'] = 'silly-pong';
+      rRouteResponse.value = pong();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
-        _routes[2].match(request.uri.path, request.method, prefix, pathParams);
+        routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = echoPathParam(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = echoPathParam(
         (pathParams.getField('message')),
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
-        _routes[3].match(request.uri.path, request.method, prefix, pathParams);
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      String rRouteResponse;
-      rRouteResponse = echoQueryParam(
+      Response rRouteResponse = new Response(null);
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = echoQueryParam(
         message: (queryParams.getField('message')),
       );
-      request.response.statusCode = 200;
-      request.response.write(rRouteResponse.toString());
-      await request.response.close();
+      await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
     match =
-        _routes[4].match(request.uri.path, request.method, prefix, pathParams);
+        routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       WebSocket ws = await WebSocketTransformer.upgrade(request);
       await websocket(

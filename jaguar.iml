@@ -2,7 +2,24 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/bin/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/forum/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/silly/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/exception/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/interceptor/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/interceptor/param/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/group/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/route/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/websocket/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/src/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/tool/packages" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="application" />

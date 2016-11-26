@@ -43,3 +43,15 @@ class InputCookies {
 class RouteResponse {
   const RouteResponse();
 }
+
+class InputPathParams {
+  final bool validate;
+
+  const InputPathParams([this.validate = false]);
+}
+
+class InputQueryParams {
+  final bool validate;
+
+  const InputQueryParams([this.validate = false]);
+}

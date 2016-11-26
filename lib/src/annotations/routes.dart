@@ -13,10 +13,6 @@ abstract class RouteBase {
 
   Map<String, String> get pathRegEx;
 
-  bool get validatePathParams;
-
-  bool get validateQueryParams;
-
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
     params.clear();
@@ -99,10 +95,6 @@ class Route extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  final bool validatePathParams;
-
-  final bool validateQueryParams;
-
   const Route(
       {this.path,
       this.methods: const <String>[
@@ -115,9 +107,7 @@ class Route extends RouteBase {
       ],
       this.statusCode: 200,
       this.headers,
-      this.pathRegEx,
-      this.validatePathParams: false,
-      this.validateQueryParams: false});
+      this.pathRegEx});
 }
 
 class Get extends RouteBase {
@@ -131,17 +121,12 @@ class Get extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  final bool validatePathParams;
-
-  final bool validateQueryParams;
-
-  const Get(
-      {this.path,
-      this.statusCode: 200,
-      this.headers,
-      this.pathRegEx,
-      this.validatePathParams: false,
-      this.validateQueryParams: false});
+  const Get({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['GET'];
 }
@@ -157,17 +142,12 @@ class Post extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  final bool validatePathParams;
-
-  final bool validateQueryParams;
-
-  const Post(
-      {this.path,
-      this.statusCode: 200,
-      this.headers,
-      this.pathRegEx,
-      this.validatePathParams: false,
-      this.validateQueryParams: false});
+  const Post({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['POST'];
 }
@@ -183,17 +163,12 @@ class Put extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  final bool validatePathParams;
-
-  final bool validateQueryParams;
-
-  const Put(
-      {this.path,
-      this.statusCode: 200,
-      this.headers,
-      this.pathRegEx,
-      this.validatePathParams: false,
-      this.validateQueryParams: false});
+  const Put({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['PUT'];
 }
@@ -209,17 +184,12 @@ class Delete extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  final bool validatePathParams;
-
-  final bool validateQueryParams;
-
-  const Delete(
-      {this.path,
-      this.statusCode: 200,
-      this.headers,
-      this.pathRegEx,
-      this.validatePathParams: false,
-      this.validateQueryParams: false});
+  const Delete({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['DELETE'];
 }

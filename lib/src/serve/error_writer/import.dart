@@ -2,14 +2,13 @@ library jaguar.src.serve.error_writer;
 
 import 'dart:io';
 import 'package:stack_trace/stack_trace.dart';
+import 'package:jaguar/src/error.dart';
 
 void writeErrorPage(HttpResponse response, String resource, Object error,
     [StackTrace stack, int statusCode]) {
-  /* TODO
-  if (error is RequestException) {
+  if (error is JaguarError) {
     statusCode = error.statusCode;
   }
-  */
 
   String description = _getStatusDescription(statusCode);
 
@@ -76,7 +75,7 @@ void writeErrorPage(HttpResponse response, String resource, Object error,
 </body>
 </html>''';
 
-  response.statusCode = 500;
+  response.statusCode = statusCode;
   response.headers.set("content-type", "text/html");
   response.write(errorTemplate);
   response.close();
