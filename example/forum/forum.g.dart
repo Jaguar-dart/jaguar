@@ -9,26 +9,26 @@ part of example.forum;
 
 abstract class _$JaguarForumApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
-    const Route('/user',
+    const Route(path: '/user',
         methods: const <String>['GET'],
         statusCode: 201,
         headers: const {"sample-header": "made-with.jaguar"}),
-    const Route('/user', methods: const <String>['DELETE']),
-    const Route('/user/:param1', methods: const <String>['POST']),
-    const Route('/user', methods: const <String>['PUT']),
-    const Route('/user1', methods: const <String>['PUT']),
-    const Route('/user2',
+    const Route(path: '/user', methods: const <String>['DELETE']),
+    const Route(path: '/user/:param1', methods: const <String>['POST']),
+    const Route(path: '/user', methods: const <String>['PUT']),
+    const Route(path: '/user1', methods: const <String>['PUT']),
+    const Route(path: '/user2',
         methods: const <String>['PUT'], validatePathParams: true),
-    const Put('/user3', validatePathParams: true),
-    const Route('/regex/:param1',
+    const Put(path: '/user3', validatePathParams: true),
+    const Route(path: '/regex/:param1',
         methods: const <String>['PUT'],
         validatePathParams: true,
         pathRegEx: const {'param1': r'^(hello|fello)$'}),
-    const Route('/regexrem/:param1*',
+    const Route(path: '/regexrem/:param1*',
         methods: const <String>['PUT'], validatePathParams: true),
-    const Route('/test/decodebody/json', methods: const <String>['POST']),
-    const Route('/test/decodebody/formdata', methods: const <String>['POST']),
-    const Route('/test/decodebody/xwww', methods: const <String>['POST'])
+    const Route(path: '/test/decodebody/json', methods: const <String>['POST']),
+    const Route(path: '/test/decodebody/formdata', methods: const <String>['POST']),
+    const Route(path: '/test/decodebody/xwww', methods: const <String>['POST'])
   ];
 
   Future<User> fetch();

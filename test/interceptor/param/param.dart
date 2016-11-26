@@ -32,7 +32,7 @@ class WithParam extends Interceptor {
 
 @Api(path: '/api')
 class ExampleApi extends Object with _$JaguarExampleApi {
-  @Route('/user', methods: const <String>['GET'])
+  @Route(path: '/user', methods: const <String>['GET'])
   @WithParam(params: const {#checker: CheckerImpl})
   @Input(WithParam)
   String getUser(String who) => who;

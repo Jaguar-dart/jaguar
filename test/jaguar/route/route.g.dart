@@ -9,13 +9,13 @@ part of test.jaguar.route;
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
-    const Route('/user', methods: const <String>['GET']),
-    const Route('/statuscode', methods: const <String>['GET'], statusCode: 201),
-    const Route('/paramandquery/:param', methods: const <String>['GET']),
-    const Route('/input/header', methods: const <String>['GET']),
-    const Route('/input/headers', methods: const <String>['GET']),
-    const Route('/input/cookie', methods: const <String>['GET']),
-    const Route('/input/cookies', methods: const <String>['GET'])
+    const Route(path: '/user', methods: const <String>['GET']),
+    const Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201),
+    const Route(path: '/paramandquery/:param', methods: const <String>['GET']),
+    const Route(path: '/input/header', methods: const <String>['GET']),
+    const Route(path: '/input/headers', methods: const <String>['GET']),
+    const Route(path: '/input/cookie', methods: const <String>['GET']),
+    const Route(path: '/input/cookies', methods: const <String>['GET'])
   ];
 
   String getUser();

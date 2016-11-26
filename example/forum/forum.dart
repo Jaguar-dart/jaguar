@@ -71,7 +71,7 @@ class ParamCreate implements Validatable {
 
 @Api(path: '/api')
 class ForumApi extends Object with _$JaguarForumApi {
-  @Route('/user',
+  @Route(path: '/user',
       methods: const <String>['GET'],
       statusCode: 201,
       headers: const {"sample-header": "made-with.jaguar"})
@@ -83,13 +83,13 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new User('dummy@dummy.com', 'Dummy', 'password', 27);
   }
 
-  @Route('/user', methods: const <String>['DELETE'])
+  @Route(path: '/user', methods: const <String>['DELETE'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
   void delete(HttpRequest request, Db db) {}
 
-  @Route('/user/:param1', methods: const <String>['POST'])
+  @Route(path: '/user/:param1', methods: const <String>['POST'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
@@ -98,7 +98,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new User(email, name, password, age);
   }
 
-  @Route('/user', methods: const <String>['PUT'])
+  @Route(path: '/user', methods: const <String>['PUT'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
@@ -107,7 +107,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return param1;
   }
 
-  @Route('/user1', methods: const <String>['PUT'])
+  @Route(path: '/user1', methods: const <String>['PUT'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
@@ -118,7 +118,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Route('/user2', methods: const <String>['PUT'], validatePathParams: true)
+  @Route(path: '/user2', methods: const <String>['PUT'], validatePathParams: true)
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
@@ -129,7 +129,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Put('/user3', validatePathParams: true)
+  @Put(path: '/user3', validatePathParams: true)
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')
@@ -142,7 +142,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Route('/regex/:param1',
+  @Route(path: '/regex/:param1',
       methods: const <String>['PUT'],
       validatePathParams: true,
       pathRegEx: const {'param1': r'^(hello|fello)$'})
@@ -153,7 +153,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return param1;
   }
 
-  @Route('/regexrem/:param1*',
+  @Route(path: '/regexrem/:param1*',
       methods: const <String>['PUT'], validatePathParams: true)
   @MongoDb('admin', id: 'Admin')
   @Login()
@@ -162,21 +162,21 @@ class ForumApi extends Object with _$JaguarForumApi {
     return param1;
   }
 
-  @Route('/test/decodebody/json', methods: const <String>['POST'])
+  @Route(path: '/test/decodebody/json', methods: const <String>['POST'])
   @DecodeJson()
   @Input(DecodeJson)
   String decodeJson(Map<String, dynamic> json) {
     return json.toString();
   }
 
-  @Route('/test/decodebody/formdata', methods: const <String>['POST'])
+  @Route(path: '/test/decodebody/formdata', methods: const <String>['POST'])
   @DecodeFormData()
   @Input(DecodeFormData)
   String decodeFormData(Map<String, FormField> formFields) {
     return formFields.toString();
   }
 
-  @Route('/test/decodebody/xwww', methods: const <String>['POST'])
+  @Route(path: '/test/decodebody/xwww', methods: const <String>['POST'])
   @DecodeUrlEncodedForm()
   @Input(DecodeUrlEncodedForm)
   String decodeXwww(Map<String, String> xwww) {

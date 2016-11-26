@@ -9,8 +9,8 @@ part of test.jaguar.group.normal.book;
 
 abstract class _$JaguarBookApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
-    const Route('', methods: const <String>['GET']),
-    const Route('/some/:param1', methods: const <String>['POST'])
+    const Route(methods: const <String>['GET']),
+    const Route(path: '/some/:param1', methods: const <String>['POST'])
   ];
 
   String getBook();

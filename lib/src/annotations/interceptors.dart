@@ -1,20 +1,5 @@
 part of jaguar.src.annotations;
 
-class DefineInterceptorFunc {
-  const DefineInterceptorFunc();
-}
-
-/// Annotation to define a function as interceptor to a route
-class InterceptorFunction {
-  ///Function that contains the implementation of the interceptor
-  final Function function;
-
-  /// Defines if the interceptor should be executed pre or post route execution
-  final bool isPost;
-
-  const InterceptorFunction(this.function, {this.isPost: false});
-}
-
 /// Annotation to defines an interceptor class
 class InterceptorClass {
   /// Defines if the interceptor writes response
@@ -33,4 +18,15 @@ class Interceptor {
   final Map<Symbol, Type> params;
 
   const Interceptor({this.id, this.params});
+}
+
+/// Instantiates a parameter in constructor or method as non-constant instance
+class InstantiateParam {
+  const InstantiateParam();
+}
+
+class ProvideAsInterceptorResult {
+  final Type asInterceptor;
+
+  const ProvideAsInterceptorResult(this.asInterceptor);
 }

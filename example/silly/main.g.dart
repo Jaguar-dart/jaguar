@@ -8,7 +8,7 @@ part of jaguar.example.silly;
 // **************************************************************************
 
 abstract class _$JaguarMyGroup implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+  static const List<RouteBase> _routes = const <RouteBase>[const Get(path: '/')];
 
   String get();
 
@@ -38,7 +38,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarMySecondGroup implements RequestHandler {
-  static const List<RouteBase> _routes = const <RouteBase>[const Get('/')];
+  static const List<RouteBase> _routes = const <RouteBase>[const Get(path: '/')];
 
   String get();
 
@@ -69,11 +69,11 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
-    const Route('/ping', methods: const <String>['GET']),
-    const Put('/pong',
+    const Route(path: '/ping', methods: const <String>['GET']),
+    const Put(path: '/pong',
         statusCode: 201, headers: const {"pong-header": "silly-pong"}),
-    const Route('/echo/pathparam/:message', methods: const <String>['POST']),
-    const Route('/echo/queryparam', methods: const <String>['POST']),
+    const Route(path: '/echo/pathparam/:message', methods: const <String>['POST']),
+    const Route(path: '/echo/queryparam', methods: const <String>['POST']),
     const Ws('/ws')
   ];
 

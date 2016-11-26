@@ -168,7 +168,7 @@ class Writer {
   }
 
   void _writePreInterceptorClass(RouteInfo route, InterceptorClassInfo info) {
-    InterceptorClassDecl declWriter = new InterceptorClassDecl(route, info);
+    InterceptorClassDecl declWriter = new InterceptorClassDecl(info);
 
     sb.write(declWriter.code);
 

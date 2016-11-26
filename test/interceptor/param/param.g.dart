@@ -9,7 +9,7 @@ part of test.interceptor.param;
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> _routes = const <RouteBase>[
-    const Route('/user', methods: const <String>['GET'])
+    const Route(path: '/user', methods: const <String>['GET'])
   ];
 
   String getUser(String who);

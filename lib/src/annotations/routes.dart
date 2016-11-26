@@ -103,8 +103,9 @@ class Route extends RouteBase {
 
   final bool validateQueryParams;
 
-  const Route(this.path,
-      {this.methods: const <String>[
+  const Route(
+      {this.path,
+      this.methods: const <String>[
         'GET',
         'POST',
         'PUT',
@@ -134,8 +135,9 @@ class Get extends RouteBase {
 
   final bool validateQueryParams;
 
-  const Get(this.path,
-      {this.statusCode: 200,
+  const Get(
+      {this.path,
+      this.statusCode: 200,
       this.headers,
       this.pathRegEx,
       this.validatePathParams: false,
@@ -159,8 +161,9 @@ class Post extends RouteBase {
 
   final bool validateQueryParams;
 
-  const Post(this.path,
-      {this.statusCode: 200,
+  const Post(
+      {this.path,
+      this.statusCode: 200,
       this.headers,
       this.pathRegEx,
       this.validatePathParams: false,
@@ -184,8 +187,9 @@ class Put extends RouteBase {
 
   final bool validateQueryParams;
 
-  const Put(this.path,
-      {this.statusCode: 200,
+  const Put(
+      {this.path,
+      this.statusCode: 200,
       this.headers,
       this.pathRegEx,
       this.validatePathParams: false,
@@ -209,8 +213,9 @@ class Delete extends RouteBase {
 
   final bool validateQueryParams;
 
-  const Delete(this.path,
-      {this.statusCode: 200,
+  const Delete(
+      {this.path,
+      this.statusCode: 200,
       this.headers,
       this.pathRegEx,
       this.validatePathParams: false,
