@@ -10,7 +10,8 @@ part of test.jaguar.route;
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/user', methods: const <String>['GET']),
-    const Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201),
+    const Route(
+        path: '/statuscode', methods: const <String>['GET'], statusCode: 201),
     const Route(path: '/paramandquery/:param', methods: const <String>['GET']),
     const Route(path: '/input/header', methods: const <String>['GET']),
     const Route(path: '/input/headers', methods: const <String>['GET']),
@@ -22,7 +23,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String statusCode();
 
-  String paramAndQuery(String param, [String query]);
+  String paramAndQuery(String param, {String query});
 
   String inputHeader(String user);
 
@@ -38,6 +39,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
+//Handler for getUser
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -48,6 +50,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for statusCode
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -58,6 +61,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for paramAndQuery
     match =
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -65,12 +69,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       rRouteResponse.statusCode = 200;
       rRouteResponse.value = paramAndQuery(
         (pathParams.getField('param')),
-        (queryParams.getField('query')),
+        query: (queryParams.getField('query')),
       );
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for inputHeader
     match =
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -83,6 +88,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for inputHeaders
     match =
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -95,6 +101,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for inputCookie
     match =
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -109,6 +116,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for inputCookies
     match =
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {

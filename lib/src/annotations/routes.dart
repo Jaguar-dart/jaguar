@@ -13,6 +13,8 @@ abstract class RouteBase {
 
   Map<String, String> get pathRegEx;
 
+  String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
+
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
     params.clear();
@@ -23,7 +25,7 @@ abstract class RouteBase {
 
     List<String> rqSegs = requestPath.split('/');
 
-    List<String> segs = (prefix + path).split('/');
+    List<String> segs = prefixedPath(prefix).split('/');
 
     return comparePathSegments(segs, rqSegs, params);
   }

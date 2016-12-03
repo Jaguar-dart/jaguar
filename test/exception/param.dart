@@ -28,7 +28,6 @@ class ValidationExceptionHandler
   }
 }
 
-@InterceptorClass()
 class UserParser extends Interceptor {
   const UserParser();
 

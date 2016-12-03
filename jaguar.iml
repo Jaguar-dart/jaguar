@@ -12,12 +12,12 @@
       <excludeFolder url="file://$MODULE_DIR$/test/exception/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/interceptor/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/interceptor/param/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/interceptor/state/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/group/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/route/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/websocket/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/test/src/packages" />
       <excludeFolder url="file://$MODULE_DIR$/tool/packages" />
     </content>
     <orderEntry type="inheritedJdk" />

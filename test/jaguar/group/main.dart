@@ -12,7 +12,7 @@ part 'main.g.dart';
 
 @RouteGroup()
 class UserApi extends Object with _$JaguarUserApi {
-  @Route(path: '', methods: const <String>['GET'])
+  @Route(methods: const <String>['GET'])
   String getUser() => 'Get user';
 
   @Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201)

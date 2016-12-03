@@ -29,7 +29,10 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   String ping() => "You pinged me ${++_pingCount} times, silly!";
 
   /// Example of setting default status code and headers in response
-  @Put(path: '/pong', statusCode: 201, headers: const {"pong-header": "silly-pong"})
+  @Put(
+      path: '/pong',
+      statusCode: 201,
+      headers: const {"pong-header": "silly-pong"})
   String pong() => "Your silly pongs have no effect on me!";
 
   /// Example of getting path parameter in route handler arguments

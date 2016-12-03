@@ -10,7 +10,8 @@ part of test.jaguar.group;
 abstract class _$JaguarUserApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(methods: const <String>['GET']),
-    const Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201)
+    const Route(
+        path: '/statuscode', methods: const <String>['GET'], statusCode: 201)
   ];
 
   String getUser();
@@ -21,6 +22,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
+//Handler for getUser
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -31,6 +33,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
       return true;
     }
 
+//Handler for statusCode
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -65,6 +68,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
+//Handler for statusCode
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {

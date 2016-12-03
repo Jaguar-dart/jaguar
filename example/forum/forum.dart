@@ -71,7 +71,8 @@ class ParamCreate implements Validatable {
 
 @Api(path: '/api')
 class ForumApi extends Object with _$JaguarForumApi {
-  @Route(path: '/user',
+  @Route(
+      path: '/user',
       methods: const <String>['GET'],
       statusCode: 201,
       headers: const {"sample-header": "made-with.jaguar"})
@@ -142,7 +143,8 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Route(path: '/regex/:param1',
+  @Route(
+      path: '/regex/:param1',
       methods: const <String>['PUT'],
       pathRegEx: const {'param1': r'^(hello|fello)$'})
   @MongoDb('admin', id: 'Admin')
@@ -152,8 +154,7 @@ class ForumApi extends Object with _$JaguarForumApi {
     return param1;
   }
 
-  @Route(path: '/regexrem/:param1*',
-      methods: const <String>['PUT'])
+  @Route(path: '/regexrem/:param1*', methods: const <String>['PUT'])
   @MongoDb('admin', id: 'Admin')
   @Login()
   @Input(MongoDb, id: 'Admin')

@@ -21,6 +21,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
+//Handler for getBook
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -31,6 +32,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
       return true;
     }
 
+//Handler for some
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {

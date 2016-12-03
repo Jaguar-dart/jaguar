@@ -63,7 +63,6 @@ class MongoDbState {
   const MongoDbState({this.whatever});
 }
 
-@InterceptorClass()
 class MongoDb extends Interceptor {
   final String dbName;
 
@@ -90,7 +89,6 @@ class LoginState {
   const LoginState({this.whatever});
 }
 
-@InterceptorClass()
 class Login extends Interceptor {
   final LoginState state;
 
@@ -100,7 +98,6 @@ class Login extends Interceptor {
   void pre(Db db) {}
 }
 
-@InterceptorClass(writesResponse: true)
 class EncodeToJson {
   const EncodeToJson();
 

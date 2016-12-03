@@ -1,18 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.interceptor.param;
+part of test.interceptor.state;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
+// Target: class StateApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+abstract class _$JaguarStateApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/user', methods: const <String>['GET'])
   ];
 
-  String getUser(String who);
+  void getUser();
 
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
@@ -24,14 +24,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      WithParam iWithParam = new WithParam(
-        params: const {#checker: CheckerImpl},
-        checker: new CheckerImpl(),
+      WithState iWithState = new WithState(
+        state: WithState.createState(),
       );
-      String rWithParam = iWithParam.pre();
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getUser(
-        rWithParam,
+      iWithState.pre();
+      getUser();
+      rRouteResponse = iWithState.post(
+        rRouteResponse,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;

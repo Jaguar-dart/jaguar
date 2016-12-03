@@ -23,6 +23,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
+//Handler for getUser
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -45,6 +46,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for post
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {

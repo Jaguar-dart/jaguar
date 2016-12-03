@@ -17,7 +17,7 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   String statusCode() => 'status code';
 
   @Route(path: '/paramandquery/:param', methods: const <String>['GET'])
-  String paramAndQuery(String param, [String query]) => '$param $query';
+  String paramAndQuery(String param, {String query}) => '$param $query';
 
   @Route(path: '/input/header', methods: const <String>['GET'])
   @InputHeader('user')

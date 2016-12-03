@@ -18,7 +18,6 @@ class CheckerImpl implements Checker {
   CheckerImpl();
 }
 
-@InterceptorClass()
 class WithParam extends Interceptor {
   final CheckerImpl checker;
 

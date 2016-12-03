@@ -17,6 +17,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
+//Handler for websocket
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
