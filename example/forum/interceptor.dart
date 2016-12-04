@@ -76,7 +76,7 @@ class MongoDb extends Interceptor {
     return new Db();
   }
 
-  @Input(RouteResponse)
+  @InputRouteResponse()
   Future<Response> post(Response resp) async {
     return new Response(resp.value,
         statusCode: resp.statusCode, headers: resp.headers..['teja'] = 'hello');
@@ -101,7 +101,7 @@ class Login extends Interceptor {
 class EncodeToJson {
   const EncodeToJson();
 
-  @Input(RouteResponse)
+  @InputRouteResponse()
   Response post(HttpRequest request, Response resp) {
     if (resp.value is ViewSerializer) {
       resp.value = JSON.encode(resp.value.toViewMap());

@@ -23,7 +23,7 @@ class WithState extends Interceptor {
     state.message = 'hello';
   }
 
-  @Input(RouteResponse)
+  @InputRouteResponse()
   Response post(Response response) {
     response.value = state.message;
     return response;
