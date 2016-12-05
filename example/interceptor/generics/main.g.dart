@@ -1,37 +1,33 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.interceptor.param;
+part of jaguar.example.silly;
 
 // **************************************************************************
-// Generator: ApiGenerator
+// Generator: RouteGroupGenerator
 // Target: class ExampleApi
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> routes = const <RouteBase>[
-    const Route(path: '/user', methods: const <String>['GET'])
-  ];
+  static const List<RouteBase> routes = const <RouteBase>[const Get('/ping')];
 
-  String getUser(String who);
+  String ping(User model);
 
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
 
-//Handler for getUser
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      WithParam iWithParam = new WithParam(
-        makeParams: const {#checker: const MakeParamFromType(CheckerImpl)},
-        checker: new CheckerImpl(),
+      MyInterceptor iMyInterceptor = new MyInterceptor(
+        user,
       );
-      String rWithParam = iWithParam.pre();
+      User rMyInterceptor = iMyInterceptor.pre();
       rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getUser(
-        rWithParam,
+      rRouteResponse.value = ping(
+        rMyInterceptor,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;

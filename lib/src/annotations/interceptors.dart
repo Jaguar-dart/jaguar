@@ -5,9 +5,9 @@ class Interceptor {
   /// Id of the interceptor
   final String id;
 
-  final Map<Symbol, MakeParam> params;
+  final Map<Symbol, MakeParam> makeParams;
 
-  const Interceptor({this.id, this.params});
+  const Interceptor({this.id, this.makeParams});
 }
 
 class ProvideAsInterceptorResult {

@@ -6,6 +6,8 @@
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/bin/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/forum/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/interceptor/generics/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/interceptor/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/silly/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages" />
@@ -13,7 +15,6 @@
       <excludeFolder url="file://$MODULE_DIR$/test/interceptor/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/interceptor/param/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/interceptor/state/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/test/interceptor_builtin/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/group/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/route/packages" />

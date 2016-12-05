@@ -9,6 +9,8 @@ class MockHttpResponse implements HttpResponse {
 
   String _reasonPhrase;
 
+  final List<Cookie> cookies = [];
+
   MockHttpResponse();
 
   int statusCode = HttpStatus.OK;
