@@ -14,10 +14,10 @@ class DecodeJson extends Interceptor {
   }
 }
 
-class DecodeMap extends Interceptor {
+class DecodeJsonMap extends Interceptor {
   final Encoding encoding;
 
-  const DecodeMap({this.encoding: UTF8});
+  const DecodeJsonMap({this.encoding: UTF8});
 
   Future<Map> pre(HttpRequest request) async {
     String data = await getStringFromBody(request, encoding);
@@ -34,10 +34,10 @@ class DecodeMap extends Interceptor {
   }
 }
 
-class DecodeList extends Interceptor {
+class DecodeJsonList extends Interceptor {
   final Encoding encoding;
 
-  const DecodeList({this.encoding: UTF8});
+  const DecodeJsonList({this.encoding: UTF8});
 
   Future<List> pre(HttpRequest request) async {
     String data = await getStringFromBody(request, encoding);

@@ -90,12 +90,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
       rRouteResponse.statusCode = 201;
       rRouteResponse.headers['sample-header'] = 'made-with.jaguar';
       rRouteResponse.value = await fetch();
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
-      rRouteResponse = await iMongoDbTest.post(
-        rRouteResponse,
-      );
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
@@ -118,9 +112,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
       delete(
         request,
         rMongoDbAdmin,
-      );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;
@@ -150,9 +141,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         (pathParams.getField('password')),
         stringToInt(pathParams.getField('age')),
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
@@ -180,9 +168,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         param2: stringToInt(queryParams.getField('param2')) ?? 5555,
         param3: stringToInt(queryParams.getField('param3')) ?? 55,
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
@@ -206,9 +191,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         request,
         rMongoDbAdmin,
         null,
-      );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;
@@ -234,9 +216,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rMongoDbAdmin,
         new ParamCreate.FromPathParam(pathParams),
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
@@ -260,9 +239,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         request,
         rMongoDbAdmin,
         new ParamCreate.FromPathParam(pathParams),
-      );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;
@@ -289,9 +265,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rMongoDbAdmin,
         (pathParams.getField('param1')),
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
@@ -316,9 +289,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         request,
         rMongoDbAdmin,
         (pathParams.getField('param1')),
-      );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;

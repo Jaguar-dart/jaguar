@@ -3,20 +3,26 @@ library jaguar.src.http.response;
 import 'dart:io';
 import 'dart:async';
 
+part 'headers.dart';
+
 class Response<ValueType> {
   ValueType value;
 
   int statusCode = 200;
 
-  final Map<String, String> headers = {};
+  final JaguarHttpHeaders headers = new JaguarHttpHeaders();
 
-  Response(this.value, {int statusCode, Map<String, String> headers}) {
+  final List<Cookie> cookies = [];
+
+  Response(this.value, {int statusCode, Map<String, dynamic> headers}) {
     if (statusCode is int) {
       this.statusCode = statusCode;
     }
 
-    if (headers is Map<String, String>) {
-      this.headers.addAll(headers);
+    if(headers is Map) {
+      headers.forEach((String name, String value) {
+        this.headers.add(name, value);
+      });
     }
   }
 
@@ -28,10 +34,12 @@ class Response<ValueType> {
     }
 
     if (headers is Map<String, String>) {
-      headers.forEach((String key, String val) {
-        resp.headers.set(key, val);
+      headers.forEach((String key, List<String> val) {
+        resp.headers.add(key, val);
       });
     }
+
+    resp.cookies.addAll(cookies);
 
     resp.write(valueAsString);
   }

@@ -75,12 +75,6 @@ class MongoDb extends Interceptor {
   Future<Db> pre() async {
     return new Db();
   }
-
-  @InputRouteResponse()
-  Future<Response> post(Response resp) async {
-    return new Response(resp.value,
-        statusCode: resp.statusCode, headers: resp.headers..['teja'] = 'hello');
-  }
 }
 
 class LoginState {

@@ -5,14 +5,9 @@ class Interceptor {
   /// Id of the interceptor
   final String id;
 
-  final Map<Symbol, Type> params;
+  final Map<Symbol, MakeParam> params;
 
   const Interceptor({this.id, this.params});
-}
-
-/// Instantiates a parameter in constructor or method as non-constant instance
-class InstantiateParam {
-  const InstantiateParam();
 }
 
 class ProvideAsInterceptorResult {
@@ -20,3 +15,20 @@ class ProvideAsInterceptorResult {
 
   const ProvideAsInterceptorResult(this.asInterceptor);
 }
+
+abstract class MakeParam {
+}
+
+class MakeParamFromType implements MakeParam {
+  final Type type;
+
+  const MakeParamFromType(this.type);
+}
+
+/// Instantiates a parameter in constructor or method as non-constant instance
+class MakeParamFromMethod implements MakeParam {
+  final Symbol methodName;
+
+  const MakeParamFromMethod([this.methodName]);
+}
+
