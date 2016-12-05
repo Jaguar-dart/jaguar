@@ -16,8 +16,7 @@ class ProvideAsInterceptorResult {
   const ProvideAsInterceptorResult(this.asInterceptor);
 }
 
-abstract class MakeParam {
-}
+abstract class MakeParam {}
 
 class MakeParamFromType implements MakeParam {
   final Type type;
@@ -29,6 +28,5 @@ class MakeParamFromType implements MakeParam {
 class MakeParamFromMethod implements MakeParam {
   final Symbol methodName;
 
-  const MakeParamFromMethod([this.methodName]);
+  const MakeParamFromMethod(this.methodName);
 }
-

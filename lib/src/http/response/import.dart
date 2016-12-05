@@ -19,7 +19,7 @@ class Response<ValueType> {
       this.statusCode = statusCode;
     }
 
-    if(headers is Map) {
+    if (headers is Map) {
       headers.forEach((String name, String value) {
         this.headers.add(name, value);
       });
