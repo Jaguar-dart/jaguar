@@ -14,9 +14,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
         methods: const <String>['GET'],
         statusCode: 201,
         headers: const {"sample-header": "made-with.jaguar"}),
-    const Route(path: '/user', methods: const <String>['DELETE']),
-    const Route(path: '/user/:param1', methods: const <String>['POST']),
-    const Route(path: '/user', methods: const <String>['PUT']),
+    const Route(path: '/user', methods: const <String>['POST']),
+    const Route(path: '/user/:param1', methods: const <String>['PUT']),
     const Route(path: '/user1', methods: const <String>['PUT']),
     const Route(path: '/user2', methods: const <String>['PUT']),
     const Put(path: '/user3'),
@@ -25,7 +24,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
         methods: const <String>['PUT'],
         pathRegEx: const {'param1': r'^(hello|fello)$'}),
     const Route(path: '/regexrem/:param1*', methods: const <String>['PUT']),
-    const Route(path: '/test/decodebody/json', methods: const <String>['POST']),
     const Route(
         path: '/test/decodebody/formdata', methods: const <String>['POST']),
     const Route(path: '/test/decodebody/xwww', methods: const <String>['POST'])
@@ -33,10 +31,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
 
   Future<User> fetch();
 
-  void delete(HttpRequest request, Db db);
-
-  User create(HttpRequest request, Db db, String email, String name,
-      String password, int age);
+  User create(HttpRequest request, Db db,
+      {String email, String name, String password, int age});
 
   String update(HttpRequest request, Db db, String param1,
       {int param2: 5555, int param3: 55});
@@ -51,8 +47,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
   Future<String> regex(HttpRequest request, Db db, String param1);
 
   Future<String> pathRem(HttpRequest request, Db db, String param1);
-
-  String decodeJson(Map<String, dynamic> json);
 
   String decodeFormData(Map<String, FormField> formFields);
 
@@ -72,7 +66,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
       MongoDb iMongoDbTest = new MongoDb(
         'test',
         id: 'Test',
-        state: const MongoDbState(),
+        state: MongoDb.createState(),
       );
       await iMongoDbTest.pre();
       MongoDb iMongoDbAdmin = new MongoDb(
@@ -82,7 +76,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
       Login iLogin = new Login(
-        const LoginState(),
+        const PasswordChecker(),
+        state: const Passwords(),
       );
       iLogin.pre(
         rMongoDbAdmin,
@@ -90,11 +85,13 @@ abstract class _$JaguarForumApi implements RequestHandler {
       rRouteResponse.statusCode = 201;
       rRouteResponse.headers['sample-header'] = 'made-with.jaguar';
       rRouteResponse.value = await fetch();
+      await iMongoDbAdmin.post();
+      await iMongoDbTest.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for delete
+//Handler for create
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -105,19 +102,27 @@ abstract class _$JaguarForumApi implements RequestHandler {
         state: MongoDb.createState(),
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
+      Login iLogin = new Login(
+        const PasswordChecker(),
+      );
       iLogin.pre(
         rMongoDbAdmin,
       );
-      delete(
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = create(
         request,
         rMongoDbAdmin,
+        email: (queryParams.getField('email')),
+        name: (queryParams.getField('name')),
+        password: (queryParams.getField('password')),
+        age: stringToInt(queryParams.getField('age')),
       );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for create
+//Handler for update
     match =
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -128,35 +133,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
         state: MongoDb.createState(),
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
+      Login iLogin = new Login(
+        const PasswordChecker(),
       );
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = create(
-        request,
-        rMongoDbAdmin,
-        (pathParams.getField('email')),
-        (pathParams.getField('name')),
-        (pathParams.getField('password')),
-        stringToInt(pathParams.getField('age')),
-      );
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-//Handler for update
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin = new MongoDb(
-        'admin',
-        id: 'Admin',
-        state: MongoDb.createState(),
-      );
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
       iLogin.pre(
         rMongoDbAdmin,
       );
@@ -168,11 +147,39 @@ abstract class _$JaguarForumApi implements RequestHandler {
         param2: stringToInt(queryParams.getField('param2')) ?? 5555,
         param3: stringToInt(queryParams.getField('param3')) ?? 55,
       );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
 //Handler for update1
+    match =
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      Response rRouteResponse = new Response(null);
+      MongoDb iMongoDbAdmin = new MongoDb(
+        'admin',
+        id: 'Admin',
+        state: MongoDb.createState(),
+      );
+      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+      Login iLogin = new Login(
+        const PasswordChecker(),
+      );
+      iLogin.pre(
+        rMongoDbAdmin,
+      );
+      rRouteResponse = update1(
+        request,
+        rMongoDbAdmin,
+        null,
+      );
+      await iMongoDbAdmin.post();
+      await rRouteResponse.writeResponse(request.response);
+      return true;
+    }
+
+//Handler for update2
     match =
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -183,20 +190,23 @@ abstract class _$JaguarForumApi implements RequestHandler {
         state: MongoDb.createState(),
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
+      Login iLogin = new Login(
+        const PasswordChecker(),
+      );
       iLogin.pre(
         rMongoDbAdmin,
       );
-      rRouteResponse = update1(
+      rRouteResponse = update2(
         request,
         rMongoDbAdmin,
-        null,
+        new ParamCreate.FromPathParam(pathParams),
       );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for update2
+//Handler for update3
     match =
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -207,20 +217,23 @@ abstract class _$JaguarForumApi implements RequestHandler {
         state: MongoDb.createState(),
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
+      Login iLogin = new Login(
+        const PasswordChecker(),
+      );
       iLogin.pre(
         rMongoDbAdmin,
       );
-      rRouteResponse = update2(
+      rRouteResponse = await update3(
         request,
         rMongoDbAdmin,
         new ParamCreate.FromPathParam(pathParams),
       );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for update3
+//Handler for regex
     match =
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -231,20 +244,24 @@ abstract class _$JaguarForumApi implements RequestHandler {
         state: MongoDb.createState(),
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
+      Login iLogin = new Login(
+        const PasswordChecker(),
+      );
       iLogin.pre(
         rMongoDbAdmin,
       );
-      rRouteResponse = await update3(
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = await regex(
         request,
         rMongoDbAdmin,
-        new ParamCreate.FromPathParam(pathParams),
+        (pathParams.getField('param1')),
       );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for regex
+//Handler for pathRem
     match =
         routes[7].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -255,32 +272,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
         state: MongoDb.createState(),
       );
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
+      Login iLogin = new Login(
+        const PasswordChecker(),
       );
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = await regex(
-        request,
-        rMongoDbAdmin,
-        (pathParams.getField('param1')),
-      );
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-//Handler for pathRem
-    match =
-        routes[8].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin = new MongoDb(
-        'admin',
-        id: 'Admin',
-        state: MongoDb.createState(),
-      );
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
       iLogin.pre(
         rMongoDbAdmin,
       );
@@ -290,30 +284,14 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rMongoDbAdmin,
         (pathParams.getField('param1')),
       );
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-//Handler for decodeJson
-    match =
-        routes[9].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      DecodeJson iDecodeJson = new DecodeJson();
-      dynamic rDecodeJson = await iDecodeJson.pre(
-        request,
-      );
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = decodeJson(
-        rDecodeJson,
-      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
 //Handler for decodeFormData
     match =
-        routes[10].match(request.uri.path, request.method, prefix, pathParams);
+        routes[8].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
       DecodeFormData iDecodeFormData = new DecodeFormData();
@@ -330,7 +308,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
 
 //Handler for decodeXwww
     match =
-        routes[11].match(request.uri.path, request.method, prefix, pathParams);
+        routes[9].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
       DecodeUrlEncodedForm iDecodeUrlEncodedForm = new DecodeUrlEncodedForm();

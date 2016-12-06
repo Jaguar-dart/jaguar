@@ -12,6 +12,7 @@ import 'package:mime/mime.dart';
 part 'decode/form_data.dart';
 part 'decode/json.dart';
 part 'decode/url_encoded_form.dart';
+part 'encode/json.dart';
 
 Future<String> getStringFromBody(HttpRequest request, Encoding encoding) async {
   Completer<String> completer = new Completer<String>();

@@ -19,7 +19,7 @@ class DecodeJsonMap extends Interceptor {
 
   const DecodeJsonMap({this.encoding: UTF8});
 
-  Future<Map> pre(HttpRequest request) async {
+  Future<Map<String, dynamic>> pre(HttpRequest request) async {
     String data = await getStringFromBody(request, encoding);
     if (data.isNotEmpty) {
       dynamic ret = JSON.decode(data);

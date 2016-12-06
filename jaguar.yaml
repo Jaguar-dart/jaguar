@@ -1,6 +1,8 @@
 apis:
 - 'example/forum/forum.dart'
 - 'example/silly/main.dart'
+- 'example/body/json/example_json.dart'
+- 'example/route/example_route.dart'
 - 'test/jaguar/route/route.dart'
 - 'test/jaguar/group/main.dart'
 - 'test/jaguar/group/book.dart'

@@ -1,11 +1,8 @@
 library example.forum.interceptor;
 
 import 'dart:io';
-import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 import 'dart:convert';
-
-class Db {}
 
 abstract class ViewSerializer {
   void fromViewMap(Map map);
@@ -57,43 +54,8 @@ class User implements ViewSerializer, ModelSerializer {
   Map toModelMap() => toMap()..['pwdH'] = passwordHash;
 }
 
-class MongoDbState {
-  final String whatever;
-
-  const MongoDbState({this.whatever});
-}
-
-class MongoDb extends Interceptor {
-  final String dbName;
-
-  final MongoDbState state;
-
-  const MongoDb(this.dbName, {String id, this.state}) : super(id: id);
-
-  static MongoDbState createState() => new MongoDbState();
-
-  Future<Db> pre() async {
-    return new Db();
-  }
-}
-
-class LoginState {
-  final String whatever;
-
-  const LoginState({this.whatever});
-}
-
-class Login extends Interceptor {
-  final LoginState state;
-
-  const Login([this.state]);
-
-  @Input(MongoDb, id: 'Admin')
-  void pre(Db db) {}
-}
-
-class EncodeToJson {
-  const EncodeToJson();
+class EncodeObjectToJson {
+  const EncodeObjectToJson();
 
   @InputRouteResponse()
   Response post(HttpRequest request, Response resp) {
