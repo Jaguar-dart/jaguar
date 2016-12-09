@@ -1,5 +1,18 @@
 part of jaguar.src.interceptors;
 
+class WrapDecodeUrlEncodedForm implements RouteWrapper<DecodeUrlEncodedForm> {
+  final Encoding encoding;
+
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapDecodeUrlEncodedForm({this.encoding, this.id});
+
+  DecodeUrlEncodedForm createInterceptor() =>
+      new DecodeUrlEncodedForm(encoding: this.encoding);
+}
+
 class DecodeUrlEncodedForm extends Interceptor {
   final Encoding encoding;
 

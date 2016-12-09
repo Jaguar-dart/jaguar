@@ -54,8 +54,18 @@ class User implements ViewSerializer, ModelSerializer {
   Map toModelMap() => toMap()..['pwdH'] = passwordHash;
 }
 
-class EncodeObjectToJson {
-  const EncodeObjectToJson();
+class WrapEncodeObjectToJson implements RouteWrapper<EncodeObjectToJson> {
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapEncodeObjectToJson({this.id});
+
+  EncodeObjectToJson createInterceptor() => new EncodeObjectToJson();
+}
+
+class EncodeObjectToJson implements Interceptor {
+  EncodeObjectToJson();
 
   @InputRouteResponse()
   Response post(HttpRequest request, Response resp) {

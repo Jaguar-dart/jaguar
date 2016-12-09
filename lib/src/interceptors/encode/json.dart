@@ -1,7 +1,17 @@
 part of jaguar.src.interceptors;
 
+class WrapEncodeToJson implements RouteWrapper<EncodeToJson> {
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapEncodeToJson({this.id});
+
+  EncodeToJson createInterceptor() => new EncodeToJson();
+}
+
 class EncodeToJson extends Interceptor {
-  const EncodeToJson();
+  EncodeToJson();
 
   @InputRouteResponse()
   Response pre(Response resp) {

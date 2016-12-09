@@ -33,11 +33,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      EncodeToJson iEncodeToJson = new EncodeToJson();
+      EncodeToJson iEncodeToJson = new WrapEncodeToJson().createInterceptor();
       iEncodeToJson.pre(
         rRouteResponse,
       );
-      DecodeJsonMap iDecodeJsonMap = new DecodeJsonMap();
+      DecodeJsonMap iDecodeJsonMap =
+          new WrapDecodeJsonMap().createInterceptor();
       Map<String, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
         request,
       );
@@ -54,7 +55,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      EncodeToJson iEncodeToJson = new EncodeToJson();
+      EncodeToJson iEncodeToJson = new WrapEncodeToJson().createInterceptor();
       iEncodeToJson.pre(
         rRouteResponse,
       );
@@ -71,7 +72,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      EncodeToJson iEncodeToJson = new EncodeToJson();
+      EncodeToJson iEncodeToJson = new WrapEncodeToJson().createInterceptor();
       iEncodeToJson.pre(
         rRouteResponse,
       );
@@ -88,11 +89,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      EncodeToJson iEncodeToJson = new EncodeToJson();
+      EncodeToJson iEncodeToJson = new WrapEncodeToJson().createInterceptor();
       iEncodeToJson.pre(
         rRouteResponse,
       );
-      DecodeJsonMap iDecodeJsonMap = new DecodeJsonMap();
+      DecodeJsonMap iDecodeJsonMap =
+          new WrapDecodeJsonMap().createInterceptor();
       Map<String, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
         request,
       );

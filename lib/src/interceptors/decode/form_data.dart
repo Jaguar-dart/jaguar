@@ -28,8 +28,18 @@ class FormField {
   }
 }
 
+class WrapDecodeFormData implements RouteWrapper<DecodeFormData> {
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapDecodeFormData({this.id});
+
+  DecodeFormData createInterceptor() => new DecodeFormData();
+}
+
 class DecodeFormData extends Interceptor {
-  const DecodeFormData();
+  DecodeFormData();
 
   Future<Map<String, FormField>> pre(HttpRequest request) {
     if (!request.headers.contentType.parameters.containsKey('boundary')) {

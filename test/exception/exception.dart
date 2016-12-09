@@ -26,7 +26,7 @@ class ExampleApi extends Object
   }
 
   @Post(path: '/user')
-  @UserParser()
+  @WrapUserParser()
   @Input(UserParser)
   User post(User user) => user;
 }

@@ -18,11 +18,22 @@ class CheckerImpl implements Checker {
   CheckerImpl();
 }
 
+class WrapWithParam implements RouteWrapper<WithParam> {
+  final CheckerImpl checker;
+
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams;
+
+  const WrapWithParam({this.id, this.checker, this.makeParams});
+
+  WithParam createInterceptor() => new WithParam(this.checker);
+}
+
 class WithParam extends Interceptor {
   final CheckerImpl checker;
 
-  const WithParam({this.checker, Map<Symbol, MakeParam> makeParams})
-      : super(makeParams: makeParams);
+  WithParam(this.checker);
 
   String pre() {
     return checker.who;
@@ -32,7 +43,8 @@ class WithParam extends Interceptor {
 @Api(path: '/api')
 class ExampleApi extends Object with _$JaguarExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
-  @WithParam(makeParams: const {#checker: const MakeParamFromType(CheckerImpl)})
+  @WrapWithParam(
+      makeParams: const {#checker: const MakeParamFromType(CheckerImpl)})
   @Input(WithParam)
   String getUser(String who) => who;
 }

@@ -1,13 +1,17 @@
 part of jaguar.src.annotations;
 
+abstract class RouteWrapper<WrapperType> {
+  /// Id of the interceptor
+  String get id;
+
+  Map<Symbol, MakeParam> get makeParams;
+
+  WrapperType createInterceptor();
+}
+
 /// Base class for interceptor
 class Interceptor {
-  /// Id of the interceptor
-  final String id;
-
-  final Map<Symbol, MakeParam> makeParams;
-
-  const Interceptor({this.id, this.makeParams});
+  const Interceptor();
 }
 
 class ProvideAsInterceptorResult {

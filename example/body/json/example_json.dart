@@ -18,10 +18,10 @@ List<Book> _books = [
 int _id = 3; //TODO race condition
 
 @Api(path: '/api/book')
-@EncodeToJson()
+@WrapEncodeToJson()
 class BooksApi extends Object with _$JaguarBooksApi {
   @Post()
-  @DecodeJsonMap()
+  @WrapDecodeJsonMap()
   @Input(DecodeJsonMap)
   Map addBook(Map<String, dynamic> json) {
     Book book = new Book();
@@ -61,7 +61,7 @@ class BooksApi extends Object with _$JaguarBooksApi {
   }
 
   @Put(path: '/:id')
-  @DecodeJsonMap()
+  @WrapDecodeJsonMap()
   @Input(DecodeJsonMap)
   Map updateBook(Map<String, dynamic> json, String id) {
     Book bookReq = new Book();

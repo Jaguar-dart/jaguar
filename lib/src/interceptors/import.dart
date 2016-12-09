@@ -10,7 +10,9 @@ import 'package:http_server/http_server.dart';
 import 'package:mime/mime.dart';
 
 part 'decode/form_data.dart';
-part 'decode/json.dart';
+part 'decode/json/generic.dart';
+part 'decode/json/map.dart';
+part 'decode/json/list.dart';
 part 'decode/url_encoded_form.dart';
 part 'encode/json.dart';
 

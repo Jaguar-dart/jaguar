@@ -64,7 +64,7 @@ class BooksApi extends Object with _$JaguarBooksApi {
   /// [Input] annotation can be used to request inputting of result of certain
   /// interceptor.
   @Route(path: '/user', methods: const <String>['DELETE'])
-  @MongoDb('store')
+  @WrapMongoDb(dbName: 'store')
   @Input(MongoDb)
   void delete(HttpRequest request, Db db) {}
 }

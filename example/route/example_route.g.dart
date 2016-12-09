@@ -90,10 +90,10 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      MongoDb iMongoDb = new MongoDb(
-        'store',
-        state: MongoDb.createState(),
-      );
+      MongoDb iMongoDb = new WrapMongoDb(
+        dbName: 'store',
+      )
+          .createInterceptor();
       Db rMongoDb = await iMongoDb.pre();
       delete(
         request,
