@@ -9,97 +9,82 @@ part of example.routes;
 
 abstract class _$JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route(
-        path: '/books',
-        methods: const <String>['GET'],
-        statusCode: 201,
-        headers: const {"sample-header": "made-with.jaguar"}),
-    const Get(
-        statusCode: 201, headers: const {"sample-header": "made-with.jaguar"}),
-    const Delete(path: '/:id'),
-    const Post(path: '/inject/httprequest'),
-    const Route(path: '/user', methods: const <String>['DELETE'])
+    const Route(path: '/books'),
+    const Route(path: '/books', methods: const <String>['GET']),
+    const Get(path: '/books'),
+    const Post(
+        path: '/inject/httprequest',
+        statusCode: 200,
+        headers: const {'custom-header': 'custom data'}),
+    const Post(path: '/inject/httprequest')
   ];
 
-  List<Map<dynamic, dynamic>> routeAnnotation();
+  List<Map<dynamic, dynamic>> getAllBooks();
 
-  List<Map<dynamic, dynamic>> getAnnotation();
+  List<Map<dynamic, dynamic>> getAllBooks1();
 
-  Map<dynamic, dynamic> pathParameter(String id);
+  List<Map<dynamic, dynamic>> getAllBooks2();
+
+  void defaultStatusAndHeader();
 
   void inputHttpRequest(HttpRequest req);
-
-  void delete(HttpRequest request, Db db);
 
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api/book';
     PathParams pathParams = new PathParams();
     bool match = false;
 
-//Handler for routeAnnotation
+//Handler for getAllBooks
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      rRouteResponse.statusCode = 201;
-      rRouteResponse.headers['sample-header'] = 'made-with.jaguar';
-      rRouteResponse.value = routeAnnotation();
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = getAllBooks();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for getAnnotation
+//Handler for getAllBooks1
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      rRouteResponse.statusCode = 201;
-      rRouteResponse.headers['sample-header'] = 'made-with.jaguar';
-      rRouteResponse.value = getAnnotation();
+      rRouteResponse.statusCode = 200;
+      rRouteResponse.value = getAllBooks1();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for pathParameter
+//Handler for getAllBooks2
     match =
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
       rRouteResponse.statusCode = 200;
-      rRouteResponse.value = pathParameter(
-        (pathParams.getField('id')),
-      );
+      rRouteResponse.value = getAllBooks2();
+      await rRouteResponse.writeResponse(request.response);
+      return true;
+    }
+
+//Handler for defaultStatusAndHeader
+    match =
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      Response rRouteResponse = new Response(null);
+      defaultStatusAndHeader();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
 //Handler for inputHttpRequest
     match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+        routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
       inputHttpRequest(
         request,
       );
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-//Handler for delete
-    match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      MongoDb iMongoDb = new WrapMongoDb(
-        dbName: 'store',
-      )
-          .createInterceptor();
-      Db rMongoDb = await iMongoDb.pre();
-      delete(
-        request,
-        rMongoDb,
-      );
-      await iMongoDb.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
