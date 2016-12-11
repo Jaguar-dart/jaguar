@@ -12,8 +12,13 @@
       <excludeFolder url="file://$MODULE_DIR$/example/common/models/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/common/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/forum/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/interceptor/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/interceptor/use_interceptor/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/route/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/path_variables/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/query_params/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/routing/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/silly/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/exception/packages" />

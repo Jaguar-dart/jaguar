@@ -159,11 +159,11 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
-    if (await myGroup.handleRequest(request)) {
+    if (await myGroup.handleRequest(request, prefix: prefix)) {
       return true;
     }
 
-    if (await mySecondGroup.handleRequest(request)) {
+    if (await mySecondGroup.handleRequest(request, prefix: prefix)) {
       return true;
     }
 

@@ -33,11 +33,9 @@ class Response<ValueType> {
       resp.statusCode = statusCode;
     }
 
-    if (headers is Map<String, String>) {
-      headers.forEach((String key, List<String> val) {
-        resp.headers.add(key, val);
-      });
-    }
+    headers.forEach((String key, List<String> val) {
+      resp.headers.add(key, val);
+    });
 
     resp.cookies.addAll(cookies);
 
