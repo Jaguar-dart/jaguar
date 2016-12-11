@@ -16,8 +16,8 @@ dependencies:
   intl:
   cookies:
   jaguar_generator:
-    path: ../jaguar_generator
-    # git: https://github.com/Jaguar-dart/jaguar_generator.git
+    # path: ../jaguar_generator
+    git: https://github.com/Jaguar-dart/jaguar_generator.git
 
 dev_dependencies:
   test: 0.12.15+10
