@@ -10,30 +10,30 @@ part 'route.g.dart';
 
 @Api(path: '/api')
 class ExampleApi extends Object with _$JaguarExampleApi {
-  @Route('/user', methods: const <String>['GET'])
+  @Route(path: '/user', methods: const <String>['GET'])
   String getUser() => 'Get user';
 
-  @Route('/statuscode', methods: const <String>['GET'], statusCode: 201)
+  @Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201)
   String statusCode() => 'status code';
 
-  @Route('/paramandquery/:param', methods: const <String>['GET'])
-  String paramAndQuery(String param, [String query]) => '$param $query';
+  @Route(path: '/paramandquery/:param', methods: const <String>['GET'])
+  String paramAndQuery(String param, {String query}) => '$param $query';
 
-  @Route('/input/header', methods: const <String>['GET'])
+  @Route(path: '/input/header', methods: const <String>['GET'])
   @InputHeader('user')
   String inputHeader(String user) => user;
 
-  @Route('/input/headers', methods: const <String>['GET'])
+  @Route(path: '/input/headers', methods: const <String>['GET'])
   @InputHeaders()
   String inputHeaders(HttpHeaders headers) {
     return headers.value('user');
   }
 
-  @Route('/input/cookie', methods: const <String>['GET'])
+  @Route(path: '/input/cookie', methods: const <String>['GET'])
   @InputCookie('user')
   String inputCookie(String user) => user;
 
-  @Route('/input/cookies', methods: const <String>['GET'])
+  @Route(path: '/input/cookies', methods: const <String>['GET'])
   @InputCookies()
   String inputCookies(List<Cookie> cookies) {
     return cookies.firstWhere((Cookie cook) => cook.name == 'user')?.value;

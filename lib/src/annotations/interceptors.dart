@@ -1,36 +1,36 @@
 part of jaguar.src.annotations;
 
-class DefineInterceptorFunc {
-  const DefineInterceptorFunc();
-}
+abstract class RouteWrapper<WrapperType> {
+  /// Id of the interceptor
+  String get id;
 
-/// Annotation to define a function as interceptor to a route
-class InterceptorFunction {
-  ///Function that contains the implementation of the interceptor
-  final Function function;
+  Map<Symbol, MakeParam> get makeParams;
 
-  /// Defines if the interceptor should be executed pre or post route execution
-  final bool isPost;
-
-  const InterceptorFunction(this.function, {this.isPost: false});
-}
-
-/// Annotation to defines an interceptor class
-class InterceptorClass {
-  /// Defines if the interceptor writes response
-  ///
-  /// Only one interceptor can write response in an interceptor chain
-  final bool writesResponse;
-
-  const InterceptorClass({this.writesResponse: false});
+  WrapperType createInterceptor();
 }
 
 /// Base class for interceptor
 class Interceptor {
-  /// Id of the interceptor
-  final String id;
+  const Interceptor();
+}
 
-  final Map<Symbol, Type> params;
+class ProvideAsInterceptorResult {
+  final Type asInterceptor;
 
-  const Interceptor({this.id, this.params});
+  const ProvideAsInterceptorResult(this.asInterceptor);
+}
+
+abstract class MakeParam {}
+
+class MakeParamFromType implements MakeParam {
+  final Type type;
+
+  const MakeParamFromType(this.type);
+}
+
+/// Instantiates a parameter in constructor or method as non-constant instance
+class MakeParamFromMethod implements MakeParam {
+  final Symbol methodName;
+
+  const MakeParamFromMethod(this.methodName);
 }

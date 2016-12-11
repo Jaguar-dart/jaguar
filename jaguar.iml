@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/bin/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/body/json/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/body/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/common/interceptors/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/common/models/book/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/common/models/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/common/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/forum/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/interceptor/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/interceptor/use_interceptor/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/path_variables/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/query_params/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/route/routing/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/silly/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/exception/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/interceptor/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/interceptor/param/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/interceptor_builtin/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/group/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/route/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/jaguar/websocket/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/tool/packages" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="application" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
+  </component>
+</module>

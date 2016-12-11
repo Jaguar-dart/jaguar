@@ -9,8 +9,8 @@ part of test.exception.exception;
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Get('/user'),
-    const Post('/user')
+    const Get(path: '/user'),
+    const Post(path: '/user')
   ];
 
   String getUser({String who});
@@ -23,6 +23,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
+//Handler for getUser
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -45,12 +46,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for post
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
       try {
-        UserParser iUserParser = new UserParser();
+        UserParser iUserParser = new WrapUserParser().createInterceptor();
         User rUserParser = iUserParser.pre(
           new QueryParams.FromQueryParam(queryParams),
         );

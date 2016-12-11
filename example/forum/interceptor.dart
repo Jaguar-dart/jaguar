@@ -1,11 +1,8 @@
 library example.forum.interceptor;
 
 import 'dart:io';
-import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 import 'dart:convert';
-
-class Db {}
 
 abstract class ViewSerializer {
   void fromViewMap(Map map);
@@ -57,54 +54,20 @@ class User implements ViewSerializer, ModelSerializer {
   Map toModelMap() => toMap()..['pwdH'] = passwordHash;
 }
 
-class MongoDbState {
-  final String whatever;
+class WrapEncodeObjectToJson implements RouteWrapper<EncodeObjectToJson> {
+  final String id;
 
-  const MongoDbState({this.whatever});
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapEncodeObjectToJson({this.id});
+
+  EncodeObjectToJson createInterceptor() => new EncodeObjectToJson();
 }
 
-@InterceptorClass()
-class MongoDb extends Interceptor {
-  final String dbName;
+class EncodeObjectToJson implements Interceptor {
+  EncodeObjectToJson();
 
-  final MongoDbState state;
-
-  const MongoDb(this.dbName, {String id, this.state}) : super(id: id);
-
-  static MongoDbState createState() => new MongoDbState();
-
-  Future<Db> pre() async {
-    return new Db();
-  }
-
-  @Input(RouteResponse)
-  Future<Response> post(Response resp) async {
-    return new Response(resp.value,
-        statusCode: resp.statusCode, headers: resp.headers..['teja'] = 'hello');
-  }
-}
-
-class LoginState {
-  final String whatever;
-
-  const LoginState({this.whatever});
-}
-
-@InterceptorClass()
-class Login extends Interceptor {
-  final LoginState state;
-
-  const Login([this.state]);
-
-  @Input(MongoDb, id: 'Admin')
-  void pre(Db db) {}
-}
-
-@InterceptorClass(writesResponse: true)
-class EncodeToJson {
-  const EncodeToJson();
-
-  @Input(RouteResponse)
+  @InputRouteResponse()
   Response post(HttpRequest request, Response resp) {
     if (resp.value is ViewSerializer) {
       resp.value = JSON.encode(resp.value.toViewMap());

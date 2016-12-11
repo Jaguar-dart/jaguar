@@ -6,6 +6,9 @@ import 'package:jaguar/jaguar.dart';
 import 'package:jaguar/interceptors.dart';
 import 'interceptor.dart';
 
+import '../common/interceptors/db.dart';
+import '../common/interceptors/login.dart';
+
 part 'forum.g.dart';
 
 class ParamValidationException {
@@ -71,57 +74,51 @@ class ParamCreate implements Validatable {
 
 @Api(path: '/api')
 class ForumApi extends Object with _$JaguarForumApi {
-  @Route('/user',
+  @Route(
+      path: '/user',
       methods: const <String>['GET'],
       statusCode: 201,
       headers: const {"sample-header": "made-with.jaguar"})
-  @MongoDb('test', id: 'Test', state: const MongoDbState())
-  @MongoDb('admin', id: 'Admin')
-  @Login(const LoginState())
-  @EncodeToJson()
+  @WrapMongoDb(dbName: 'test', id: 'Test')
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker(), state: const Passwords())
+  @WrapEncodeObjectToJson()
   Future<User> fetch() async {
     return new User('dummy@dummy.com', 'Dummy', 'password', 27);
   }
 
-  @Route('/user', methods: const <String>['DELETE'])
-  @MongoDb('admin', id: 'Admin')
-  @Login()
+  @Route(path: '/user', methods: const <String>['POST'])
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
-  void delete(HttpRequest request, Db db) {}
-
-  @Route('/user/:param1', methods: const <String>['POST'])
-  @MongoDb('admin', id: 'Admin')
-  @Login()
-  @Input(MongoDb, id: 'Admin')
-  User create(HttpRequest request, Db db, String email, String name,
-      String password, int age) {
+  User create(HttpRequest request, Db db,
+      {String email, String name, String password, int age}) {
     return new User(email, name, password, age);
   }
 
-  @Route('/user', methods: const <String>['PUT'])
-  @MongoDb('admin', id: 'Admin')
-  @Login()
+  @Route(path: '/user/:param1', methods: const <String>['PUT'])
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
   String update(HttpRequest request, Db db, String param1,
       {int param2: 5555, int param3: 55}) {
     return param1;
   }
 
-  @Route('/user1', methods: const <String>['PUT'])
-  @MongoDb('admin', id: 'Admin')
-  @Login()
+  @Route(path: '/user1', methods: const <String>['PUT'])
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
-  @EncodeToJson()
+  @WrapEncodeObjectToJson()
   Response<User> update1(HttpRequest request, Db db, PathParams pathParams) {
     User user =
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
   }
 
-  @Route('/user2', methods: const <String>['PUT'])
-  @ParamValidationExceptionHandler()
-  @MongoDb('admin', id: 'Admin')
-  @Login()
+  @Route(path: '/user2', methods: const <String>['PUT'])
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
   @InputPathParams(true)
   Response<User> update2(HttpRequest request, Db db, ParamCreate pathParams) {
@@ -130,11 +127,10 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Put('/user3')
-  @ParamValidationExceptionHandler()
-  @MongoDb('admin', id: 'Admin')
-  @Login()
-  @EncodeToJson()
+  @Put(path: '/user3')
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
+  @WrapEncodeObjectToJson()
   @Input(MongoDb, id: 'Admin')
   @InputPathParams(true)
   Future<Response<User>> update3(
@@ -144,40 +140,34 @@ class ForumApi extends Object with _$JaguarForumApi {
     return new Response<User>(user);
   }
 
-  @Route('/regex/:param1',
+  @Route(
+      path: '/regex/:param1',
       methods: const <String>['PUT'],
       pathRegEx: const {'param1': r'^(hello|fello)$'})
-  @MongoDb('admin', id: 'Admin')
-  @Login()
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
   Future<String> regex(HttpRequest request, Db db, String param1) async {
     return param1;
   }
 
-  @Route('/regexrem/:param1*', methods: const <String>['PUT'])
-  @MongoDb('admin', id: 'Admin')
-  @Login()
+  @Route(path: '/regexrem/:param1*', methods: const <String>['PUT'])
+  @WrapMongoDb(dbName: 'admin', id: 'Admin')
+  @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
   Future<String> pathRem(HttpRequest request, Db db, String param1) async {
     return param1;
   }
 
-  @Route('/test/decodebody/json', methods: const <String>['POST'])
-  @DecodeJson()
-  @Input(DecodeJson)
-  String decodeJson(Map<String, dynamic> json) {
-    return json.toString();
-  }
-
-  @Route('/test/decodebody/formdata', methods: const <String>['POST'])
-  @DecodeFormData()
+  @Route(path: '/test/decodebody/formdata', methods: const <String>['POST'])
+  @WrapDecodeFormData()
   @Input(DecodeFormData)
   String decodeFormData(Map<String, FormField> formFields) {
     return formFields.toString();
   }
 
-  @Route('/test/decodebody/xwww', methods: const <String>['POST'])
-  @DecodeUrlEncodedForm()
+  @Route(path: '/test/decodebody/xwww', methods: const <String>['POST'])
+  @WrapDecodeUrlEncodedForm()
   @Input(DecodeUrlEncodedForm)
   String decodeXwww(Map<String, String> xwww) {
     return xwww.toString();

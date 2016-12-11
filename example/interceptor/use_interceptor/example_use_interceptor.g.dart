@@ -1,45 +1,55 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.jaguar.group.normal.book;
+part of example.routes;
 
 // **************************************************************************
-// Generator: RouteGroupGenerator
-// Target: class BookApi
+// Generator: ApiGenerator
+// Target: class BooksApi
 // **************************************************************************
 
-abstract class _$JaguarBookApi implements RequestHandler {
+abstract class _$JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route(methods: const <String>['GET']),
-    const Route(path: '/some/:param1', methods: const <String>['POST'])
+    const Get(),
+    const Post()
   ];
 
-  String getBook();
+  Map<dynamic, dynamic> getJaguarInfo();
 
-  String some(String param1);
+  Map<dynamic, dynamic> createJaguarInfo(Map<dynamic, dynamic> body);
 
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+    prefix += '/api/book';
     PathParams pathParams = new PathParams();
     bool match = false;
 
-//Handler for getBook
+//Handler for getJaguarInfo
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
+      EncodeToJson iEncodeToJson = new WrapEncodeToJson().createInterceptor();
+      iEncodeToJson.pre(
+        rRouteResponse,
+      );
       rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getBook();
+      rRouteResponse.value = getJaguarInfo();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
-//Handler for some
+//Handler for createJaguarInfo
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
+      DecodeJsonMap iDecodeJsonMap =
+          new WrapDecodeJsonMap().createInterceptor();
+      Map<String, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
+        request,
+      );
       rRouteResponse.statusCode = 200;
-      rRouteResponse.value = some(
-        (pathParams.getField('param1')),
+      rRouteResponse.value = createJaguarInfo(
+        rDecodeJsonMap,
       );
       await rRouteResponse.writeResponse(request.response);
       return true;

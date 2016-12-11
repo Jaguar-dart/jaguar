@@ -8,7 +8,7 @@ part of jaguar.example.silly;
 // **************************************************************************
 
 abstract class _$JaguarMyGroup implements RequestHandler {
-  static const List<RouteBase> routes = const <RouteBase>[const Get('/')];
+  static const List<RouteBase> routes = const <RouteBase>[const Get(path: '/')];
 
   String get();
 
@@ -17,6 +17,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
+//Handler for get
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -37,7 +38,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 // **************************************************************************
 
 abstract class _$JaguarMySecondGroup implements RequestHandler {
-  static const List<RouteBase> routes = const <RouteBase>[const Get('/')];
+  static const List<RouteBase> routes = const <RouteBase>[const Get(path: '/')];
 
   String get();
 
@@ -46,6 +47,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
+//Handler for get
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -67,11 +69,14 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route('/ping', methods: const <String>['GET']),
-    const Put('/pong',
-        statusCode: 201, headers: const {"pong-header": "silly-pong"}),
-    const Route('/echo/pathparam/:message', methods: const <String>['POST']),
-    const Route('/echo/queryparam', methods: const <String>['POST']),
+    const Route(path: '/ping', methods: const <String>['GET']),
+    const Put(
+        path: '/pong',
+        statusCode: 201,
+        headers: const {"pong-header": "silly-pong"}),
+    const Route(
+        path: '/echo/pathparam/:message', methods: const <String>['POST']),
+    const Route(path: '/echo/queryparam', methods: const <String>['POST']),
     const Ws('/ws')
   ];
 
@@ -94,6 +99,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     bool match = false;
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
+//Handler for ping
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -104,6 +110,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for pong
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -115,6 +122,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for echoPathParam
     match =
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -127,6 +135,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for echoQueryParam
     match =
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -139,6 +148,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
+//Handler for websocket
     match =
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
@@ -149,11 +159,11 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       return true;
     }
 
-    if (await myGroup.handleRequest(request)) {
+    if (await myGroup.handleRequest(request, prefix: prefix)) {
       return true;
     }
 
-    if (await mySecondGroup.handleRequest(request)) {
+    if (await mySecondGroup.handleRequest(request, prefix: prefix)) {
       return true;
     }
 

@@ -9,31 +9,30 @@ part of example.forum;
 
 abstract class _$JaguarForumApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route('/user',
+    const Route(
+        path: '/user',
         methods: const <String>['GET'],
         statusCode: 201,
         headers: const {"sample-header": "made-with.jaguar"}),
-    const Route('/user', methods: const <String>['DELETE']),
-    const Route('/user/:param1', methods: const <String>['POST']),
-    const Route('/user', methods: const <String>['PUT']),
-    const Route('/user1', methods: const <String>['PUT']),
-    const Route('/user2', methods: const <String>['PUT']),
-    const Put('/user3'),
-    const Route('/regex/:param1',
+    const Route(path: '/user', methods: const <String>['POST']),
+    const Route(path: '/user/:param1', methods: const <String>['PUT']),
+    const Route(path: '/user1', methods: const <String>['PUT']),
+    const Route(path: '/user2', methods: const <String>['PUT']),
+    const Put(path: '/user3'),
+    const Route(
+        path: '/regex/:param1',
         methods: const <String>['PUT'],
         pathRegEx: const {'param1': r'^(hello|fello)$'}),
-    const Route('/regexrem/:param1*', methods: const <String>['PUT']),
-    const Route('/test/decodebody/json', methods: const <String>['POST']),
-    const Route('/test/decodebody/formdata', methods: const <String>['POST']),
-    const Route('/test/decodebody/xwww', methods: const <String>['POST'])
+    const Route(path: '/regexrem/:param1*', methods: const <String>['PUT']),
+    const Route(
+        path: '/test/decodebody/formdata', methods: const <String>['POST']),
+    const Route(path: '/test/decodebody/xwww', methods: const <String>['POST'])
   ];
 
   Future<User> fetch();
 
-  void delete(HttpRequest request, Db db);
-
-  User create(HttpRequest request, Db db, String email, String name,
-      String password, int age);
+  User create(HttpRequest request, Db db,
+      {String email, String name, String password, int age});
 
   String update(HttpRequest request, Db db, String param1,
       {int param2: 5555, int param3: 55});
@@ -49,8 +48,6 @@ abstract class _$JaguarForumApi implements RequestHandler {
 
   Future<String> pathRem(HttpRequest request, Db db, String param1);
 
-  String decodeJson(Map<String, dynamic> json);
-
   String decodeFormData(Map<String, FormField> formFields);
 
   String decodeXwww(Map<String, String> xwww);
@@ -61,101 +58,74 @@ abstract class _$JaguarForumApi implements RequestHandler {
     bool match = false;
     QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
+//Handler for fetch
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbTest = new MongoDb(
-        'test',
+      MongoDb iMongoDbTest = new WrapMongoDb(
+        dbName: 'test',
         id: 'Test',
-        state: const MongoDbState(),
-      );
+      )
+          .createInterceptor();
       await iMongoDbTest.pre();
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
-      EncodeToJson iEncodeToJson = new EncodeToJson();
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
+      await iMongoDbAdmin.pre();
+      EncodeObjectToJson iEncodeObjectToJson =
+          new WrapEncodeObjectToJson().createInterceptor();
       rRouteResponse.statusCode = 201;
       rRouteResponse.headers['sample-header'] = 'made-with.jaguar';
       rRouteResponse.value = await fetch();
-      rRouteResponse = iEncodeToJson.post(
+      rRouteResponse = iEncodeObjectToJson.post(
         request,
         rRouteResponse,
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
-      rRouteResponse = await iMongoDbTest.post(
-        rRouteResponse,
-      );
+      await iMongoDbAdmin.post();
+      await iMongoDbTest.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for create
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
-      delete(
-        request,
-        rMongoDbAdmin,
-      );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
       rRouteResponse.statusCode = 200;
       rRouteResponse.value = create(
         request,
         rMongoDbAdmin,
-        (pathParams.getField('email')),
-        (pathParams.getField('name')),
-        (pathParams.getField('password')),
-        stringToInt(pathParams.getField('age')),
+        email: (queryParams.getField('email')),
+        name: (queryParams.getField('name')),
+        password: (queryParams.getField('password')),
+        age: stringToInt(queryParams.getField('age')),
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for update
     match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+        routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
       rRouteResponse.statusCode = 200;
       rRouteResponse.value = update(
         request,
@@ -164,175 +134,137 @@ abstract class _$JaguarForumApi implements RequestHandler {
         param2: stringToInt(queryParams.getField('param2')) ?? 5555,
         param3: stringToInt(queryParams.getField('param3')) ?? 55,
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for update1
     match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+        routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
-      EncodeToJson iEncodeToJson = new EncodeToJson();
+      EncodeObjectToJson iEncodeObjectToJson =
+          new WrapEncodeObjectToJson().createInterceptor();
       rRouteResponse = update1(
         request,
         rMongoDbAdmin,
         null,
       );
-      rRouteResponse = iEncodeToJson.post(
+      rRouteResponse = iEncodeObjectToJson.post(
         request,
         rRouteResponse,
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for update2
+    match =
+        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      Response rRouteResponse = new Response(null);
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
+      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+      rRouteResponse = update2(
+        request,
+        rMongoDbAdmin,
+        new ParamCreate.FromPathParam(pathParams),
+      );
+      await iMongoDbAdmin.post();
+      await rRouteResponse.writeResponse(request.response);
+      return true;
+    }
+
+//Handler for update3
     match =
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      try {
-        MongoDb iMongoDbAdmin =
-            new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
-        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-        Login iLogin = new Login();
-        iLogin.pre(
-          rMongoDbAdmin,
-        );
-        rRouteResponse = update2(
-          request,
-          rMongoDbAdmin,
-          new ParamCreate.FromPathParam(pathParams),
-        );
-        rRouteResponse = await iMongoDbAdmin.post(
-          rRouteResponse,
-        );
-      } on ParamValidationException catch (e, s) {
-        ParamValidationExceptionHandler handler =
-            new ParamValidationExceptionHandler();
-        handler.onRouteException(request, e, s);
-        return true;
-      }
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
+      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+      EncodeObjectToJson iEncodeObjectToJson =
+          new WrapEncodeObjectToJson().createInterceptor();
+      rRouteResponse = await update3(
+        request,
+        rMongoDbAdmin,
+        new ParamCreate.FromPathParam(pathParams),
+      );
+      rRouteResponse = iEncodeObjectToJson.post(
+        request,
+        rRouteResponse,
+      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for regex
     match =
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      try {
-        MongoDb iMongoDbAdmin =
-            new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
-        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-        Login iLogin = new Login();
-        iLogin.pre(
-          rMongoDbAdmin,
-        );
-        EncodeToJson iEncodeToJson = new EncodeToJson();
-        rRouteResponse = await update3(
-          request,
-          rMongoDbAdmin,
-          new ParamCreate.FromPathParam(pathParams),
-        );
-        rRouteResponse = iEncodeToJson.post(
-          request,
-          rRouteResponse,
-        );
-        rRouteResponse = await iMongoDbAdmin.post(
-          rRouteResponse,
-        );
-      } on ParamValidationException catch (e, s) {
-        ParamValidationExceptionHandler handler =
-            new ParamValidationExceptionHandler();
-        handler.onRouteException(request, e, s);
-        return true;
-      }
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-    match =
-        routes[7].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
       rRouteResponse.statusCode = 200;
       rRouteResponse.value = await regex(
         request,
         rMongoDbAdmin,
         (pathParams.getField('param1')),
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for pathRem
     match =
-        routes[8].match(request.uri.path, request.method, prefix, pathParams);
+        routes[7].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      MongoDb iMongoDbAdmin =
-          new MongoDb('admin', id: 'Admin', state: MongoDb.createState());
+      MongoDb iMongoDbAdmin = new WrapMongoDb(
+        dbName: 'admin',
+        id: 'Admin',
+      )
+          .createInterceptor();
       Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      Login iLogin = new Login();
-      iLogin.pre(
-        rMongoDbAdmin,
-      );
       rRouteResponse.statusCode = 200;
       rRouteResponse.value = await pathRem(
         request,
         rMongoDbAdmin,
         (pathParams.getField('param1')),
       );
-      rRouteResponse = await iMongoDbAdmin.post(
-        rRouteResponse,
-      );
+      await iMongoDbAdmin.post();
       await rRouteResponse.writeResponse(request.response);
       return true;
     }
 
+//Handler for decodeFormData
     match =
-        routes[9].match(request.uri.path, request.method, prefix, pathParams);
+        routes[8].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      DecodeJson iDecodeJson = new DecodeJson();
-      dynamic rDecodeJson = await iDecodeJson.pre(
-        request,
-      );
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = decodeJson(
-        rDecodeJson,
-      );
-      await rRouteResponse.writeResponse(request.response);
-      return true;
-    }
-
-    match =
-        routes[10].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response rRouteResponse = new Response(null);
-      DecodeFormData iDecodeFormData = new DecodeFormData();
+      DecodeFormData iDecodeFormData =
+          new WrapDecodeFormData().createInterceptor();
       Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
         request,
       );
@@ -344,11 +276,13 @@ abstract class _$JaguarForumApi implements RequestHandler {
       return true;
     }
 
+//Handler for decodeXwww
     match =
-        routes[11].match(request.uri.path, request.method, prefix, pathParams);
+        routes[9].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response rRouteResponse = new Response(null);
-      DecodeUrlEncodedForm iDecodeUrlEncodedForm = new DecodeUrlEncodedForm();
+      DecodeUrlEncodedForm iDecodeUrlEncodedForm =
+          new WrapDecodeUrlEncodedForm().createInterceptor();
       Map<String, String> rDecodeUrlEncodedForm =
           await iDecodeUrlEncodedForm.pre(
         request,

@@ -37,11 +37,8 @@ class InputCookies {
   const InputCookies();
 }
 
-/// Dummy interceptor used to request injection of Route's result
-///
-/// Must be only used in post interceptors
-class RouteResponse {
-  const RouteResponse();
+class InputRouteResponse {
+  const InputRouteResponse();
 }
 
 class InputPathParams {

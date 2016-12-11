@@ -28,9 +28,18 @@ class ValidationExceptionHandler
   }
 }
 
-@InterceptorClass()
+class WrapUserParser implements RouteWrapper<UserParser> {
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapUserParser({this.id});
+
+  UserParser createInterceptor() => new UserParser();
+}
+
 class UserParser extends Interceptor {
-  const UserParser();
+  UserParser();
 
   @InputQueryParams()
   User pre(QueryParams queryParams) {

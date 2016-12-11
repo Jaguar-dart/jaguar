@@ -13,6 +13,8 @@ abstract class RouteBase {
 
   Map<String, String> get pathRegEx;
 
+  String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
+
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
     params.clear();
@@ -23,7 +25,7 @@ abstract class RouteBase {
 
     List<String> rqSegs = requestPath.split('/');
 
-    List<String> segs = (prefix + path).split('/');
+    List<String> segs = prefixedPath(prefix).split('/');
 
     return comparePathSegments(segs, rqSegs, params);
   }
@@ -95,8 +97,9 @@ class Route extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Route(this.path,
-      {this.methods: const <String>[
+  const Route(
+      {this.path,
+      this.methods: const <String>[
         'GET',
         'POST',
         'PUT',
@@ -120,7 +123,12 @@ class Get extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Get(this.path, {this.statusCode: 200, this.headers, this.pathRegEx});
+  const Get({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['GET'];
 }
@@ -136,7 +144,12 @@ class Post extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Post(this.path, {this.statusCode: 200, this.headers, this.pathRegEx});
+  const Post({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['POST'];
 }
@@ -152,7 +165,12 @@ class Put extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Put(this.path, {this.statusCode: 200, this.headers, this.pathRegEx});
+  const Put({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['PUT'];
 }
@@ -168,7 +186,12 @@ class Delete extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Delete(this.path, {this.statusCode: 200, this.headers, this.pathRegEx});
+  const Delete({
+    this.path,
+    this.statusCode: 200,
+    this.headers,
+    this.pathRegEx,
+  });
 
   static const List<String> _methods = const <String>['DELETE'];
 }

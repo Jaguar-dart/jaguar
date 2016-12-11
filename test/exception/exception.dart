@@ -15,7 +15,7 @@ part 'exception.g.dart';
 class ExampleApi extends Object
     with _$JaguarExampleApi
     implements RequestHandler {
-  @Get('/user')
+  @Get(path: '/user')
   @CustomExceptionHandler()
   String getUser({String who}) {
     if (who == null) {
@@ -25,8 +25,8 @@ class ExampleApi extends Object
     return who;
   }
 
-  @Post('/user')
-  @UserParser()
+  @Post(path: '/user')
+  @WrapUserParser()
   @Input(UserParser)
   User post(User user) => user;
 }
