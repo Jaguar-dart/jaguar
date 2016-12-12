@@ -14,7 +14,7 @@ dependencies:
   mime: ">=0.9.3 <0.10.0"
   logging: ">=0.11.3 <0.12.0"
   intl: ">=0.14.0 <0.15.0"
-  jaguar_generator: 0.1.0
+  jaguar_generator: ">=0.1.0 <0.2.0"
 #    path: ../jaguar_generator
 #    git: https://github.com/Jaguar-dart/jaguar_generator.git
 
