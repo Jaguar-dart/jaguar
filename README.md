@@ -71,6 +71,10 @@ Future<Null> main(List<String> args) async {
 
 Jaguar is currently under development. Feedbacks and contributions are welcome.
 
+## Join us on Gitter
+
+[gitter](https://gitter.im/jaguar_dart/jaguar)
+
 ## Issue
 
 If you have an issue please tell us which version of jaguar and if you can provide
