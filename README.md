@@ -73,7 +73,8 @@ Jaguar is currently under development. Feedbacks and contributions are welcome.
 
 ## Join us on Gitter
 
-[gitter](https://gitter.im/jaguar_dart/jaguar)
+- [jaguar](https://gitter.im/jaguar_dart/jaguar)
+- [dart server](https://gitter.im/dart-lang/server)
 
 ## Issue
 
