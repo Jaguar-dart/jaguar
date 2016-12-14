@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.interceptor.param;
+part of test.response.stream;
 
 // **************************************************************************
 // Generator: ApiGenerator
@@ -9,31 +9,23 @@ part of test.interceptor.param;
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route(path: '/user', methods: const <String>['GET'])
+    const Get(path: '/stream')
   ];
 
-  String getUser(String who);
+  Stream<List<int>> getStream();
 
   Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
 
-//Handler for getUser
+//Handler for getStream
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      WithParam iWithParam = new WrapWithParam(
-        makeParams: const {#checker: const MakeParamFromType(CheckerImpl)},
-        checker: new CheckerImpl(),
-      )
-          .createInterceptor();
-      String rWithParam = iWithParam.pre();
+      Response<Stream> rRouteResponse0 = new Response(null);
       rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = getUser(
-        rWithParam,
-      );
+      rRouteResponse0.value = getStream();
       await rRouteResponse0.writeResponse(request.response);
       return true;
     }

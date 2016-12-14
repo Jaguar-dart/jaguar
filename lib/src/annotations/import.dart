@@ -41,3 +41,12 @@ class Group {
 
   const Group({this.path: ''});
 }
+
+/// JaguarFile represents a file. The route handlers and interceptors can return
+/// this type to return a filename instead of returning Strings.
+class JaguarFile {
+  /// Path of the file
+  final String filePath;
+
+  const JaguarFile(this.filePath);
+}

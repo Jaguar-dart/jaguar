@@ -121,7 +121,8 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
   @InputPathParams(true)
-  Response<User> update2(HttpRequest request, Db db, ParamCreate pathParams) {
+  Future<Response<User>> update2(
+      HttpRequest request, Db db, ParamCreate pathParams) async {
     User user =
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);

@@ -38,10 +38,10 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getAllBooks();
-      await rRouteResponse.writeResponse(request.response);
+      Response<List> rRouteResponse0 = new Response(null);
+      rRouteResponse0.statusCode = 200;
+      rRouteResponse0.value = getAllBooks();
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
@@ -49,10 +49,10 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getAllBooks1();
-      await rRouteResponse.writeResponse(request.response);
+      Response<List> rRouteResponse0 = new Response(null);
+      rRouteResponse0.statusCode = 200;
+      rRouteResponse0.value = getAllBooks1();
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
@@ -60,10 +60,10 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getAllBooks2();
-      await rRouteResponse.writeResponse(request.response);
+      Response<List> rRouteResponse0 = new Response(null);
+      rRouteResponse0.statusCode = 200;
+      rRouteResponse0.value = getAllBooks2();
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
@@ -71,9 +71,9 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
+      Response<dynamic> rRouteResponse0 = new Response(null);
       defaultStatusAndHeader();
-      await rRouteResponse.writeResponse(request.response);
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
@@ -81,11 +81,11 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
+      Response<dynamic> rRouteResponse0 = new Response(null);
       inputHttpRequest(
         request,
       );
-      await rRouteResponse.writeResponse(request.response);
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 

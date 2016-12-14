@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/bin/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/example/body/json/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/body/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/common/interceptors/packages" />
@@ -30,6 +31,8 @@
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/route/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/jaguar/websocket/packages" />
       <excludeFolder url="file://$MODULE_DIR$/test/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/response/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/test/response/stream/packages" />
       <excludeFolder url="file://$MODULE_DIR$/tool/packages" />
     </content>
     <orderEntry type="inheritedJdk" />

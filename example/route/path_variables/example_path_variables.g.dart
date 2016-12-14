@@ -26,12 +26,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
-      rRouteResponse.statusCode = 200;
-      rRouteResponse.value = getBookById(
+      Response<String> rRouteResponse0 = new Response(null);
+      rRouteResponse0.statusCode = 200;
+      rRouteResponse0.value = getBookById(
         (pathParams.getField('id')),
       );
-      await rRouteResponse.writeResponse(request.response);
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
@@ -39,12 +39,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response rRouteResponse = new Response(null);
+      Response<dynamic> rRouteResponse0 = new Response(null);
       createBook(
         (pathParams.getField('book')),
         (pathParams.getField('author')),
       );
-      await rRouteResponse.writeResponse(request.response);
+      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
