@@ -6,8 +6,6 @@ import 'package:jaguar/jaguar.dart';
 
 import 'package:jaguar/interceptors.dart';
 
-import '../../common/models/book/book.dart';
-
 part 'example_use_interceptor.g.dart';
 
 class WrapSampleInterceptor implements RouteWrapper<SampleInterceptor> {

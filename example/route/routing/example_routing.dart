@@ -3,11 +3,8 @@ library example.routes;
 import 'dart:async';
 import 'dart:io';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/interceptors.dart';
 
 import '../../common/models/book/book.dart';
-
-import '../../common/interceptors/db.dart';
 
 part 'example_routing.g.dart';
 

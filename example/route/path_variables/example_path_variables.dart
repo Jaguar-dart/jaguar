@@ -6,8 +6,6 @@ import 'package:jaguar/jaguar.dart';
 
 import '../../common/models/book/book.dart';
 
-import '../../common/interceptors/db.dart';
-
 part 'example_path_variables.g.dart';
 
 Map<String, Book> _books = {

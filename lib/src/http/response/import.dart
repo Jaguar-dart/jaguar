@@ -26,6 +26,14 @@ class Response<ValueType> {
     }
   }
 
+  Response.cloneExceptValue(Response incoming) {
+    statusCode = incoming.statusCode;
+    incoming.headers.forEach((String key, dynamic val) {
+      headers.add(key, val);
+    });
+    cookies.addAll(incoming.cookies);
+  }
+
   String get valueAsString => value?.toString() ?? '';
 
   Future writeResponse(HttpResponse resp) async {
