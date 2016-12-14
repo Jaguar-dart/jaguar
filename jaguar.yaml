@@ -13,3 +13,4 @@ apis:
 - 'test/interceptor/param/param.dart'
 - 'test/interceptor/state/state.dart'
 - 'test/exception/exception.dart'
+- 'test/response/stream/stream.dart'

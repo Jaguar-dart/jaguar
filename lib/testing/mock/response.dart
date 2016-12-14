@@ -27,6 +27,12 @@ class MockHttpResponse implements HttpResponse {
     _buffer.addAll(data);
   }
 
+  Future<Null> addStream(Stream<List<int>> stream) async {
+    await for (List<int> data in stream) {
+      add(data);
+    }
+  }
+
   void addError(error, [StackTrace stackTrace]) {
     // doesn't seem to be hit...hmm...
   }
@@ -40,11 +46,10 @@ class MockHttpResponse implements HttpResponse {
   void write(Object obj) {
     var str = obj.toString();
     add(UTF8.encode(str));
+    print(str);
   }
 
-  /*
-   * Implemented to remove editor warnings
-   */
+  // Implemented to remove editor warnings
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 
   String get mockContent => UTF8.decode(_buffer);

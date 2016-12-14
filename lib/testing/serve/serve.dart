@@ -16,7 +16,7 @@ class JaguarMock {
   Future<HttpResponse> handleRequest(HttpRequest request) async {
     try {
       for (int i = 0; i < config.apis.length; i++) {
-        var apiClass = config.apis[i];
+        RequestHandler apiClass = config.apis[i];
         bool result = await apiClass.handleRequest(request);
         if (result) break;
       }
