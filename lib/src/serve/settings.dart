@@ -8,8 +8,8 @@ class Settings {
   final Map<String, dynamic> _settingsFromYaml;
   final Map<String, String> _settingsFromMap;
 
-  Settings._(
-      Map<String, dynamic> settingsFromYaml, Map<String, String> settingsFromMap)
+  Settings._(Map<String, dynamic> settingsFromYaml,
+      Map<String, String> settingsFromMap)
       : _settingsFromYaml = settingsFromYaml ?? {},
         _settingsFromMap = settingsFromMap ?? {};
 

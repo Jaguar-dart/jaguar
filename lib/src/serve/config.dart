@@ -9,7 +9,7 @@ class Configuration {
   final bool log;
   List<RequestHandler> apis = <RequestHandler>[];
 
-  Map<String, String> _settings;
+  final Map<String, String> _settings = {};
   List<String> _args;
 
   Configuration(
@@ -19,9 +19,7 @@ class Configuration {
       this.securityContext: null,
       this.log: false,
       List<String> args: const []})
-      : _args = args {
-    _settings = {};
-  }
+      : _args = args;
 
   void addApi(RequestHandler clazz) {
     apis.add(clazz);
