@@ -2,7 +2,7 @@ library jaguar.src.annotations;
 
 import 'dart:io';
 
-import '../serve/settings.dart';
+import '../serve/import.dart';
 
 part 'routes.dart';
 part 'interceptors.dart';
