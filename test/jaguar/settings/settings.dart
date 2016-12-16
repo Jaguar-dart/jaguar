@@ -28,8 +28,8 @@ class SettingsApi extends Object with _$JaguarSettingsApi {
       Settings.getString('TATA', settingsFilter: SettingsFilter.Yaml);
 
   @Route(path: '/getYamlDefault', methods: const <String>['GET'])
-  String getYamlDefault() =>
-      Settings.getString('TATA', settingsFilter: SettingsFilter.Yaml, defaultValue: 'TATA');
+  String getYamlDefault() => Settings.getString('TATA',
+      settingsFilter: SettingsFilter.Yaml, defaultValue: 'TATA');
 }
 
 void main() {
