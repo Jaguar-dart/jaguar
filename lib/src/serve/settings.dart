@@ -34,7 +34,6 @@ class Settings {
   static String getString(String key,
       {String defaultValue,
       SettingsFilter settingsFilter: SettingsFilter.MapOrYaml}) {
-    print("$key $defaultValue $settingsFilter");
     if (settingsFilter == SettingsFilter.MapOrYaml) {
       String value = _singletonInstance._settingsFromMap[key] ??
           _singletonInstance._settingsFromYaml[key];

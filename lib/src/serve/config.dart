@@ -7,10 +7,10 @@ class Configuration {
   final SecurityContext securityContext;
   final bool multiThread;
   final bool log;
-  List<RequestHandler> apis = <RequestHandler>[];
+  final List<RequestHandler> apis = <RequestHandler>[];
 
   final Map<String, String> _settings = {};
-  List<String> _args;
+  final List<String> _args;
 
   Configuration(
       {this.address: "0.0.0.0",
