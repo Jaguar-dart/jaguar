@@ -1,13 +1,5 @@
 part of jaguar.src.serve;
 
-class JaguarSettingsError extends Error {
-  final String message;
-
-  JaguarSettingsError(this.message);
-
-  String toString() => message;
-}
-
 enum SettingsFilter { Yaml, Env, Map, MapOrYaml }
 
 class Settings {
@@ -23,9 +15,6 @@ class Settings {
 
   static Future parse(
       List<String> args, Map<String, String> settingsMap) async {
-    if (_singletonInstance != null) {
-      throw new JaguarSettingsError("Settings is already set");
-    }
     Map<String, String> yamlSettings = {};
     if (args.isNotEmpty) {
       ArgParser parser = new ArgParser();
@@ -40,12 +29,12 @@ class Settings {
       }
     }
     _singletonInstance = new Settings._(yamlSettings, settingsMap);
-    return _singletonInstance;
   }
 
   static String getString(String key,
       {String defaultValue,
       SettingsFilter settingsFilter: SettingsFilter.MapOrYaml}) {
+    print("$key $defaultValue $settingsFilter");
     if (settingsFilter == SettingsFilter.MapOrYaml) {
       String value = _singletonInstance._settingsFromMap[key] ??
           _singletonInstance._settingsFromYaml[key];

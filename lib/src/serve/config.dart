@@ -37,7 +37,5 @@ class Configuration {
     _settings.addAll(map);
   }
 
-  void _instanciateSettings() {
-    Settings.parse(_args, _settings);
-  }
+  Future instanciateSettings() => Settings.parse(_args, _settings);
 }

@@ -16,8 +16,6 @@ class Jaguar {
       String dateStr = _dateFormatter.format(rec.time);
       print('[@$dateStr ${rec.loggerName}]: ${rec.message}');
     });
-
-    configuration._instanciateSettings();
   }
 
   final DateFormat _dateFormatter = new DateFormat('MM-dd H:m');
@@ -27,6 +25,8 @@ class Jaguar {
   final Logger _logRequest = new Logger('J.Req');
 
   Future<Null> serve() async {
+    await configuration.instanciateSettings();
+
     _log.severe("Running on ${configuration.baseUrl}");
     await _serve();
   }
