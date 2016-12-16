@@ -16,6 +16,8 @@ class Jaguar {
       String dateStr = _dateFormatter.format(rec.time);
       print('[@$dateStr ${rec.loggerName}]: ${rec.message}');
     });
+
+    configuration._instanciateSettings();
   }
 
   final DateFormat _dateFormatter = new DateFormat('MM-dd H:m');
