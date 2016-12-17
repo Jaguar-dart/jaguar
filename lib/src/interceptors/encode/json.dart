@@ -16,7 +16,7 @@ class EncodeToJson extends Interceptor {
   @InputRouteResponse()
   Response<String> post(Response incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
-    resp.value = JSON.encode(resp.value);
+    resp.value = JSON.encode(incoming.value);
     return resp;
   }
 }
@@ -37,7 +37,7 @@ class EncodeMapToJson extends Interceptor {
   @InputRouteResponse()
   Response<String> post(Response<Map> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
-    resp.value = JSON.encode(resp.value);
+    resp.value = JSON.encode(incoming.value);
     return resp;
   }
 }
@@ -58,7 +58,7 @@ class EncodeListToJson extends Interceptor {
   @InputRouteResponse()
   Response<String> post(Response<List> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
-    resp.value = JSON.encode(resp.value);
+    resp.value = JSON.encode(incoming.value);
     return resp;
   }
 }
