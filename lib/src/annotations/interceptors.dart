@@ -36,3 +36,12 @@ class MakeParamFromMethod implements MakeParam {
 
   const MakeParamFromMethod(this.methodName);
 }
+
+class MakeParamFromSettings implements MakeParam {
+  final String key;
+  final SettingsFilter filter;
+  final String defaultValue;
+
+  const MakeParamFromSettings(this.key,
+      {this.filter: SettingsFilter.MapOrYaml, this.defaultValue});
+}

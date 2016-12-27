@@ -3,6 +3,8 @@ library jaguar.src.annotations;
 import 'dart:async';
 import 'dart:io';
 
+import '../serve/import.dart';
+
 part 'routes.dart';
 part 'interceptors.dart';
 part 'inputs.dart';

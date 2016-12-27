@@ -11,6 +11,7 @@ apis:
 - 'test/jaguar/group/book.dart'
 - 'test/jaguar/websocket/websocket.dart'
 - 'test/jaguar/query_params/query_params.dart'
+- 'test/jaguar/settings/settings.dart'
 - 'test/interceptor/param/param.dart'
 - 'test/interceptor/state/state.dart'
 - 'test/exception/exception.dart'
