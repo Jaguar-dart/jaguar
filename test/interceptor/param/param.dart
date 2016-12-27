@@ -45,8 +45,7 @@ class ExampleApi extends Object with _$JaguarExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
   @WrapWithParam(
       makeParams: const {#checker: const MakeParamFromType(CheckerImpl)})
-  @Input(WithParam)
-  String getUser(String who) => who;
+  String getUser(@Input(WithParam) String who) => who;
 }
 
 void main() {

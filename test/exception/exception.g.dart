@@ -33,6 +33,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.value = getUser(
           who: (queryParams.getField('who')),
         );
+        await rRouteResponse0.writeResponse(request.response);
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         handler.onRouteException(request, e, s);
@@ -42,7 +43,6 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         handler.onRouteException(request, e, s);
         return true;
       }
-      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 
@@ -60,12 +60,12 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.value = post(
           rUserParser,
         );
+        await rRouteResponse0.writeResponse(request.response);
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         handler.onRouteException(request, e, s);
         return true;
       }
-      await rRouteResponse0.writeResponse(request.response);
       return true;
     }
 

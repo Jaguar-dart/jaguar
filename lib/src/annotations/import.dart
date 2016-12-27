@@ -1,5 +1,6 @@
 library jaguar.src.annotations;
 
+import 'dart:async';
 import 'dart:io';
 
 part 'routes.dart';

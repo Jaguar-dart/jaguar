@@ -12,6 +12,8 @@ abstract class RouteWrapper<WrapperType> {
 /// Base class for interceptor
 class Interceptor {
   const Interceptor();
+
+  Future<Null> onException() async {}
 }
 
 class ProvideAsInterceptorResult {

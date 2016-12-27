@@ -18,7 +18,7 @@ class WrapSampleInterceptor implements RouteWrapper<SampleInterceptor> {
   SampleInterceptor createInterceptor() => new SampleInterceptor();
 }
 
-class SampleInterceptor implements Interceptor {
+class SampleInterceptor extends Interceptor {
   SampleInterceptor();
 
   void pre() {
@@ -30,7 +30,7 @@ class SampleInterceptor implements Interceptor {
   }
 }
 
-class NeedsHttpRequestInterceptor implements Interceptor {
+class NeedsHttpRequestInterceptor extends Interceptor {
   NeedsHttpRequestInterceptor();
 
   /// [HttpRequest] object of the current request is automatically provided when
@@ -46,7 +46,7 @@ class NeedsHttpRequestInterceptor implements Interceptor {
   }
 }
 
-class InterceptorWithInput implements Interceptor {
+class InterceptorWithInput extends Interceptor {
   InterceptorWithInput();
 
   /// [Input] annotation can be used to request result from another interceptor.
