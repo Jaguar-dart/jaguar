@@ -21,10 +21,14 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      WebSocket ws = await WebSocketTransformer.upgrade(request);
-      await websocket(
-        ws,
-      );
+      try {
+        WebSocket ws = await WebSocketTransformer.upgrade(request);
+        await websocket(
+          ws,
+        );
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 

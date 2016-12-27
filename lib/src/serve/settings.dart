@@ -49,5 +49,7 @@ class Settings {
     } else if (settingsFilter == SettingsFilter.Env) {
       return Platform.environment[key] ?? defaultValue;
     }
+
+    return null;
   }
 }

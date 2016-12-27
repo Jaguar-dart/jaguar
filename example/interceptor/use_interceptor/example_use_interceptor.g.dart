@@ -27,13 +27,19 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      EncodeToJson iEncodeToJson = new WrapEncodeToJson().createInterceptor();
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = getJaguarInfo();
-      Response<String> rRouteResponse1 = iEncodeToJson.post(
-        rRouteResponse0,
-      );
-      await rRouteResponse1.writeResponse(request.response);
+      EncodeToJson iEncodeToJson;
+      try {
+        iEncodeToJson = new WrapEncodeToJson().createInterceptor();
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = getJaguarInfo();
+        Response<String> rRouteResponse1 = iEncodeToJson.post(
+          rRouteResponse0,
+        );
+        await rRouteResponse1.writeResponse(request.response);
+      } catch (e) {
+        await iEncodeToJson.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -42,16 +48,21 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      DecodeJsonMap iDecodeJsonMap =
-          new WrapDecodeJsonMap().createInterceptor();
-      Map<String, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
-        request,
-      );
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = createJaguarInfo(
-        rDecodeJsonMap,
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      DecodeJsonMap iDecodeJsonMap;
+      try {
+        iDecodeJsonMap = new WrapDecodeJsonMap().createInterceptor();
+        Map<String, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
+          request,
+        );
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = createJaguarInfo(
+          rDecodeJsonMap,
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iDecodeJsonMap.onException();
+        rethrow;
+      }
       return true;
     }
 

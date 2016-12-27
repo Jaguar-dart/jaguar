@@ -29,11 +29,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
       try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = getUser(
-          who: (queryParams.getField('who')),
-        );
-        await rRouteResponse0.writeResponse(request.response);
+        try {
+          rRouteResponse0.statusCode = 200;
+          rRouteResponse0.value = getUser(
+            who: (queryParams.getField('who')),
+          );
+          await rRouteResponse0.writeResponse(request.response);
+        } catch (e) {
+          rethrow;
+        }
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         handler.onRouteException(request, e, s);
@@ -52,15 +56,21 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
       try {
-        UserParser iUserParser = new WrapUserParser().createInterceptor();
-        User rUserParser = iUserParser.pre(
-          new QueryParams.FromQueryParam(queryParams),
-        );
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = post(
-          rUserParser,
-        );
-        await rRouteResponse0.writeResponse(request.response);
+        UserParser iUserParser;
+        try {
+          iUserParser = new WrapUserParser().createInterceptor();
+          User rUserParser = iUserParser.pre(
+            new QueryParams.FromQueryParam(queryParams),
+          );
+          rRouteResponse0.statusCode = 200;
+          rRouteResponse0.value = post(
+            rUserParser,
+          );
+          await rRouteResponse0.writeResponse(request.response);
+        } catch (e) {
+          await iUserParser.onException();
+          rethrow;
+        }
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         handler.onRouteException(request, e, s);
