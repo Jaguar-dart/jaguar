@@ -6,6 +6,10 @@ authors:
 - Kevin Segaud <segaud.kevin@gmail.com>
 homepage: http://jaguar-dart.github.io
 
+environment:
+  sdk: ">=1.8.0 <2.0.0"
+
+
 executables:
   jaguar:
 
