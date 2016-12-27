@@ -1,30 +1,93 @@
 part of jaguar.src.interceptors;
 
-class FormField {
-  final String name;
-  final value;
-  final String contentType;
-  final String filename;
+abstract class FormField {
+  String get name;
 
-  FormField(String this.name, this.value,
-      {String this.contentType, String this.filename});
+  dynamic get value;
+
+  ContentType get contentType;
+
+  int get hashCode => name.hashCode;
+}
+
+class StringFormField implements FormField {
+  final String name;
+
+  final String value;
+
+  final ContentType contentType;
+
+  StringFormField(this.name, this.value, {this.contentType});
 
   bool operator ==(other) {
-    if (value.length != other.value.length) return false;
-    for (int i = 0; i < value.length; i++) {
-      if (value[i] != other.value[i]) {
-        return false;
-      }
+    if (other is! StringFormField) {
+      return false;
     }
+
+    return _equality(other as StringFormField);
+  }
+
+  bool _equality(StringFormField other) {
     return name == other.name &&
-        contentType == other.contentType &&
+        value == other.value &&
+        contentType.mimeType == other.contentType.mimeType &&
+        contentType.charset == other.contentType.charset;
+  }
+
+  int get hashCode => name.hashCode;
+
+  String toString() {
+    return "StringFormField('$name', '$value', '$contentType')";
+  }
+}
+
+class TextFileFormField implements FormField {
+  final String name;
+
+  final Stream<String> value;
+
+  final ContentType contentType;
+
+  final String filename;
+
+  TextFileFormField(this.name, this.value, {this.contentType, this.filename});
+
+  bool operator ==(other) {
+    return name == other.name &&
+        contentType.mimeType == other.contentType.mimeType &&
+        contentType.charset == other.contentType.charset &&
         filename == other.filename;
   }
 
   int get hashCode => name.hashCode;
 
   String toString() {
-    return "FormField('$name', '$value', '$contentType', '$filename')";
+    return "FileFormField('$name', '$contentType', '$filename')";
+  }
+}
+
+class BinaryFileFormField implements FormField {
+  final String name;
+
+  final Stream<List<int>> value;
+
+  final ContentType contentType;
+
+  final String filename;
+
+  BinaryFileFormField(this.name, this.value, {this.contentType, this.filename});
+
+  bool operator ==(other) {
+    return name == other.name &&
+        contentType.mimeType == other.contentType.mimeType &&
+        contentType.charset == other.contentType.charset &&
+        filename == other.filename;
+  }
+
+  int get hashCode => name.hashCode;
+
+  String toString() {
+    return "FileFormField('$name', '$contentType', '$filename')";
   }
 }
 
@@ -41,43 +104,46 @@ class WrapDecodeFormData implements RouteWrapper<DecodeFormData> {
 class DecodeFormData extends Interceptor {
   DecodeFormData();
 
-  Future<Map<String, FormField>> pre(HttpRequest request) {
+  Future<Map<String, FormField>> pre(HttpRequest request) async {
     if (!request.headers.contentType.parameters.containsKey('boundary')) {
       return null;
     }
-    String boundary = request.headers.contentType.parameters['boundary'];
-    return request
-        .transform(new MimeMultipartTransformer(boundary))
-        .map((part) => HttpMultipartFormData.parse(part))
-        .map((multipart) {
-          var future;
-          if (multipart.isText) {
-            future = multipart.join();
-          } else {
-            future = multipart.fold([], (b, s) => b..addAll(s));
-          }
-          return future.then((data) {
-            String contentType;
-            if (multipart.contentType != null) {
-              contentType = multipart.contentType.mimeType;
-            }
-            return new FormField(
-                multipart.contentDisposition.parameters['name'], data,
-                contentType: contentType,
-                filename: multipart.contentDisposition.parameters['filename']);
-          });
-        })
-        .toList()
-        .then((List future) async {
-          Iterable<Future<FormField>> list =
-              future.map((Future<FormField> f) => f);
-          return await Future.wait(list);
-        })
-        .then((List<FormField> formFields) {
-          Map<String, FormField> mapped = <String, FormField>{};
-          formFields.forEach(
-              (FormField formField) => mapped[formField.name] = formField);
-          return mapped;
-        });
+
+    final String boundary = request.headers.contentType.parameters['boundary'];
+
+    final Map<String, FormField> ret = {};
+
+    // Transform body to [MimeMultipart]
+    final transformer = new MimeMultipartTransformer(boundary);
+    final Stream<MimeMultipart> stream = request.transform(transformer);
+
+    await for (MimeMultipart part in stream) {
+      HttpMultipartFormData multipart = HttpMultipartFormData.parse(part);
+
+      // Parse field content type
+      final ContentType contentType = multipart.contentType;
+
+      final String name = multipart.contentDisposition.parameters['name'];
+
+      final String fn = multipart.contentDisposition.parameters['filename'];
+
+      // Create field
+      if (fn is! String && multipart.isText) {
+        final String data = await multipart.join();
+        final field = new StringFormField(name, data, contentType: contentType);
+        ret[field.name] = field;
+      } else if (multipart.isText) {
+        final field = new TextFileFormField(name, multipart as Stream<String>,
+            contentType: contentType, filename: fn);
+        ret[field.name] = field;
+      } else {
+        final field = new BinaryFileFormField(
+            name, multipart as Stream<List<int>>,
+            contentType: contentType, filename: fn);
+        ret[field.name] = field;
+      }
+    }
+
+    return ret;
   }
 }
