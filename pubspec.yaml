@@ -1,10 +1,13 @@
 name: jaguar
-version: 0.1.4
+version: 0.1.6
 description: jaguar is a performant server side framework
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
 homepage: http://jaguar-dart.github.io
+
+environment:
+  sdk: ">=1.8.0 <2.0.0"
 
 executables:
   jaguar:
@@ -16,7 +19,7 @@ dependencies:
   mime: ">=0.9.3 <0.10.0"
   logging: ">=0.11.3 <0.12.0"
   intl: ">=0.14.0 <0.15.0"
-  jaguar_generator: ">=0.1.13 <0.2.0"
+  jaguar_generator: ">=0.1.14 <0.2.0"
 #    path: ../jaguar_generator
 #    git: https://github.com/Jaguar-dart/jaguar_generator.git
 

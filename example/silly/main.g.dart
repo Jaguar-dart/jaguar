@@ -22,9 +22,13 @@ abstract class _$JaguarMyGroup implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = get();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = get();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -52,9 +56,13 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = get();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = get();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -104,9 +112,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = ping();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = ping();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -115,10 +127,14 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 201;
-      rRouteResponse0.headers['pong-header'] = 'silly-pong';
-      rRouteResponse0.value = pong();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 201;
+        rRouteResponse0.headers['pong-header'] = 'silly-pong';
+        rRouteResponse0.value = pong();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -127,11 +143,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = echoPathParam(
-        (pathParams.getField('message')),
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = echoPathParam(
+          (pathParams.getField('message')),
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -140,11 +160,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = echoQueryParam(
-        message: (queryParams.getField('message')),
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = echoQueryParam(
+          message: (queryParams.getField('message')),
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -152,10 +176,14 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     match =
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      WebSocket ws = await WebSocketTransformer.upgrade(request);
-      await websocket(
-        ws,
-      );
+      try {
+        WebSocket ws = await WebSocketTransformer.upgrade(request);
+        await websocket(
+          ws,
+        );
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
