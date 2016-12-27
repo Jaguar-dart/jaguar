@@ -25,6 +25,8 @@ class Jaguar {
   final Logger _logRequest = new Logger('J.Req');
 
   Future<Null> serve() async {
+    await configuration.instanciateSettings();
+
     _log.severe("Running on ${configuration.baseUrl}");
     await _serve();
   }
