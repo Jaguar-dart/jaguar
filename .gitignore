@@ -7,3 +7,4 @@ pubspec.lock
 .idea/
 .atom/
 .dart_tool
+*.iml
