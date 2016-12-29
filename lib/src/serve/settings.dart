@@ -40,7 +40,7 @@ class Settings {
   /// @param settingsMap Settings provided through Dart Map
   static Future<Null> parse(
       List<String> args, Map<String, String> settingsMap) async {
-    if(_singletonInstance != null) {
+    if (_singletonInstance != null) {
       throw new Exception("Settings must be parsed only once!");
     }
 
@@ -72,7 +72,7 @@ class Settings {
   static String getString(String key,
       {String defaultValue,
       SettingsFilter settingsFilter: SettingsFilter.MapOrYaml}) {
-    if(_singletonInstance == null) {
+    if (_singletonInstance == null) {
       throw new Exception("Settings are not parsed yet!");
     }
 
