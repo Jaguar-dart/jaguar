@@ -17,6 +17,7 @@ class EncodeToJson extends Interceptor {
   Response<String> post(Response incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value);
+    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
     return resp;
   }
 }
@@ -38,6 +39,7 @@ class EncodeMapToJson extends Interceptor {
   Response<String> post(Response<Map> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value);
+    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
     return resp;
   }
 }
@@ -59,6 +61,29 @@ class EncodeListToJson extends Interceptor {
   Response<String> post(Response<List> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value);
+    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    return resp;
+  }
+}
+
+class WrapEncodeJsonable implements RouteWrapper<EncodeJsonable> {
+  final String id;
+
+  final Map<Symbol, MakeParam> makeParams = const {};
+
+  const WrapEncodeJsonable({this.id});
+
+  EncodeJsonable createInterceptor() => new EncodeJsonable();
+}
+
+class EncodeJsonable extends Interceptor {
+  EncodeJsonable();
+
+  @InputRouteResponse()
+  Response<String> post(Response<ToJsonable> incoming) {
+    Response<String> resp = new Response<String>.cloneExceptValue(incoming);
+    resp.value = incoming.value.toJson();
+    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
     return resp;
   }
 }
