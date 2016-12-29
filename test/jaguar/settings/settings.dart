@@ -12,7 +12,6 @@ void main() {
   group('settings', () {
     Map<String, String> localSettings = {
       "interval": "1",
-      "secret": "fghfghfghtdry",
     };
 
     Settings.parse(
@@ -54,6 +53,28 @@ void main() {
       expect(
           Settings.getString('notfound',
               defaultValue: 'novalue', settingsFilter: SettingsFilter.Yaml),
+          'novalue');
+    });
+
+    test('from env', () async {
+      expect(Settings.getString('secret'), null);
+      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Map),
+          null);
+      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Yaml),
+          null);
+      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Env),
+          '123456');
+    });
+
+    test('from not found env', () async {
+      expect(Settings.getString('notfound', settingsFilter: SettingsFilter.Env),
+          null);
+    });
+
+    test('from env default', () async {
+      expect(
+          Settings.getString('notfound',
+              defaultValue: 'novalue', settingsFilter: SettingsFilter.Env),
           'novalue');
     });
   });
