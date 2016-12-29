@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
 
 part 'settings.g.dart';
 

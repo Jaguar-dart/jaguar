@@ -3,18 +3,27 @@ part of jaguar.src.serve;
 /// Settings source filter
 ///
 /// Determines where a corresponding setting must be retrieved from
-enum SettingsFilter {
+class SettingsFilter {
+  final int index;
+
+  final String name;
+
+  String get fullname => "SettingsFilter.$name";
+
+  const SettingsFilter._(this.index, this.name);
+
   /// Setting shall be retrieved from YAML config file
-  Yaml,
+  static const SettingsFilter Yaml = const SettingsFilter._(0, 'Yaml');
 
   /// Setting shall be retrieved from environment variables
-  Env,
+  static const SettingsFilter Env = const SettingsFilter._(0, 'Env');
 
   /// Setting shall be retrieved from settings Map provided from dart code
-  Map,
+  static const SettingsFilter Map = const SettingsFilter._(0, 'Map');
 
   /// Setting shall be retrieved from either Map or YAML config file
-  MapOrYaml
+  static const SettingsFilter MapOrYaml =
+      const SettingsFilter._(0, 'MapOrYaml');
 }
 
 /// {Key: Value} Settings repository. Allows to query settings values based on
