@@ -16,16 +16,6 @@ part 'decode/json/list.dart';
 part 'decode/url_encoded_form.dart';
 part 'encode/json.dart';
 
-abstract class ToJsonable {
-  String toJson();
-}
-
-abstract class FromJsonable {
-  void fromJson(String json);
-}
-
-abstract class Jsonable implements ToJsonable, FromJsonable {}
-
 Future<String> getStringFromBody(HttpRequest request, Encoding encoding) async {
   Completer<String> completer = new Completer<String>();
   String allData = "";
