@@ -92,9 +92,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbTest.post();
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeObjectToJson?.onException();
-        await iMongoDbAdmin?.onException();
-        await iMongoDbTest?.onException();
+        await iEncodeObjectToJson.onException();
+        await iMongoDbAdmin.onException();
+        await iMongoDbTest.onException();
         rethrow;
       }
       return true;
@@ -125,7 +125,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iMongoDbAdmin?.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -155,7 +155,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iMongoDbAdmin?.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -188,8 +188,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeObjectToJson?.onException();
-        await iMongoDbAdmin?.onException();
+        await iEncodeObjectToJson.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -216,7 +216,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iMongoDbAdmin?.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -249,8 +249,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeObjectToJson?.onException();
-        await iMongoDbAdmin?.onException();
+        await iEncodeObjectToJson.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -278,7 +278,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iMongoDbAdmin?.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -306,7 +306,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.post();
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iMongoDbAdmin?.onException();
+        await iMongoDbAdmin.onException();
         rethrow;
       }
       return true;
@@ -329,7 +329,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         );
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iDecodeFormData?.onException();
+        await iDecodeFormData.onException();
         rethrow;
       }
       return true;
@@ -354,7 +354,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         );
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iDecodeUrlEncodedForm?.onException();
+        await iDecodeUrlEncodedForm.onException();
         rethrow;
       }
       return true;

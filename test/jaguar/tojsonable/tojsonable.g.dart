@@ -43,7 +43,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         );
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeJsonable?.onException();
+        await iEncodeJsonable.onException();
         rethrow;
       }
       return true;
@@ -64,7 +64,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         );
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeJsonable?.onException();
+        await iEncodeJsonable.onException();
         rethrow;
       }
       return true;
@@ -86,7 +86,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         );
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeJsonableObject?.onException();
+        await iEncodeJsonableObject.onException();
         rethrow;
       }
       return true;
@@ -107,7 +107,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         );
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeJsonableList?.onException();
+        await iEncodeJsonableList.onException();
         rethrow;
       }
       return true;
