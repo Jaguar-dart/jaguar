@@ -68,7 +68,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
           );
           await rRouteResponse0.writeResponse(request.response);
         } catch (e) {
-          await iUserParser.onException();
+          await iUserParser?.onException();
           rethrow;
         }
       } on ValidationException catch (e, s) {

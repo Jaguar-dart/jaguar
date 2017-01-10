@@ -38,7 +38,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         );
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iWithParam.onException();
+        await iWithParam?.onException();
         rethrow;
       }
       return true;

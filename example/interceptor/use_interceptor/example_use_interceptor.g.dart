@@ -37,7 +37,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         );
         await rRouteResponse1.writeResponse(request.response);
       } catch (e) {
-        await iEncodeToJson.onException();
+        await iEncodeToJson?.onException();
         rethrow;
       }
       return true;
@@ -60,7 +60,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         );
         await rRouteResponse0.writeResponse(request.response);
       } catch (e) {
-        await iDecodeJsonMap.onException();
+        await iDecodeJsonMap?.onException();
         rethrow;
       }
       return true;

@@ -5,126 +5,98 @@ import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar/testing.dart';
+import 'package:jaguar/interceptors.dart';
 
-part 'query_params.g.dart';
+part 'tojsonable.g.dart';
+
+class Model implements ToJsonable {
+  Model(this.name, this.email);
+
+  String name = "";
+
+  String email = "";
+
+  Map toJson() => {
+        "name": name,
+        "email": email,
+      };
+}
 
 @Api(path: '/api')
-class QueryParamsExampleApi extends Object with _$JaguarQueryParamsExampleApi {
-  @Get(path: '/stringParam')
-  String stringParam({String strParam}) => strParam;
+class ToJsonableExampleApi extends Object with _$JaguarToJsonableExampleApi {
+  @Get(path: '/EncodeJsonable/object')
+  @WrapEncodeJsonable()
+  Model encodeJsonable_object() => new Model('kleak', 'kleak@kleak.com');
 
-  @Get(path: '/intParam')
-  String intParam({int intParam}) => '${intParam*intParam}';
+  @Get(path: '/EncodeJsonable/list')
+  @WrapEncodeJsonable()
+  List<Model> encodeJsonable_list() =>
+      <Model>[new Model('kleak', 'kleak@kleak.com')];
 
-  @Get(path: '/doubleParam')
-  String doubleParam({num doubleParam}) => '${doubleParam*2}';
+  @Get(path: '/EncodeJsonableObject')
+  @WrapEncodeJsonableObject()
+  Model encodeJsonableObject() => new Model('kleak', 'kleak@kleak.com');
 
-  @Get(path: '/numParam')
-  String numParam({num numParam}) => '${numParam*2}';
-
-  @Get(path: '/defStringParam')
-  String defStringParam({String strParam: 'default'}) => strParam;
-
-  @Get(path: '/defIntParam')
-  String defIntParam({int intParam: 50}) => '${intParam*intParam}';
-
-  @Get(path: '/defDoubleParam')
-  String defDoubleParam({num doubleParam: 12.75}) => '${doubleParam*2}';
-
-  @Get(path: '/defNumParam')
-  String defDumParam({num numParam: 5.25}) => '${numParam*2}';
+  @Get(path: '/EncodeJsonableList')
+  @WrapEncodeJsonableList()
+  List<Model> encodeJsonableList() =>
+      <Model>[new Model('kleak', 'kleak@kleak.com')];
 }
 
 void main() {
-  group('route', () {
+  group('Encode ToJsonable', () {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new QueryParamsExampleApi());
+      config.addApi(new ToJsonableExampleApi());
       mock = new JaguarMock(config);
     });
 
-    test('stringParam', () async {
-      Uri uri = new Uri.http(
-          'localhost:8080', '/api/stringParam', {'strParam': 'hello'});
+    test('/EncodeJsonable/object', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/EncodeJsonable/object');
       MockHttpRequest rq = new MockHttpRequest(uri);
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, 'hello');
-      expect(response.headers.toMap, {});
+      expect(
+          response.mockContent, '{"name":"kleak","email":"kleak@kleak.com"}');
+      expect(
+          response.headers.value(HttpHeaders.CONTENT_TYPE), 'application/json');
       expect(response.statusCode, 200);
     });
 
-    test('intParam', () async {
-      Uri uri =
-          new Uri.http('localhost:8080', '/api/intParam', {'intParam': '5'});
+    test('/EncodeJsonable/list', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/EncodeJsonable/list');
       MockHttpRequest rq = new MockHttpRequest(uri);
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, '25');
-      expect(response.headers.toMap, {});
+      expect(
+          response.mockContent, '[{"name":"kleak","email":"kleak@kleak.com"}]');
+      expect(
+          response.headers.value(HttpHeaders.CONTENT_TYPE), 'application/json');
       expect(response.statusCode, 200);
     });
 
-    test('doubleParam', () async {
-      Uri uri = new Uri.http(
-          'localhost:8080', '/api/doubleParam', {'doubleParam': '1.25'});
+    test('/EncodeJsonableObject', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/EncodeJsonableObject');
       MockHttpRequest rq = new MockHttpRequest(uri);
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, '2.5');
-      expect(response.headers.toMap, {});
+      expect(
+          response.mockContent, '{"name":"kleak","email":"kleak@kleak.com"}');
+      expect(
+          response.headers.value(HttpHeaders.CONTENT_TYPE), 'application/json');
       expect(response.statusCode, 200);
     });
 
-    test('numParam', () async {
-      Uri uri =
-          new Uri.http('localhost:8080', '/api/numParam', {'numParam': '1.25'});
+    test('/EncodeJsonableList', () async {
+      Uri uri = new Uri.http('localhost:8080', '/api/EncodeJsonableList');
       MockHttpRequest rq = new MockHttpRequest(uri);
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, '2.5');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
-    });
-
-    test('defStringParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defStringParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, 'default');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
-    });
-
-    test('defIntParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defIntParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, '2500');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
-    });
-
-    test('defDoubleParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defDoubleParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, '25.5');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
-    });
-
-    test('defNumParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defNumParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, '10.5');
-      expect(response.headers.toMap, {});
+      expect(
+          response.mockContent, '[{"name":"kleak","email":"kleak@kleak.com"}]');
+      expect(
+          response.headers.value(HttpHeaders.CONTENT_TYPE), 'application/json');
       expect(response.statusCode, 200);
     });
   });
