@@ -1,11 +1,11 @@
 library jaguar.http.json;
 
 abstract class ToJsonable {
-  String toJson();
+  Map toJson();
 }
 
 abstract class FromJsonable {
-  void fromJson(String json);
+  void fromJson(Map json);
 }
 
 abstract class Jsonable implements ToJsonable, FromJsonable {}

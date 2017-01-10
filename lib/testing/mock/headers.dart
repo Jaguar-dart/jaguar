@@ -50,6 +50,10 @@ class MockHttpHeaders implements HttpHeaders {
 
   String toString() => '$runtimeType : $_headers';
 
+  void add(String name, value) {
+    _add(name, value);
+  }
+
   // [name] must be a lower-case version of the name.
   void _add(String name, value) {
     if (name == HttpHeaders.IF_MODIFIED_SINCE) {

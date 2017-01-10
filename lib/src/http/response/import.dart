@@ -42,7 +42,7 @@ class Response<ValueType> {
     }
 
     headers.forEach((String key, List<String> val) {
-      resp.headers.add(key, val);
+      val.forEach((String v) => resp.headers.add(key, v));
     });
 
     resp.cookies.addAll(cookies);

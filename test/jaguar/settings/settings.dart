@@ -5,8 +5,6 @@ import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 
-part 'settings.g.dart';
-
 void main() {
   group('settings', () {
     Map<String, String> localSettings = {

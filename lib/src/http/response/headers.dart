@@ -5,7 +5,7 @@ class JaguarHttpHeaders {
 
   operator [](String name) => headers[name];
 
-  operator []=(String name, value) => add(name, value);
+  operator []=(String name, value) => set(name, value);
 
   String value(String name) {
     name = name.toLowerCase();
