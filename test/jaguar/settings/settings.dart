@@ -4,106 +4,75 @@ import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
-
-part 'settings.g.dart';
-
-@Api(path: '/api')
-class SettingsApi extends Object with _$JaguarSettingsApi {
-  @Route(path: '/getMap', methods: const <String>['GET'])
-  String getMap() => Settings.getString('TEST');
-
-  @Route(path: '/getNotFoundMap', methods: const <String>['GET'])
-  String getNotFoundMap() => Settings.getString('TATA');
-
-  @Route(path: '/getMapDefault', methods: const <String>['GET'])
-  String getMapDefault() => Settings.getString('TATA', defaultValue: "TATA");
-
-  @Route(path: '/getYaml', methods: const <String>['GET'])
-  String getYaml() =>
-      Settings.getString('TEST', settingsFilter: SettingsFilter.Yaml);
-
-  @Route(path: '/getNotFoundYaml', methods: const <String>['GET'])
-  String getNotFoundYaml() =>
-      Settings.getString('TATA', settingsFilter: SettingsFilter.Yaml);
-
-  @Route(path: '/getYamlDefault', methods: const <String>['GET'])
-  String getYamlDefault() => Settings.getString('TATA',
-      settingsFilter: SettingsFilter.Yaml, defaultValue: 'TATA');
-}
 
 void main() {
   group('settings', () {
-    JaguarMock mock;
-    setUp(() async {
-      Configuration config =
-          new Configuration(args: ["-s", "jaguar-test.yaml"]);
-      await config.instanciateSettings();
-      config.addSettings({"TEST": "TEST"});
-      config.addApi(new SettingsApi());
-      mock = new JaguarMock(config);
-    });
+    Map<String, String> localSettings = {
+      "interval": "1",
+    };
 
-    tearDown(() {});
+    Settings.parse(
+        <String>['-s', 'test/jaguar/settings/settings.yaml'], localSettings);
 
     test('from map', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/getMap');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, 'TEST');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
+      expect(Settings.getString('interval'), "1");
     });
 
     test('from not found map', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/getNotFoundMap');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, '');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
+      expect(Settings.getString('notfound'), null);
     });
 
     test('from map default', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/getMapDefault');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, 'TATA');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
+      expect(
+          Settings.getString('notfound', defaultValue: 'novalue'), 'novalue');
     });
 
-    test('from yaml', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/getYaml');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+    test('from yaml {filter: none}', () async {
+      expect(Settings.getString('host'), 'localhost');
+    });
 
-      expect(response.mockContent, 'TEST');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
+    test('from yaml {filter: yaml}', () async {
+      expect(
+          Settings.getString('host', settingsFilter: SettingsFilter.Map), null);
+      expect(
+          Settings.getString('host', settingsFilter: SettingsFilter.Env), null);
+      expect(Settings.getString('host', settingsFilter: SettingsFilter.Yaml),
+          'localhost');
     });
 
     test('from not found yaml', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/getNotFoundYaml');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, '');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
+      expect(
+          Settings.getString('notfound', settingsFilter: SettingsFilter.Yaml),
+          null);
     });
 
     test('from yaml default', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/getYamlDefault');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      expect(
+          Settings.getString('notfound',
+              defaultValue: 'novalue', settingsFilter: SettingsFilter.Yaml),
+          'novalue');
+    });
 
-      expect(response.mockContent, 'TATA');
-      expect(response.headers.toMap, {});
-      expect(response.statusCode, 200);
+    test('from env', () async {
+      expect(Settings.getString('secret'), null);
+      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Map),
+          null);
+      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Yaml),
+          null);
+      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Env),
+          '123456');
+    });
+
+    test('from not found env', () async {
+      expect(Settings.getString('notfound', settingsFilter: SettingsFilter.Env),
+          null);
+    });
+
+    test('from env default', () async {
+      expect(
+          Settings.getString('notfound',
+              defaultValue: 'novalue', settingsFilter: SettingsFilter.Env),
+          'novalue');
     });
   });
 }

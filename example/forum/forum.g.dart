@@ -64,30 +64,39 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbTest = new WrapMongoDb(
-        dbName: 'test',
-        id: 'Test',
-      )
-          .createInterceptor();
-      await iMongoDbTest.pre();
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      await iMongoDbAdmin.pre();
-      EncodeObjectToJson iEncodeObjectToJson =
-          new WrapEncodeObjectToJson().createInterceptor();
-      rRouteResponse0.statusCode = 201;
-      rRouteResponse0.headers['sample-header'] = 'made-with.jaguar';
-      rRouteResponse0.value = await fetch();
-      Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
-        request,
-        rRouteResponse0,
-      );
-      await iMongoDbAdmin.post();
-      await iMongoDbTest.post();
-      await rRouteResponse1.writeResponse(request.response);
+      MongoDb iMongoDbTest;
+      MongoDb iMongoDbAdmin;
+      EncodeObjectToJson iEncodeObjectToJson;
+      try {
+        iMongoDbTest = new WrapMongoDb(
+          dbName: 'test',
+          id: 'Test',
+        )
+            .createInterceptor();
+        await iMongoDbTest.pre();
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        await iMongoDbAdmin.pre();
+        iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
+        rRouteResponse0.statusCode = 201;
+        rRouteResponse0.headers['sample-header'] = 'made-with.jaguar';
+        rRouteResponse0.value = await fetch();
+        Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
+          request,
+          rRouteResponse0,
+        );
+        await iMongoDbAdmin.post();
+        await iMongoDbTest.post();
+        await rRouteResponse1.writeResponse(request.response);
+      } catch (e) {
+        await iEncodeObjectToJson.onException();
+        await iMongoDbAdmin.onException();
+        await iMongoDbTest.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -96,23 +105,29 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = create(
-        request,
-        rMongoDbAdmin,
-        email: (queryParams.getField('email')),
-        name: (queryParams.getField('name')),
-        password: (queryParams.getField('password')),
-        age: stringToInt(queryParams.getField('age')),
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse0.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = create(
+          request,
+          rMongoDbAdmin,
+          email: (queryParams.getField('email')),
+          name: (queryParams.getField('name')),
+          password: (queryParams.getField('password')),
+          age: stringToInt(queryParams.getField('age')),
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -121,22 +136,28 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = update(
-        request,
-        rMongoDbAdmin,
-        (pathParams.getField('param1')),
-        param2: stringToInt(queryParams.getField('param2')) ?? 5555,
-        param3: stringToInt(queryParams.getField('param3')) ?? 55,
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse0.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = update(
+          request,
+          rMongoDbAdmin,
+          (pathParams.getField('param1')),
+          param2: stringToInt(queryParams.getField('param2')) ?? 5555,
+          param3: stringToInt(queryParams.getField('param3')) ?? 55,
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -145,25 +166,32 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      EncodeObjectToJson iEncodeObjectToJson =
-          new WrapEncodeObjectToJson().createInterceptor();
-      rRouteResponse0 = update1(
-        request,
-        rMongoDbAdmin,
-        null,
-      );
-      Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
-        request,
-        rRouteResponse0,
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse1.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      EncodeObjectToJson iEncodeObjectToJson;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
+        rRouteResponse0 = update1(
+          request,
+          rMongoDbAdmin,
+          null,
+        );
+        Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
+          request,
+          rRouteResponse0,
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse1.writeResponse(request.response);
+      } catch (e) {
+        await iEncodeObjectToJson.onException();
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -172,19 +200,25 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      rRouteResponse0 = await update2(
-        request,
-        rMongoDbAdmin,
-        new ParamCreate.FromPathParam(pathParams),
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse0.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        rRouteResponse0 = await update2(
+          request,
+          rMongoDbAdmin,
+          new ParamCreate.FromPathParam(pathParams),
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -193,25 +227,32 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      EncodeObjectToJson iEncodeObjectToJson =
-          new WrapEncodeObjectToJson().createInterceptor();
-      rRouteResponse0 = await update3(
-        request,
-        rMongoDbAdmin,
-        new ParamCreate.FromPathParam(pathParams),
-      );
-      Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
-        request,
-        rRouteResponse0,
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse1.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      EncodeObjectToJson iEncodeObjectToJson;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
+        rRouteResponse0 = await update3(
+          request,
+          rMongoDbAdmin,
+          new ParamCreate.FromPathParam(pathParams),
+        );
+        Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
+          request,
+          rRouteResponse0,
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse1.writeResponse(request.response);
+      } catch (e) {
+        await iEncodeObjectToJson.onException();
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -220,20 +261,26 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = await regex(
-        request,
-        rMongoDbAdmin,
-        (pathParams.getField('param1')),
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse0.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = await regex(
+          request,
+          rMongoDbAdmin,
+          (pathParams.getField('param1')),
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -242,20 +289,26 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[7].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      MongoDb iMongoDbAdmin = new WrapMongoDb(
-        dbName: 'admin',
-        id: 'Admin',
-      )
-          .createInterceptor();
-      Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = await pathRem(
-        request,
-        rMongoDbAdmin,
-        (pathParams.getField('param1')),
-      );
-      await iMongoDbAdmin.post();
-      await rRouteResponse0.writeResponse(request.response);
+      MongoDb iMongoDbAdmin;
+      try {
+        iMongoDbAdmin = new WrapMongoDb(
+          dbName: 'admin',
+          id: 'Admin',
+        )
+            .createInterceptor();
+        Db rMongoDbAdmin = await iMongoDbAdmin.pre();
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = await pathRem(
+          request,
+          rMongoDbAdmin,
+          (pathParams.getField('param1')),
+        );
+        await iMongoDbAdmin.post();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iMongoDbAdmin.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -264,16 +317,21 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[8].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      DecodeFormData iDecodeFormData =
-          new WrapDecodeFormData().createInterceptor();
-      Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
-        request,
-      );
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = decodeFormData(
-        rDecodeFormData,
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      DecodeFormData iDecodeFormData;
+      try {
+        iDecodeFormData = new WrapDecodeFormData().createInterceptor();
+        Map<String, FormField> rDecodeFormData = await iDecodeFormData.pre(
+          request,
+        );
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = decodeFormData(
+          rDecodeFormData,
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iDecodeFormData.onException();
+        rethrow;
+      }
       return true;
     }
 
@@ -282,17 +340,23 @@ abstract class _$JaguarForumApi implements RequestHandler {
         routes[9].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      DecodeUrlEncodedForm iDecodeUrlEncodedForm =
-          new WrapDecodeUrlEncodedForm().createInterceptor();
-      Map<String, String> rDecodeUrlEncodedForm =
-          await iDecodeUrlEncodedForm.pre(
-        request,
-      );
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = decodeXwww(
-        rDecodeUrlEncodedForm,
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      DecodeUrlEncodedForm iDecodeUrlEncodedForm;
+      try {
+        iDecodeUrlEncodedForm =
+            new WrapDecodeUrlEncodedForm().createInterceptor();
+        Map<String, String> rDecodeUrlEncodedForm =
+            await iDecodeUrlEncodedForm.pre(
+          request,
+        );
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = decodeXwww(
+          rDecodeUrlEncodedForm,
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        await iDecodeUrlEncodedForm.onException();
+        rethrow;
+      }
       return true;
     }
 

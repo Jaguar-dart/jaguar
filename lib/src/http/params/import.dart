@@ -129,8 +129,9 @@ class QueryParams extends DynamicDottableMap {
   QueryParams.FromQueryParam(QueryParams param) : super(param);
 }
 
+/// Interface that must be implemented by all validatable objects
 abstract class Validatable {
-  /// Validates the model
+  /// Validates the object
   ///
   /// Shall throw an exception in case of validation failure.
   /// The thrown exception must contain the reason for the failure

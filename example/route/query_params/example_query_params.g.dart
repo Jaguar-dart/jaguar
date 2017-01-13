@@ -23,11 +23,15 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
-      createBook(
-        book: (queryParams.getField('book')),
-        author: (queryParams.getField('author')),
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        createBook(
+          book: (queryParams.getField('book')),
+          author: (queryParams.getField('author')),
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 

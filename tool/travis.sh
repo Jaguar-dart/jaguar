@@ -5,6 +5,8 @@ set -e
 
 $(dirname -- "$0")/ensure_dartfmt.sh
 
+export secret=123456
+
 # Run the tests.
 pub run test/test_all.dart
 

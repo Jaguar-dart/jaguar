@@ -64,7 +64,7 @@ class WrapEncodeObjectToJson implements RouteWrapper<EncodeObjectToJson> {
   EncodeObjectToJson createInterceptor() => new EncodeObjectToJson();
 }
 
-class EncodeObjectToJson implements Interceptor {
+class EncodeObjectToJson extends Interceptor {
   EncodeObjectToJson();
 
   @InputRouteResponse()

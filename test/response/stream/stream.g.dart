@@ -24,9 +24,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<Stream> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = getStream();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = getStream();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 

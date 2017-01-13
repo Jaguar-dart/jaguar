@@ -44,9 +44,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = getUser();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = getUser();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -55,9 +59,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 201;
-      rRouteResponse0.value = statusCode();
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 201;
+        rRouteResponse0.value = statusCode();
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -66,12 +74,16 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = paramAndQuery(
-        (pathParams.getField('param')),
-        query: (queryParams.getField('query')),
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = paramAndQuery(
+          (pathParams.getField('param')),
+          query: (queryParams.getField('query')),
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -80,11 +92,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = inputHeader(
-        request.headers.value('user'),
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = inputHeader(
+          request.headers.value('user'),
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -93,11 +109,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = inputHeaders(
-        request.headers,
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = inputHeaders(
+          request.headers,
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -106,13 +126,17 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = inputCookie(
-        request.cookies
-            .firstWhere((cookie) => cookie.name == 'user', orElse: () => null)
-            ?.value,
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = inputCookie(
+          request.cookies
+              .firstWhere((cookie) => cookie.name == 'user', orElse: () => null)
+              ?.value,
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
@@ -121,11 +145,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      rRouteResponse0.statusCode = 200;
-      rRouteResponse0.value = inputCookies(
-        request.cookies,
-      );
-      await rRouteResponse0.writeResponse(request.response);
+      try {
+        rRouteResponse0.statusCode = 200;
+        rRouteResponse0.value = inputCookies(
+          request.cookies,
+        );
+        await rRouteResponse0.writeResponse(request.response);
+      } catch (e) {
+        rethrow;
+      }
       return true;
     }
 
