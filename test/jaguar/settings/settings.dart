@@ -11,8 +11,8 @@ void main() {
       "interval": "1",
     };
 
-    Settings.parse(
-        <String>['-s', 'test/jaguar/settings/settings.yaml'], localSettings);
+    Settings.parse(<String>['-s', 'test/jaguar/settings/settings.yaml'],
+        settingsMap: localSettings);
 
     test('from map', () async {
       expect(Settings.getString('interval'), "1");
