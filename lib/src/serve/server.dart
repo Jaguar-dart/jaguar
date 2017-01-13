@@ -34,10 +34,16 @@ class Jaguar {
   Future<Null> handleRequest(HttpRequest request) async {
     _logRequest.info("Method: ${request.method} Url: ${request.uri}");
     try {
-      for (int i = 0; i < configuration.apis.length; i++) {
-        var apiClass = configuration.apis[i];
-        bool result = await apiClass.handleRequest(request);
-        if (result) break;
+      bool throwNotFound = true;
+      for (RequestHandler requestHandler in configuration.apis) {
+        bool result = await requestHandler.handleRequest(request);
+        if (result) {
+          throwNotFound = false;
+          break;
+        }
+      }
+      if (throwNotFound) {
+        throw new NotFoundError("This path ${request.uri.path} is not found");
       }
     } catch (e, stack) {
       _logRequest.severe(

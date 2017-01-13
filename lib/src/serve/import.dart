@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:intl/intl.dart';
 
+import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
 
 import 'package:jaguar/src/serve/error_writer/import.dart';
