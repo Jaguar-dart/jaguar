@@ -53,14 +53,13 @@ class Jaguar {
   }
 
   Future<Null> _serve([dynamic message]) async {
-    bool share = configuration.multiThread;
     HttpServer server;
     if (configuration.securityContext != null) {
       server = await HttpServer.bindSecure(configuration.address,
           configuration.port, configuration.securityContext);
     } else {
       server = await HttpServer.bind(configuration.address, configuration.port,
-          shared: share);
+          shared: configuration.multiThread);
     }
     server.listen((HttpRequest request) => handleRequest(request));
   }
