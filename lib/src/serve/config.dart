@@ -9,7 +9,6 @@ class Configuration {
   final bool log;
   final List<RequestHandler> apis = <RequestHandler>[];
 
-
   Configuration(
       {this.address: "0.0.0.0",
       this.port: 8080,
