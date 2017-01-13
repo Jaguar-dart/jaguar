@@ -25,7 +25,7 @@ class Jaguar {
   final Logger _logRequest = new Logger('J.Req');
 
   Future<Null> serve() async {
-    await configuration.instanciateSettings();
+    await configuration.instantiateSettings();
 
     _log.severe("Running on ${configuration.baseUrl}");
     await _serve();
@@ -55,14 +55,13 @@ class Jaguar {
   }
 
   Future<Null> _serve([dynamic message]) async {
-    bool share = configuration.multiThread;
     HttpServer server;
     if (configuration.securityContext != null) {
       server = await HttpServer.bindSecure(configuration.address,
           configuration.port, configuration.securityContext);
     } else {
       server = await HttpServer.bind(configuration.address, configuration.port,
-          shared: share);
+          shared: configuration.multiThread);
     }
     server.listen((HttpRequest request) => handleRequest(request));
   }
