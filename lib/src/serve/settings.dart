@@ -48,7 +48,7 @@ class Settings {
   ///   config file passed through '-s' command line flag
   /// @param settingsMap Settings provided through Dart Map
   static Future<Null> parse(
-      List<String> args, Map<String, String> settingsMap) async {
+      List<String> args, {Map<String, String> settingsMap: const {}}) async {
     if (_singletonInstance != null) {
       throw new Exception("Settings must be parsed only once!");
     }
