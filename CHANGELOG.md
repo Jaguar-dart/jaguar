@@ -11,3 +11,8 @@ Annotation to build annotation from annotated function has changed.<br>
 `jaguar.yaml` parameters has also changed
 - `pre_processors` has changed to `pre_interceptors`
 - `post_processors` has changed to `post_interceptors`
+
+## 0.1.13
+
+- Removed isolate creation. Control is given to the programmer.
+- Bug fix for "Page not found!" error
