@@ -37,7 +37,7 @@ class Jaguar {
       bool throwNotFound = true;
       for (RequestHandler requestHandler in configuration.apis) {
         bool result = await requestHandler.handleRequest(request);
-        if (result){
+        if (result) {
           throwNotFound = false;
           break;
         }
