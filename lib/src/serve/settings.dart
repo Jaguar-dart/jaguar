@@ -47,8 +47,8 @@ class Settings {
   /// @param args Command line arguments. Used to parse the location of YAML
   ///   config file passed through '-s' command line flag
   /// @param settingsMap Settings provided through Dart Map
-  static Future<Null> parse(
-      List<String> args, Map<String, String> settingsMap) async {
+  static Future<Null> parse(List<String> args,
+      {Map<String, String> settingsMap: const {}}) async {
     if (_singletonInstance != null) {
       throw new Exception("Settings must be parsed only once!");
     }

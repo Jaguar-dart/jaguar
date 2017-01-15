@@ -16,3 +16,6 @@ Annotation to build annotation from annotated function has changed.<br>
 
 - Removed isolate creation. Control is given to the programmer.
 - Bug fix for "Page not found!" error
+
+## 0.1.14
+- Remove Settings from Configuration
