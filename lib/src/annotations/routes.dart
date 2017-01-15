@@ -1,5 +1,7 @@
 part of jaguar.src.annotations;
 
+const String _kDefaultContentType = 'text/plain; charset=us-ascii';
+
 abstract class RouteBase {
   const RouteBase();
 
@@ -14,6 +16,8 @@ abstract class RouteBase {
   Map<String, String> get pathRegEx;
 
   String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
+
+  String get contentType;
 
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
@@ -97,6 +101,8 @@ class Route extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
+  final String contentType;
+
   const Route(
       {this.path,
       this.methods: const <String>[
@@ -109,7 +115,8 @@ class Route extends RouteBase {
       ],
       this.statusCode: 200,
       this.headers,
-      this.pathRegEx});
+      this.pathRegEx,
+      this.contentType: _kDefaultContentType});
 }
 
 class Get extends RouteBase {
@@ -123,12 +130,14 @@ class Get extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Get({
-    this.path,
-    this.statusCode: 200,
-    this.headers,
-    this.pathRegEx,
-  });
+  final String contentType;
+
+  const Get(
+      {this.path,
+      this.statusCode: 200,
+      this.headers,
+      this.pathRegEx,
+      this.contentType: _kDefaultContentType});
 
   static const List<String> _methods = const <String>['GET'];
 }
@@ -144,12 +153,14 @@ class Post extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Post({
-    this.path,
-    this.statusCode: 200,
-    this.headers,
-    this.pathRegEx,
-  });
+  final String contentType;
+
+  const Post(
+      {this.path,
+      this.statusCode: 200,
+      this.headers,
+      this.pathRegEx,
+      this.contentType: _kDefaultContentType});
 
   static const List<String> _methods = const <String>['POST'];
 }
@@ -165,12 +176,14 @@ class Put extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Put({
-    this.path,
-    this.statusCode: 200,
-    this.headers,
-    this.pathRegEx,
-  });
+  final String contentType;
+
+  const Put(
+      {this.path,
+      this.statusCode: 200,
+      this.headers,
+      this.pathRegEx,
+      this.contentType: _kDefaultContentType});
 
   static const List<String> _methods = const <String>['PUT'];
 }
@@ -186,12 +199,14 @@ class Delete extends RouteBase {
 
   final Map<String, String> pathRegEx;
 
-  const Delete({
-    this.path,
-    this.statusCode: 200,
-    this.headers,
-    this.pathRegEx,
-  });
+  final String contentType;
+
+  const Delete(
+      {this.path,
+      this.statusCode: 200,
+      this.headers,
+      this.pathRegEx,
+      this.contentType: _kDefaultContentType});
 
   static const List<String> _methods = const <String>['DELETE'];
 }

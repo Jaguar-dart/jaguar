@@ -15,6 +15,8 @@ class Ws extends RouteBase {
 
   final bool validateQueryParams;
 
+  String get contentType => _kDefaultContentType;
+
   const Ws(this.path,
       {this.headers,
       this.pathRegEx,

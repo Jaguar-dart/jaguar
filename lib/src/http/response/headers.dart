@@ -59,4 +59,9 @@ class JaguarHttpHeaders {
       values.add(value.toString());
     }
   }
+
+  void setContentType(ContentType contentType) {
+    if (contentType == null) return;
+    set(HttpHeaders.CONTENT_TYPE, contentType.toString());
+  }
 }
