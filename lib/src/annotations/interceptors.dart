@@ -1,6 +1,6 @@
 part of jaguar.src.annotations;
 
-abstract class RouteWrapper<WrapperType> {
+abstract class RouteWrapper<WrapperType extends Interceptor> {
   /// Id of the interceptor
   String get id;
 
