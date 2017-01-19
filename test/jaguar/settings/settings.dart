@@ -1,7 +1,5 @@
 library test.jaguar.settings;
 
-import 'dart:io';
-import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 
