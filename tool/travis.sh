@@ -10,9 +10,6 @@ export secret=123456
 # Run the tests.
 pub run test/test_all.dart
 
-# Run the build.dart file - just to make sure it works
-dart --checked tool/build.dart
-
 # Install dart_coveralls; gather and send coverage data.
 # Re activate coverall when a solution arrive
 # if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
