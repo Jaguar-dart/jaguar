@@ -6,15 +6,16 @@ class Configuration {
   final int port;
   final SecurityContext securityContext;
   final bool multiThread;
-  final bool log;
   final List<RequestHandler> apis = <RequestHandler>[];
 
-  Configuration(
-      {this.address: "0.0.0.0",
-      this.port: 8080,
-      this.multiThread: false,
-      this.securityContext: null,
-      this.log: false});
+  final Logger log = new Logger('J');
+
+  Configuration({
+    this.address: "0.0.0.0",
+    this.port: 8080,
+    this.multiThread: false,
+    this.securityContext: null,
+  });
 
   void addApi(RequestHandler clazz) {
     apis.add(clazz);
