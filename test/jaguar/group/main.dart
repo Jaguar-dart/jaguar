@@ -1,6 +1,5 @@
 library test.jaguar.group;
 
-import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
@@ -48,7 +47,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, '1.0');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -58,7 +58,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'Get user');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -68,7 +69,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'status code');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 201);
     });
 
@@ -78,7 +80,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'Get book');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -88,7 +91,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'Some param');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
   });

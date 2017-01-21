@@ -17,7 +17,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
 
   Map<dynamic, dynamic> createJaguarInfo(Map<dynamic, dynamic> body);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -31,16 +31,16 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       try {
         iEncodeToJson = new WrapEncodeToJson().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getJaguarInfo();
         Response<String> rRouteResponse1 = iEncodeToJson.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeToJson.onException();
+        await iEncodeToJson?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for createJaguarInfo
@@ -55,17 +55,17 @@ abstract class _$JaguarBooksApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = createJaguarInfo(
           rDecodeJsonMap,
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iDecodeJsonMap.onException();
+        await iDecodeJsonMap?.onException();
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

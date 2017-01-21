@@ -11,10 +11,9 @@ class CustomException {
 class CustomExceptionHandler implements ExceptionHandler<CustomException> {
   const CustomExceptionHandler();
 
-  void onRouteException(
-      HttpRequest request, CustomException e, StackTrace trace) {
-    request.response.statusCode = 400;
-
-    request.response.write('{"Code": ${e.code}, "Message": "${e.message} }');
+  Future<Response<String>> onRouteException(
+      Request request, CustomException e, StackTrace trace) async {
+    final String value = '{"Code": ${e.code}, "Message": "${e.message} }';
+    return new Response<String>(value, statusCode: 400);
   }
 }

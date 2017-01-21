@@ -18,7 +18,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
 
   String statusCode();
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 
@@ -29,12 +29,12 @@ abstract class _$JaguarUserApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getUser();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for statusCode
@@ -44,15 +44,15 @@ abstract class _$JaguarUserApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 201;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = statusCode();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }
 
@@ -71,7 +71,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String statusCode();
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -83,22 +83,30 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = statusCode();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    if (await user.handleRequest(request, prefix: prefix + '/user')) {
-      return true;
+    {
+      Response response =
+          await user.handleRequest(request, prefix: prefix + '/user');
+      if (response is Response) {
+        return response;
+      }
     }
 
-    if (await book.handleRequest(request, prefix: prefix + '/book')) {
-      return true;
+    {
+      Response response =
+          await book.handleRequest(request, prefix: prefix + '/book');
+      if (response is Response) {
+        return response;
+      }
     }
 
-    return false;
+    return null;
   }
 }

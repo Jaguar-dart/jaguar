@@ -23,7 +23,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
 
   Map<dynamic, dynamic> updateBook(Map<String, dynamic> json, String id);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -42,19 +42,19 @@ abstract class _$JaguarBooksApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = addBook(
           rDecodeJsonMap,
         );
         Response<String> rRouteResponse1 = iEncodeToJson.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iDecodeJsonMap.onException();
-        await iEncodeToJson.onException();
+        await iDecodeJsonMap?.onException();
+        await iEncodeToJson?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for getById
@@ -66,18 +66,18 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       try {
         iEncodeToJson = new WrapEncodeToJson().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getById(
           (pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeToJson.onException();
+        await iEncodeToJson?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for removeBook
@@ -89,18 +89,18 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       try {
         iEncodeToJson = new WrapEncodeToJson().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = removeBook(
           (pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeToJson.onException();
+        await iEncodeToJson?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for updateBook
@@ -117,6 +117,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = updateBook(
           rDecodeJsonMap,
           (pathParams.getField('id')),
@@ -124,15 +125,14 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         Response<String> rRouteResponse1 = iEncodeToJson.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iDecodeJsonMap.onException();
-        await iEncodeToJson.onException();
+        await iDecodeJsonMap?.onException();
+        await iEncodeToJson?.onException();
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

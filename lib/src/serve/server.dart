@@ -1,11 +1,11 @@
 part of jaguar.src.serve;
 
 abstract class RequestHandler {
-  Future handleRequest(HttpRequest request, {String prefix});
+  Future<Response> handleRequest(Request request, {String prefix});
 }
 
 class Jaguar {
-  Configuration configuration;
+  final Configuration configuration;
 
   Jaguar(this.configuration);
 
@@ -14,19 +14,21 @@ class Jaguar {
     await _serve();
   }
 
-  Future<Null> handleRequest(HttpRequest request) async {
+  Future handleRequest(HttpRequest request) async {
+    final jaguarRequest = new Request(request);
     configuration.log
         .info("Req => Method: ${request.method} Url: ${request.uri}");
     try {
-      bool throwNotFound = true;
+      Response response;
       for (RequestHandler requestHandler in configuration.apis) {
-        bool result = await requestHandler.handleRequest(request);
-        if (result) {
-          throwNotFound = false;
+        response = await requestHandler.handleRequest(jaguarRequest);
+        if (response is Response) {
           break;
         }
       }
-      if (throwNotFound) {
+      if (response is Response) {
+        await response.writeResponse(request.response);
+      } else {
         throw new NotFoundError("This path ${request.uri.path} is not found");
       }
     } catch (e, stack) {

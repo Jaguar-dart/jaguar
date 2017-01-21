@@ -4,6 +4,6 @@ typedef dynamic ExceptionHandlerFunc(
     HttpRequest request, dynamic e, StackTrace trace);
 
 abstract class ExceptionHandler<ExceptionType> {
-  dynamic onRouteException(
-      HttpRequest request, ExceptionType e, StackTrace trace);
+  Future<Response> onRouteException(
+      Request request, ExceptionType e, StackTrace trace);
 }

@@ -23,7 +23,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
 
   List<Model> encodeJsonableList();
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -37,16 +37,16 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
       try {
         iEncodeJsonable = new WrapEncodeJsonable().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = encodeJsonable_object();
         Response<String> rRouteResponse1 = iEncodeJsonable.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonable.onException();
+        await iEncodeJsonable?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for encodeJsonable_list
@@ -58,16 +58,16 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
       try {
         iEncodeJsonable = new WrapEncodeJsonable().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = encodeJsonable_list();
         Response<String> rRouteResponse1 = iEncodeJsonable.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonable.onException();
+        await iEncodeJsonable?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for encodeJsonableObject
@@ -80,16 +80,16 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         iEncodeJsonableObject =
             new WrapEncodeJsonableObject().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = encodeJsonableObject();
         Response<String> rRouteResponse1 = iEncodeJsonableObject.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonableObject.onException();
+        await iEncodeJsonableObject?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for encodeJsonableList
@@ -101,18 +101,18 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
       try {
         iEncodeJsonableList = new WrapEncodeJsonableList().createInterceptor();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = encodeJsonableList();
         Response<String> rRouteResponse1 = iEncodeJsonableList.post(
           rRouteResponse0,
         );
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonableList.onException();
+        await iEncodeJsonableList?.onException();
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

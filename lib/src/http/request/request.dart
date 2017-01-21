@@ -2,6 +2,7 @@ library jaguar.src.http.request;
 
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
 
 /// [Request] contains information about HTTP request
 class Request {
@@ -55,4 +56,17 @@ class Request {
     _body = builder.takeBytes();
     return _body;
   }
+
+  /// Returns the body of HTTP request
+  Future<Stream<List<int>>> get bodyAsStream async {
+    final List<int> bodyRaw = await body;
+    return new Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
+  }
+
+  Future<String> bodyAsText(Encoding encoding) async {
+    return encoding.decode(await body);
+  }
+
+  Future<WebSocket> get upgradeToWebSocket =>
+      WebSocketTransformer.upgrade(_request);
 }

@@ -12,7 +12,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
 
   void createBook({String book, String author});
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -28,13 +28,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
           book: (queryParams.getField('book')),
           author: (queryParams.getField('author')),
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

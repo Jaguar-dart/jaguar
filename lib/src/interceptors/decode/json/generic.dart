@@ -17,8 +17,8 @@ class DecodeJson extends Interceptor {
 
   DecodeJson({this.encoding: UTF8});
 
-  Future<dynamic> pre(HttpRequest request) async {
-    String data = await getStringFromBody(request, encoding);
+  Future<dynamic> pre(Request request) async {
+    final String data = await request.bodyAsText(encoding);
     if (data.isNotEmpty) {
       return JSON.decode(data);
     }

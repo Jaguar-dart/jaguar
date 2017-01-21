@@ -31,29 +31,29 @@ abstract class _$JaguarForumApi implements RequestHandler {
 
   Future<User> fetch();
 
-  User create(HttpRequest request, Db db,
+  User create(Request request, Db db,
       {String email, String name, String password, int age});
 
-  String update(HttpRequest request, Db db, String param1,
+  String update(Request request, Db db, String param1,
       {int param2: 5555, int param3: 55});
 
-  Response<User> update1(HttpRequest request, Db db, PathParams pathParams);
+  Response<User> update1(Request request, Db db, PathParams pathParams);
 
   Future<Response<User>> update2(
-      HttpRequest request, Db db, ParamCreate pathParams);
+      Request request, Db db, ParamCreate pathParams);
 
   Future<Response<User>> update3(
-      HttpRequest request, Db db, ParamCreate pathParams);
+      Request request, Db db, ParamCreate pathParams);
 
-  Future<String> regex(HttpRequest request, Db db, String param1);
+  Future<String> regex(Request request, Db db, String param1);
 
-  Future<String> pathRem(HttpRequest request, Db db, String param1);
+  Future<String> pathRem(Request request, Db db, String param1);
 
   String decodeFormData(Map<String, FormField> formFields);
 
   String decodeXwww(Map<String, String> xwww);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -82,22 +82,21 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.pre();
         iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
         rRouteResponse0.statusCode = 201;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.headers['sample-header'] = 'made-with.jaguar';
         rRouteResponse0.value = await fetch();
         Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
-          request,
           rRouteResponse0,
         );
         await iMongoDbAdmin.post();
         await iMongoDbTest.post();
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeObjectToJson.onException();
-        await iMongoDbAdmin.onException();
-        await iMongoDbTest.onException();
+        await iEncodeObjectToJson?.onException();
+        await iMongoDbAdmin?.onException();
+        await iMongoDbTest?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for create
@@ -114,6 +113,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = create(
           request,
           rMongoDbAdmin,
@@ -123,12 +123,11 @@ abstract class _$JaguarForumApi implements RequestHandler {
           age: stringToInt(queryParams.getField('age')),
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iMongoDbAdmin.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for update
@@ -145,6 +144,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = update(
           request,
           rMongoDbAdmin,
@@ -153,12 +153,11 @@ abstract class _$JaguarForumApi implements RequestHandler {
           param3: stringToInt(queryParams.getField('param3')) ?? 55,
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iMongoDbAdmin.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for update1
@@ -182,17 +181,15 @@ abstract class _$JaguarForumApi implements RequestHandler {
           null,
         );
         Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
-          request,
           rRouteResponse0,
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeObjectToJson.onException();
-        await iMongoDbAdmin.onException();
+        await iEncodeObjectToJson?.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for update2
@@ -214,12 +211,11 @@ abstract class _$JaguarForumApi implements RequestHandler {
           new ParamCreate.FromPathParam(pathParams),
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iMongoDbAdmin.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for update3
@@ -243,17 +239,15 @@ abstract class _$JaguarForumApi implements RequestHandler {
           new ParamCreate.FromPathParam(pathParams),
         );
         Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
-          request,
           rRouteResponse0,
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse1.writeResponse(request.response);
+        return rRouteResponse1;
       } catch (e) {
-        await iEncodeObjectToJson.onException();
-        await iMongoDbAdmin.onException();
+        await iEncodeObjectToJson?.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for regex
@@ -270,18 +264,18 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = await regex(
           request,
           rMongoDbAdmin,
           (pathParams.getField('param1')),
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iMongoDbAdmin.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for pathRem
@@ -298,18 +292,18 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = await pathRem(
           request,
           rMongoDbAdmin,
           (pathParams.getField('param1')),
         );
         await iMongoDbAdmin.post();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iMongoDbAdmin.onException();
+        await iMongoDbAdmin?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for decodeFormData
@@ -324,15 +318,15 @@ abstract class _$JaguarForumApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = decodeFormData(
           rDecodeFormData,
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iDecodeFormData.onException();
+        await iDecodeFormData?.onException();
         rethrow;
       }
-      return true;
     }
 
 //Handler for decodeXwww
@@ -349,17 +343,17 @@ abstract class _$JaguarForumApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = decodeXwww(
           rDecodeUrlEncodedForm,
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iDecodeUrlEncodedForm.onException();
+        await iDecodeUrlEncodedForm?.onException();
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

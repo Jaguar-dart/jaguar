@@ -2,30 +2,25 @@ library testing.serve;
 
 import 'dart:async';
 import 'dart:io';
+import 'package:meta/meta.dart';
 
-import 'package:jaguar/src/serve/error_writer/import.dart';
+import 'package:jaguar/jaguar.dart';
 
 import 'package:jaguar/src/serve/import.dart';
 
 /// Mocks jaguar for testing
-class JaguarMock {
-  Configuration config;
+class JaguarMock extends Jaguar {
+  JaguarMock(Configuration configuration) : super(configuration);
 
-  JaguarMock(this.config);
-
-  Future<HttpResponse> handleRequest(HttpRequest request) async {
-    try {
-      for (int i = 0; i < config.apis.length; i++) {
-        RequestHandler apiClass = config.apis[i];
-        bool result = await apiClass.handleRequest(request);
-        if (result) break;
-      }
-    } catch (e, stack) {
-      writeErrorPage(request.response, request.uri.toString(), e, stack, 500);
-    } finally {
-      await request.response.close();
-    }
-
+  @checked
+  @override
+  Future handleRequest(HttpRequest request) async {
+    await super.handleRequest(request);
     return request.response;
+  }
+
+  @override
+  Future<Null> serve() async {
+    //Do nothing!
   }
 }

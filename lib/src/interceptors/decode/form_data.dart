@@ -104,7 +104,7 @@ class WrapDecodeFormData implements RouteWrapper<DecodeFormData> {
 class DecodeFormData extends Interceptor {
   DecodeFormData();
 
-  Future<Map<String, FormField>> pre(HttpRequest request) async {
+  Future<Map<String, FormField>> pre(Request request) async {
     if (!request.headers.contentType.parameters.containsKey('boundary')) {
       return null;
     }
@@ -113,9 +113,11 @@ class DecodeFormData extends Interceptor {
 
     final Map<String, FormField> ret = {};
 
+    final Stream<List<int>> bodyStream = await request.bodyAsStream;
+
     // Transform body to [MimeMultipart]
     final transformer = new MimeMultipartTransformer(boundary);
-    final Stream<MimeMultipart> stream = request.transform(transformer);
+    final Stream<MimeMultipart> stream = bodyStream.transform(transformer);
 
     await for (MimeMultipart part in stream) {
       HttpMultipartFormData multipart = HttpMultipartFormData.parse(part);
