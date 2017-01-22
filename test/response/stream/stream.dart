@@ -1,6 +1,5 @@
 library test.response.stream;
 
-import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
@@ -41,7 +40,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContentBinary, equals([1, 2, 3, 4, 5, 6, 7, 8]));
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
   });

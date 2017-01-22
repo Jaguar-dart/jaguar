@@ -12,7 +12,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   Future<dynamic> websocket(WebSocket ws);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -22,16 +22,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       try {
-        WebSocket ws = await WebSocketTransformer.upgrade(request);
+        WebSocket ws = await request.upgradeToWebSocket;
         await websocket(
           ws,
         );
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

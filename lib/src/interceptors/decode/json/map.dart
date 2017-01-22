@@ -17,8 +17,8 @@ class DecodeJsonMap extends Interceptor {
 
   DecodeJsonMap({this.encoding: UTF8});
 
-  Future<Map<String, dynamic>> pre(HttpRequest request) async {
-    String data = await getStringFromBody(request, encoding);
+  Future<Map<String, dynamic>> pre(Request request) async {
+    String data = await request.bodyAsText(encoding);
     if (data.isNotEmpty) {
       dynamic ret = JSON.decode(data);
       if (ret is! Map) {

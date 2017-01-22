@@ -29,7 +29,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
 
   void inputHttpRequest(HttpRequest req);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -41,12 +41,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<List> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getAllBooks();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for getAllBooks1
@@ -56,12 +56,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<List> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getAllBooks1();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for getAllBooks2
@@ -71,12 +71,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<List> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getAllBooks2();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for defaultStatusAndHeader
@@ -86,11 +86,10 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
         defaultStatusAndHeader();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for inputHttpRequest
@@ -100,15 +99,14 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
         inputHttpRequest(
-          request,
+          null,
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

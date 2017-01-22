@@ -17,7 +17,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
 
   String some(String param1);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     PathParams pathParams = new PathParams();
     bool match = false;
 
@@ -28,12 +28,12 @@ abstract class _$JaguarBookApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getBook();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for some
@@ -43,16 +43,16 @@ abstract class _$JaguarBookApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = some(
           (pathParams.getField('param1')),
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

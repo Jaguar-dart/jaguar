@@ -17,8 +17,8 @@ class DecodeJsonList extends Interceptor {
 
   const DecodeJsonList({this.encoding: UTF8});
 
-  Future<List> pre(HttpRequest request) async {
-    String data = await getStringFromBody(request, encoding);
+  Future<List> pre(Request request) async {
+    String data = await request.bodyAsText(encoding);
     if (data.isNotEmpty) {
       dynamic ret = JSON.decode(data);
       if (ret is! List) {

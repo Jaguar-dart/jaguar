@@ -18,8 +18,8 @@ class DecodeUrlEncodedForm extends Interceptor {
 
   const DecodeUrlEncodedForm({this.encoding: UTF8});
 
-  Future<Map<String, String>> pre(HttpRequest request) async {
-    return (await getStringFromBody(request, encoding))
+  Future<Map<String, String>> pre(Request request) async {
+    return (await request.bodyAsText(encoding))
         .split("&")
         .map((String part) => part.split("="))
         .map((List<String> part) => <String, String>{part.first: part.last})

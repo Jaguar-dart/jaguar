@@ -1,7 +1,6 @@
 library example.forum;
 
 import 'dart:async';
-import 'dart:io';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar/interceptors.dart';
 import 'interceptor.dart';
@@ -27,12 +26,11 @@ class ParamValidationExceptionHandler
     implements ExceptionHandler<ParamValidationException> {
   const ParamValidationExceptionHandler();
 
-  void onRouteException(
-      HttpRequest request, ParamValidationException e, StackTrace trace) {
-    request.response.statusCode = e.statusCode;
+  Future<Response<String>> onRouteException(
+      Request request, ParamValidationException e, StackTrace trace) async {
+    String value = '{"Code": 5, "Params": {"${e.param}: ${e.error} } }';
 
-    request.response
-        .write('{"Code": 5, "Params": {"${e.param}: ${e.error} } }');
+    return new Response<String>(value, statusCode: e.statusCode);
   }
 }
 
@@ -91,7 +89,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @WrapMongoDb(dbName: 'admin', id: 'Admin')
   @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
-  User create(HttpRequest request, Db db,
+  User create(Request request, Db db,
       {String email, String name, String password, int age}) {
     return new User(email, name, password, age);
   }
@@ -100,7 +98,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @WrapMongoDb(dbName: 'admin', id: 'Admin')
   @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
-  String update(HttpRequest request, Db db, String param1,
+  String update(Request request, Db db, String param1,
       {int param2: 5555, int param3: 55}) {
     return param1;
   }
@@ -110,7 +108,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
   @WrapEncodeObjectToJson()
-  Response<User> update1(HttpRequest request, Db db, PathParams pathParams) {
+  Response<User> update1(Request request, Db db, PathParams pathParams) {
     User user =
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
@@ -122,7 +120,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Input(MongoDb, id: 'Admin')
   @InputPathParams(true)
   Future<Response<User>> update2(
-      HttpRequest request, Db db, ParamCreate pathParams) async {
+      Request request, Db db, ParamCreate pathParams) async {
     User user =
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
@@ -135,7 +133,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @Input(MongoDb, id: 'Admin')
   @InputPathParams(true)
   Future<Response<User>> update3(
-      HttpRequest request, Db db, ParamCreate pathParams) async {
+      Request request, Db db, ParamCreate pathParams) async {
     User user =
         new User(pathParams.email, pathParams.name, "password", pathParams.age);
     return new Response<User>(user);
@@ -148,7 +146,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @WrapMongoDb(dbName: 'admin', id: 'Admin')
   @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
-  Future<String> regex(HttpRequest request, Db db, String param1) async {
+  Future<String> regex(Request request, Db db, String param1) async {
     return param1;
   }
 
@@ -156,7 +154,7 @@ class ForumApi extends Object with _$JaguarForumApi {
   @WrapMongoDb(dbName: 'admin', id: 'Admin')
   @Login(const PasswordChecker())
   @Input(MongoDb, id: 'Admin')
-  Future<String> pathRem(HttpRequest request, Db db, String param1) async {
+  Future<String> pathRem(Request request, Db db, String param1) async {
     return param1;
   }
 

@@ -14,7 +14,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String getUser(String who);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -33,17 +33,17 @@ abstract class _$JaguarExampleApi implements RequestHandler {
             .createInterceptor();
         String rWithParam = iWithParam.pre();
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = getUser(
           rWithParam,
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
-        await iWithParam.onException();
+        await iWithParam?.onException();
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }

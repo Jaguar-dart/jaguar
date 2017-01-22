@@ -1,6 +1,5 @@
 library example.forum.interceptor;
 
-import 'dart:io';
 import 'package:jaguar/jaguar.dart';
 import 'dart:convert';
 
@@ -68,7 +67,7 @@ class EncodeObjectToJson extends Interceptor {
   EncodeObjectToJson();
 
   @InputRouteResponse()
-  Response post(HttpRequest request, Response resp) {
+  Response post(Response resp) {
     if (resp.value is ViewSerializer) {
       resp.value = JSON.encode(resp.value.toViewMap());
     } else {

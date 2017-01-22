@@ -1,6 +1,5 @@
 library test.exception.exception;
 
-import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
@@ -59,7 +58,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, r'kleak');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 

@@ -57,7 +57,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'Get user');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -67,7 +68,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'status code');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 201);
     });
 
@@ -78,7 +80,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'hello world');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -90,7 +93,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'teja');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -102,7 +106,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'kleak');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -115,7 +120,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'teja');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
 
@@ -127,7 +133,8 @@ void main() {
       MockHttpResponse response = await mock.handleRequest(rq);
 
       expect(response.mockContent, 'kleak');
-      expect(response.headers.toMap, {});
+      expect(response.headers.toMap,
+          {'content-type': 'text/plain; charset=us-ascii'});
       expect(response.statusCode, 200);
     });
   });

@@ -16,10 +16,9 @@ part 'decode/json/list.dart';
 part 'decode/url_encoded_form.dart';
 part 'encode/json.dart';
 
-Future<String> getStringFromBody(HttpRequest request, Encoding encoding) async {
-  Completer<String> completer = new Completer<String>();
-  String allData = "";
-  request.transform(encoding.decoder).listen((String data) => allData += data,
-      onDone: () => completer.complete(allData));
-  return completer.future;
+/* TODO
+Future<String> getStringFromBody(Request request, Encoding encoding) async {
+  final List<int> body = await request.body;
+  return encoding.decode(body);
 }
+*/

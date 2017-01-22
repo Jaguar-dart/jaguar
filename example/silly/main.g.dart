@@ -12,7 +12,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 
   String get();
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/myGroup';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -24,15 +24,15 @@ abstract class _$JaguarMyGroup implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = get();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }
 
@@ -46,7 +46,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 
   String get();
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/mySecondGroup';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -58,15 +58,15 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = get();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }
 
@@ -101,7 +101,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   Future<dynamic> websocket(WebSocket ws);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -114,12 +114,12 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = ping();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for pong
@@ -129,13 +129,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 201;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.headers['pong-header'] = 'silly-pong';
         rRouteResponse0.value = pong();
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for echoPathParam
@@ -145,14 +145,14 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = echoPathParam(
           (pathParams.getField('message')),
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for echoQueryParam
@@ -162,14 +162,14 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
+        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.value = echoQueryParam(
           message: (queryParams.getField('message')),
         );
-        await rRouteResponse0.writeResponse(request.response);
+        return rRouteResponse0;
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
 //Handler for websocket
@@ -177,24 +177,30 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       try {
-        WebSocket ws = await WebSocketTransformer.upgrade(request);
+        WebSocket ws = await request.upgradeToWebSocket;
         await websocket(
           ws,
         );
       } catch (e) {
         rethrow;
       }
-      return true;
     }
 
-    if (await myGroup.handleRequest(request, prefix: prefix)) {
-      return true;
+    {
+      Response response = await myGroup.handleRequest(request, prefix: prefix);
+      if (response is Response) {
+        return response;
+      }
     }
 
-    if (await mySecondGroup.handleRequest(request, prefix: prefix)) {
-      return true;
+    {
+      Response response =
+          await mySecondGroup.handleRequest(request, prefix: prefix);
+      if (response is Response) {
+        return response;
+      }
     }
 
-    return false;
+    return null;
   }
 }

@@ -17,7 +17,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   User post(User user);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
@@ -31,23 +31,21 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       try {
         try {
           rRouteResponse0.statusCode = 200;
+          rRouteResponse0.setContentType('text/plain; charset=us-ascii');
           rRouteResponse0.value = getUser(
             who: (queryParams.getField('who')),
           );
-          await rRouteResponse0.writeResponse(request.response);
+          return rRouteResponse0;
         } catch (e) {
           rethrow;
         }
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
-        handler.onRouteException(request, e, s);
-        return true;
+        return await handler.onRouteException(request, e, s);
       } on CustomException catch (e, s) {
         CustomExceptionHandler handler = new CustomExceptionHandler();
-        handler.onRouteException(request, e, s);
-        return true;
+        return await handler.onRouteException(request, e, s);
       }
-      return true;
     }
 
 //Handler for post
@@ -63,22 +61,21 @@ abstract class _$JaguarExampleApi implements RequestHandler {
             new QueryParams.FromQueryParam(queryParams),
           );
           rRouteResponse0.statusCode = 200;
+          rRouteResponse0.setContentType('text/plain; charset=us-ascii');
           rRouteResponse0.value = post(
             rUserParser,
           );
-          await rRouteResponse0.writeResponse(request.response);
+          return rRouteResponse0;
         } catch (e) {
-          await iUserParser.onException();
+          await iUserParser?.onException();
           rethrow;
         }
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
-        handler.onRouteException(request, e, s);
-        return true;
+        return await handler.onRouteException(request, e, s);
       }
-      return true;
     }
 
-    return false;
+    return null;
   }
 }
