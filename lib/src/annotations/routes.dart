@@ -1,6 +1,8 @@
 part of jaguar.src.annotations;
 
-const String _kDefaultContentType = 'text/plain; charset=us-ascii';
+const String _kDefaultContentType = 'text/plain; charset=utf-8';
+const String _kDefaultMimeType = 'text/plain';
+const String _kDefaultCharset = 'utf-8';
 
 abstract class RouteBase {
   const RouteBase();
@@ -11,13 +13,15 @@ abstract class RouteBase {
 
   int get statusCode;
 
+  String get mimeType;
+
+  String get charset;
+
   Map<String, String> get headers;
 
   Map<String, String> get pathRegEx;
 
   String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
-
-  String get contentType;
 
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
@@ -97,11 +101,13 @@ class Route extends RouteBase {
 
   final int statusCode;
 
+  final String mimeType;
+
+  final String charset;
+
   final Map<String, String> headers;
 
   final Map<String, String> pathRegEx;
-
-  final String contentType;
 
   const Route(
       {this.path,
@@ -114,9 +120,10 @@ class Route extends RouteBase {
         'OPTIONS'
       ],
       this.statusCode: 200,
+      this.mimeType: _kDefaultMimeType,
+      this.charset: _kDefaultCharset,
       this.headers,
-      this.pathRegEx,
-      this.contentType: _kDefaultContentType});
+      this.pathRegEx});
 }
 
 class Get extends RouteBase {
@@ -126,18 +133,21 @@ class Get extends RouteBase {
 
   final int statusCode;
 
+  final String mimeType;
+
+  final String charset;
+
   final Map<String, String> headers;
 
   final Map<String, String> pathRegEx;
 
-  final String contentType;
-
   const Get(
       {this.path,
       this.statusCode: 200,
+      this.mimeType: _kDefaultMimeType,
+      this.charset: _kDefaultCharset,
       this.headers,
-      this.pathRegEx,
-      this.contentType: _kDefaultContentType});
+      this.pathRegEx});
 
   static const List<String> _methods = const <String>['GET'];
 }
@@ -149,18 +159,21 @@ class Post extends RouteBase {
 
   final int statusCode;
 
+  final String mimeType;
+
+  final String charset;
+
   final Map<String, String> headers;
 
   final Map<String, String> pathRegEx;
 
-  final String contentType;
-
   const Post(
       {this.path,
       this.statusCode: 200,
+      this.mimeType: _kDefaultMimeType,
+      this.charset: _kDefaultCharset,
       this.headers,
-      this.pathRegEx,
-      this.contentType: _kDefaultContentType});
+      this.pathRegEx});
 
   static const List<String> _methods = const <String>['POST'];
 }
@@ -172,18 +185,21 @@ class Put extends RouteBase {
 
   final int statusCode;
 
+  final String mimeType;
+
+  final String charset;
+
   final Map<String, String> headers;
 
   final Map<String, String> pathRegEx;
 
-  final String contentType;
-
   const Put(
       {this.path,
       this.statusCode: 200,
+      this.mimeType: _kDefaultMimeType,
+      this.charset: _kDefaultCharset,
       this.headers,
-      this.pathRegEx,
-      this.contentType: _kDefaultContentType});
+      this.pathRegEx});
 
   static const List<String> _methods = const <String>['PUT'];
 }
@@ -195,18 +211,21 @@ class Delete extends RouteBase {
 
   final int statusCode;
 
+  final String mimeType;
+
+  final String charset;
+
   final Map<String, String> headers;
 
   final Map<String, String> pathRegEx;
 
-  final String contentType;
-
   const Delete(
       {this.path,
       this.statusCode: 200,
+      this.mimeType: _kDefaultMimeType,
+      this.charset: _kDefaultCharset,
       this.headers,
-      this.pathRegEx,
-      this.contentType: _kDefaultContentType});
+      this.pathRegEx});
 
   static const List<String> _methods = const <String>['DELETE'];
 }

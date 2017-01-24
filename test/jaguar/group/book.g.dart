@@ -28,7 +28,8 @@ abstract class _$JaguarBookApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = getBook();
         return rRouteResponse0;
       } catch (e) {
@@ -43,7 +44,8 @@ abstract class _$JaguarBookApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = some(
           (pathParams.getField('param1')),
         );

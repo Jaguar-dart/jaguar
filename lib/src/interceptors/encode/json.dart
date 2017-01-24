@@ -18,7 +18,7 @@ class EncodeToJson extends Interceptor {
   Response<String> post(Response incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value);
-    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    resp.headers.mimeType = ContentType.JSON.mimeType;
     return resp;
   }
 }
@@ -41,7 +41,7 @@ class EncodeMapToJson extends Interceptor {
   Response<String> post(Response<Map> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value);
-    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    resp.headers.mimeType = ContentType.JSON.mimeType;
     return resp;
   }
 }
@@ -64,7 +64,7 @@ class EncodeListToJson extends Interceptor {
   Response<String> post(Response<List> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value);
-    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    resp.headers.mimeType = ContentType.JSON.mimeType;
     return resp;
   }
 }
@@ -92,7 +92,7 @@ class EncodeJsonable extends Interceptor {
       resp.value = JSON.encode(
           incoming.value.map((ToJsonable obj) => obj.toJson()).toList());
     }
-    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    resp.headers.mimeType = ContentType.JSON.mimeType;
     return resp;
   }
 }
@@ -115,7 +115,7 @@ class EncodeJsonableObject extends Interceptor {
   Response<String> post(Response<ToJsonable> incoming) {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON.encode(incoming.value.toJson());
-    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    resp.headers.mimeType = ContentType.JSON.mimeType;
     return resp;
   }
 }
@@ -139,7 +139,7 @@ class EncodeJsonableList extends Interceptor {
     Response<String> resp = new Response<String>.cloneExceptValue(incoming);
     resp.value = JSON
         .encode(incoming.value.map((ToJsonable obj) => obj.toJson()).toList());
-    resp.headers[HttpHeaders.CONTENT_TYPE] = 'application/json';
+    resp.headers.mimeType = ContentType.JSON.mimeType;
     return resp;
   }
 }

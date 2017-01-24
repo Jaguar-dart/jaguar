@@ -42,7 +42,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = addBook(
           rDecodeJsonMap,
         );
@@ -66,7 +67,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       try {
         iEncodeToJson = new WrapEncodeToJson().createInterceptor();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = getById(
           (pathParams.getField('id')),
         );
@@ -89,7 +91,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       try {
         iEncodeToJson = new WrapEncodeToJson().createInterceptor();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = removeBook(
           (pathParams.getField('id')),
         );
@@ -117,7 +120,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = updateBook(
           rDecodeJsonMap,
           (pathParams.getField('id')),

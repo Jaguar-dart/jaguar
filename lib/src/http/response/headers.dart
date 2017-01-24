@@ -60,8 +60,59 @@ class JaguarHttpHeaders {
     }
   }
 
-  void setContentType(ContentType contentType) {
+  set contentType(ContentType contentType) {
     if (contentType == null) return;
     set(HttpHeaders.CONTENT_TYPE, contentType.toString());
+  }
+
+  ContentType get contentType {
+    String str = value(HttpHeaders.CONTENT_TYPE);
+    if (str is! String) return null;
+    return ContentType.parse(str);
+  }
+
+  String get mimeType => contentType?.mimeType;
+
+  set mimeType(String mimeType) {
+    ContentType contentType = this.contentType;
+    if (contentType == null) {
+      if (mimeType != null && mimeType.isNotEmpty) {
+        ContentType newContentType = ContentType.parse(mimeType);
+        this.contentType = newContentType;
+      }
+    } else {
+      if (mimeType != null && mimeType.isNotEmpty) {
+        ContentType newContentType = ContentType.parse(mimeType);
+        this.contentType = new ContentType(
+            newContentType.primaryType, newContentType.subType,
+            charset: contentType.charset, parameters: contentType.parameters);
+      } else {
+        this.contentType =
+            new ContentType('', '', parameters: contentType.parameters);
+      }
+    }
+  }
+
+  String get charset => contentType?.charset;
+
+  set charset(String charset) {
+    ContentType contentType = this.contentType;
+    if (contentType == null) {
+      if (charset != null && charset.isNotEmpty) {
+        this.contentType = new ContentType(
+            ContentType.TEXT.primaryType, ContentType.TEXT.subType,
+            charset: charset);
+      }
+    } else {
+      if (charset != null && charset.isNotEmpty) {
+        this.contentType = new ContentType(
+            contentType.primaryType, contentType.subType,
+            charset: charset, parameters: contentType.parameters);
+      } else {
+        this.contentType = new ContentType(
+            contentType.primaryType, contentType.subType,
+            parameters: contentType.parameters..remove('charset'));
+      }
+    }
   }
 }

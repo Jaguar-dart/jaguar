@@ -24,7 +24,8 @@ abstract class _$JaguarMyGroup implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = get();
         return rRouteResponse0;
       } catch (e) {
@@ -58,7 +59,8 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = get();
         return rRouteResponse0;
       } catch (e) {
@@ -114,7 +116,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = ping();
         return rRouteResponse0;
       } catch (e) {
@@ -129,8 +132,9 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 201;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.headers['pong-header'] = 'silly-pong';
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = pong();
         return rRouteResponse0;
       } catch (e) {
@@ -145,7 +149,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = echoPathParam(
           (pathParams.getField('message')),
         );
@@ -162,7 +167,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       Response<String> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = echoQueryParam(
           message: (queryParams.getField('message')),
         );

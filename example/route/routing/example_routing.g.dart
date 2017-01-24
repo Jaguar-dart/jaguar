@@ -41,7 +41,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<List> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = getAllBooks();
         return rRouteResponse0;
       } catch (e) {
@@ -56,7 +57,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<List> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = getAllBooks1();
         return rRouteResponse0;
       } catch (e) {
@@ -71,7 +73,8 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       Response<List> rRouteResponse0 = new Response(null);
       try {
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = getAllBooks2();
         return rRouteResponse0;
       } catch (e) {
