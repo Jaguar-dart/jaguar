@@ -53,9 +53,4 @@ class Response<ValueType> {
       resp.write(valueAsString);
     }
   }
-
-  void setContentType(String contentType) {
-    if (contentType == null) return;
-    headers.setContentType(ContentType.parse(contentType));
-  }
 }

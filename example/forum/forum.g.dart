@@ -82,8 +82,9 @@ abstract class _$JaguarForumApi implements RequestHandler {
         await iMongoDbAdmin.pre();
         iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
         rRouteResponse0.statusCode = 201;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
         rRouteResponse0.headers['sample-header'] = 'made-with.jaguar';
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = await fetch();
         Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
           rRouteResponse0,
@@ -113,7 +114,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = create(
           request,
           rMongoDbAdmin,
@@ -144,7 +146,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = update(
           request,
           rMongoDbAdmin,
@@ -264,7 +267,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = await regex(
           request,
           rMongoDbAdmin,
@@ -292,7 +296,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = await pathRem(
           request,
           rMongoDbAdmin,
@@ -318,7 +323,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = decodeFormData(
           rDecodeFormData,
         );
@@ -343,7 +349,8 @@ abstract class _$JaguarForumApi implements RequestHandler {
           request,
         );
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = decodeXwww(
           rDecodeUrlEncodedForm,
         );

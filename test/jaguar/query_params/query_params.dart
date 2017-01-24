@@ -51,7 +51,7 @@ void main() {
 
       expect(response.mockContent, 'hello');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -63,7 +63,7 @@ void main() {
 
       expect(response.mockContent, '25');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -75,7 +75,7 @@ void main() {
 
       expect(response.mockContent, '2.5');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -87,7 +87,7 @@ void main() {
 
       expect(response.mockContent, '2.5');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -98,7 +98,7 @@ void main() {
 
       expect(response.mockContent, 'default');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -109,7 +109,7 @@ void main() {
 
       expect(response.mockContent, '2500');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -120,7 +120,7 @@ void main() {
 
       expect(response.mockContent, '25.5');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -131,7 +131,7 @@ void main() {
 
       expect(response.mockContent, '10.5');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
   });

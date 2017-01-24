@@ -48,7 +48,7 @@ void main() {
 
       expect(response.mockContent, '1.0');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -59,7 +59,7 @@ void main() {
 
       expect(response.mockContent, 'Get user');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -70,7 +70,7 @@ void main() {
 
       expect(response.mockContent, 'status code');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 201);
     });
 
@@ -81,7 +81,7 @@ void main() {
 
       expect(response.mockContent, 'Get book');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -92,7 +92,7 @@ void main() {
 
       expect(response.mockContent, 'Some param');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
   });

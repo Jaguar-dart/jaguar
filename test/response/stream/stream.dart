@@ -41,7 +41,7 @@ void main() {
 
       expect(response.mockContentBinary, equals([1, 2, 3, 4, 5, 6, 7, 8]));
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
   });

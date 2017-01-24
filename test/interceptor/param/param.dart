@@ -65,7 +65,7 @@ void main() {
 
       expect(response.mockContent, 'CheckerImpl');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
   });

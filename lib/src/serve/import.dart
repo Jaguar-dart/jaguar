@@ -2,7 +2,6 @@ library jaguar.src.serve;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:intl/intl.dart';
 
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';

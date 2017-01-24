@@ -31,7 +31,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       try {
         try {
           rRouteResponse0.statusCode = 200;
-          rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+          rRouteResponse0.headers
+              .set('content-type', 'text/plain; charset=utf-8');
           rRouteResponse0.value = getUser(
             who: (queryParams.getField('who')),
           );
@@ -61,7 +62,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
             new QueryParams.FromQueryParam(queryParams),
           );
           rRouteResponse0.statusCode = 200;
-          rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+          rRouteResponse0.headers
+              .set('content-type', 'text/plain; charset=utf-8');
           rRouteResponse0.value = post(
             rUserParser,
           );

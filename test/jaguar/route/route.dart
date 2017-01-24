@@ -58,7 +58,7 @@ void main() {
 
       expect(response.mockContent, 'Get user');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -69,7 +69,7 @@ void main() {
 
       expect(response.mockContent, 'status code');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 201);
     });
 
@@ -81,7 +81,7 @@ void main() {
 
       expect(response.mockContent, 'hello world');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -94,7 +94,7 @@ void main() {
 
       expect(response.mockContent, 'teja');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -107,7 +107,7 @@ void main() {
 
       expect(response.mockContent, 'kleak');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -121,7 +121,7 @@ void main() {
 
       expect(response.mockContent, 'teja');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
 
@@ -134,7 +134,7 @@ void main() {
 
       expect(response.mockContent, 'kleak');
       expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=us-ascii'});
+          {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);
     });
   });

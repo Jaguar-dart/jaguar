@@ -7,6 +7,10 @@ class Ws extends RouteBase {
 
   final int statusCode = 200;
 
+  String get mimeType => null;
+
+  String get charset => null;
+
   final Map<String, String> headers;
 
   final Map<String, String> pathRegEx;
@@ -14,8 +18,6 @@ class Ws extends RouteBase {
   final bool validatePathParams;
 
   final bool validateQueryParams;
-
-  String get contentType => _kDefaultContentType;
 
   const Ws(this.path,
       {this.headers,

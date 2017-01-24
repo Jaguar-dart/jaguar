@@ -37,7 +37,8 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
       try {
         iEncodeJsonable = new WrapEncodeJsonable().createInterceptor();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = encodeJsonable_object();
         Response<String> rRouteResponse1 = iEncodeJsonable.post(
           rRouteResponse0,
@@ -58,7 +59,8 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
       try {
         iEncodeJsonable = new WrapEncodeJsonable().createInterceptor();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = encodeJsonable_list();
         Response<String> rRouteResponse1 = iEncodeJsonable.post(
           rRouteResponse0,
@@ -80,7 +82,8 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         iEncodeJsonableObject =
             new WrapEncodeJsonableObject().createInterceptor();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = encodeJsonableObject();
         Response<String> rRouteResponse1 = iEncodeJsonableObject.post(
           rRouteResponse0,
@@ -101,7 +104,8 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
       try {
         iEncodeJsonableList = new WrapEncodeJsonableList().createInterceptor();
         rRouteResponse0.statusCode = 200;
-        rRouteResponse0.setContentType('text/plain; charset=us-ascii');
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = encodeJsonableList();
         Response<String> rRouteResponse1 = iEncodeJsonableList.post(
           rRouteResponse0,
