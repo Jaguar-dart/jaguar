@@ -49,6 +49,8 @@ class Response<ValueType> {
 
     if (value is Stream<List<int>>) {
       await resp.addStream(value as Stream<List<int>>);
+    } else if (value is List<int>) {
+      await resp.add(value as List<int>);
     } else {
       resp.write(valueAsString);
     }
