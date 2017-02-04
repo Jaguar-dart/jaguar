@@ -7,44 +7,35 @@ import 'package:jaguar/testing.dart';
 
 part 'param.g.dart';
 
-abstract class Checker {
-  String get who;
-}
-
-class CheckerImpl implements Checker {
-  String get who => 'CheckerImpl';
-
-  CheckerImpl();
-}
-
 class WrapWithParam implements RouteWrapper<WithParam> {
-  final CheckerImpl checker;
+  final String who;
 
   final String id;
 
   final Map<Symbol, MakeParam> makeParams;
 
-  const WrapWithParam({this.id, this.checker, this.makeParams});
+  const WrapWithParam({this.id, this.who, this.makeParams});
 
-  WithParam createInterceptor() => new WithParam(this.checker);
+  WithParam createInterceptor() => new WithParam(this.who);
 }
 
 class WithParam extends Interceptor {
-  final CheckerImpl checker;
+  final String who;
 
-  WithParam(this.checker);
+  WithParam(this.who);
 
   String pre() {
-    return checker.who;
+    return who;
   }
 }
 
 @Api(path: '/api')
 class ExampleApi extends Object with _$JaguarExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
-  @WrapWithParam(
-      makeParams: const {#checker: const MakeParamFromType(CheckerImpl)})
+  @WrapWithParam(makeParams: const {#who: const MakeParamFromMethod(#who)})
   String getUser(@Input(WithParam) String who) => who;
+
+  String who() => 'teja';
 }
 
 void main() {
@@ -63,7 +54,7 @@ void main() {
       MockHttpRequest rq = new MockHttpRequest(uri);
       MockHttpResponse response = await mock.handleRequest(rq);
 
-      expect(response.mockContent, 'CheckerImpl');
+      expect(response.mockContent, 'teja');
       expect(response.headers.toMap,
           {'content-type': 'text/plain; charset=utf-8'});
       expect(response.statusCode, 200);

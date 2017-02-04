@@ -14,6 +14,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
   String getUser(String who);
 
+  String who();
+
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
     PathParams pathParams = new PathParams();
@@ -27,8 +29,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       WithParam iWithParam;
       try {
         iWithParam = new WrapWithParam(
-          makeParams: const {#checker: const MakeParamFromType(CheckerImpl)},
-          checker: new CheckerImpl(),
+          makeParams: const {#who: const MakeParamFromMethod(#who)},
+          who: who(),
         )
             .createInterceptor();
         String rWithParam = iWithParam.pre();

@@ -24,12 +24,6 @@ class ProvideAsInterceptorResult {
 
 abstract class MakeParam {}
 
-class MakeParamFromType implements MakeParam {
-  final Type type;
-
-  const MakeParamFromType(this.type);
-}
-
 /// Instantiates a parameter in constructor or method as non-constant instance
 class MakeParamFromMethod implements MakeParam {
   final Symbol methodName;
@@ -44,4 +38,7 @@ class MakeParamFromSettings implements MakeParam {
 
   const MakeParamFromSettings(this.key,
       {this.filter: SettingsFilter.MapOrYaml, this.defaultValue});
+
+  String getSetting() => Settings.getString(key,
+      settingsFilter: filter, defaultValue: defaultValue);
 }
