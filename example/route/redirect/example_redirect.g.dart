@@ -4,18 +4,22 @@ part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class BooksApi
+// Target: class RedirectExampleApi
 // **************************************************************************
 
-abstract class _$JaguarBooksApi implements RequestHandler {
+abstract class _$JaguarRedirectExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Get(path: '/book/:id'),
-    const Post(path: '/book/:book/:author')
+    const Get(path: '/tome'),
+    const Get(path: '/redirectme', statusCode: HttpStatus.MOVED_PERMANENTLY),
+    const Get(
+        path: '/redirectme/withquery', statusCode: HttpStatus.MOVED_PERMANENTLY)
   ];
 
   String getBookById(String id);
 
-  void createBook(String book, String author);
+  Uri redirectMe();
+
+  Uri redirectWithQuery();
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -40,16 +44,32 @@ abstract class _$JaguarBooksApi implements RequestHandler {
       }
     }
 
-//Handler for createBook
+//Handler for redirectMe
     match =
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response<dynamic> rRouteResponse0 = new Response(null);
+      Response<Uri> rRouteResponse0 = new Response(null);
       try {
-        createBook(
-          (pathParams.getField('book')),
-          (pathParams.getField('author')),
-        );
+        rRouteResponse0.statusCode = 301;
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
+        rRouteResponse0.value = redirectMe();
+        return rRouteResponse0;
+      } catch (e) {
+        rethrow;
+      }
+    }
+
+//Handler for redirectWithQuery
+    match =
+        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    if (match) {
+      Response<Uri> rRouteResponse0 = new Response(null);
+      try {
+        rRouteResponse0.statusCode = 301;
+        rRouteResponse0.headers
+            .set('content-type', 'text/plain; charset=utf-8');
+        rRouteResponse0.value = redirectWithQuery();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
