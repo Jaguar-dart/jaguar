@@ -19,3 +19,7 @@ Annotation to build annotation from annotated function has changed.<br>
 
 ## 0.1.14
 - Remove Settings from Configuration
+
+## 0.2.7
+- Added properly handling `List<int>` response type
+- Implemented Route redirection
