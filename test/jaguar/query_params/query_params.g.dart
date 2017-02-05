@@ -7,7 +7,7 @@ part of test.jaguar.query_params;
 // Target: class QueryParamsExampleApi
 // **************************************************************************
 
-abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
+class JaguarQueryParamsExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/stringParam'),
     const Get(path: '/intParam'),
@@ -19,21 +19,13 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
     const Get(path: '/defNumParam')
   ];
 
-  String stringParam({String strParam});
+  final QueryParamsExampleApi _internal;
 
-  String intParam({int intParam});
-
-  String doubleParam({num doubleParam});
-
-  String numParam({num numParam});
-
-  String defStringParam({String strParam: 'default'});
-
-  String defIntParam({int intParam: 50});
-
-  String defDoubleParam({num doubleParam: 12.75});
-
-  String defDumParam({num numParam: 5.25});
+  factory JaguarQueryParamsExampleApi() {
+    final instance = new QueryParamsExampleApi();
+    return new JaguarQueryParamsExampleApi.from(instance);
+  }
+  JaguarQueryParamsExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -50,7 +42,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = stringParam(
+        rRouteResponse0.value = _internal.stringParam(
           strParam: (queryParams.getField('strParam')),
         );
         return rRouteResponse0;
@@ -68,7 +60,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = intParam(
+        rRouteResponse0.value = _internal.intParam(
           intParam: stringToInt(queryParams.getField('intParam')),
         );
         return rRouteResponse0;
@@ -86,7 +78,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = doubleParam(
+        rRouteResponse0.value = _internal.doubleParam(
           doubleParam: stringToNum(queryParams.getField('doubleParam')),
         );
         return rRouteResponse0;
@@ -104,7 +96,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = numParam(
+        rRouteResponse0.value = _internal.numParam(
           numParam: stringToNum(queryParams.getField('numParam')),
         );
         return rRouteResponse0;
@@ -122,7 +114,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = defStringParam(
+        rRouteResponse0.value = _internal.defStringParam(
           strParam: (queryParams.getField('strParam')) ?? 'default',
         );
         return rRouteResponse0;
@@ -140,7 +132,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = defIntParam(
+        rRouteResponse0.value = _internal.defIntParam(
           intParam: stringToInt(queryParams.getField('intParam')) ?? 50,
         );
         return rRouteResponse0;
@@ -158,7 +150,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = defDoubleParam(
+        rRouteResponse0.value = _internal.defDoubleParam(
           doubleParam:
               stringToNum(queryParams.getField('doubleParam')) ?? 12.75,
         );
@@ -177,7 +169,7 @@ abstract class _$JaguarQueryParamsExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = defDumParam(
+        rRouteResponse0.value = _internal.defDumParam(
           numParam: stringToNum(queryParams.getField('numParam')) ?? 5.25,
         );
         return rRouteResponse0;

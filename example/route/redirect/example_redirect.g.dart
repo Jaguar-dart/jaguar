@@ -7,7 +7,7 @@ part of example.routes;
 // Target: class RedirectExampleApi
 // **************************************************************************
 
-abstract class _$JaguarRedirectExampleApi implements RequestHandler {
+class JaguarRedirectExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/tome'),
     const Get(path: '/redirectme', statusCode: HttpStatus.MOVED_PERMANENTLY),
@@ -15,11 +15,13 @@ abstract class _$JaguarRedirectExampleApi implements RequestHandler {
         path: '/redirectme/withquery', statusCode: HttpStatus.MOVED_PERMANENTLY)
   ];
 
-  String getBookById(String id);
+  final RedirectExampleApi _internal;
 
-  Uri redirectMe();
-
-  Uri redirectWithQuery();
+  factory JaguarRedirectExampleApi() {
+    final instance = new RedirectExampleApi();
+    return new JaguarRedirectExampleApi.from(instance);
+  }
+  JaguarRedirectExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -35,7 +37,7 @@ abstract class _$JaguarRedirectExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getBookById(
+        rRouteResponse0.value = _internal.getBookById(
           (pathParams.getField('id')),
         );
         return rRouteResponse0;
@@ -53,7 +55,7 @@ abstract class _$JaguarRedirectExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 301;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = redirectMe();
+        rRouteResponse0.value = _internal.redirectMe();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -69,7 +71,7 @@ abstract class _$JaguarRedirectExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 301;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = redirectWithQuery();
+        rRouteResponse0.value = _internal.redirectWithQuery();
         return rRouteResponse0;
       } catch (e) {
         rethrow;

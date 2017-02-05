@@ -58,7 +58,7 @@ class InterceptorWithInput extends Interceptor {
 }
 
 @Api(path: '/api/book')
-class BooksApi extends Object with _$JaguarBooksApi {
+class BooksApi {
   /// A route can be wrapped with an interceptor by annotating the route with
   /// interceptor's wrapper. WrapEncodeToJson wrapper can be used to wrap EncodeToJson
   /// interceptor. EncodeToJson interceptor executes after route handler execution
@@ -78,7 +78,7 @@ class BooksApi extends Object with _$JaguarBooksApi {
 
 Future<Null> main(List<String> args) async {
   Configuration configuration = new Configuration();
-  configuration.addApi(new BooksApi());
+  configuration.addApi(new JaguarBooksApi());
 
   await serve(configuration);
 }

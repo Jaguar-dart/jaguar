@@ -4,13 +4,10 @@ import 'dart:io' show HttpStatus;
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
-import '../../common/models/book/book.dart';
-
 part 'example_redirect.g.dart';
 
 @Api(path: '/api')
-class RedirectExampleApi extends _$JaguarRedirectExampleApi
-    implements RequestHandler {
+class RedirectExampleApi {
   /// Target route for redirection
   @Get(path: '/tome')
   String getBookById(String id) => "Hey there!";
@@ -27,7 +24,7 @@ class RedirectExampleApi extends _$JaguarRedirectExampleApi
 
 Future<Null> main(List<String> args) async {
   Configuration configuration = new Configuration();
-  configuration.addApi(new RedirectExampleApi());
+  configuration.addApi(new JaguarRedirectExampleApi());
 
   await serve(configuration);
 }

@@ -7,15 +7,19 @@ part of test.jaguar.group.normal.book;
 // Target: class BookApi
 // **************************************************************************
 
-abstract class _$JaguarBookApi implements RequestHandler {
+class JaguarBookApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(methods: const <String>['GET']),
     const Route(path: '/some/:param1', methods: const <String>['POST'])
   ];
 
-  String getBook();
+  final BookApi _internal;
 
-  String some(String param1);
+  factory JaguarBookApi() {
+    final instance = new BookApi();
+    return new JaguarBookApi.from(instance);
+  }
+  JaguarBookApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     PathParams pathParams = new PathParams();
@@ -30,7 +34,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getBook();
+        rRouteResponse0.value = _internal.getBook();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -46,7 +50,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = some(
+        rRouteResponse0.value = _internal.some(
           (pathParams.getField('param1')),
         );
         return rRouteResponse0;

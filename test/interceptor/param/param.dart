@@ -30,7 +30,7 @@ class WithParam extends Interceptor {
 }
 
 @Api(path: '/api')
-class ExampleApi extends Object with _$JaguarExampleApi {
+class ExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
   @WrapWithParam(makeParams: const {#who: const MakeParamFromMethod(#who)})
   String getUser(@Input(WithParam) String who) => who;
@@ -43,7 +43,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new ExampleApi());
+      config.addApi(new JaguarExampleApi());
       mock = new JaguarMock(config);
     });
 

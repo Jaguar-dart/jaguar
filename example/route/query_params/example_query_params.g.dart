@@ -7,10 +7,16 @@ part of example.routes;
 // Target: class BooksApi
 // **************************************************************************
 
-abstract class _$JaguarBooksApi implements RequestHandler {
+class JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[const Post()];
 
-  void createBook({String book, String author});
+  final BooksApi _internal;
+
+  factory JaguarBooksApi() {
+    final instance = new BooksApi();
+    return new JaguarBooksApi.from(instance);
+  }
+  JaguarBooksApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
@@ -24,7 +30,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
-        createBook(
+        _internal.createBook(
           book: (queryParams.getField('book')),
           author: (queryParams.getField('author')),
         );

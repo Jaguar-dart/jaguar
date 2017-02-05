@@ -7,10 +7,16 @@ part of jaguar.example.silly;
 // Target: class MyGroup
 // **************************************************************************
 
-abstract class _$JaguarMyGroup implements RequestHandler {
+class JaguarMyGroup implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[const Get(path: '/')];
 
-  String get();
+  final MyGroup _internal;
+
+  factory JaguarMyGroup() {
+    final instance = new MyGroup();
+    return new JaguarMyGroup.from(instance);
+  }
+  JaguarMyGroup.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/myGroup';
@@ -26,7 +32,7 @@ abstract class _$JaguarMyGroup implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = get();
+        rRouteResponse0.value = _internal.get();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -42,10 +48,16 @@ abstract class _$JaguarMyGroup implements RequestHandler {
 // Target: class MySecondGroup
 // **************************************************************************
 
-abstract class _$JaguarMySecondGroup implements RequestHandler {
+class JaguarMySecondGroup implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[const Get(path: '/')];
 
-  String get();
+  final MySecondGroup _internal;
+
+  factory JaguarMySecondGroup() {
+    final instance = new MySecondGroup();
+    return new JaguarMySecondGroup.from(instance);
+  }
+  JaguarMySecondGroup.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/mySecondGroup';
@@ -61,7 +73,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = get();
+        rRouteResponse0.value = _internal.get();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -77,7 +89,7 @@ abstract class _$JaguarMySecondGroup implements RequestHandler {
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/ping', methods: const <String>['GET']),
     const Put(
@@ -90,18 +102,18 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     const Ws('/ws')
   ];
 
-  MyGroup get myGroup;
-  MySecondGroup get mySecondGroup;
+  final ExampleApi _internal;
+  final JaguarMyGroup _myGroupInternal;
+  final JaguarMySecondGroup _mySecondGroupInternal;
 
-  String ping();
-
-  String pong();
-
-  String echoPathParam(String message);
-
-  String echoQueryParam({String message});
-
-  Future<dynamic> websocket(WebSocket ws);
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
+  }
+  JaguarExampleApi.from(this._internal)
+      : _myGroupInternal = new JaguarMyGroup.from(_internal.myGroup),
+        _mySecondGroupInternal =
+            new JaguarMySecondGroup.from(_internal.mySecondGroup);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -118,7 +130,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = ping();
+        rRouteResponse0.value = _internal.ping();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -135,7 +147,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.headers['pong-header'] = 'silly-pong';
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = pong();
+        rRouteResponse0.value = _internal.pong();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -151,7 +163,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = echoPathParam(
+        rRouteResponse0.value = _internal.echoPathParam(
           (pathParams.getField('message')),
         );
         return rRouteResponse0;
@@ -169,7 +181,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = echoQueryParam(
+        rRouteResponse0.value = _internal.echoQueryParam(
           message: (queryParams.getField('message')),
         );
         return rRouteResponse0;
@@ -184,7 +196,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     if (match) {
       try {
         WebSocket ws = await request.upgradeToWebSocket;
-        await websocket(
+        await _internal.websocket(
           ws,
         );
       } catch (e) {
@@ -193,7 +205,8 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     }
 
     {
-      Response response = await myGroup.handleRequest(request, prefix: prefix);
+      Response response =
+          await _myGroupInternal.handleRequest(request, prefix: prefix);
       if (response is Response) {
         return response;
       }
@@ -201,7 +214,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 
     {
       Response response =
-          await mySecondGroup.handleRequest(request, prefix: prefix);
+          await _mySecondGroupInternal.handleRequest(request, prefix: prefix);
       if (response is Response) {
         return response;
       }

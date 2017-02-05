@@ -18,7 +18,7 @@ int _id = 3;
 String _newId() => (_id++).toString();
 
 @Api(path: '/api/book')
-class BooksApi extends Object with _$JaguarBooksApi {
+class BooksApi {
   /// Jaguar automatically provides query parameter through optional named parameters
   /// of the route handler
   @Post()
@@ -30,7 +30,7 @@ class BooksApi extends Object with _$JaguarBooksApi {
 
 Future<Null> main(List<String> args) async {
   Configuration configuration = new Configuration();
-  configuration.addApi(new BooksApi());
+  configuration.addApi(new JaguarBooksApi());
 
   await serve(configuration);
 }

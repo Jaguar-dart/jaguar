@@ -8,7 +8,7 @@ import 'package:jaguar/testing.dart';
 part 'query_params.g.dart';
 
 @Api(path: '/api')
-class QueryParamsExampleApi extends Object with _$JaguarQueryParamsExampleApi {
+class QueryParamsExampleApi {
   @Get(path: '/stringParam')
   String stringParam({String strParam}) => strParam;
 
@@ -39,7 +39,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new QueryParamsExampleApi());
+      config.addApi(new JaguarQueryParamsExampleApi());
       mock = new JaguarMock(config);
     });
 

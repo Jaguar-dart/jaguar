@@ -7,12 +7,18 @@ part of test.response.stream;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/stream')
   ];
 
-  Stream<List<int>> getStream();
+  final ExampleApi _internal;
+
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
+  }
+  JaguarExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -28,7 +34,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getStream();
+        rRouteResponse0.value = _internal.getStream();
         return rRouteResponse0;
       } catch (e) {
         rethrow;

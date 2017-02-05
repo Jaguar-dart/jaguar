@@ -7,7 +7,7 @@ part of example.forum;
 // Target: class ForumApi
 // **************************************************************************
 
-abstract class _$JaguarForumApi implements RequestHandler {
+class JaguarForumApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(
         path: '/user',
@@ -29,29 +29,13 @@ abstract class _$JaguarForumApi implements RequestHandler {
     const Route(path: '/test/decodebody/xwww', methods: const <String>['POST'])
   ];
 
-  Future<User> fetch();
+  final ForumApi _internal;
 
-  User create(Request request, Db db,
-      {String email, String name, String password, int age});
-
-  String update(Request request, Db db, String param1,
-      {int param2: 5555, int param3: 55});
-
-  Response<User> update1(Request request, Db db, PathParams pathParams);
-
-  Future<Response<User>> update2(
-      Request request, Db db, ParamCreate pathParams);
-
-  Future<Response<User>> update3(
-      Request request, Db db, ParamCreate pathParams);
-
-  Future<String> regex(Request request, Db db, String param1);
-
-  Future<String> pathRem(Request request, Db db, String param1);
-
-  String decodeFormData(Map<String, FormField> formFields);
-
-  String decodeXwww(Map<String, String> xwww);
+  factory JaguarForumApi() {
+    final instance = new ForumApi();
+    return new JaguarForumApi.from(instance);
+  }
+  JaguarForumApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -85,7 +69,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.headers['sample-header'] = 'made-with.jaguar';
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = await fetch();
+        rRouteResponse0.value = await _internal.fetch();
         Response<dynamic> rRouteResponse1 = iEncodeObjectToJson.post(
           rRouteResponse0,
         );
@@ -116,7 +100,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = create(
+        rRouteResponse0.value = _internal.create(
           request,
           rMongoDbAdmin,
           email: (queryParams.getField('email')),
@@ -148,7 +132,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = update(
+        rRouteResponse0.value = _internal.update(
           request,
           rMongoDbAdmin,
           (pathParams.getField('param1')),
@@ -178,7 +162,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
-        rRouteResponse0 = update1(
+        rRouteResponse0 = _internal.update1(
           request,
           rMongoDbAdmin,
           null,
@@ -208,7 +192,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         )
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
-        rRouteResponse0 = await update2(
+        rRouteResponse0 = await _internal.update2(
           request,
           rMongoDbAdmin,
           new ParamCreate.FromPathParam(pathParams),
@@ -236,7 +220,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
             .createInterceptor();
         Db rMongoDbAdmin = await iMongoDbAdmin.pre();
         iEncodeObjectToJson = new WrapEncodeObjectToJson().createInterceptor();
-        rRouteResponse0 = await update3(
+        rRouteResponse0 = await _internal.update3(
           request,
           rMongoDbAdmin,
           new ParamCreate.FromPathParam(pathParams),
@@ -269,7 +253,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = await regex(
+        rRouteResponse0.value = await _internal.regex(
           request,
           rMongoDbAdmin,
           (pathParams.getField('param1')),
@@ -298,7 +282,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = await pathRem(
+        rRouteResponse0.value = await _internal.pathRem(
           request,
           rMongoDbAdmin,
           (pathParams.getField('param1')),
@@ -325,7 +309,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = decodeFormData(
+        rRouteResponse0.value = _internal.decodeFormData(
           rDecodeFormData,
         );
         return rRouteResponse0;
@@ -351,7 +335,7 @@ abstract class _$JaguarForumApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = decodeXwww(
+        rRouteResponse0.value = _internal.decodeXwww(
           rDecodeUrlEncodedForm,
         );
         return rRouteResponse0;
