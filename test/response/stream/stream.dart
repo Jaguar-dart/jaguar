@@ -8,7 +8,7 @@ import 'package:jaguar/testing.dart';
 part 'stream.g.dart';
 
 @Api(path: '/api')
-class ExampleApi extends Object with _$JaguarExampleApi {
+class ExampleApi {
   @Get(path: '/stream')
   Stream<List<int>> getStream() {
     StreamController<List<int>> streamCon = new StreamController<List<int>>();
@@ -28,7 +28,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new ExampleApi());
+      config.addApi(new JaguarExampleApi());
       mock = new JaguarMock(config);
     });
 

@@ -9,7 +9,7 @@ import 'package:jaguar/testing.dart';
 part 'route.g.dart';
 
 @Api(path: '/api')
-class ExampleApi extends Object with _$JaguarExampleApi {
+class ExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
   String getUser() => 'Get user';
 
@@ -45,7 +45,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new ExampleApi());
+      config.addApi(new JaguarExampleApi());
       mock = new JaguarMock(config);
     });
 

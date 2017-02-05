@@ -7,15 +7,19 @@ part of test.exception.exception;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/user'),
     const Post(path: '/user')
   ];
 
-  String getUser({String who});
+  final ExampleApi _internal;
 
-  User post(User user);
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
+  }
+  JaguarExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -33,7 +37,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
           rRouteResponse0.statusCode = 200;
           rRouteResponse0.headers
               .set('content-type', 'text/plain; charset=utf-8');
-          rRouteResponse0.value = getUser(
+          rRouteResponse0.value = _internal.getUser(
             who: (queryParams.getField('who')),
           );
           return rRouteResponse0;
@@ -64,7 +68,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
           rRouteResponse0.statusCode = 200;
           rRouteResponse0.headers
               .set('content-type', 'text/plain; charset=utf-8');
-          rRouteResponse0.value = post(
+          rRouteResponse0.value = _internal.post(
             rUserParser,
           );
           return rRouteResponse0;

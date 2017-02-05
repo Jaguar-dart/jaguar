@@ -15,7 +15,7 @@ List<Book> _books = [
 ];
 
 @Api(path: '/api/book')
-class BooksApi extends Object with _$JaguarBooksApi implements RequestHandler {
+class BooksApi {
   /// Simple [Route] annotation. Specifies path of the route using path argument.
   @Route(path: '/books')
   List<Map> getAllBooks() => _books.map((book) => book.toMap()).toList();
@@ -46,7 +46,7 @@ class BooksApi extends Object with _$JaguarBooksApi implements RequestHandler {
 
 Future<Null> main(List<String> args) async {
   Configuration configuration = new Configuration();
-  configuration.addApi(new BooksApi());
+  configuration.addApi(new JaguarBooksApi());
 
   await serve(configuration);
 }

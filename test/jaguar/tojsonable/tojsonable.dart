@@ -23,7 +23,7 @@ class Model implements ToJsonable {
 }
 
 @Api(path: '/api')
-class ToJsonableExampleApi extends Object with _$JaguarToJsonableExampleApi {
+class ToJsonableExampleApi {
   @Get(path: '/EncodeJsonable/object')
   @WrapEncodeJsonable()
   Model encodeJsonable_object() => new Model('kleak', 'kleak@kleak.com');
@@ -48,7 +48,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new ToJsonableExampleApi());
+      config.addApi(new JaguarToJsonableExampleApi());
       mock = new JaguarMock(config);
     });
 

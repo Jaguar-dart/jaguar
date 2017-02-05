@@ -7,7 +7,7 @@ part of example.routes;
 // Target: class BooksApi
 // **************************************************************************
 
-abstract class _$JaguarBooksApi implements RequestHandler {
+class JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/books'),
     const Route(path: '/books', methods: const <String>['GET']),
@@ -19,15 +19,13 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     const Post(path: '/inject/httprequest')
   ];
 
-  List<Map<dynamic, dynamic>> getAllBooks();
+  final BooksApi _internal;
 
-  List<Map<dynamic, dynamic>> getAllBooks1();
-
-  List<Map<dynamic, dynamic>> getAllBooks2();
-
-  void defaultStatusAndHeader();
-
-  void inputHttpRequest(HttpRequest req);
+  factory JaguarBooksApi() {
+    final instance = new BooksApi();
+    return new JaguarBooksApi.from(instance);
+  }
+  JaguarBooksApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
@@ -43,7 +41,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getAllBooks();
+        rRouteResponse0.value = _internal.getAllBooks();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -59,7 +57,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getAllBooks1();
+        rRouteResponse0.value = _internal.getAllBooks1();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -75,7 +73,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getAllBooks2();
+        rRouteResponse0.value = _internal.getAllBooks2();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -88,7 +86,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
-        defaultStatusAndHeader();
+        _internal.defaultStatusAndHeader();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -101,7 +99,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
-        inputHttpRequest(
+        _internal.inputHttpRequest(
           null,
         );
         return rRouteResponse0;

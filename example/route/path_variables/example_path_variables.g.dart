@@ -7,15 +7,19 @@ part of example.routes;
 // Target: class BooksApi
 // **************************************************************************
 
-abstract class _$JaguarBooksApi implements RequestHandler {
+class JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/book/:id'),
     const Post(path: '/book/:book/:author')
   ];
 
-  String getBookById(String id);
+  final BooksApi _internal;
 
-  void createBook(String book, String author);
+  factory JaguarBooksApi() {
+    final instance = new BooksApi();
+    return new JaguarBooksApi.from(instance);
+  }
+  JaguarBooksApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -31,7 +35,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getBookById(
+        rRouteResponse0.value = _internal.getBookById(
           (pathParams.getField('id')),
         );
         return rRouteResponse0;
@@ -46,7 +50,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
-        createBook(
+        _internal.createBook(
           (pathParams.getField('book')),
           (pathParams.getField('author')),
         );

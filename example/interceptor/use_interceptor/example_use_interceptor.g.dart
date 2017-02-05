@@ -7,15 +7,19 @@ part of example.routes;
 // Target: class BooksApi
 // **************************************************************************
 
-abstract class _$JaguarBooksApi implements RequestHandler {
+class JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(),
     const Post()
   ];
 
-  Map<dynamic, dynamic> getJaguarInfo();
+  final BooksApi _internal;
 
-  Map<dynamic, dynamic> createJaguarInfo(Map<dynamic, dynamic> body);
+  factory JaguarBooksApi() {
+    final instance = new BooksApi();
+    return new JaguarBooksApi.from(instance);
+  }
+  JaguarBooksApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
@@ -33,7 +37,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getJaguarInfo();
+        rRouteResponse0.value = _internal.getJaguarInfo();
         Response<String> rRouteResponse1 = iEncodeToJson.post(
           rRouteResponse0,
         );
@@ -58,7 +62,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = createJaguarInfo(
+        rRouteResponse0.value = _internal.createJaguarInfo(
           rDecodeJsonMap,
         );
         return rRouteResponse0;

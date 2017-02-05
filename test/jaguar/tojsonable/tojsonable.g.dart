@@ -7,7 +7,7 @@ part of test.jaguar.query_params;
 // Target: class ToJsonableExampleApi
 // **************************************************************************
 
-abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
+class JaguarToJsonableExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/EncodeJsonable/object'),
     const Get(path: '/EncodeJsonable/list'),
@@ -15,13 +15,13 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
     const Get(path: '/EncodeJsonableList')
   ];
 
-  Model encodeJsonable_object();
+  final ToJsonableExampleApi _internal;
 
-  List<Model> encodeJsonable_list();
-
-  Model encodeJsonableObject();
-
-  List<Model> encodeJsonableList();
+  factory JaguarToJsonableExampleApi() {
+    final instance = new ToJsonableExampleApi();
+    return new JaguarToJsonableExampleApi.from(instance);
+  }
+  JaguarToJsonableExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -39,7 +39,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = encodeJsonable_object();
+        rRouteResponse0.value = _internal.encodeJsonable_object();
         Response<String> rRouteResponse1 = iEncodeJsonable.post(
           rRouteResponse0,
         );
@@ -61,7 +61,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = encodeJsonable_list();
+        rRouteResponse0.value = _internal.encodeJsonable_list();
         Response<String> rRouteResponse1 = iEncodeJsonable.post(
           rRouteResponse0,
         );
@@ -84,7 +84,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = encodeJsonableObject();
+        rRouteResponse0.value = _internal.encodeJsonableObject();
         Response<String> rRouteResponse1 = iEncodeJsonableObject.post(
           rRouteResponse0,
         );
@@ -106,7 +106,7 @@ abstract class _$JaguarToJsonableExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = encodeJsonableList();
+        rRouteResponse0.value = _internal.encodeJsonableList();
         Response<String> rRouteResponse1 = iEncodeJsonableList.post(
           rRouteResponse0,
         );

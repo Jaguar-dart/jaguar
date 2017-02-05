@@ -7,12 +7,18 @@ part of test.interceptor.param;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/user', methods: const <String>['GET'])
   ];
 
-  String getUser(String who);
+  final ExampleApi _internal;
+
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
+  }
+  JaguarExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -27,15 +33,15 @@ abstract class _$JaguarExampleApi implements RequestHandler {
       WithParam iWithParam;
       try {
         iWithParam = new WrapWithParam(
-          makeParams: const {#checker: const MakeParamFromType(CheckerImpl)},
-          checker: new CheckerImpl(),
+          makeParams: const {#who: const MakeParamFromMethod(#who)},
+          who: _internal.who(),
         )
             .createInterceptor();
         String rWithParam = iWithParam.pre();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getUser(
+        rRouteResponse0.value = _internal.getUser(
           rWithParam,
         );
         return rRouteResponse0;

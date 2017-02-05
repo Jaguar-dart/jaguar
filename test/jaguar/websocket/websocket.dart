@@ -9,7 +9,7 @@ import 'package:jaguar/jaguar.dart';
 part 'websocket.g.dart';
 
 @Api(path: '/api')
-class ExampleApi extends Object with _$JaguarExampleApi {
+class ExampleApi {
   @Ws('/ws')
   Future websocket(WebSocket ws) async {
     ws.listen((data) => ws.add("Hello World !"));

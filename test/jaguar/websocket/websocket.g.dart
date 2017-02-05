@@ -7,10 +7,16 @@ part of test.jaguar.websocket;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[const Ws('/ws')];
 
-  Future<dynamic> websocket(WebSocket ws);
+  final ExampleApi _internal;
+
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
+  }
+  JaguarExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -23,7 +29,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     if (match) {
       try {
         WebSocket ws = await request.upgradeToWebSocket;
-        await websocket(
+        await _internal.websocket(
           ws,
         );
       } catch (e) {

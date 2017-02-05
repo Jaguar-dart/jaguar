@@ -71,7 +71,7 @@ class ParamCreate implements Validatable {
 }
 
 @Api(path: '/api')
-class ForumApi extends Object with _$JaguarForumApi {
+class ForumApi {
   @Route(
       path: '/user',
       methods: const <String>['GET'],

@@ -7,7 +7,7 @@ part of example.body.json;
 // Target: class BooksApi
 // **************************************************************************
 
-abstract class _$JaguarBooksApi implements RequestHandler {
+class JaguarBooksApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Post(),
     const Get(path: '/:id'),
@@ -15,13 +15,13 @@ abstract class _$JaguarBooksApi implements RequestHandler {
     const Put(path: '/:id')
   ];
 
-  Map<dynamic, dynamic> addBook(Map<String, dynamic> json);
+  final BooksApi _internal;
 
-  Map<dynamic, dynamic> getById(String id);
-
-  Map<dynamic, dynamic> removeBook(String id);
-
-  Map<dynamic, dynamic> updateBook(Map<String, dynamic> json, String id);
+  factory JaguarBooksApi() {
+    final instance = new BooksApi();
+    return new JaguarBooksApi.from(instance);
+  }
+  JaguarBooksApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
@@ -44,7 +44,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = addBook(
+        rRouteResponse0.value = _internal.addBook(
           rDecodeJsonMap,
         );
         Response<String> rRouteResponse1 = iEncodeToJson.post(
@@ -69,7 +69,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getById(
+        rRouteResponse0.value = _internal.getById(
           (pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson.post(
@@ -93,7 +93,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = removeBook(
+        rRouteResponse0.value = _internal.removeBook(
           (pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson.post(
@@ -122,7 +122,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = updateBook(
+        rRouteResponse0.value = _internal.updateBook(
           rDecodeJsonMap,
           (pathParams.getField('id')),
         );

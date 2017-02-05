@@ -19,7 +19,7 @@ int _id = 3; //TODO race condition
 
 @Api(path: '/api/book')
 @WrapEncodeToJson()
-class BooksApi extends Object with _$JaguarBooksApi {
+class BooksApi {
   @Post()
   @WrapDecodeJsonMap()
   @Input(DecodeJsonMap)
@@ -88,7 +88,7 @@ class BooksApi extends Object with _$JaguarBooksApi {
 
 Future<Null> main(List<String> args) async {
   Configuration configuration = new Configuration();
-  configuration.addApi(new BooksApi());
+  configuration.addApi(new JaguarBooksApi());
 
   await serve(configuration);
 }

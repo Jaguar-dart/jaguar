@@ -7,7 +7,7 @@ part of test.jaguar.route;
 // Target: class ExampleApi
 // **************************************************************************
 
-abstract class _$JaguarExampleApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/user', methods: const <String>['GET']),
     const Route(
@@ -19,19 +19,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     const Route(path: '/input/cookies', methods: const <String>['GET'])
   ];
 
-  String getUser();
+  final ExampleApi _internal;
 
-  String statusCode();
-
-  String paramAndQuery(String param, {String query});
-
-  String inputHeader(String user);
-
-  String inputHeaders(HttpHeaders headers);
-
-  String inputCookie(String user);
-
-  String inputCookies(List<Cookie> cookies);
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
+  }
+  JaguarExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
@@ -48,7 +42,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = getUser();
+        rRouteResponse0.value = _internal.getUser();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -64,7 +58,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 201;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = statusCode();
+        rRouteResponse0.value = _internal.statusCode();
         return rRouteResponse0;
       } catch (e) {
         rethrow;
@@ -80,7 +74,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = paramAndQuery(
+        rRouteResponse0.value = _internal.paramAndQuery(
           (pathParams.getField('param')),
           query: (queryParams.getField('query')),
         );
@@ -99,7 +93,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = inputHeader(
+        rRouteResponse0.value = _internal.inputHeader(
           request.headers.value('user'),
         );
         return rRouteResponse0;
@@ -117,7 +111,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = inputHeaders(
+        rRouteResponse0.value = _internal.inputHeaders(
           request.headers,
         );
         return rRouteResponse0;
@@ -135,7 +129,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = inputCookie(
+        rRouteResponse0.value = _internal.inputCookie(
           request.cookies
               .firstWhere((cookie) => cookie.name == 'user', orElse: () => null)
               ?.value,
@@ -155,7 +149,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = inputCookies(
+        rRouteResponse0.value = _internal.inputCookies(
           request.cookies,
         );
         return rRouteResponse0;

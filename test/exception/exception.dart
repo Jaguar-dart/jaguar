@@ -11,9 +11,7 @@ part 'exception.g.dart';
 
 @Api(path: '/api')
 @ValidationExceptionHandler()
-class ExampleApi extends Object
-    with _$JaguarExampleApi
-    implements RequestHandler {
+class ExampleApi {
   @Get(path: '/user')
   @CustomExceptionHandler()
   String getUser({String who}) {
@@ -35,7 +33,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new ExampleApi());
+      config.addApi(new JaguarExampleApi());
       mock = new JaguarMock(config);
     });
 

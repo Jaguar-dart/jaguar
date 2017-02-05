@@ -10,7 +10,7 @@ import 'book.dart';
 part 'main.g.dart';
 
 @RouteGroup()
-class UserApi extends Object with _$JaguarUserApi {
+class UserApi {
   @Route(methods: const <String>['GET'])
   String getUser() => 'Get user';
 
@@ -19,7 +19,7 @@ class UserApi extends Object with _$JaguarUserApi {
 }
 
 @Api(path: '/api')
-class ExampleApi extends Object with _$JaguarExampleApi {
+class ExampleApi {
   @Group(path: '/user')
   UserApi user = new UserApi();
 
@@ -35,7 +35,7 @@ void main() {
     JaguarMock mock;
     setUp(() {
       Configuration config = new Configuration();
-      config.addApi(new ExampleApi());
+      config.addApi(new JaguarExampleApi());
       mock = new JaguarMock(config);
     });
 

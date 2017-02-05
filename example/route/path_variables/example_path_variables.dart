@@ -18,7 +18,7 @@ int _id = 3;
 String _newId() => (_id++).toString();
 
 @Api(path: '/api')
-class BooksApi extends Object with _$JaguarBooksApi {
+class BooksApi {
   /// Path variables can be defined in the path argument of route annotations by
   /// beginning the path segment with ':'. The path variable identifier follows ':'.
   /// Jaguar will automatically provide the path variable if it finds corresponding
@@ -36,7 +36,7 @@ class BooksApi extends Object with _$JaguarBooksApi {
 
 Future<Null> main(List<String> args) async {
   Configuration configuration = new Configuration();
-  configuration.addApi(new BooksApi());
+  configuration.addApi(new JaguarBooksApi());
 
   await serve(configuration);
 }
