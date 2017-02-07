@@ -4,6 +4,13 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
+/// Splits given path to composing segments
+List<String> splitPathToSegments(final String paths) {
+  final List<String> segments = paths.split(new RegExp('/+'));
+  if (segments.length > 0 && segments.first.isEmpty) segments.removeAt(0);
+  return segments;
+}
+
 /// [Request] contains information about HTTP request
 class Request {
   final HttpRequest _request;

@@ -31,9 +31,9 @@ abstract class RouteBase {
       return false;
     }
 
-    List<String> rqSegs = requestPath.split('/');
+    List<String> rqSegs = splitPathToSegments(requestPath);
 
-    List<String> segs = prefixedPath(prefix).split('/');
+    List<String> segs = splitPathToSegments(prefixedPath(prefix));
 
     return comparePathSegments(segs, rqSegs, params);
   }
