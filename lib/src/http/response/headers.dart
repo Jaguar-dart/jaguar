@@ -36,7 +36,7 @@ class JaguarHttpHeaders {
   }
 
   void removeAll(String name) {
-    headers.clear();
+    headers.remove(name);
   }
 
   void forEach(void f(String name, List<String> values)) {
