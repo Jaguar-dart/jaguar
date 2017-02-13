@@ -49,6 +49,7 @@ class Jaguar {
       server = await HttpServer.bind(configuration.address, configuration.port,
           shared: configuration.multiThread);
     }
+    server.autoCompress = configuration.autoCompress;
     server.listen((HttpRequest request) => handleRequest(request));
   }
 }
