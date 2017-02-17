@@ -1,9 +1,9 @@
 library test.exception.exception;
 
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
 
 part 'param.dart';
 part 'custom.dart';
@@ -22,75 +22,65 @@ class ExampleApi {
     return who;
   }
 
+  final WrapUserParser userParser = new WrapUserParser();
+
   @Post(path: '/user')
-  @WrapUserParser()
-  @Input(UserParser)
-  User post(User user) => user;
+  @InterceptWith(const [#userParser])
+  User post(@Input(UserParser) User user) => user;
 }
 
 void main() {
   group('Exception', () {
-    JaguarMock mock;
-    setUp(() {
-      Configuration config = new Configuration();
-      config.addApi(new JaguarExampleApi());
-      mock = new JaguarMock(config);
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApi(new JaguarExampleApi());
+      await server.serve();
     });
 
-    tearDown(() {});
+    tearDownAll(() async {
+      await server.close();
+    });
 
     test('Exception message', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user', {'who1': 'kleak'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent,
+      expect(response.body,
           r'{"Code": 5, "Message": "`who` query parameter must be provided! }');
-      expect(response.headers.toMap, {});
       expect(response.statusCode, 400);
     });
 
     test('No exception', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user', {'who': 'kleak'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, r'kleak');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, r'kleak');
       expect(response.statusCode, 200);
     });
 
     test('Class exception', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user', {'name': 'teja'});
-      MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(
-          response.mockContent, r'{"Field": age, "Message": "Is required! }');
-      expect(response.headers.toMap, {});
+      expect(response.body,
+          r'{"Code": 5, "Message": "`who` query parameter must be provided! }');
       expect(response.statusCode, 400);
     });
 
     test('Multiple exceptions', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user', {'age': '27'});
-      MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.post(uri);
 
-      expect(
-          response.mockContent, r'{"Field": name, "Message": "is required! }');
-      expect(response.headers.toMap, {});
+      expect(response.body, r'{"Field": name, "Message": "is required! }');
       expect(response.statusCode, 400);
     });
 
     test('Exceptions in interceptor', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user', {'name': ''});
-      MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.post(uri);
 
-      expect(response.mockContent,
-          r'{"Field": name, "Message": "Cannot be empty! }');
-      expect(response.headers.toMap, {});
+      expect(response.body, r'{"Field": name, "Message": "Cannot be empty! }');
       expect(response.statusCode, 400);
     });
   });

@@ -27,7 +27,7 @@ class UsesRequest extends Interceptor {
 
 @Api(path: '/api/book')
 class BooksApi {
-  final UsesRequest usesRequest = new UsesRequest();
+  final WrapUsesRequest usesRequest = new WrapUsesRequest();
 
   final WrapEncodeToJson jsonEncoder = new WrapEncodeToJson();
 
@@ -40,8 +40,8 @@ class BooksApi {
 }
 
 Future<Null> main(List<String> args) async {
-  Configuration configuration = new Configuration();
-  configuration.addApi(new JaguarBooksApi());
+  Jaguar jaguar = new Jaguar();
+  jaguar.addApi(new JaguarBooksApi());
 
-  await serve(configuration);
+  await jaguar.serve();
 }

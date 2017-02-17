@@ -2,9 +2,9 @@ library test.jaguar.websocket;
 
 import 'dart:io';
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-//TODO import 'package:jaguar/testing.dart';
 
 part 'websocket.g.dart';
 

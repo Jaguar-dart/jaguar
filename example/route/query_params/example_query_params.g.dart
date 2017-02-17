@@ -29,6 +29,7 @@ class JaguarBooksApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         _internal.createBook(
           book: (queryParams.getField('book')),

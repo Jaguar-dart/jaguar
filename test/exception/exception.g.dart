@@ -32,6 +32,7 @@ class JaguarExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         try {
           rRouteResponse0.statusCode = 200;
@@ -58,22 +59,24 @@ class JaguarExampleApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
-        UserParser iUserParser;
+        UserParser iUserParser0;
         try {
-          iUserParser = new WrapUserParser().createInterceptor();
-          User rUserParser = iUserParser.pre(
+          iUserParser0 = _internal.userParser.createInterceptor();
+          User rUserParser0 = iUserParser0.pre(
             new QueryParams.FromQueryParam(queryParams),
           );
+          ctx.addOutput(_internal.userParser, iUserParser0, rUserParser0);
           rRouteResponse0.statusCode = 200;
           rRouteResponse0.headers
               .set('content-type', 'text/plain; charset=utf-8');
           rRouteResponse0.value = _internal.post(
-            rUserParser,
+            ctx.getInput(UserParser),
           );
           return rRouteResponse0;
         } catch (e) {
-          await iUserParser?.onException();
+          await iUserParser0?.onException();
           rethrow;
         }
       } on ValidationException catch (e, s) {

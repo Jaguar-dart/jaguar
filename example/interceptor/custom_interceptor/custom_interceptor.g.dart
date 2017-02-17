@@ -8,10 +8,7 @@ part of example.routes;
 // **************************************************************************
 
 class JaguarBooksApi implements RequestHandler {
-  static const List<RouteBase> routes = const <RouteBase>[
-    const Get(),
-    const Post()
-  ];
+  static const List<RouteBase> routes = const <RouteBase>[const Get()];
 
   final BooksApi _internal;
 
@@ -31,43 +28,31 @@ class JaguarBooksApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      EncodeToJson iEncodeToJson;
+      ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeToJson iEncodeToJson0;
+      GenRandom iGenRandom0;
+      UsesRandom iUsesRandom0;
       try {
-        iEncodeToJson = new WrapEncodeToJson().createInterceptor();
+        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
+        iGenRandom0 = _internal.genRandom.createInterceptor();
+        int rGenRandom0 = iGenRandom0.pre();
+        ctx.addOutput(_internal.genRandom, iGenRandom0, rGenRandom0);
+        iUsesRandom0 = _internal.usesRandom.createInterceptor();
+        iUsesRandom0.pre();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.getJaguarInfo();
-        Response<String> rRouteResponse1 = iEncodeToJson.post(
+        iUsesRandom0.post();
+        iGenRandom0.post();
+        Response<String> rRouteResponse1 = iEncodeToJson0.post(
           rRouteResponse0,
         );
         return rRouteResponse1;
       } catch (e) {
-        await iEncodeToJson?.onException();
-        rethrow;
-      }
-    }
-
-//Handler for createJaguarInfo
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
-    if (match) {
-      Response<Map> rRouteResponse0 = new Response(null);
-      DecodeJsonMap iDecodeJsonMap;
-      try {
-        iDecodeJsonMap = new WrapDecodeJsonMap().createInterceptor();
-        Map<String, dynamic> rDecodeJsonMap = await iDecodeJsonMap.pre(
-          request,
-        );
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.createJaguarInfo(
-          rDecodeJsonMap,
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        await iDecodeJsonMap?.onException();
+        await iUsesRandom0?.onException();
+        await iGenRandom0?.onException();
+        await iEncodeToJson0?.onException();
         rethrow;
       }
     }

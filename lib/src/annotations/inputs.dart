@@ -52,3 +52,16 @@ class InputQueryParams {
 
   const InputQueryParams([this.validate = false]);
 }
+
+class InputContext {
+  const InputContext();
+}
+
+/// Annotation to request inputs from an interceptor in request chain
+class InputVariable {
+  final Type type;
+
+  final String id;
+
+  const InputVariable(this.type, {this.id});
+}

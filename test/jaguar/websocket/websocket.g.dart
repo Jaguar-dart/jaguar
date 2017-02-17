@@ -27,6 +27,7 @@ class JaguarExampleApi implements RequestHandler {
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         WebSocket ws = await request.upgradeToWebSocket;
         await _internal.websocket(

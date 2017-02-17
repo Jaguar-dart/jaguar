@@ -33,19 +33,20 @@ class JaguarToJsonableExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<Model> rRouteResponse0 = new Response(null);
-      EncodeJsonable iEncodeJsonable;
+      ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonable = new WrapEncodeJsonable().createInterceptor();
+        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.encodeJsonable_object();
-        Response<String> rRouteResponse1 = iEncodeJsonable.post(
+        Response<String> rRouteResponse1 = iEncodeJsonable0.post(
           rRouteResponse0,
         );
         return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonable?.onException();
+        await iEncodeJsonable0?.onException();
         rethrow;
       }
     }
@@ -55,19 +56,20 @@ class JaguarToJsonableExampleApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      EncodeJsonable iEncodeJsonable;
+      ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonable = new WrapEncodeJsonable().createInterceptor();
+        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.encodeJsonable_list();
-        Response<String> rRouteResponse1 = iEncodeJsonable.post(
+        Response<String> rRouteResponse1 = iEncodeJsonable0.post(
           rRouteResponse0,
         );
         return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonable?.onException();
+        await iEncodeJsonable0?.onException();
         rethrow;
       }
     }
@@ -77,20 +79,20 @@ class JaguarToJsonableExampleApi implements RequestHandler {
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<Model> rRouteResponse0 = new Response(null);
-      EncodeJsonableObject iEncodeJsonableObject;
+      ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonableObject =
-            new WrapEncodeJsonableObject().createInterceptor();
+        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.encodeJsonableObject();
-        Response<String> rRouteResponse1 = iEncodeJsonableObject.post(
+        Response<String> rRouteResponse1 = iEncodeJsonable0.post(
           rRouteResponse0,
         );
         return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonableObject?.onException();
+        await iEncodeJsonable0?.onException();
         rethrow;
       }
     }
@@ -100,19 +102,20 @@ class JaguarToJsonableExampleApi implements RequestHandler {
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      EncodeJsonableList iEncodeJsonableList;
+      ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonableList = new WrapEncodeJsonableList().createInterceptor();
+        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.encodeJsonableList();
-        Response<String> rRouteResponse1 = iEncodeJsonableList.post(
+        Response<String> rRouteResponse1 = iEncodeJsonable0.post(
           rRouteResponse0,
         );
         return rRouteResponse1;
       } catch (e) {
-        await iEncodeJsonableList?.onException();
+        await iEncodeJsonable0?.onException();
         rethrow;
       }
     }

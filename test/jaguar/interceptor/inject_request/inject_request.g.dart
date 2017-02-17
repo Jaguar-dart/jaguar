@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.response.stream;
+part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
@@ -9,7 +9,7 @@ part of test.response.stream;
 
 class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Get(path: '/stream')
+    const Get(path: '/echo/uri')
   ];
 
   final ExampleApi _internal;
@@ -25,19 +25,34 @@ class JaguarExampleApi implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
-//Handler for getStream
+//Handler for getJaguarInfo
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response<Stream> rRouteResponse0 = new Response(null);
+      Response<Map> rRouteResponse0 = new Response(null);
       ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeToJson iEncodeToJson0;
+      UsesRequest iUsesRequest0;
       try {
+        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
+        iUsesRequest0 = _internal.usesRequest.createInterceptor();
+        String rUsesRequest0 = iUsesRequest0.pre(
+          request,
+        );
+        ctx.addOutput(_internal.usesRequest, iUsesRequest0, rUsesRequest0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.getStream();
-        return rRouteResponse0;
+        rRouteResponse0.value = _internal.getJaguarInfo(
+          ctx.getInput(UsesRequest),
+        );
+        Response<String> rRouteResponse1 = iEncodeToJson0.post(
+          rRouteResponse0,
+        );
+        return rRouteResponse1;
       } catch (e) {
+        await iUsesRequest0?.onException();
+        await iEncodeToJson0?.onException();
         rethrow;
       }
     }

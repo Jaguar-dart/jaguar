@@ -38,6 +38,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -56,6 +57,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -74,6 +76,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[2].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -92,6 +95,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[3].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -110,6 +114,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[4].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -128,6 +133,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[5].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -146,6 +152,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[6].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -165,6 +172,7 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
         routes[7].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers

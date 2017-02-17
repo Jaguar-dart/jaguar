@@ -4,25 +4,25 @@ part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class BooksApi
+// Target: class ExampleApi
 // **************************************************************************
 
-class JaguarBooksApi implements RequestHandler {
+class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Get(),
-    const Post()
+    const Get(path: '/info'),
+    const Post(path: '/info')
   ];
 
-  final BooksApi _internal;
+  final ExampleApi _internal;
 
-  factory JaguarBooksApi() {
-    final instance = new BooksApi();
-    return new JaguarBooksApi.from(instance);
+  factory JaguarExampleApi() {
+    final instance = new ExampleApi();
+    return new JaguarExampleApi.from(instance);
   }
-  JaguarBooksApi.from(this._internal);
+  JaguarExampleApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
-    prefix += '/api/book';
+    prefix += '/api';
     PathParams pathParams = new PathParams();
     bool match = false;
 

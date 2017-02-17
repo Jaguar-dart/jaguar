@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.response.stream;
+part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
@@ -9,7 +9,7 @@ part of test.response.stream;
 
 class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Get(path: '/stream')
+    const Get(path: '/random')
   ];
 
   final ExampleApi _internal;
@@ -25,19 +25,40 @@ class JaguarExampleApi implements RequestHandler {
     PathParams pathParams = new PathParams();
     bool match = false;
 
-//Handler for getStream
+//Handler for getRandom
     match =
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
-      Response<Stream> rRouteResponse0 = new Response(null);
+      Response<Map> rRouteResponse0 = new Response(null);
       ContextImpl ctx = new ContextImpl(request, pathParams);
+      EncodeToJson iEncodeToJson0;
+      GenRandom iGenRandom0;
+      UsesRandom iUsesRandom0;
       try {
+        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
+        iGenRandom0 = _internal.genRandom.createInterceptor();
+        int rGenRandom0 = iGenRandom0.pre();
+        ctx.addOutput(_internal.genRandom, iGenRandom0, rGenRandom0);
+        iUsesRandom0 = _internal.usesRandom.createInterceptor();
+        int rUsesRandom0 = iUsesRandom0.pre(
+          ctx.getInput(GenRandom),
+        );
+        ctx.addOutput(_internal.usesRandom, iUsesRandom0, rUsesRandom0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.getStream();
-        return rRouteResponse0;
+        rRouteResponse0.value = _internal.getRandom(
+          ctx.getInput(GenRandom),
+          ctx.getInput(UsesRandom),
+        );
+        Response<String> rRouteResponse1 = iEncodeToJson0.post(
+          rRouteResponse0,
+        );
+        return rRouteResponse1;
       } catch (e) {
+        await iUsesRandom0?.onException();
+        await iGenRandom0?.onException();
+        await iEncodeToJson0?.onException();
         rethrow;
       }
     }

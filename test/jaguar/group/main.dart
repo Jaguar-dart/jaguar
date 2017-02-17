@@ -1,9 +1,9 @@
 library test.jaguar.group;
 
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
 
 import 'book.dart';
 
@@ -32,67 +32,54 @@ class ExampleApi {
 
 void main() {
   group('Group', () {
-    JaguarMock mock;
-    setUp(() {
-      Configuration config = new Configuration();
-      config.addApi(new JaguarExampleApi());
-      mock = new JaguarMock(config);
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApi(new JaguarExampleApi());
+      await server.serve();
     });
 
-    tearDown(() {});
+    tearDownAll(() async {
+      await server.close();
+    });
 
     test('Route', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/version');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '1.0');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '1.0');
       expect(response.statusCode, 200);
     });
 
     test('Group.GET', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'Get user');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'Get user');
       expect(response.statusCode, 200);
     });
 
     test('Group.DefaultStatusCode', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user/statuscode');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'status code');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'status code');
       expect(response.statusCode, 201);
     });
 
     test('Group.Imported.GET', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/book');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'Get book');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'Get book');
       expect(response.statusCode, 200);
     });
 
     test('Group.POST.StringParam', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/book/some/param');
-      MockHttpRequest rq = new MockHttpRequest(uri, method: 'POST');
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.post(uri);
 
-      expect(response.mockContent, 'Some param');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'Some param');
       expect(response.statusCode, 200);
     });
   });

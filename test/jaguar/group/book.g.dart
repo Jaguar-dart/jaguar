@@ -30,6 +30,7 @@ class JaguarBookApi implements RequestHandler {
         routes[0].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -46,6 +47,7 @@ class JaguarBookApi implements RequestHandler {
         routes[1].match(request.uri.path, request.method, prefix, pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
+      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers

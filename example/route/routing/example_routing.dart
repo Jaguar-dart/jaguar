@@ -45,8 +45,8 @@ class BooksApi {
 }
 
 Future<Null> main(List<String> args) async {
-  Configuration configuration = new Configuration();
-  configuration.addApi(new JaguarBooksApi());
+  Jaguar jaguar = new Jaguar();
+  jaguar.addApi(new JaguarBooksApi());
 
-  await serve(configuration);
+  await jaguar.serve();
 }
