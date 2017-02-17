@@ -91,10 +91,8 @@ class BinaryFileFormField implements FormField {
   }
 }
 
-class WrapDecodeFormData implements RouteWrapper<DecodeFormData> {
+class WrapDecodeFormData extends RouteWrapper<DecodeFormData> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapDecodeFormData({this.id});
 

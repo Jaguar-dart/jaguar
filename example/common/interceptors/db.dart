@@ -13,12 +13,10 @@ class MongoDbState {
   MongoDbState();
 }
 
-class WrapMongoDb implements RouteWrapper<MongoDb> {
+class WrapMongoDb extends RouteWrapper<MongoDb> {
   final String dbName;
 
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapMongoDb({this.dbName, this.id});
 

@@ -1,10 +1,8 @@
 part of jaguar.src.interceptors;
 
 /// Interceptor wrapper to write Map or List as JSON response
-class WrapEncodeToJson implements RouteWrapper<EncodeToJson> {
+class WrapEncodeToJson extends RouteWrapper<EncodeToJson> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeToJson({this.id});
 
@@ -24,10 +22,8 @@ class EncodeToJson extends Interceptor {
 }
 
 /// Interceptor wrapper to write Map as JSON response
-class WrapEncodeMapToJson implements RouteWrapper<EncodeMapToJson> {
+class WrapEncodeMapToJson extends RouteWrapper<EncodeMapToJson> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeMapToJson({this.id});
 
@@ -47,10 +43,8 @@ class EncodeMapToJson extends Interceptor {
 }
 
 /// Interceptor wrapper to write List as JSON response
-class WrapEncodeListToJson implements RouteWrapper<EncodeListToJson> {
+class WrapEncodeListToJson extends RouteWrapper<EncodeListToJson> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeListToJson({this.id});
 
@@ -70,10 +64,8 @@ class EncodeListToJson extends Interceptor {
 }
 
 /// Interceptor wrapper to write [ToJsonable] or List of [ToJsonable] as JSON response
-class WrapEncodeJsonable implements RouteWrapper<EncodeJsonable> {
+class WrapEncodeJsonable extends RouteWrapper<EncodeJsonable> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeJsonable({this.id});
 
@@ -98,10 +90,8 @@ class EncodeJsonable extends Interceptor {
 }
 
 /// Interceptor wrapper to write [ToJsonable] object as JSON response
-class WrapEncodeJsonableObject implements RouteWrapper<EncodeJsonableObject> {
+class WrapEncodeJsonableObject extends RouteWrapper<EncodeJsonableObject> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeJsonableObject({this.id});
 
@@ -121,10 +111,8 @@ class EncodeJsonableObject extends Interceptor {
 }
 
 /// Interceptor wrapper to write List of [ToJsonable] as JSON response
-class WrapEncodeJsonableList implements RouteWrapper<EncodeJsonableList> {
+class WrapEncodeJsonableList extends RouteWrapper<EncodeJsonableList> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeJsonableList({this.id});
 

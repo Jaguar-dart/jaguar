@@ -27,10 +27,8 @@ class ValidationExceptionHandler
   }
 }
 
-class WrapUserParser implements RouteWrapper<UserParser> {
+class WrapUserParser extends RouteWrapper<UserParser> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapUserParser({this.id});
 

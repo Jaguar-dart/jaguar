@@ -1,11 +1,9 @@
 part of jaguar.src.interceptors;
 
-class WrapDecodeJsonMap implements RouteWrapper<DecodeJsonMap> {
+class WrapDecodeJsonMap extends RouteWrapper<DecodeJsonMap> {
   final Encoding encoding;
 
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapDecodeJsonMap({this.encoding: UTF8, this.id});
 

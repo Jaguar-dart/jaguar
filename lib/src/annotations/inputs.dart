@@ -1,8 +1,8 @@
 part of jaguar.src.annotations;
 
-/// Annotation to request inputs from another interceptor in request chain
+/// Annotation to request inputs from an interceptor in request chain
 class Input {
-  /// Defines an interceptor, whose response must be used as input
+  /// Defines an interceptor, whose output must be used as input
   final Type resultFrom;
 
   /// Identifier to identify an interceptor from interceptors of same type
