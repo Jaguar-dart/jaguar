@@ -22,7 +22,7 @@ class ExampleApi {
     return who;
   }
 
-  final WrapUserParser userParser = new WrapUserParser();
+  WrapUserParser userParser() => new WrapUserParser();
 
   @Post(path: '/user')
   @InterceptWith(const [#userParser])

@@ -32,8 +32,10 @@ class JaguarBooksApi implements RequestHandler {
       EncodeToJson iEncodeToJson0;
       UsesRequest iUsesRequest0;
       try {
-        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
-        iUsesRequest0 = _internal.usesRequest.createInterceptor();
+        final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
+        iEncodeToJson0 = wEncodeToJson0.createInterceptor();
+        final RouteWrapper wUsesRequest0 = _internal.usesRequest();
+        iUsesRequest0 = wUsesRequest0.createInterceptor();
         iUsesRequest0.pre(
           request,
         );

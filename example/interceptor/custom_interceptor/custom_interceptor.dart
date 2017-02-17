@@ -50,11 +50,11 @@ class UsesRandom extends Interceptor {
 
 @Api(path: '/api/book')
 class BooksApi {
-  final WrapGenRandom genRandom = new WrapGenRandom();
+  WrapGenRandom genRandom() => new WrapGenRandom();
 
-  final WrapUsesRandom usesRandom = new WrapUsesRandom();
+  WrapUsesRandom usesRandom() => new WrapUsesRandom();
 
-  final WrapEncodeToJson jsonEncoder = new WrapEncodeToJson();
+  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
   /// TODO add documentation
   @Get()

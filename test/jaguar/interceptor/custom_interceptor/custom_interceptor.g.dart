@@ -35,15 +35,18 @@ class JaguarExampleApi implements RequestHandler {
       GenRandom iGenRandom0;
       UsesRandom iUsesRandom0;
       try {
-        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
-        iGenRandom0 = _internal.genRandom.createInterceptor();
+        final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
+        iEncodeToJson0 = wEncodeToJson0.createInterceptor();
+        final RouteWrapper wGenRandom0 = _internal.genRandom();
+        iGenRandom0 = wGenRandom0.createInterceptor();
         int rGenRandom0 = iGenRandom0.pre();
-        ctx.addOutput(_internal.genRandom, iGenRandom0, rGenRandom0);
-        iUsesRandom0 = _internal.usesRandom.createInterceptor();
+        ctx.addOutput(wGenRandom0, iGenRandom0, rGenRandom0);
+        final RouteWrapper wUsesRandom0 = _internal.usesRandom();
+        iUsesRandom0 = wUsesRandom0.createInterceptor();
         int rUsesRandom0 = iUsesRandom0.pre(
           ctx.getInput(GenRandom),
         );
-        ctx.addOutput(_internal.usesRandom, iUsesRandom0, rUsesRandom0);
+        ctx.addOutput(wUsesRandom0, iUsesRandom0, rUsesRandom0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');

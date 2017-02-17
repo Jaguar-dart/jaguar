@@ -24,7 +24,7 @@ class Model implements ToJsonable {
 
 @Api(path: '/api')
 class ToJsonableExampleApi {
-  final WrapEncodeJsonable jsonEncoder = new WrapEncodeJsonable();
+  WrapEncodeJsonable jsonEncoder() => new WrapEncodeJsonable();
   @Get(path: '/EncodeJsonable/object')
   @InterceptWith(const [#jsonEncoder])
   Model encodeJsonable_object() => new Model('kleak', 'kleak@kleak.com');

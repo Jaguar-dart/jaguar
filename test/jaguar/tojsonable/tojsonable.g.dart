@@ -36,7 +36,8 @@ class JaguarToJsonableExampleApi implements RequestHandler {
       ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
+        final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
+        iEncodeJsonable0 = wEncodeJsonable0.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
@@ -59,7 +60,8 @@ class JaguarToJsonableExampleApi implements RequestHandler {
       ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
+        final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
+        iEncodeJsonable0 = wEncodeJsonable0.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
@@ -82,7 +84,8 @@ class JaguarToJsonableExampleApi implements RequestHandler {
       ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
+        final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
+        iEncodeJsonable0 = wEncodeJsonable0.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
@@ -105,7 +108,8 @@ class JaguarToJsonableExampleApi implements RequestHandler {
       ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
-        iEncodeJsonable0 = _internal.jsonEncoder.createInterceptor();
+        final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
+        iEncodeJsonable0 = wEncodeJsonable0.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');

@@ -34,12 +34,14 @@ class JaguarExampleApi implements RequestHandler {
       EncodeToJson iEncodeToJson0;
       UsesRequest iUsesRequest0;
       try {
-        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
-        iUsesRequest0 = _internal.usesRequest.createInterceptor();
+        final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
+        iEncodeToJson0 = wEncodeToJson0.createInterceptor();
+        final RouteWrapper wUsesRequest0 = _internal.usesRequest();
+        iUsesRequest0 = wUsesRequest0.createInterceptor();
         String rUsesRequest0 = iUsesRequest0.pre(
           request,
         );
-        ctx.addOutput(_internal.usesRequest, iUsesRequest0, rUsesRequest0);
+        ctx.addOutput(wUsesRequest0, iUsesRequest0, rUsesRequest0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');

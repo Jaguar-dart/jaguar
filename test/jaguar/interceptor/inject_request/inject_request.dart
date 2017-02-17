@@ -20,9 +20,9 @@ class UsesRequest extends Interceptor {
 
 @Api(path: '/api')
 class ExampleApi {
-  final WrapUsesRequest usesRequest = new WrapUsesRequest();
+  WrapUsesRequest usesRequest() => new WrapUsesRequest();
 
-  final WrapEncodeToJson jsonEncoder = new WrapEncodeToJson();
+  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
   @Get(path: '/echo/uri')
   @InterceptWith(const [#jsonEncoder, #usesRequest])

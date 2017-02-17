@@ -63,11 +63,12 @@ class JaguarExampleApi implements RequestHandler {
       try {
         UserParser iUserParser0;
         try {
-          iUserParser0 = _internal.userParser.createInterceptor();
+          final RouteWrapper wUserParser0 = _internal.userParser();
+          iUserParser0 = wUserParser0.createInterceptor();
           User rUserParser0 = iUserParser0.pre(
             new QueryParams.FromQueryParam(queryParams),
           );
-          ctx.addOutput(_internal.userParser, iUserParser0, rUserParser0);
+          ctx.addOutput(wUserParser0, iUserParser0, rUserParser0);
           rRouteResponse0.statusCode = 200;
           rRouteResponse0.headers
               .set('content-type', 'text/plain; charset=utf-8');

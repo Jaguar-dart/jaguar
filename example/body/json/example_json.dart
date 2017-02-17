@@ -20,9 +20,9 @@ int _id = 3; //TODO race condition
 @Api(path: '/api/book')
 @InterceptWith(const [#jsonEncoder])
 class BooksApi {
-  final WrapEncodeToJson jsonEncoder = new WrapEncodeToJson();
+  WrapEncodeToJson jsonEncoder() => const WrapEncodeToJson();
 
-  final WrapDecodeJsonMap jsonDecoder = new WrapDecodeJsonMap();
+  WrapDecodeJsonMap jsonDecoder() => const WrapDecodeJsonMap();
 
   @Post()
   @InterceptWith(const [#jsonDecoder])

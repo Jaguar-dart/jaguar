@@ -12,8 +12,8 @@ part 'use_interceptor.g.dart';
 
 @Api(path: '/api')
 class ExampleApi {
-  final WrapEncodeToJson jsonEncoder = new WrapEncodeToJson();
-  final WrapDecodeJsonMap jsonDecoder = new WrapDecodeJsonMap();
+  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
+  WrapDecodeJsonMap jsonDecoder() => new WrapDecodeJsonMap();
 
   /// A route can be wrapped with interceptors using [InterceptWith] annotation. The
   /// annotation takes list of fields in the controller class that provide [RouteWrapper]s.

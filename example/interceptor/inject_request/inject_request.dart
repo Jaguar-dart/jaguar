@@ -27,9 +27,9 @@ class UsesRequest extends Interceptor {
 
 @Api(path: '/api/book')
 class BooksApi {
-  final WrapUsesRequest usesRequest = new WrapUsesRequest();
+  WrapUsesRequest usesRequest() => new WrapUsesRequest();
 
-  final WrapEncodeToJson jsonEncoder = new WrapEncodeToJson();
+  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
   @Get()
   @InterceptWith(const [#jsonEncoder, #usesRequest])

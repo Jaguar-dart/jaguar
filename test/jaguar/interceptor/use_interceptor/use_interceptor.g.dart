@@ -34,7 +34,8 @@ class JaguarExampleApi implements RequestHandler {
       ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       try {
-        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
+        final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
+        iEncodeToJson0 = wEncodeToJson0.createInterceptor();
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
@@ -58,12 +59,14 @@ class JaguarExampleApi implements RequestHandler {
       EncodeToJson iEncodeToJson0;
       DecodeJsonMap iDecodeJsonMap0;
       try {
-        iEncodeToJson0 = _internal.jsonEncoder.createInterceptor();
-        iDecodeJsonMap0 = _internal.jsonDecoder.createInterceptor();
+        final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
+        iEncodeToJson0 = wEncodeToJson0.createInterceptor();
+        final RouteWrapper wDecodeJsonMap0 = _internal.jsonDecoder();
+        iDecodeJsonMap0 = wDecodeJsonMap0.createInterceptor();
         Map<String, dynamic> rDecodeJsonMap0 = await iDecodeJsonMap0.pre(
           request,
         );
-        ctx.addOutput(_internal.jsonDecoder, iDecodeJsonMap0, rDecodeJsonMap0);
+        ctx.addOutput(wDecodeJsonMap0, iDecodeJsonMap0, rDecodeJsonMap0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
