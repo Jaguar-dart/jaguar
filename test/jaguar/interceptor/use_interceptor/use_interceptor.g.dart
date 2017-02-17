@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of example.routes;
+part of test.jaguar.interceptor.use_interceptor;
 
 // **************************************************************************
 // Generator: ApiGenerator

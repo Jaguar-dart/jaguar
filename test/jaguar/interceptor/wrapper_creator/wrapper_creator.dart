@@ -1,4 +1,4 @@
-library test.jaguar.interceptor.custom_interceptor;
+library test.jaguar.interceptor.wrapper_creator;
 
 import 'dart:io';
 import 'dart:async';
@@ -9,7 +9,7 @@ import 'package:jaguar/jaguar.dart';
 import 'package:jaguar/interceptors.dart';
 import 'dart:convert';
 
-part 'custom_interceptor.g.dart';
+part 'wrapper_creator.g.dart';
 
 final Random rand = new Random.secure();
 
@@ -22,18 +22,27 @@ class GenRandom extends Interceptor {
 }
 
 class WrapUsesRandom extends RouteWrapper<UsesRandom> {
-  UsesRandom createInterceptor() => new UsesRandom();
+  final int random;
+
+  const WrapUsesRandom(this.random);
+
+  UsesRandom createInterceptor() => new UsesRandom(random);
 }
 
 class UsesRandom extends Interceptor {
-  int pre(@Input(GenRandom) int number) => number * 2;
+  final int random;
+
+  UsesRandom(this.random);
+
+  int pre() => random * 2;
 }
 
 @Api(path: '/api')
 class ExampleApi {
   WrapGenRandom genRandom() => new WrapGenRandom();
 
-  WrapUsesRandom usesRandom() => new WrapUsesRandom();
+  WrapUsesRandom usesRandom(@Input(GenRandom) int random) =>
+      new WrapUsesRandom(random);
 
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
@@ -47,7 +56,7 @@ class ExampleApi {
 }
 
 void main() {
-  group('Custom interceptor', () {
+  group('Wrapper creator', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
@@ -59,7 +68,7 @@ void main() {
       await server.close();
     });
 
-    test('one interceptor', () async {
+    test('Inject interceptor output', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/random');
       http.Response response = await http.get(uri);
 

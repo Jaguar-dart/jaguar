@@ -1,4 +1,4 @@
-library example.routes;
+library test.jaguar.interceptor.inject_request;
 
 import 'dart:io';
 import 'dart:async';
@@ -32,7 +32,7 @@ class ExampleApi {
 }
 
 void main() {
-  group('use_interceptor', () {
+  group('Inject Request into interceptor', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
@@ -44,7 +44,7 @@ void main() {
       await server.close();
     });
 
-    test('one interceptor', () async {
+    test('inject request', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/echo/uri');
       http.Response response = await http.get(uri);
 

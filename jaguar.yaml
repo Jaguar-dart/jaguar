@@ -13,6 +13,7 @@ apis:
 - 'test/jaguar/interceptor/use_interceptor/use_interceptor.dart'
 - 'test/jaguar/interceptor/custom_interceptor/custom_interceptor.dart'
 - 'test/jaguar/interceptor/inject_request/inject_request.dart'
+- 'test/jaguar/interceptor/wrapper_creator/wrapper_creator.dart'
 - 'test/jaguar/group/book.dart'
 - 'test/jaguar/group/main.dart'
 - 'test/jaguar/query_params/query_params.dart'

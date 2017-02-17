@@ -1,4 +1,4 @@
-library example.routes;
+library test.jaguar.interceptor.use_interceptor;
 
 import 'dart:io';
 import 'dart:async';
