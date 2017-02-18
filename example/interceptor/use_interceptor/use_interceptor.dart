@@ -12,12 +12,12 @@ class BooksApi {
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapDecodeJsonMap jsonDecoder() => new WrapDecodeJsonMap();
 
-  /// A route can be wrapped with interceptors using [InterceptWith] annotation. The
+  /// A route can be wrapped with interceptors using [Wrap] annotation. The
   /// annotation takes list of fields in the controller class that provide [RouteWrapper]s.
   ///
   /// In this case [EncodeToJson] is wrapped around the route.
   @Get()
-  @InterceptWith(const [#jsonEncoder])
+  @Wrap(const [#jsonEncoder])
   Map getJaguarInfo() => {
         'Name': 'Jaguar',
         'Features': ['Speed', 'Simplicity', 'Extensiblity'],
@@ -25,7 +25,7 @@ class BooksApi {
 
   /// An example showing wrapping multiple interceptors around a route
   @Post()
-  @InterceptWith(const [#jsonEncoder, #jsonDecoder])
+  @Wrap(const [#jsonEncoder, #jsonDecoder])
   Map createJaguarInfo(@Input(DecodeJsonMap) Map body) => body;
 }
 

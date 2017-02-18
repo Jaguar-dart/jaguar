@@ -22,15 +22,14 @@ class JaguarExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for getRandom
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       GenRandom iGenRandom0;
       UsesRandom iUsesRandom0;
@@ -40,13 +39,13 @@ class JaguarExampleApi implements RequestHandler {
         final RouteWrapper wGenRandom0 = _internal.genRandom();
         iGenRandom0 = wGenRandom0.createInterceptor();
         int rGenRandom0 = iGenRandom0.pre();
-        ctx.addOutput(wGenRandom0, iGenRandom0, rGenRandom0);
+        ctx.addOutput(GenRandom, wGenRandom0.id, iGenRandom0, rGenRandom0);
         final RouteWrapper wUsesRandom0 = _internal.usesRandom();
         iUsesRandom0 = wUsesRandom0.createInterceptor();
         int rUsesRandom0 = iUsesRandom0.pre(
           ctx.getInput(GenRandom),
         );
-        ctx.addOutput(wUsesRandom0, iUsesRandom0, rUsesRandom0);
+        ctx.addOutput(UsesRandom, wUsesRandom0.id, iUsesRandom0, rUsesRandom0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');

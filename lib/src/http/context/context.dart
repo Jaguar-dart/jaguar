@@ -19,8 +19,6 @@ class _IdiedType {
 
     return interceptor == other.interceptor && id == other.id;
   }
-
-//TODO add hashcode and equality
 }
 
 abstract class Context {
@@ -28,6 +26,7 @@ abstract class Context {
 
   PathParams get pathParams;
 
+  /// Returns query params for the request
   QueryParams get queryParams;
 
   dynamic getInput(Type interceptor, {String id});
@@ -40,9 +39,19 @@ abstract class Context {
 class ContextImpl implements Context {
   final Request req;
 
-  final PathParams pathParams;
+  final PathParams pathParams = new PathParams();
 
-  QueryParams get queryParams => null; //TODO
+  QueryParams _queryParams;
+
+  /// Returns query params for the request
+  ///
+  /// Lazily creates query parameters to enhance performance of route handling
+  QueryParams get queryParams {
+    if (_queryParams != null) return _queryParams;
+
+    _queryParams = new QueryParams(req.uri.queryParameters);
+    return _queryParams;
+  }
 
   final List<Interceptor> interceptors = [];
 
@@ -50,7 +59,7 @@ class ContextImpl implements Context {
 
   final _variables = <_IdiedType, dynamic>{};
 
-  ContextImpl(this.req, this.pathParams);
+  ContextImpl(this.req);
 
   dynamic getInput(Type interceptor, {String id}) {
     /* TODO how to do this?
@@ -68,11 +77,12 @@ class ContextImpl implements Context {
     return _inputs[idied];
   }
 
-  void addOutput(RouteWrapper rw, Interceptor interceptor, dynamic value) {
-    final idied = new _IdiedType(rw.interceptorType, id: rw.id);
+  void addOutput(
+      Type interceptorType, String id, Interceptor interceptor, dynamic value) {
+    final idied = new _IdiedType(interceptorType, id: id);
     if (_inputs.containsKey(idied)) {
       throw new Exception(
-          "Context already has output from an interceptor of type:${rw.interceptorType} and id:${rw.id}!");
+          "Context already has output from an interceptor of type:$interceptorType and id:$id!");
     }
     interceptors.add(interceptor);
     _inputs[idied] = value;

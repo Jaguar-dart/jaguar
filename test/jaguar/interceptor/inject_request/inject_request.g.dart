@@ -22,15 +22,14 @@ class JaguarExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for getJaguarInfo
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       UsesRequest iUsesRequest0;
       try {
@@ -41,7 +40,8 @@ class JaguarExampleApi implements RequestHandler {
         String rUsesRequest0 = iUsesRequest0.pre(
           request,
         );
-        ctx.addOutput(wUsesRequest0, iUsesRequest0, rUsesRequest0);
+        ctx.addOutput(
+            UsesRequest, wUsesRequest0.id, iUsesRequest0, rUsesRequest0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');

@@ -29,22 +29,20 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
 //Handler for stringParam
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.stringParam(
-          strParam: (queryParams.getField('strParam')),
+          strParam: (ctx.queryParams.getField('strParam')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -53,17 +51,16 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for intParam
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.intParam(
-          intParam: stringToInt(queryParams.getField('intParam')),
+          intParam: stringToInt(ctx.queryParams.getField('intParam')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -72,17 +69,16 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for doubleParam
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.doubleParam(
-          doubleParam: stringToNum(queryParams.getField('doubleParam')),
+          doubleParam: stringToNum(ctx.queryParams.getField('doubleParam')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -91,17 +87,16 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for numParam
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.numParam(
-          numParam: stringToNum(queryParams.getField('numParam')),
+          numParam: stringToNum(ctx.queryParams.getField('numParam')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -110,17 +105,16 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for defStringParam
-    match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[4]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.defStringParam(
-          strParam: (queryParams.getField('strParam')) ?? 'default',
+          strParam: (ctx.queryParams.getField('strParam')) ?? 'default',
         );
         return rRouteResponse0;
       } catch (e) {
@@ -129,17 +123,16 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for defIntParam
-    match =
-        routes[5].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[5]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.defIntParam(
-          intParam: stringToInt(queryParams.getField('intParam')) ?? 50,
+          intParam: stringToInt(ctx.queryParams.getField('intParam')) ?? 50,
         );
         return rRouteResponse0;
       } catch (e) {
@@ -148,18 +141,17 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for defDoubleParam
-    match =
-        routes[6].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[6]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.defDoubleParam(
           doubleParam:
-              stringToNum(queryParams.getField('doubleParam')) ?? 12.75,
+              stringToNum(ctx.queryParams.getField('doubleParam')) ?? 12.75,
         );
         return rRouteResponse0;
       } catch (e) {
@@ -168,17 +160,16 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
     }
 
 //Handler for defDumParam
-    match =
-        routes[7].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[7]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.defDumParam(
-          numParam: stringToNum(queryParams.getField('numParam')) ?? 5.25,
+          numParam: stringToNum(ctx.queryParams.getField('numParam')) ?? 5.25,
         );
         return rRouteResponse0;
       } catch (e) {

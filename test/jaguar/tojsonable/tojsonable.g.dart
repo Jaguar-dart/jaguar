@@ -25,15 +25,14 @@ class JaguarToJsonableExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for encodeJsonable_object
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Model> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
         final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
@@ -53,11 +52,10 @@ class JaguarToJsonableExampleApi implements RequestHandler {
     }
 
 //Handler for encodeJsonable_list
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
         final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
@@ -77,11 +75,10 @@ class JaguarToJsonableExampleApi implements RequestHandler {
     }
 
 //Handler for encodeJsonableObject
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Model> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
         final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();
@@ -101,11 +98,10 @@ class JaguarToJsonableExampleApi implements RequestHandler {
     }
 
 //Handler for encodeJsonableList
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeJsonable iEncodeJsonable0;
       try {
         final RouteWrapper wEncodeJsonable0 = _internal.jsonEncoder();

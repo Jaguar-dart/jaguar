@@ -20,14 +20,13 @@ class JaguarExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for websocket
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         WebSocket ws = await request.upgradeToWebSocket;
         await _internal.websocket(

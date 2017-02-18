@@ -26,20 +26,20 @@ class Model implements ToJsonable {
 class ToJsonableExampleApi {
   WrapEncodeJsonable jsonEncoder() => new WrapEncodeJsonable();
   @Get(path: '/EncodeJsonable/object')
-  @InterceptWith(const [#jsonEncoder])
+  @Wrap(const [#jsonEncoder])
   Model encodeJsonable_object() => new Model('kleak', 'kleak@kleak.com');
 
   @Get(path: '/EncodeJsonable/list')
-  @InterceptWith(const [#jsonEncoder])
+  @Wrap(const [#jsonEncoder])
   List<Model> encodeJsonable_list() =>
       <Model>[new Model('kleak', 'kleak@kleak.com')];
 
   @Get(path: '/EncodeJsonableObject')
-  @InterceptWith(const [#jsonEncoder])
+  @Wrap(const [#jsonEncoder])
   Model encodeJsonableObject() => new Model('kleak', 'kleak@kleak.com');
 
   @Get(path: '/EncodeJsonableList')
-  @InterceptWith(const [#jsonEncoder])
+  @Wrap(const [#jsonEncoder])
   List<Model> encodeJsonableList() =>
       <Model>[new Model('kleak', 'kleak@kleak.com')];
 }

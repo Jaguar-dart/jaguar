@@ -47,7 +47,7 @@ class ExampleApi {
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
   @Get(path: '/random')
-  @InterceptWith(const [#jsonEncoder, #genRandom, #usesRandom])
+  @Wrap(const [#jsonEncoder, #genRandom, #usesRandom])
   Map getRandom(@Input(GenRandom) int random, @Input(UsesRandom) int doubled) =>
       {
         'Random': random,

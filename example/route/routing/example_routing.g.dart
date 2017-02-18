@@ -29,15 +29,14 @@ class JaguarBooksApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for getAllBooks
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -50,11 +49,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for getAllBooks1
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -67,11 +65,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for getAllBooks2
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<List> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -84,11 +81,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for defaultStatusAndHeader
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         _internal.defaultStatusAndHeader();
         return rRouteResponse0;
@@ -98,11 +94,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for inputHttpRequest
-    match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[4]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         _internal.inputHttpRequest(
           null,

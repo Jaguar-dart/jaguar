@@ -25,7 +25,7 @@ class ExampleApi {
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
   @Get(path: '/echo/uri')
-  @InterceptWith(const [#jsonEncoder, #usesRequest])
+  @Wrap(const [#jsonEncoder, #usesRequest])
   Map getJaguarInfo(@Input(UsesRequest) String uri) => {
         'Uri': uri,
       };

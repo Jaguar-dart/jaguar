@@ -58,7 +58,7 @@ class BooksApi {
 
   /// TODO add documentation
   @Get()
-  @InterceptWith(const [#jsonEncoder, #genRandom, #usesRandom])
+  @Wrap(const [#jsonEncoder, #genRandom, #usesRandom])
   Map getJaguarInfo() => {
         'Name': 'Jaguar',
         'Features': ['Speed', 'Simplicity', 'Extensiblity'],

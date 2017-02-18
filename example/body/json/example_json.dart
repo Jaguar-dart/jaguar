@@ -18,14 +18,14 @@ List<Book> _books = [
 int _id = 3; //TODO race condition
 
 @Api(path: '/api/book')
-@InterceptWith(const [#jsonEncoder])
+@Wrap(const [#jsonEncoder])
 class BooksApi {
   WrapEncodeToJson jsonEncoder() => const WrapEncodeToJson();
 
   WrapDecodeJsonMap jsonDecoder() => const WrapDecodeJsonMap();
 
   @Post()
-  @InterceptWith(const [#jsonDecoder])
+  @Wrap(const [#jsonDecoder])
   Map addBook(@Input(DecodeJsonMap) Map<String, dynamic> json) {
     Book book = new Book();
     book.fromMap(json);
@@ -64,7 +64,7 @@ class BooksApi {
   }
 
   @Put(path: '/:id')
-  @InterceptWith(const [#jsonDecoder])
+  @Wrap(const [#jsonDecoder])
   Map updateBook(@Input(DecodeJsonMap) Map<String, dynamic> json, String id) {
     Book bookReq = new Book();
     bookReq.fromMap(json);

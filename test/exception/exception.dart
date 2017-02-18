@@ -25,7 +25,7 @@ class ExampleApi {
   WrapUserParser userParser() => new WrapUserParser();
 
   @Post(path: '/user')
-  @InterceptWith(const [#userParser])
+  @Wrap(const [#userParser])
   User post(@Input(UserParser) User user) => user;
 }
 

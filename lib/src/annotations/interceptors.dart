@@ -1,7 +1,7 @@
 part of jaguar.src.annotations;
 
-class InterceptWith {
+class Wrap {
   final List<Symbol> interceptorChain;
 
-  const InterceptWith(this.interceptorChain);
+  const Wrap(this.interceptorChain);
 }

@@ -32,7 +32,7 @@ class BooksApi {
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
 
   @Get()
-  @InterceptWith(const [#jsonEncoder, #usesRequest])
+  @Wrap(const [#jsonEncoder, #usesRequest])
   Map getJaguarInfo() => {
         'Name': 'Jaguar',
         'Features': ['Speed', 'Simplicity', 'Extensiblity'],

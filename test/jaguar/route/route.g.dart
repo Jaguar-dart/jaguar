@@ -28,16 +28,14 @@ class JaguarExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
 //Handler for getUser
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -50,11 +48,10 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for statusCode
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 201;
         rRouteResponse0.headers
@@ -67,18 +64,17 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for paramAndQuery
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.paramAndQuery(
-          (pathParams.getField('param')),
-          query: (queryParams.getField('query')),
+          (ctx.pathParams.getField('param')),
+          query: (ctx.queryParams.getField('query')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -87,11 +83,10 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for inputHeader
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -106,11 +101,10 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for inputHeaders
-    match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[4]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -125,11 +119,10 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for inputCookie
-    match =
-        routes[5].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[5]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -146,11 +139,10 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for inputCookies
-    match =
-        routes[6].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[6]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers

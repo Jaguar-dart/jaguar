@@ -25,15 +25,14 @@ class JaguarBooksApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for addBook
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       DecodeJsonMap iDecodeJsonMap0;
       try {
@@ -44,7 +43,8 @@ class JaguarBooksApi implements RequestHandler {
         Map<String, dynamic> rDecodeJsonMap0 = await iDecodeJsonMap0.pre(
           request,
         );
-        ctx.addOutput(wDecodeJsonMap0, iDecodeJsonMap0, rDecodeJsonMap0);
+        ctx.addOutput(DecodeJsonMap, wDecodeJsonMap0.id, iDecodeJsonMap0,
+            rDecodeJsonMap0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
@@ -63,11 +63,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for getById
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       try {
         final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
@@ -76,7 +75,7 @@ class JaguarBooksApi implements RequestHandler {
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.getById(
-          (pathParams.getField('id')),
+          (ctx.pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson0.post(
           rRouteResponse0,
@@ -89,11 +88,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for removeBook
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       try {
         final RouteWrapper wEncodeToJson0 = _internal.jsonEncoder();
@@ -102,7 +100,7 @@ class JaguarBooksApi implements RequestHandler {
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.removeBook(
-          (pathParams.getField('id')),
+          (ctx.pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson0.post(
           rRouteResponse0,
@@ -115,11 +113,10 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for updateBook
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Map> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       EncodeToJson iEncodeToJson0;
       DecodeJsonMap iDecodeJsonMap0;
       try {
@@ -130,13 +127,14 @@ class JaguarBooksApi implements RequestHandler {
         Map<String, dynamic> rDecodeJsonMap0 = await iDecodeJsonMap0.pre(
           request,
         );
-        ctx.addOutput(wDecodeJsonMap0, iDecodeJsonMap0, rDecodeJsonMap0);
+        ctx.addOutput(DecodeJsonMap, wDecodeJsonMap0.id, iDecodeJsonMap0,
+            rDecodeJsonMap0);
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.updateBook(
           ctx.getInput(DecodeJsonMap),
-          (pathParams.getField('id')),
+          (ctx.pathParams.getField('id')),
         );
         Response<String> rRouteResponse1 = iEncodeToJson0.post(
           rRouteResponse0,
