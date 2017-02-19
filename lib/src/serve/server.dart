@@ -11,6 +11,7 @@ class Jaguar {
   final bool multiThread;
   final List<RequestHandler> apis = <RequestHandler>[];
   final bool autoCompress;
+  final String basePath;
 
   HttpServer _server;
 
@@ -18,14 +19,15 @@ class Jaguar {
 
   String get protocolStr => securityContext == null ? 'http' : 'https';
 
-  String get baseUrl => "$protocolStr://$address:$port/";
+  String get resourceName => "$protocolStr://$address:$port/";
 
   Jaguar(
       {this.address: "0.0.0.0",
       this.port: 8080,
       this.multiThread: false,
       this.securityContext: null,
-      this.autoCompress: false});
+      this.autoCompress: false,
+      this.basePath});
 
   void addApi(RequestHandler clazz) {
     apis.add(clazz);
@@ -33,7 +35,7 @@ class Jaguar {
 
   Future<Null> serve() async {
     if (_server != null) throw new Exception('Already serving!');
-    log.severe("Running on $baseUrl");
+    log.severe("Running on $resourceName");
     if (securityContext != null) {
       _server = await HttpServer.bindSecure(address, port, securityContext);
     } else {
@@ -54,7 +56,7 @@ class Jaguar {
     try {
       Response response;
       for (RequestHandler requestHandler in apis) {
-        response = await requestHandler.handleRequest(jaguarRequest);
+        response = await requestHandler.handleRequest(jaguarRequest, prefix: basePath);
         if (response is Response) {
           break;
         }

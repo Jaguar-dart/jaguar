@@ -20,15 +20,14 @@ class JaguarMyGroup implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/myGroup';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for get
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -62,15 +61,14 @@ class JaguarMySecondGroup implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/mySecondGroup';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for get
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -98,9 +96,8 @@ class JaguarExampleApi implements RequestHandler {
         path: '/pong',
         statusCode: 201,
         headers: const {"pong-header": "silly-pong"}),
-    const Route(
-        path: '/echo/pathparam/:message', methods: const <String>['POST']),
-    const Route(path: '/echo/queryparam', methods: const <String>['POST']),
+    const Post(path: '/echo/pathparam/:message'),
+    const Get(path: '/echo/queryparam'),
     const Ws('/ws')
   ];
 
@@ -119,16 +116,14 @@ class JaguarExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
 //Handler for ping
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
@@ -141,11 +136,10 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for pong
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 201;
         rRouteResponse0.headers['pong-header'] = 'silly-pong';
@@ -159,17 +153,16 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for echoPathParam
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.echoPathParam(
-          (pathParams.getField('message')),
+          (ctx.pathParams.getField('message')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -178,17 +171,16 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for echoQueryParam
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         rRouteResponse0.statusCode = 200;
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.echoQueryParam(
-          message: (queryParams.getField('message')),
+          message: (ctx.queryParams.getField('message')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -197,10 +189,9 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for websocket
-    match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[4]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      ContextImpl ctx = new ContextImpl(request, pathParams);
       try {
         WebSocket ws = await request.upgradeToWebSocket;
         await _internal.websocket(

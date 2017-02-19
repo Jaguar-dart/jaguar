@@ -4,7 +4,7 @@ apis:
 - 'example/interceptor/inject_request/inject_request.dart'
 - 'example/interceptor/use_interceptor/use_interceptor.dart'
 #- 'example/forum/forum.dart'
-#- 'example/silly/main.dart'
+- 'example/silly/main.dart'
 - 'example/route/path_variables/example_path_variables.dart'
 - 'example/route/query_params/example_query_params.dart'
 - 'example/route/redirect/example_redirect.dart'
