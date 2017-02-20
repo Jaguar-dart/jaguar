@@ -56,7 +56,8 @@ class Jaguar {
     try {
       Response response;
       for (RequestHandler requestHandler in apis) {
-        response = await requestHandler.handleRequest(jaguarRequest, prefix: basePath);
+        response =
+            await requestHandler.handleRequest(jaguarRequest, prefix: basePath);
         if (response is Response) {
           break;
         }
