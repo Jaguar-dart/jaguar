@@ -27,7 +27,7 @@ class Jaguar {
       this.multiThread: false,
       this.securityContext: null,
       this.autoCompress: false,
-      this.basePath});
+      this.basePath: ''});
 
   void addApi(RequestHandler clazz) {
     apis.add(clazz);
