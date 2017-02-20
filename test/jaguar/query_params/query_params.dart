@@ -1,9 +1,9 @@
 library test.jaguar.query_params;
 
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
 
 part 'query_params.g.dart';
 
@@ -36,102 +36,82 @@ class QueryParamsExampleApi {
 
 void main() {
   group('route', () {
-    JaguarMock mock;
-    setUp(() {
-      Configuration config = new Configuration();
-      config.addApi(new JaguarQueryParamsExampleApi());
-      mock = new JaguarMock(config);
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApi(new JaguarQueryParamsExampleApi());
+      await server.serve();
+    });
+
+    tearDownAll(() async {
+      await server.close();
     });
 
     test('stringParam', () async {
       Uri uri = new Uri.http(
           'localhost:8080', '/api/stringParam', {'strParam': 'hello'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'hello');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'hello');
       expect(response.statusCode, 200);
     });
 
     test('intParam', () async {
       Uri uri =
           new Uri.http('localhost:8080', '/api/intParam', {'intParam': '5'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '25');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '25');
       expect(response.statusCode, 200);
     });
 
     test('doubleParam', () async {
       Uri uri = new Uri.http(
           'localhost:8080', '/api/doubleParam', {'doubleParam': '1.25'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '2.5');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '2.5');
       expect(response.statusCode, 200);
     });
 
     test('numParam', () async {
       Uri uri =
           new Uri.http('localhost:8080', '/api/numParam', {'numParam': '1.25'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '2.5');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '2.5');
       expect(response.statusCode, 200);
     });
 
     test('defStringParam', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/defStringParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'default');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'default');
       expect(response.statusCode, 200);
     });
 
     test('defIntParam', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/defIntParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '2500');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '2500');
       expect(response.statusCode, 200);
     });
 
     test('defDoubleParam', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/defDoubleParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '25.5');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '25.5');
       expect(response.statusCode, 200);
     });
 
     test('defNumParam', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/defNumParam');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, '10.5');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, '10.5');
       expect(response.statusCode, 200);
     });
   });

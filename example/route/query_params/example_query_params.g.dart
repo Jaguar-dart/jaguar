@@ -20,19 +20,18 @@ class JaguarBooksApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api/book';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
 //Handler for createBook
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
         _internal.createBook(
-          book: (queryParams.getField('book')),
-          author: (queryParams.getField('author')),
+          book: (ctx.queryParams.getField('book')),
+          author: (ctx.queryParams.getField('author')),
         );
         return rRouteResponse0;
       } catch (e) {

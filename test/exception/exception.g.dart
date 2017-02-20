@@ -23,13 +23,12 @@ class JaguarExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
 //Handler for getUser
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
       try {
@@ -38,7 +37,7 @@ class JaguarExampleApi implements RequestHandler {
           rRouteResponse0.headers
               .set('content-type', 'text/plain; charset=utf-8');
           rRouteResponse0.value = _internal.getUser(
-            who: (queryParams.getField('who')),
+            who: (ctx.queryParams.getField('who')),
           );
           return rRouteResponse0;
         } catch (e) {
@@ -54,26 +53,29 @@ class JaguarExampleApi implements RequestHandler {
     }
 
 //Handler for post
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<User> rRouteResponse0 = new Response(null);
       try {
-        UserParser iUserParser;
+        UserParser iUserParser0;
         try {
-          iUserParser = new WrapUserParser().createInterceptor();
-          User rUserParser = iUserParser.pre(
-            new QueryParams.FromQueryParam(queryParams),
+          final RouteWrapper wUserParser0 = _internal.userParser();
+          iUserParser0 = wUserParser0.createInterceptor();
+          User rUserParser0 = iUserParser0.pre(
+            ctx.queryParams,
           );
+          ctx.addOutput(
+              UserParser, wUserParser0.id, iUserParser0, rUserParser0);
           rRouteResponse0.statusCode = 200;
           rRouteResponse0.headers
               .set('content-type', 'text/plain; charset=utf-8');
           rRouteResponse0.value = _internal.post(
-            rUserParser,
+            ctx.getInput(UserParser),
           );
           return rRouteResponse0;
         } catch (e) {
-          await iUserParser?.onException();
+          await iUserParser0?.onException();
           rethrow;
         }
       } on ValidationException catch (e, s) {

@@ -23,12 +23,12 @@ class JaguarBooksApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for getBookById
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
       try {
@@ -36,7 +36,7 @@ class JaguarBooksApi implements RequestHandler {
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.getBookById(
-          (pathParams.getField('id')),
+          (ctx.pathParams.getField('id')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -45,14 +45,14 @@ class JaguarBooksApi implements RequestHandler {
     }
 
 //Handler for createBook
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<dynamic> rRouteResponse0 = new Response(null);
       try {
         _internal.createBook(
-          (pathParams.getField('book')),
-          (pathParams.getField('author')),
+          (ctx.pathParams.getField('book')),
+          (ctx.pathParams.getField('author')),
         );
         return rRouteResponse0;
       } catch (e) {

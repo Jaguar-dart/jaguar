@@ -53,10 +53,8 @@ class User implements ViewSerializer, ModelSerializer {
   Map toModelMap() => toMap()..['pwdH'] = passwordHash;
 }
 
-class WrapEncodeObjectToJson implements RouteWrapper<EncodeObjectToJson> {
+class WrapEncodeObjectToJson extends RouteWrapper<EncodeObjectToJson> {
   final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
 
   const WrapEncodeObjectToJson({this.id});
 

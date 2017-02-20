@@ -18,12 +18,15 @@ List<Book> _books = [
 int _id = 3; //TODO race condition
 
 @Api(path: '/api/book')
-@WrapEncodeToJson()
+@Wrap(const [#jsonEncoder])
 class BooksApi {
+  WrapEncodeToJson jsonEncoder() => const WrapEncodeToJson();
+
+  WrapDecodeJsonMap jsonDecoder() => const WrapDecodeJsonMap();
+
   @Post()
-  @WrapDecodeJsonMap()
-  @Input(DecodeJsonMap)
-  Map addBook(Map<String, dynamic> json) {
+  @Wrap(const [#jsonDecoder])
+  Map addBook(@Input(DecodeJsonMap) Map<String, dynamic> json) {
     Book book = new Book();
     book.fromMap(json);
     book.id = (_id++).toString();
@@ -61,9 +64,8 @@ class BooksApi {
   }
 
   @Put(path: '/:id')
-  @WrapDecodeJsonMap()
-  @Input(DecodeJsonMap)
-  Map updateBook(Map<String, dynamic> json, String id) {
+  @Wrap(const [#jsonDecoder])
+  Map updateBook(@Input(DecodeJsonMap) Map<String, dynamic> json, String id) {
     Book bookReq = new Book();
     bookReq.fromMap(json);
     if (bookReq.id != id) {
@@ -87,8 +89,8 @@ class BooksApi {
 }
 
 Future<Null> main(List<String> args) async {
-  Configuration configuration = new Configuration();
-  configuration.addApi(new JaguarBooksApi());
+  Jaguar jaguar = new Jaguar();
+  jaguar.addApi(new JaguarBooksApi());
 
-  await serve(configuration);
+  await jaguar.serve();
 }

@@ -25,12 +25,12 @@ class JaguarRedirectExampleApi implements RequestHandler {
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for getBookById
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
       try {
@@ -38,7 +38,7 @@ class JaguarRedirectExampleApi implements RequestHandler {
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.getBookById(
-          (pathParams.getField('id')),
+          (ctx.pathParams.getField('id')),
         );
         return rRouteResponse0;
       } catch (e) {
@@ -47,8 +47,8 @@ class JaguarRedirectExampleApi implements RequestHandler {
     }
 
 //Handler for redirectMe
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Uri> rRouteResponse0 = new Response(null);
       try {
@@ -63,8 +63,8 @@ class JaguarRedirectExampleApi implements RequestHandler {
     }
 
 //Handler for redirectWithQuery
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<Uri> rRouteResponse0 = new Response(null);
       try {

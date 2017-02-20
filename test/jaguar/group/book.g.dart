@@ -22,12 +22,12 @@ class JaguarBookApi implements RequestHandler {
   JaguarBookApi.from(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
-    PathParams pathParams = new PathParams();
+    ContextImpl ctx = new ContextImpl(request);
     bool match = false;
 
 //Handler for getBook
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
       try {
@@ -42,8 +42,8 @@ class JaguarBookApi implements RequestHandler {
     }
 
 //Handler for some
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       Response<String> rRouteResponse0 = new Response(null);
       try {
@@ -51,7 +51,7 @@ class JaguarBookApi implements RequestHandler {
         rRouteResponse0.headers
             .set('content-type', 'text/plain; charset=utf-8');
         rRouteResponse0.value = _internal.some(
-          (pathParams.getField('param1')),
+          (ctx.pathParams.getField('param1')),
         );
         return rRouteResponse0;
       } catch (e) {

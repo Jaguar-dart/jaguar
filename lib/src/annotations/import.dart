@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:jaguar/jaguar.dart';
-import '../serve/import.dart';
 
 part 'routes.dart';
 part 'interceptors.dart';

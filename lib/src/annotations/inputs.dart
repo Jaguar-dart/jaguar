@@ -1,8 +1,8 @@
 part of jaguar.src.annotations;
 
-/// Annotation to request inputs from another interceptor in request chain
+/// Annotation to request inputs from an interceptor in request chain
 class Input {
-  /// Defines an interceptor, whose response must be used as input
+  /// Defines an interceptor, whose output must be used as input
   final Type resultFrom;
 
   /// Identifier to identify an interceptor from interceptors of same type
@@ -51,4 +51,17 @@ class InputQueryParams {
   final bool validate;
 
   const InputQueryParams([this.validate = false]);
+}
+
+class InputContext {
+  const InputContext();
+}
+
+/// Annotation to request inputs from an interceptor in request chain
+class InputVariable {
+  final Type type;
+
+  final String id;
+
+  const InputVariable(this.type, {this.id});
 }

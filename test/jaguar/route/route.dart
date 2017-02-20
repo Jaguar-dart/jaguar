@@ -2,9 +2,9 @@ library test.jaguar.route;
 
 import 'dart:io';
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
 
 part 'route.g.dart';
 
@@ -13,27 +13,27 @@ class ExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
   String getUser() => 'Get user';
 
-  @Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201)
+  @Get(path: '/statuscode', statusCode: 201)
   String statusCode() => 'status code';
 
-  @Route(path: '/paramandquery/:param', methods: const <String>['GET'])
+  @Get(path: '/paramandquery/:param')
   String paramAndQuery(String param, {String query}) => '$param $query';
 
-  @Route(path: '/input/header', methods: const <String>['GET'])
+  @Get(path: '/input/header')
   @InputHeader('user')
   String inputHeader(String user) => user;
 
-  @Route(path: '/input/headers', methods: const <String>['GET'])
+  @Get(path: '/input/headers')
   @InputHeaders()
   String inputHeaders(HttpHeaders headers) {
     return headers.value('user');
   }
 
-  @Route(path: '/input/cookie', methods: const <String>['GET'])
+  @Get(path: '/input/cookie')
   @InputCookie('user')
   String inputCookie(String user) => user;
 
-  @Route(path: '/input/cookies', methods: const <String>['GET'])
+  @Get(path: '/input/cookies')
   @InputCookies()
   String inputCookies(List<Cookie> cookies) {
     return cookies.firstWhere((Cookie cook) => cook.name == 'user')?.value;
@@ -42,99 +42,88 @@ class ExampleApi {
 
 void main() {
   group('route', () {
-    JaguarMock mock;
-    setUp(() {
-      Configuration config = new Configuration();
-      config.addApi(new JaguarExampleApi());
-      mock = new JaguarMock(config);
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApi(new JaguarExampleApi());
+      await server.serve();
     });
 
-    tearDown(() {});
+    tearDownAll(() async {
+      await server.close();
+    });
 
     test('GET', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/user');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'Get user');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      print(response.body);
       expect(response.statusCode, 200);
+      expect(response.body, 'Get user');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
     });
 
     test('DefaultStatusCode', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/statuscode');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'status code');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'status code');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
       expect(response.statusCode, 201);
     });
 
     test('ParamAndQuery', () async {
       Uri uri = new Uri.http(
           'localhost:8080', '/api/paramandquery/hello', {'query': 'world'});
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContent, 'hello world');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'hello world');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
       expect(response.statusCode, 200);
     });
 
     test('InputHeader', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/input/header');
-      MockHttpHeaders headers = new MockHttpHeaders();
-      headers.set('user', 'teja');
-      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri, headers: {'user': 'teja'});
 
-      expect(response.mockContent, 'teja');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'teja');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
       expect(response.statusCode, 200);
     });
 
     test('InputHeaders', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/input/headers');
-      MockHttpHeaders headers = new MockHttpHeaders();
-      headers.set('user', 'kleak');
-      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response = await http.get(uri, headers: {'user': 'kleak'});
 
-      expect(response.mockContent, 'kleak');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'kleak');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
       expect(response.statusCode, 200);
     });
 
     test('InputCookie', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/input/cookie');
-      MockHttpHeaders headers = new MockHttpHeaders();
-      headers.set('cookie', 'user=teja');
+      http.Response response =
+          await http.get(uri, headers: {'cookie': 'user=teja'});
 
-      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
-      MockHttpResponse response = await mock.handleRequest(rq);
-
-      expect(response.mockContent, 'teja');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'teja');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
       expect(response.statusCode, 200);
     });
 
     test('InputCookies', () async {
       Uri uri = new Uri.http('localhost:8080', '/api/input/cookies');
-      MockHttpHeaders headers = new MockHttpHeaders();
-      headers.set('cookie', 'user=kleak');
-      MockHttpRequest rq = new MockHttpRequest(uri, header: headers);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      http.Response response =
+          await http.get(uri, headers: {'cookie': 'user=kleak'});
 
-      expect(response.mockContent, 'kleak');
-      expect(response.headers.toMap,
-          {'content-type': 'text/plain; charset=utf-8'});
+      expect(response.body, 'kleak');
+      expect(response.headers[HttpHeaders.CONTENT_TYPE],
+          'text/plain; charset=utf-8');
       expect(response.statusCode, 200);
     });
   });
