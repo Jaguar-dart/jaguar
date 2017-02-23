@@ -82,6 +82,8 @@ abstract class RouteBase {
         }
 
         args[argName] = actual[index];
+      } else if (template[index] == '*') {
+        return true;
       } else {
         if (template[index] != actual[index]) {
           return false;
