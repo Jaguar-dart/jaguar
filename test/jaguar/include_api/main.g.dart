@@ -1,9 +1,9 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.jaguar.group;
+part of test.jaguar.include_api;
 
 // **************************************************************************
-// Generator: RouteGroupGenerator
+// Generator: ApiGenerator
 // Target: class UserApi
 // **************************************************************************
 
