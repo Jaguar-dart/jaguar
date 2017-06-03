@@ -5,7 +5,7 @@ import 'package:jaguar/jaguar.dart';
 
 part 'book.g.dart';
 
-@RouteGroup()
+@Api()
 class BookApi {
   @Route(methods: const <String>['GET'])
   String getBook(Context ctx) => 'Get book';
