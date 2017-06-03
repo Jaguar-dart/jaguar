@@ -9,7 +9,7 @@ import 'book.dart';
 
 part 'main.g.dart';
 
-@RouteGroup()
+@Api()
 class UserApi {
   @Route(methods: const <String>['GET'])
   String getUser(Context ctx) => 'Get user';
@@ -20,10 +20,10 @@ class UserApi {
 
 @Api(path: '/api')
 class ExampleApi {
-  @Group(path: '/user')
+  @IncludeApi(path: '/user')
   UserApi user = new UserApi();
 
-  @Group(path: '/book')
+  @IncludeApi(path: '/book')
   BookApi book = new BookApi();
 
   @Route(path: '/version', methods: const <String>['GET'])
