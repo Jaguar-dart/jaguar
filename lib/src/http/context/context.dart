@@ -21,22 +21,7 @@ class _IdiedType {
   }
 }
 
-abstract class Context {
-  Request get req;
-
-  PathParams get pathParams;
-
-  /// Returns query params for the request
-  QueryParams get queryParams;
-
-  dynamic getInput(Type interceptor, {String id});
-
-  T getVariable<T>({String id});
-
-  void addVariable<T>(T value, {String id});
-}
-
-class ContextImpl implements Context {
+class Context {
   final Request req;
 
   final PathParams pathParams = new PathParams();
@@ -59,22 +44,18 @@ class ContextImpl implements Context {
 
   final _variables = <_IdiedType, dynamic>{};
 
-  ContextImpl(this.req);
+  Context(this.req);
 
-  dynamic getInput(Type interceptor, {String id}) {
-    /* TODO how to do this?
-    // Throw if [interceptor] is not an interceptor
-    if (interceptor ) {
-      throw new Exception("$interceptor is not a Jaguar interceptor!");
-    }
-    */
+  T getInput<T>(Type interceptor, {String id}) {
     final idied = new _IdiedType(interceptor, id: id);
     // Throw if the requested interceptor has not been executed yet
     if (!_inputs.containsKey(idied)) {
       throw new Exception(
           "Context does not have output from an interceptor of type:$interceptor and id:$id!");
     }
-    return _inputs[idied];
+    final ret = _inputs[idied];
+    // TODO[teja] change to `ret is! T` when Dart supports reified generic types
+    return ret as T;
   }
 
   void addOutput(
@@ -91,11 +72,11 @@ class ContextImpl implements Context {
   T getVariable<T>({String id}) {
     final idied = new _IdiedType(T, id: id);
     // Throw if the variable is not present
-    if (!_inputs.containsKey(idied)) {
+    if (!_variables.containsKey(idied)) {
       throw new Exception(
           "Context does not have variable of type:$T and id:$id!");
     }
-    return _inputs[idied];
+    return _variables[idied];
   }
 
   void addVariable<T>(T value, {String id}) {

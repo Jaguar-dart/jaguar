@@ -16,46 +16,28 @@ class JaguarUserApi implements RequestHandler {
 
   final UserApi _internal;
 
-  factory JaguarUserApi() {
-    final instance = new UserApi();
-    return new JaguarUserApi.from(instance);
-  }
-  JaguarUserApi.from(this._internal);
+  JaguarUserApi(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
-    ContextImpl ctx = new ContextImpl(request);
+    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getUser
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.getUser();
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.getUser, routes[0]);
     }
 
 //Handler for statusCode
     match = routes[1]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 201;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.statusCode();
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.statusCode, routes[1]);
     }
 
     return null;
@@ -76,33 +58,22 @@ class JaguarExampleApi implements RequestHandler {
   final JaguarUserApi _userInternal;
   final JaguarBookApi _bookInternal;
 
-  factory JaguarExampleApi() {
-    final instance = new ExampleApi();
-    return new JaguarExampleApi.from(instance);
-  }
-  JaguarExampleApi.from(this._internal)
-      : _userInternal = new JaguarUserApi.from(_internal.user),
-        _bookInternal = new JaguarBookApi.from(_internal.book);
+  JaguarExampleApi(this._internal)
+      : _userInternal = new JaguarUserApi(_internal.user),
+        _bookInternal = new JaguarBookApi(_internal.book);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    ContextImpl ctx = new ContextImpl(request);
+    final ctx = new Context(request);
     bool match = false;
 
 //Handler for statusCode
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.statusCode();
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.statusCode, routes[0]);
     }
 
     {

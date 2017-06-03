@@ -15,48 +15,28 @@ class JaguarBookApi implements RequestHandler {
 
   final BookApi _internal;
 
-  factory JaguarBookApi() {
-    final instance = new BookApi();
-    return new JaguarBookApi.from(instance);
-  }
-  JaguarBookApi.from(this._internal);
+  JaguarBookApi(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
-    ContextImpl ctx = new ContextImpl(request);
+    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getBook
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.getBook();
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.getBook, routes[0]);
     }
 
 //Handler for some
     match = routes[1]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.some(
-          (ctx.pathParams.getField('param1')),
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.some, routes[1]);
     }
 
     return null;

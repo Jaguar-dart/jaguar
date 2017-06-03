@@ -2,6 +2,8 @@ library jaguar.src.http.response;
 
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
+import 'package:mustache/mustache.dart';
 
 part 'headers.dart';
 
@@ -25,7 +27,8 @@ class Response<ValueType> {
   /// HTTP cookies
   final List<Cookie> cookies = [];
 
-  Response(this.value, {int statusCode, Map<String, dynamic> headers}) {
+  Response(this.value,
+      {int statusCode: 200, Map<String, dynamic> headers: const {}}) {
     if (statusCode is int) {
       this.statusCode = statusCode;
     }
@@ -35,6 +38,37 @@ class Response<ValueType> {
         this.headers.add(name, value);
       });
     }
+  }
+
+  static Response<String> json(dynamic data,
+      {Response incoming,
+      int statusCode: 200,
+      Map<String, dynamic> headers: const {},
+      String mimeType: 'application/json'}) {
+    Response<String> ret;
+
+    final String value = JSON.encode(data);
+
+    if (incoming != null) {
+      ret = new Response<String>.cloneExceptValue(incoming);
+      ret.value = value;
+    } else {
+      ret =
+          new Response<String>(value, statusCode: statusCode, headers: headers);
+    }
+
+    ret.headers.mimeType = mimeType;
+    ret.headers.charset = 'utf-8';
+
+    return ret;
+  }
+
+  static Response<String> mustache(String template, dynamic viewVars,
+      {Response incoming,
+      int statusCode: 200,
+      Map<String, dynamic> headers: const {}}) {
+    final Template t = new Template(template);
+    return new Response<String>(t.renderString(viewVars));
   }
 
   /// Clones another [Response] object except the value

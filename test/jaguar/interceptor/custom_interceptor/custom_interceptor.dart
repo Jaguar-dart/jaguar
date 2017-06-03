@@ -6,44 +6,32 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/interceptors.dart';
 import 'dart:convert';
 
 part 'custom_interceptor.g.dart';
 
 final Random rand = new Random.secure();
 
-class WrapGenRandom extends RouteWrapper<GenRandom> {
-  GenRandom createInterceptor() => new GenRandom();
-}
-
 class GenRandom extends Interceptor {
-  int pre() => rand.nextInt(1000);
-}
-
-class WrapUsesRandom extends RouteWrapper<UsesRandom> {
-  UsesRandom createInterceptor() => new UsesRandom();
+  int pre(Context ctx) => rand.nextInt(1000);
 }
 
 class UsesRandom extends Interceptor {
-  int pre(@Input(GenRandom) int number) => number * 2;
+  int pre(Context ctx) => ctx.getInput(GenRandom) * 2;
 }
 
 @Api(path: '/api')
 class ExampleApi {
-  WrapGenRandom genRandom() => new WrapGenRandom();
+  GenRandom genRandom(Context ctx) => new GenRandom();
 
-  WrapUsesRandom usesRandom() => new WrapUsesRandom();
-
-  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
+  UsesRandom usesRandom(Context ctx) => new UsesRandom();
 
   @Get(path: '/random')
-  @Wrap(const [#jsonEncoder, #genRandom, #usesRandom])
-  Map getRandom(@Input(GenRandom) int random, @Input(UsesRandom) int doubled) =>
-      {
-        'Random': random,
-        'Doubled': doubled,
-      };
+  @Wrap(const [#genRandom, #usesRandom])
+  Response<String> getRandom(Context ctx) => Response.json({
+        'Random': ctx.getInput(GenRandom),
+        'Doubled': ctx.getInput(UsesRandom),
+      });
 }
 
 void main() {
@@ -51,7 +39,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarExampleApi());
+      server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
 

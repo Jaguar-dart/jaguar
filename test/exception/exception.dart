@@ -14,7 +14,8 @@ part 'exception.g.dart';
 class ExampleApi {
   @Get(path: '/user')
   @CustomExceptionHandler()
-  String getUser({String who}) {
+  String getUser(Context ctx) {
+    String who = ctx.queryParams['who'];
     if (who == null) {
       throw new CustomException(5, '`who` query parameter must be provided!');
     }
@@ -22,11 +23,11 @@ class ExampleApi {
     return who;
   }
 
-  WrapUserParser userParser() => new WrapUserParser();
+  UserParser userParser(Context ctx) => new UserParser();
 
   @Post(path: '/user')
   @Wrap(const [#userParser])
-  User post(@Input(UserParser) User user) => user;
+  User post(Context ctx) => ctx.getInput(UserParser);
 }
 
 void main() {
@@ -34,7 +35,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarExampleApi());
+      server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
 

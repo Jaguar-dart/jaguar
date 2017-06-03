@@ -10,7 +10,7 @@ part 'stream.g.dart';
 @Api(path: '/api')
 class ExampleApi {
   @Get(path: '/stream')
-  Stream<List<int>> getStream() {
+  Stream<List<int>> getStream(Context ctx) {
     StreamController<List<int>> streamCon = new StreamController<List<int>>();
 
     new Timer(new Duration(seconds: 5), () {
@@ -28,7 +28,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarExampleApi());
+      server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
 
