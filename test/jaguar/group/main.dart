@@ -12,10 +12,10 @@ part 'main.g.dart';
 @RouteGroup()
 class UserApi {
   @Route(methods: const <String>['GET'])
-  String getUser() => 'Get user';
+  String getUser(Context ctx) => 'Get user';
 
   @Route(path: '/statuscode', methods: const <String>['GET'], statusCode: 201)
-  String statusCode() => 'status code';
+  String statusCode(Context ctx) => 'status code';
 }
 
 @Api(path: '/api')
@@ -27,7 +27,7 @@ class ExampleApi {
   BookApi book = new BookApi();
 
   @Route(path: '/version', methods: const <String>['GET'])
-  String statusCode() => '1.0';
+  String statusCode(Context ctx) => '1.0';
 }
 
 void main() {
@@ -35,7 +35,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarExampleApi());
+      server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
 

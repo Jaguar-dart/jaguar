@@ -8,7 +8,6 @@ import 'package:jaguar/jaguar.dart';
 part 'routes.dart';
 part 'interceptors.dart';
 part 'inputs.dart';
-part 'websocket.dart';
 part 'exception.dart';
 
 ///An annotation to define an API class

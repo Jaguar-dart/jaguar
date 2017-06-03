@@ -5,30 +5,22 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/interceptors.dart';
-import 'dart:convert';
 
 part 'inject_request.g.dart';
 
-class WrapUsesRequest extends RouteWrapper<UsesRequest> {
-  UsesRequest createInterceptor() => new UsesRequest();
-}
-
 class UsesRequest extends Interceptor {
-  String pre(Request req) => req.uri.toString();
+  String pre(Context ctx) => ctx.req.uri.toString();
 }
 
 @Api(path: '/api')
 class ExampleApi {
-  WrapUsesRequest usesRequest() => new WrapUsesRequest();
-
-  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
+  UsesRequest usesRequest(Context ctx) => new UsesRequest();
 
   @Get(path: '/echo/uri')
-  @Wrap(const [#jsonEncoder, #usesRequest])
-  Map getJaguarInfo(@Input(UsesRequest) String uri) => {
-        'Uri': uri,
-      };
+  @Wrap(const [#usesRequest])
+  Response<String> getJaguarInfo(Context ctx) => Response.json({
+        'Uri': ctx.getInput(UsesRequest),
+      });
 }
 
 void main() {
@@ -36,7 +28,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarExampleApi());
+      server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
 

@@ -21,160 +21,83 @@ class JaguarQueryParamsExampleApi implements RequestHandler {
 
   final QueryParamsExampleApi _internal;
 
-  factory JaguarQueryParamsExampleApi() {
-    final instance = new QueryParamsExampleApi();
-    return new JaguarQueryParamsExampleApi.from(instance);
-  }
-  JaguarQueryParamsExampleApi.from(this._internal);
+  JaguarQueryParamsExampleApi(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    ContextImpl ctx = new ContextImpl(request);
+    final ctx = new Context(request);
     bool match = false;
 
 //Handler for stringParam
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.stringParam(
-          strParam: (ctx.queryParams.getField('strParam')),
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.stringParam, routes[0]);
     }
 
 //Handler for intParam
     match = routes[1]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.intParam(
-          intParam: stringToInt(ctx.queryParams.getField('intParam')),
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.intParam, routes[1]);
     }
 
 //Handler for doubleParam
     match = routes[2]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.doubleParam(
-          doubleParam: stringToNum(ctx.queryParams.getField('doubleParam')),
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.doubleParam, routes[2]);
     }
 
 //Handler for numParam
     match = routes[3]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.numParam(
-          numParam: stringToNum(ctx.queryParams.getField('numParam')),
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.numParam, routes[3]);
     }
 
 //Handler for defStringParam
     match = routes[4]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.defStringParam(
-          strParam: (ctx.queryParams.getField('strParam')) ?? 'default',
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.defStringParam, routes[4]);
     }
 
 //Handler for defIntParam
     match = routes[5]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.defIntParam(
-          intParam: stringToInt(ctx.queryParams.getField('intParam')) ?? 50,
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.defIntParam, routes[5]);
     }
 
 //Handler for defDoubleParam
     match = routes[6]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.defDoubleParam(
-          doubleParam:
-              stringToNum(ctx.queryParams.getField('doubleParam')) ?? 12.75,
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.defDoubleParam, routes[6]);
     }
 
 //Handler for defDumParam
     match = routes[7]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.defDumParam(
-          numParam: stringToNum(ctx.queryParams.getField('numParam')) ?? 5.25,
-        );
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.defDumParam, routes[7]);
     }
 
     return null;

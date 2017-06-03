@@ -40,11 +40,11 @@ class Response<ValueType> {
     }
   }
 
-  factory Response.json(dynamic data,
+  static Response<String> json(dynamic data,
       {Response incoming,
       int statusCode: 200,
       Map<String, dynamic> headers: const {},
-      String mimeType: ContentType.JSON.mimeType}) {
+      String mimeType: 'application/json'}) {
     Response<String> ret;
 
     final String value = JSON.encode(data);
@@ -58,11 +58,12 @@ class Response<ValueType> {
     }
 
     ret.headers.mimeType = mimeType;
+    ret.headers.charset = 'utf-8';
 
     return ret;
   }
 
-  factory Response.mustache(String template, dynamic viewVars,
+  static Response<String> mustache(String template, dynamic viewVars,
       {Response incoming,
       int statusCode: 200,
       Map<String, dynamic> headers: const {}}) {
