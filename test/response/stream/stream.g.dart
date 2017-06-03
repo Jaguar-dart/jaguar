@@ -14,31 +14,20 @@ class JaguarExampleApi implements RequestHandler {
 
   final ExampleApi _internal;
 
-  factory JaguarExampleApi() {
-    final instance = new ExampleApi();
-    return new JaguarExampleApi.from(instance);
-  }
-  JaguarExampleApi.from(this._internal);
+  JaguarExampleApi(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
     prefix += '/api';
-    ContextImpl ctx = new ContextImpl(request);
+    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getStream
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      Response<Stream> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.headers
-            .set('content-type', 'text/plain; charset=utf-8');
-        rRouteResponse0.value = _internal.getStream();
-        return rRouteResponse0;
-      } catch (e) {
-        rethrow;
-      }
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.getStream, routes[0]);
     }
 
     return null;

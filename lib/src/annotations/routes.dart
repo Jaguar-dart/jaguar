@@ -4,6 +4,8 @@ const String _kDefaultContentType = 'text/plain; charset=utf-8';
 const String _kDefaultMimeType = 'text/plain';
 const String _kDefaultCharset = 'utf-8';
 
+typedef dynamic RouteFunc<RespType>(Context ctx);
+
 abstract class RouteBase {
   const RouteBase();
 

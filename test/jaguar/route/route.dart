@@ -11,31 +11,31 @@ part 'route.g.dart';
 @Api(path: '/api')
 class ExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
-  String getUser() => 'Get user';
+  String getUser(Context ctx) => 'Get user';
 
   @Get(path: '/statuscode', statusCode: 201)
-  String statusCode() => 'status code';
+  String statusCode(Context ctx) => 'status code';
 
   @Get(path: '/paramandquery/:param')
-  String paramAndQuery(String param, {String query}) => '$param $query';
+  String paramAndQuery(Context ctx) =>
+      '${ctx.pathParams['param']} ${ctx.queryParams['query']}';
 
   @Get(path: '/input/header')
-  @InputHeader('user')
-  String inputHeader(String user) => user;
+  String inputHeader(Context ctx) => ctx.req.headers.value('user');
 
   @Get(path: '/input/headers')
-  @InputHeaders()
-  String inputHeaders(HttpHeaders headers) {
+  String inputHeaders(Context ctx) {
+    HttpHeaders headers = ctx.req.headers;
     return headers.value('user');
   }
 
   @Get(path: '/input/cookie')
-  @InputCookie('user')
-  String inputCookie(String user) => user;
+  String inputCookie(Context ctx) =>
+      ctx.req.cookies.firstWhere((Cookie c) => c.name == 'user')?.value;
 
   @Get(path: '/input/cookies')
-  @InputCookies()
-  String inputCookies(List<Cookie> cookies) {
+  String inputCookies(Context ctx) {
+    List<Cookie> cookies = ctx.req.cookies;
     return cookies.firstWhere((Cookie cook) => cook.name == 'user')?.value;
   }
 }
@@ -45,7 +45,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarExampleApi());
+      server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
 

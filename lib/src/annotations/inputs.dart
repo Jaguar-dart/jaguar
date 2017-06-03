@@ -1,5 +1,7 @@
 part of jaguar.src.annotations;
 
+/* TODO
+
 /// Annotation to request inputs from an interceptor in request chain
 class Input {
   /// Defines an interceptor, whose output must be used as input
@@ -65,3 +67,5 @@ class InputVariable {
 
   const InputVariable(this.type, {this.id});
 }
+
+*/

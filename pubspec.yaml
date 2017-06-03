@@ -1,5 +1,5 @@
 name: jaguar
-version: 0.4.3
+version: 0.5.0
 description: jaguar is a performant server side framework
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
@@ -18,6 +18,7 @@ dependencies:
   intl: ">=0.14.0 <0.15.0"
   stack_trace: '>=1.7.0 <2.0.0'
   quiver_hashcode: '>=1.0.0 <2.0.0'
+  mustache: ">=0.2.5+1 <0.3.0"
 
 dev_dependencies:
   cookies:

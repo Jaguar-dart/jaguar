@@ -27,19 +27,11 @@ class ValidationExceptionHandler
   }
 }
 
-class WrapUserParser extends RouteWrapper<UserParser> {
-  final String id;
-
-  const WrapUserParser({this.id});
-
-  UserParser createInterceptor() => new UserParser();
-}
-
 class UserParser extends Interceptor {
   UserParser();
 
-  @InputQueryParams()
-  User pre(QueryParams queryParams) {
+  User pre(Context ctx) {
+    QueryParams queryParams = ctx.queryParams;
     if (queryParams.name is! String) {
       throw new ValidationException('name', 'is required!');
     } else {

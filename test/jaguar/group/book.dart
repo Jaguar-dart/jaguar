@@ -8,8 +8,8 @@ part 'book.g.dart';
 @RouteGroup()
 class BookApi {
   @Route(methods: const <String>['GET'])
-  String getBook() => 'Get book';
+  String getBook(Context ctx) => 'Get book';
 
   @Route(path: '/some/:param1', methods: const <String>['POST'])
-  String some(String param1) => 'Some $param1';
+  String some(Context ctx) => 'Some ${ctx.pathParams.get('param1')}';
 }
