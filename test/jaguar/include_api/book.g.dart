@@ -3,7 +3,7 @@
 part of test.jaguar.group.normal.book;
 
 // **************************************************************************
-// Generator: RouteGroupGenerator
+// Generator: ApiGenerator
 // Target: class BookApi
 // **************************************************************************
 
