@@ -1,35 +1,31 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.jaguar.interceptor.custom_interceptor;
+part of example.body.json;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
+// Target: class BooksApi
 // **************************************************************************
 
-class JaguarExampleApi implements RequestHandler {
-  static const List<RouteBase> routes = const <RouteBase>[
-    const Get(path: '/random')
-  ];
+class JaguarBooksApi implements RequestHandler {
+  static const List<RouteBase> routes = const <RouteBase>[const Post()];
 
-  final ExampleApi _internal;
+  final BooksApi _internal;
 
-  JaguarExampleApi(this._internal);
+  JaguarBooksApi(this._internal);
 
   Future<Response> handleRequest(Request request, {String prefix: ''}) async {
-    prefix += '/api';
+    prefix += '/api/book';
     final ctx = new Context(request);
     bool match = false;
 
-//Handler for getRandom
+//Handler for addBook
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       final interceptors = <Interceptor>[];
-      interceptors.add(_internal.genRandom(ctx));
-      interceptors.add(_internal.usesRandom(ctx));
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getRandom, routes[0]);
+          ctx, interceptors, _internal.addBook, routes[0]);
     }
 
     return null;

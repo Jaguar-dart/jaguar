@@ -10,28 +10,34 @@ part 'query_params.g.dart';
 @Api(path: '/api')
 class QueryParamsExampleApi {
   @Get(path: '/stringParam')
-  String stringParam({String strParam}) => strParam;
+  String stringParam(Context ctx) => ctx.queryParams['strParam'];
 
   @Get(path: '/intParam')
-  String intParam({int intParam}) => '${intParam*intParam}';
+  String intParam(Context ctx) =>
+      '${ctx.queryParams.getInt('intParam')*ctx.queryParams.getInt('intParam')}';
 
   @Get(path: '/doubleParam')
-  String doubleParam({num doubleParam}) => '${doubleParam*2}';
+  String doubleParam(Context ctx) =>
+      '${ctx.queryParams.getDouble('doubleParam')*2}';
 
   @Get(path: '/numParam')
-  String numParam({num numParam}) => '${numParam*2}';
+  String numParam(Context ctx) => '${ctx.queryParams.getNum('numParam')*2}';
 
   @Get(path: '/defStringParam')
-  String defStringParam({String strParam: 'default'}) => strParam;
+  String defStringParam(Context ctx) =>
+      ctx.queryParams.get('strParam', 'default');
 
   @Get(path: '/defIntParam')
-  String defIntParam({int intParam: 50}) => '${intParam*intParam}';
+  String defIntParam(Context ctx) =>
+      '${ctx.queryParams.getInt('intParam', 50)*ctx.queryParams.getInt('intParam', 50)}';
 
   @Get(path: '/defDoubleParam')
-  String defDoubleParam({num doubleParam: 12.75}) => '${doubleParam*2}';
+  String defDoubleParam(Context ctx) =>
+      '${ctx.queryParams.getDouble('doubleParam', 12.75)*2}';
 
   @Get(path: '/defNumParam')
-  String defDumParam({num numParam: 5.25}) => '${numParam*2}';
+  String defDumParam(Context ctx) =>
+      '${ctx.queryParams.getNum('numParam', 5.25)*2}';
 }
 
 void main() {
@@ -39,7 +45,8 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar();
-      server.addApi(new JaguarQueryParamsExampleApi());
+      server
+          .addApi(new JaguarQueryParamsExampleApi(new QueryParamsExampleApi()));
       await server.serve();
     });
 

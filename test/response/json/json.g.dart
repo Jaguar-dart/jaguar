@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of test.jaguar.interceptor.custom_interceptor;
+part of test.jaguar.response.json;
 
 // **************************************************************************
 // Generator: ApiGenerator
@@ -9,7 +9,8 @@ part of test.jaguar.interceptor.custom_interceptor;
 
 class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Get(path: '/random')
+    const Get(path: '/info'),
+    const Post(path: '/info')
   ];
 
   final ExampleApi _internal;
@@ -21,15 +22,22 @@ class JaguarExampleApi implements RequestHandler {
     final ctx = new Context(request);
     bool match = false;
 
-//Handler for getRandom
+//Handler for getJaguarInfo
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       final interceptors = <Interceptor>[];
-      interceptors.add(_internal.genRandom(ctx));
-      interceptors.add(_internal.usesRandom(ctx));
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getRandom, routes[0]);
+          ctx, interceptors, _internal.getJaguarInfo, routes[0]);
+    }
+
+//Handler for createJaguarInfo
+    match = routes[1]
+        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    if (match) {
+      final interceptors = <Interceptor>[];
+      return await Interceptor.chain(
+          ctx, interceptors, _internal.createJaguarInfo, routes[1]);
     }
 
     return null;

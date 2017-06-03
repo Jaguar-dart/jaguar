@@ -1,7 +1,17 @@
 part of jaguar.src.annotations;
 
-class Wrap {
-  final List<Symbol> interceptorChain;
+/// Annotation to wrap one interceptor around a route
+class WrapOne {
+  /// Symbol of the method on the RouteClass that creates the interceptor
+  final Symbol interceptor;
 
-  const Wrap(this.interceptorChain);
+  const WrapOne(this.interceptor);
+}
+
+/// Annotation to wrap many interceptors around a route
+class Wrap {
+  /// Symbol of the methods on the RouteClass that create the interceptors
+  final List<Symbol> interceptors;
+
+  const Wrap(this.interceptors);
 }

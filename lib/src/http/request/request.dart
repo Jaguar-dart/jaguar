@@ -118,7 +118,8 @@ class Request {
             value..putIfAbsent(element.keys.first, () => element.values.first));
   }
 
-  Future<Map<String, FormField>> bodyAsFormData({Encoding encoding: UTF8}) async {
+  Future<Map<String, FormField>> bodyAsFormData(
+      {Encoding encoding: UTF8}) async {
     if (!headers.contentType.parameters.containsKey('boundary')) {
       return null;
     }
