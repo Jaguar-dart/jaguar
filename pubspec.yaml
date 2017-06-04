@@ -19,6 +19,7 @@ dependencies:
   stack_trace: '>=1.7.0 <2.0.0'
   quiver_hashcode: '>=1.0.0 <2.0.0'
   mustache: ">=0.2.5+1 <0.3.0"
+  collection: ">=1.14.1 <2.0.0"
 
 dev_dependencies:
   cookies:
