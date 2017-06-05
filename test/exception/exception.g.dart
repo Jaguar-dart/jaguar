@@ -27,9 +27,9 @@ class JaguarExampleApi implements RequestHandler {
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       try {
-        final interceptors = <Interceptor>[];
+        final interceptorCreators = <InterceptorCreator>[];
         return await Interceptor.chain(
-            ctx, interceptors, _internal.getUser, routes[0]);
+            ctx, interceptorCreators, _internal.getUser, routes[0]);
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         return await handler.onRouteException(request, e, s);
@@ -44,10 +44,10 @@ class JaguarExampleApi implements RequestHandler {
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
       try {
-        final interceptors = <Interceptor>[];
-        interceptors.add(_internal.userParser(ctx));
+        final interceptorCreators = <InterceptorCreator>[];
+        interceptorCreators.add(_internal.userParser);
         return await Interceptor.chain(
-            ctx, interceptors, _internal.post, routes[1]);
+            ctx, interceptorCreators, _internal.post, routes[1]);
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
         return await handler.onRouteException(request, e, s);

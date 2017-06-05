@@ -31,36 +31,36 @@ class JaguarBooksApi implements RequestHandler {
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <Interceptor>[];
+      final interceptorCreators = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getFive, routes[0]);
+          ctx, interceptorCreators, _internal.getFive, routes[0]);
     }
 
 //Handler for getName
     match = routes[1]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <Interceptor>[];
+      final interceptorCreators = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getName, routes[1]);
+          ctx, interceptorCreators, _internal.getName, routes[1]);
     }
 
 //Handler for getMoto
     match = routes[2]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <Interceptor>[];
+      final interceptorCreators = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getMoto, routes[2]);
+          ctx, interceptorCreators, _internal.getMoto, routes[2]);
     }
 
 //Handler for defaultStatusAndHeader
     match = routes[3]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <Interceptor>[];
-      return await Interceptor.chain(
-          ctx, interceptors, _internal.defaultStatusAndHeader, routes[3]);
+      final interceptorCreators = <InterceptorCreator>[];
+      return await Interceptor.chain(ctx, interceptorCreators,
+          _internal.defaultStatusAndHeader, routes[3]);
     }
 
     return null;

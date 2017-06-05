@@ -3,7 +3,7 @@
 part of test.jaguar.group.normal.book;
 
 // **************************************************************************
-// Generator: RouteGroupGenerator
+// Generator: ApiGenerator
 // Target: class BookApi
 // **************************************************************************
 
@@ -25,18 +25,18 @@ class JaguarBookApi implements RequestHandler {
     match = routes[0]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <Interceptor>[];
+      final interceptorCreators = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getBook, routes[0]);
+          ctx, interceptorCreators, _internal.getBook, routes[0]);
     }
 
 //Handler for some
     match = routes[1]
         .match(request.uri.path, request.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <Interceptor>[];
+      final interceptorCreators = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.some, routes[1]);
+          ctx, interceptorCreators, _internal.some, routes[1]);
     }
 
     return null;

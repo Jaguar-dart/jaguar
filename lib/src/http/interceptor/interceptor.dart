@@ -3,6 +3,9 @@ library jaguar.http.interceptor;
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
+/// Signature of interceptor creator method
+typedef Interceptor InterceptorCreator(Context ctx);
+
 /// An interceptor wraps a route and performs an action before and
 /// after the route handler.
 ///
@@ -36,16 +39,17 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
   Future<Null> onException() async {}
 
   static FutureOr<Response<RespType>> chain<RespType, RouteRespType>(
-      Context ctx,
-      List<Interceptor> interceptors,
-      RouteFunc<RouteRespType> routeHandler,
-      RouteBase routeInfo) async {
+      final Context ctx,
+      final List<InterceptorCreator> creators,
+      final RouteFunc<RouteRespType> routeHandler,
+      final RouteBase routeInfo) async {
     Response resp;
 
     final exceptList = <Interceptor>[];
 
     try {
-      for (Interceptor interceptor in interceptors) {
+      for (InterceptorCreator creator in creators) {
+        final Interceptor interceptor = creator(ctx);
         exceptList.add(interceptor);
         final output = await interceptor.pre(ctx);
         ctx.addOutput(
@@ -64,7 +68,8 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
         }
       }
 
-      for (Interceptor interceptor in interceptors.reversed) {
+      while (exceptList.length > 0) {
+        final Interceptor interceptor = exceptList.last;
         final newResp = await interceptor.post(ctx, resp);
         if (newResp != null) {
           resp = newResp;
