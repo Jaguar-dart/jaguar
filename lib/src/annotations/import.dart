@@ -4,10 +4,9 @@ import 'dart:async';
 
 import 'package:jaguar/jaguar.dart';
 
-part 'routes.dart';
-part 'interceptors.dart';
-part 'inputs.dart';
 part 'exception.dart';
+part 'interceptors.dart';
+part 'routes.dart';
 
 class Api {
   final String path;
