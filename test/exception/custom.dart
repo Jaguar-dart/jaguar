@@ -8,7 +8,7 @@ class CustomException {
   CustomException(this.code, this.message);
 }
 
-class CustomExceptionHandler implements ExceptionHandler<CustomException> {
+class CustomExceptionHandler extends ExceptionHandler<CustomException> {
   const CustomExceptionHandler();
 
   Future<Response<String>> onRouteException(

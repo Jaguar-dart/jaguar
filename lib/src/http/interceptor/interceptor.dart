@@ -38,7 +38,7 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
   /// This can be used to clean up resources used by the interceptor.
   Future<Null> onException() async {}
 
-  static FutureOr<Response<RespType>> chain<RespType, RouteRespType>(
+  static Future<Response<RespType>> chain<RespType, RouteRespType>(
       final Context ctx,
       final List<InterceptorCreator> creators,
       final RouteFunc<RouteRespType> routeHandler,
