@@ -10,8 +10,12 @@ import 'package:http_server/http_server.dart';
 /// Splits given path to composing segments
 List<String> splitPathToSegments(final String paths) {
   final List<String> segments = paths.split(new RegExp('/+'));
-  if (segments.length > 0 && segments.first.isEmpty) segments.removeAt(0);
-  return segments;
+  final res = <String>[];
+  for(String part in segments) {
+    if(part.length == 0) continue;
+    res.add(part);
+  }
+  return res;
 }
 
 /// [Request] contains information about HTTP request
