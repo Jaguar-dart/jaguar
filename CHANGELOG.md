@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.4
+
+- Added `redirect` to `Response` class
+
 ## 0.5.0
 
 - Removed RouteWrapper

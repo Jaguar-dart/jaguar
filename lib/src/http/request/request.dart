@@ -11,8 +11,8 @@ import 'package:http_server/http_server.dart';
 List<String> splitPathToSegments(final String paths) {
   final List<String> segments = paths.split(new RegExp('/+'));
   final res = <String>[];
-  for(String part in segments) {
-    if(part.length == 0) continue;
+  for (String part in segments) {
+    if (part.length == 0) continue;
     res.add(part);
   }
   return res;

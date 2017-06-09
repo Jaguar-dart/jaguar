@@ -40,6 +40,11 @@ class Response<ValueType> {
     }
   }
 
+  static Response<Uri> redirect(Uri uri,
+      {int statusCode: HttpStatus.SEE_OTHER}) {
+    return new Response<Uri>(uri, statusCode: statusCode);
+  }
+
   static Response<String> json(dynamic data,
       {Response incoming,
       int statusCode: 200,
