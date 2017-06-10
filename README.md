@@ -2,25 +2,37 @@
 
 # Jaguar
 
-Jaguar, a server framework built for **speed, simplicity and extensiblity**.
+Jaguar is a production ready server framework built for **speed, simplicity and extensiblity**
 
 ## Advantages of Jaguar
 
-1. Keeps your route handlers concise and clean
-2. Bare metal speed achieved through code generation
-3. Extensible interceptor infrastructure
-4. Generates API console client to try your server without writing single
-line of client code
-5. Tests are first class citizens in jaguar
-i. Mock HTTP requests and Websocket requests 
-ii. Use dependency injection to test your API
-6. Optional Firebase/Parse like no code or little code servers
-
-Even though Jaguar is feature rich, it is simpler and easy to get started.
+1. Batteries included
+    1. ORM
+    2. Various databases support
+    3. [Authentication and Authorization](https://github.com/Jaguar-dart/jaguar_auth)
+    4. [OAuth](https://github.com/Jaguar-dart/jaguar_oauth)
+    5. Session management
+2. Keeps your route handlers concise and clean
+3. Bare metal speed achieved through code generation
+4. Extensible interceptor infrastructure
+5. Various ways to build routes
+    1. Class-annotation based
+        1. [Reflection based](https://github.com/Jaguar-dart/jaguar_reflect)
+        2. Source generation based
+    2. [Mux based](https://github.com/Jaguar-dart/jaguar_mux)
+6. [Extensive respository of examples](https://github.com/Jaguar-examples)
+    1. [Annotation based](https://github.com/jaguar-examples/boilerplate)
+    2. [Reflection based](https://github.com/jaguar-examples/boilerplate_reflect)
+    3. [Mux based](https://github.com/jaguar-examples/boilerplate_mux)
+    4. [MongoDB](https://github.com/jaguar-examples/boilerplate_mongo)
+    5. [PostgreSQL](https://github.com/jaguar-examples/boilerplate_postgresql)
+    6. [Upload files using Jaguar](https://github.com/jaguar-examples/upload_file)
 
 ## Example
 
 ### Simple routes
+
+Below example shows route add routes to Jaguar.dart server.
 
 ```dart
 @Api(path: '/api/book')
@@ -55,10 +67,6 @@ Future<Null> main(List<String> args) async {
   await jaguar.serve();
 }
 ```
-
-## The State of Jaguar
-
-Jaguar is currently under development. Feedbacks and contributions are welcome.
 
 ## Join us on Gitter
 
