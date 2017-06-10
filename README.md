@@ -23,47 +23,36 @@ Even though Jaguar is feature rich, it is simpler and easy to get started.
 ### Simple routes
 
 ```dart
-/// File: main.dart
-library jaguar.example.silly;
+@Api(path: '/api/book')
+class BooksApi {
+  /// Simple [Route] annotation. Specifies path of the route using path argument.
+  @Route(path: '/books')
+  int getFive(Context ctx) => 5;
 
-import 'dart:async';
-import 'dart:io';
-import 'package:jaguar/jaguar.dart';
+  /// [methods] lets routes specify methods the route should respond to. By default,
+  /// a route will respond to GET, POST, PUT, PATCH, DELETE and OPTIONS methods.
+  @Route(path: '/books', methods: const <String>['GET'])
+  String getName(Context ctx) => "Jaguar";
 
-part 'main.g.dart';
+  /// [Get] is a sugar to respond to only GET requests. Similarly sugars exist for
+  /// [Post], [Put], [Delete]
+  @Get(path: '/books')
+  String getMoto(Context ctx) => "speed, simplicity and extensiblity";
 
-/// Example of basic API class
-@Api(path: '/api')
-class ExampleApi extends _$JaguarExampleApi {
-  int _pingCount = 0;
-
-  /// Example of basic route
-  @Route('/ping', methods: const <String>['GET'])
-  String ping() => "You pinged me ${++_pingCount} times, silly!";
-
-  /// Example of setting default status code and headers in response
-  @Route('/pong',
-      methods: const <String>['POST'],
-      statusCode: 201,
-      headers: const {"pong-header": "silly-pong"})
-  String pong() => "Your silly pongs have no effect on me!";
-
-  /// Example of getting path parameter in route handler arguments
-  @Route('/echo/pathparam/:message', methods: const <String>['POST'])
-  String echoPathParam(String message) => message ?? 'No message :(';
-
-  /// Example of getting query parameter in route handler arguments
-  @Route('/echo/queryparam', methods: const <String>['POST'])
-  String echoQueryParam({String message}) => message ?? 'No message :(';
+  /// [statusCode] and [headers] arguments lets route annotations specify default
+  /// Http status and headers
+  @Post(
+      path: '/inject/httprequest',
+      statusCode: 200,
+      headers: const {'custom-header': 'custom data'})
+  void defaultStatusAndHeader(Context ctx) {}
 }
 
 Future<Null> main(List<String> args) async {
-  ExampleApi api = new ExampleApi();
+  Jaguar jaguar = new Jaguar();
+  jaguar.addApi(new JaguarBooksApi(new BooksApi()));
 
-  Configuration configuration = new Configuration();
-  configuration.addApi(api);
-
-  await serve(configuration);
+  await jaguar.serve();
 }
 ```
 
