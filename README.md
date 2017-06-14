@@ -11,7 +11,7 @@ Jaguar is a production ready server framework built for **speed, simplicity and 
     2. Various databases support
     3. [Authentication and Authorization](https://github.com/Jaguar-dart/jaguar_auth)
     4. [OAuth](https://github.com/Jaguar-dart/jaguar_oauth)
-    5. Session management
+    5. [Session management](https://github.com/Jaguar-dart/jaguar_session)
 2. Keeps your route handlers concise and clean
 3. Bare metal speed achieved through code generation
 4. [Extensible interceptor infrastructure](https://github.com/Jaguar-dart/jaguar/wiki/Interceptor)
