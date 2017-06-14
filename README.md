@@ -14,7 +14,7 @@ Jaguar is a production ready server framework built for **speed, simplicity and 
     5. Session management
 2. Keeps your route handlers concise and clean
 3. Bare metal speed achieved through code generation
-4. Extensible interceptor infrastructure
+4. [Extensible interceptor infrastructure](https://github.com/Jaguar-dart/jaguar/wiki/Interceptor)
 5. Various ways to build routes
     1. Class-annotation based
         1. [Reflection based](https://github.com/Jaguar-dart/jaguar_reflect)
