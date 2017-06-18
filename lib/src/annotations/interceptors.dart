@@ -10,7 +10,7 @@ class WrapOne {
 
 /// Annotation to wrap many interceptors around a route
 class Wrap {
-  /// Symbol of the methods on the RouteClass that create the interceptors
+  /// Symbols of the methods on the RouteClass that create the interceptors
   final List<Symbol> interceptors;
 
   const Wrap(this.interceptors);

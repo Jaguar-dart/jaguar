@@ -6,6 +6,7 @@ import 'package:collection/collection.dart' show DelegatingMap;
 
 import 'package:jaguar/src/utils/string/import.dart';
 
+/// A [Map] whose keys can be accessed as if they are members of the object
 @proxy
 class DottableMap<V> extends DelegatingMap<String, V> {
   DottableMap(Map<String, V> map) : super(map);
@@ -113,6 +114,7 @@ class DynamicDottableMap extends DottableMap<dynamic> {
   }
 }
 
+/// Class to hold path parameters
 class PathParams extends DynamicDottableMap {
   PathParams([Map<String, dynamic> map]) : super({}) {
     if (map is Map) {
@@ -123,6 +125,7 @@ class PathParams extends DynamicDottableMap {
   PathParams.FromPathParam(PathParams param) : super(param);
 }
 
+/// Class to hold query parameters
 class QueryParams extends DynamicDottableMap {
   QueryParams(Map<String, dynamic> map) : super(map);
 

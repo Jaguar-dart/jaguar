@@ -77,18 +77,22 @@ class Request {
     return new Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
   }
 
+  /// Returns body as text
   Future<String> bodyAsText(Encoding encoding) async {
     return encoding.decode(await body);
   }
 
+  /// Upgrades the request to websocket request
   Future<WebSocket> get upgradeToWebSocket =>
       WebSocketTransformer.upgrade(_request);
 
+  /// Decodes JSON body of the request
   Future<dynamic> bodyAsJson({Encoding encoding: UTF8}) async {
     final String text = await bodyAsText(encoding);
     return JSON.decode(text);
   }
 
+  /// Decodes JSON body of the request as [Map]
   Future<Map> bodyAsJsonMap({Encoding encoding: UTF8}) async {
     final String text = await bodyAsText(encoding);
     final ret = JSON.decode(text);
@@ -100,6 +104,7 @@ class Request {
     return ret;
   }
 
+  /// Decodes JSON body of the request as [List]
   Future<List> bodyAsJsonList({Encoding encoding: UTF8}) async {
     final String text = await bodyAsText(encoding);
     final ret = JSON.decode(text);
@@ -111,6 +116,7 @@ class Request {
     return ret;
   }
 
+  /// Decodes url-encoded form from the body and returns Map<String, String>
   Future<Map<String, String>> bodyAsUrlEncodedForm(
       {Encoding encoding: UTF8}) async {
     final String text = await bodyAsText(encoding);
@@ -122,6 +128,7 @@ class Request {
             value..putIfAbsent(element.keys.first, () => element.values.first));
   }
 
+  /// Decodes `multipart/form-data` body
   Future<Map<String, FormField>> bodyAsFormData(
       {Encoding encoding: UTF8}) async {
     if (!headers.contentType.parameters.containsKey('boundary')) {
@@ -169,21 +176,32 @@ class Request {
   }
 }
 
-abstract class FormField {
+/// Abstract class for fields on `multipart/form-data`
+abstract class FormField<T> {
+  /// Name of the field
   String get name;
 
-  dynamic get value;
+  /// Value of the field
+  T get value;
 
+  /// content-type of the field
   ContentType get contentType;
 
+  /// Hash code
   int get hashCode => name.hashCode;
 }
 
+/// String field in the `multipart/form-data`
+///
+/// Contains `String` value
 class StringFormField implements FormField {
+  /// Name of the field
   final String name;
 
+  /// Value of the field
   final String value;
 
+  /// content-type of the field
   final ContentType contentType;
 
   StringFormField(this.name, this.value, {this.contentType});
@@ -211,12 +229,18 @@ class StringFormField implements FormField {
 }
 
 class TextFileFormField implements FormField {
+  /// Name of the field
   final String name;
 
+  /// Value of the field
+  ///
+  /// Returns a stream of text
   final Stream<String> value;
 
+  /// content-type of the field
   final ContentType contentType;
 
+  /// File of the file field
   final String filename;
 
   TextFileFormField(this.name, this.value, {this.contentType, this.filename});
@@ -236,12 +260,16 @@ class TextFileFormField implements FormField {
 }
 
 class BinaryFileFormField implements FormField {
+  /// Name of the field
   final String name;
 
+  /// Value of the field
   final Stream<List<int>> value;
 
+  /// content-type of the field
   final ContentType contentType;
 
+  /// File of the file field
   final String filename;
 
   BinaryFileFormField(this.name, this.value, {this.contentType, this.filename});

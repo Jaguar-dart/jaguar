@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:stack_trace/stack_trace.dart';
 import 'package:jaguar/src/error.dart';
 
+/// Writes error page
 void writeErrorPage(HttpResponse response, String resource, Object error,
     [StackTrace stack, int statusCode]) {
   if (error is JaguarError) {

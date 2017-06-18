@@ -1,3 +1,4 @@
+/// Annotations
 library jaguar.src.annotations;
 
 import 'dart:async';
@@ -8,22 +9,24 @@ part 'exception.dart';
 part 'interceptors.dart';
 part 'routes.dart';
 
+/// Annotates a class that it is an API class that contains route handlers
 class Api {
+  /// Path prefix of the child routes and included APIs in the API class
   final String path;
 
   const Api({this.path: ''});
 }
 
-///An annotation to define an API group in API class
+/// Includes the route handlers into the parent API class
 class IncludeApi {
-  ///Path prefix to the group
+  ///Path prefix for the route handlers of the Included API
   final String path;
 
   const IncludeApi({this.path: ''});
 }
 
-/// JaguarFile represents a file. The route handlers and interceptors can return
-/// this type to return a filename instead of returning Strings.
+/// JaguarFile represents a file. If the value of `Response` object has `JaguarFile`
+/// object, the file with [filePath] is written to the HTTP response.
 class JaguarFile {
   /// Path of the file
   final String filePath;

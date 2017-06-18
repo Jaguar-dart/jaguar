@@ -1,9 +1,14 @@
 part of jaguar.src.serve;
 
+/// Base class for Request handlers
 abstract class RequestHandler {
   Future<Response> handleRequest(Request request, {String prefix});
 }
 
+/// The Jaguar server
+///
+/// It servers the provided APIs on the given `address` and `port`
+/// `securityContext``is used to add HTTPS support
 class Jaguar {
   final String address;
   final int port;
@@ -15,10 +20,13 @@ class Jaguar {
 
   HttpServer _server;
 
+  /// Logger
   final Logger log = new Logger('J');
 
+  /// Returns protocol string
   String get protocolStr => securityContext == null ? 'http' : 'https';
 
+  /// Base path
   String get resourceName => "$protocolStr://$address:$port/";
 
   Jaguar(
@@ -29,10 +37,12 @@ class Jaguar {
       this.autoCompress: false,
       this.basePath: ''});
 
-  void addApi(RequestHandler clazz) {
-    apis.add(clazz);
+  /// Adds given API [api] to list of API that will be served
+  void addApi(RequestHandler api) {
+    apis.add(api);
   }
 
+  /// Starts serving the provided APIs
   Future<Null> serve() async {
     if (_server != null) throw new Exception('Already serving!');
     log.severe("Running on $resourceName");
@@ -45,6 +55,7 @@ class Jaguar {
     _server.listen((HttpRequest request) => _handleRequest(request));
   }
 
+  /// Closes the server
   Future<Null> close() async {
     await _server.close(force: true);
     _server = null;

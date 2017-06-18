@@ -1,3 +1,4 @@
+/// Declares the Jaguar `Context` class
 library jaguar.src.http.context;
 
 import 'package:quiver_hashcode/hashcode.dart' show hash2;
@@ -21,9 +22,20 @@ class _IdiedType {
   }
 }
 
+/// Request context
+///
+/// Contains:
+/// 1. Request object
+/// 2. Path parameters
+/// 3. Query parameters
+/// 4. Route inputs
+/// 5. Route variables
+/// 6. Interceptors
 class Context {
+  /// Request
   final Request req;
 
+  /// Path parameters
   final PathParams pathParams = new PathParams();
 
   QueryParams _queryParams;
@@ -38,6 +50,7 @@ class Context {
     return _queryParams;
   }
 
+  /// Interceptors for the route
   final List<Interceptor> interceptors = [];
 
   final _inputs = <_IdiedType, dynamic>{};
@@ -46,6 +59,7 @@ class Context {
 
   Context(this.req);
 
+  /// Gets input by [Interceptor] and [id]
   T getInput<T>(Type interceptor, {String id}) {
     final idied = new _IdiedType(interceptor, id: id);
     // Throw if the requested interceptor has not been executed yet
@@ -58,6 +72,7 @@ class Context {
     return ret as T;
   }
 
+  /// Adds output of an Interceptor by id
   void addOutput(
       Type interceptorType, String id, Interceptor interceptor, dynamic value) {
     final idied = new _IdiedType(interceptorType, id: id);
@@ -69,6 +84,7 @@ class Context {
     _inputs[idied] = value;
   }
 
+  /// Gets variable by type and id
   T getVariable<T>({String id}) {
     final idied = new _IdiedType(T, id: id);
     // Throw if the variable is not present
@@ -79,6 +95,7 @@ class Context {
     return _variables[idied];
   }
 
+  /// Adds variable by type and id
   void addVariable<T>(T value, {String id}) {
     final idied = new _IdiedType(T, id: id);
     if (_variables.containsKey(idied)) {

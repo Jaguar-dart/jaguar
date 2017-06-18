@@ -4,27 +4,38 @@ const String _kDefaultContentType = 'text/plain; charset=utf-8';
 const String _kDefaultMimeType = 'text/plain';
 const String _kDefaultCharset = 'utf-8';
 
+/// Function type for a route handler
 typedef dynamic RouteFunc<RespType>(Context ctx);
 
+/// Base class for route specification
 abstract class RouteBase {
   const RouteBase();
 
+  /// Path of the route
   String get path;
 
+  /// Methods handled by the route
   List<String> get methods;
 
+  /// Default status code for the route response
   int get statusCode;
 
+  /// Default mime-type for route response
   String get mimeType;
 
+  /// Default charset for route response
   String get charset;
 
+  /// Default headers for route response
   Map<String, String> get headers;
 
+  /// Map of regular expression matchers for specific path segment
   Map<String, String> get pathRegEx;
 
+  /// Returns path with provided prefix
   String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
 
+  /// Returns if this route matches the given request path and method
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
     params.clear();
@@ -99,18 +110,25 @@ abstract class RouteBase {
 
 ///An annotation to define a route
 class Route extends RouteBase {
+  /// Path of the route
   final String path;
 
+  /// Methods handled by the route
   final List<String> methods;
 
+  /// Default status code for the route response
   final int statusCode;
 
+  /// Default mime-type for route response
   final String mimeType;
 
+  /// Default charset for route response
   final String charset;
 
+  /// Default headers for route response
   final Map<String, String> headers;
 
+  /// Map of regular expression matchers for specific path segment
   final Map<String, String> pathRegEx;
 
   const Route(
@@ -131,18 +149,25 @@ class Route extends RouteBase {
 }
 
 class Get extends RouteBase {
+  /// Path of the route
   final String path;
 
+  /// Methods handled by the route
   final List<String> methods = _methods;
 
+  /// Default status code for the route response
   final int statusCode;
 
+  /// Default mime-type for route response
   final String mimeType;
 
+  /// Default charset for route response
   final String charset;
 
+  /// Default headers for route response
   final Map<String, String> headers;
 
+  /// Map of regular expression matchers for specific path segment
   final Map<String, String> pathRegEx;
 
   const Get(
@@ -157,18 +182,25 @@ class Get extends RouteBase {
 }
 
 class Post extends RouteBase {
+  /// Path of the route
   final String path;
 
+  /// Methods handled by the route
   final List<String> methods = _methods;
 
+  /// Default status code for the route response
   final int statusCode;
 
+  /// Default mime-type for route response
   final String mimeType;
 
+  /// Default charset for route response
   final String charset;
 
+  /// Default headers for route response
   final Map<String, String> headers;
 
+  /// Map of regular expression matchers for specific path segment
   final Map<String, String> pathRegEx;
 
   const Post(
@@ -183,18 +215,25 @@ class Post extends RouteBase {
 }
 
 class Put extends RouteBase {
+  /// Path of the route
   final String path;
 
+  /// Methods handled by the route
   final List<String> methods = _methods;
 
+  /// Default status code for the route response
   final int statusCode;
 
+  /// Default mime-type for route response
   final String mimeType;
 
+  /// Default charset for route response
   final String charset;
 
+  /// Default headers for route response
   final Map<String, String> headers;
 
+  /// Map of regular expression matchers for specific path segment
   final Map<String, String> pathRegEx;
 
   const Put(
@@ -209,18 +248,25 @@ class Put extends RouteBase {
 }
 
 class Delete extends RouteBase {
+  /// Path of the route
   final String path;
 
+  /// Methods handled by the route
   final List<String> methods = _methods;
 
+  /// Default status code for the route response
   final int statusCode;
 
+  /// Default mime-type for route response
   final String mimeType;
 
+  /// Default charset for route response
   final String charset;
 
+  /// Default headers for route response
   final Map<String, String> headers;
 
+  /// Map of regular expression matchers for specific path segment
   final Map<String, String> pathRegEx;
 
   const Delete(

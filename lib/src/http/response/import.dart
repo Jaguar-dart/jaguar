@@ -40,11 +40,13 @@ class Response<ValueType> {
     }
   }
 
+  /// Returns a `Response` object that performs a redirect
   static Response<Uri> redirect(Uri uri,
       {int statusCode: HttpStatus.SEE_OTHER}) {
     return new Response<Uri>(uri, statusCode: statusCode);
   }
 
+  /// Encodes the given value to JSON and returns a `Response`
   static Response<String> json(dynamic data,
       {Response incoming,
       int statusCode: 200,
@@ -68,6 +70,8 @@ class Response<ValueType> {
     return ret;
   }
 
+  /// Renders a mustach template with given template and variables and returns
+  /// the `Response`
   static Response<String> mustache(String template, dynamic viewVars,
       {Response incoming,
       int statusCode: 200,
@@ -85,6 +89,7 @@ class Response<ValueType> {
     cookies.addAll(incoming.cookies);
   }
 
+  /// Returns value as `String`
   String get valueAsString => value?.toString() ?? '';
 
   /// Writes body of the HTTP response from [value] property

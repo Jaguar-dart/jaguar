@@ -1,3 +1,4 @@
+/// This library declares `Interceptor` class
 library jaguar.http.interceptor;
 
 import 'dart:async';
@@ -38,6 +39,7 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
   /// This can be used to clean up resources used by the interceptor.
   Future<Null> onException() async {}
 
+  /// Executes a route chain
   static Future<Response<RespType>> chain<RespType, RouteRespType>(
       final Context ctx,
       final List<InterceptorCreator> creators,
