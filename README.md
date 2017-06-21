@@ -7,8 +7,11 @@ Jaguar is a production ready server framework built for **speed, simplicity and 
 ## Advantages of Jaguar
 
 1. Batteries included
-    1. ORM
+    1. [ORM](https://github.com/Jaguar-dart/jaguar_query)
     2. Various databases support
+        1. [Mongo](https://github.com/Jaguar-dart/jaguar_mongo)
+        2. [PostgreSQL](https://github.com/Jaguar-dart/jaguar_postgresql)
+        3. MySQL
     3. [Authentication and Authorization](https://github.com/Jaguar-dart/jaguar_auth)
     4. [OAuth](https://github.com/Jaguar-dart/jaguar_oauth)
     5. [Session management](https://github.com/Jaguar-dart/jaguar_session)
@@ -32,7 +35,7 @@ Jaguar is a production ready server framework built for **speed, simplicity and 
 
 ### Simple routes
 
-Below example shows route add routes to Jaguar.dart server.
+Below example shows how to add routes to Jaguar.dart server.
 
 ```dart
 @Api(path: '/api/book')
@@ -72,8 +75,3 @@ Future<Null> main(List<String> args) async {
 
 - [jaguar](https://gitter.im/jaguar_dart/jaguar)
 - [dart server](https://gitter.im/dart-lang/server)
-
-## Issue
-
-If you have an issue please tell us which version of jaguar and if you can provide
-an example this will simplify the path to resolve it :).

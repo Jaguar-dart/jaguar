@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.9
+
+- Fixed writing headers to response by `Response`
+
 ## 0.5.4
 
 - Added `redirect` to `Response` class

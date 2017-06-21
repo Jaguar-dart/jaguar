@@ -101,9 +101,7 @@ class Response<ValueType> {
       resp.statusCode = statusCode;
     }
 
-    headers.forEach((String key, List<String> val) {
-      val.forEach((String v) => resp.headers.add(key, v));
-    });
+    headers.forEach(resp.headers.set);
 
     resp.cookies.addAll(cookies);
 
