@@ -20,6 +20,8 @@ class Jaguar {
 
   HttpServer _server;
 
+  final ErrorWriter errorWriter;
+
   /// Logger
   final Logger log = new Logger('J');
 
@@ -35,7 +37,8 @@ class Jaguar {
       this.multiThread: false,
       this.securityContext: null,
       this.autoCompress: false,
-      this.basePath: ''});
+      this.basePath: '',
+      this.errorWriter: const HtmlErrorWriter()});
 
   /// Adds given API [api] to list of API that will be served
   void addApi(RequestHandler api) {
@@ -81,7 +84,9 @@ class Jaguar {
     } catch (e, stack) {
       log.severe(
           "ReqErr => Method: ${request.method} Url: ${request.uri} E: $e Stack: $stack");
-      writeErrorPage(request.response, request.uri.toString(), e, stack, 500);
+      final Response resp =
+          errorWriter.writeError(request.uri.toString(), e, stack, 500);
+      await resp.writeResponse(request.response);
     } finally {
       await request.response.close();
     }

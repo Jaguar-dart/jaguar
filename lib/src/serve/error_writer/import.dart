@@ -1,24 +1,48 @@
 library jaguar.src.serve.error_writer;
 
 import 'dart:io';
+import 'dart:convert';
 import 'package:stack_trace/stack_trace.dart';
 import 'package:jaguar/src/error.dart';
+import 'package:jaguar/jaguar.dart';
 
-/// Writes error page
-void writeErrorPage(HttpResponse response, String resource, Object error,
-    [StackTrace stack, int statusCode]) {
-  if (error is JaguarError) {
-    statusCode = error.statusCode;
+abstract class ErrorWriter {
+  Response writeError(String resource, Object error,
+      [StackTrace stack, int statusCode]);
+}
+
+class JsonErrorWriter implements ErrorWriter {
+  Response writeError(String resource, Object error,
+      [StackTrace stack, int statusCode]) {
+    final data = <String, dynamic>{
+      'StatusCode': statusCode,
+      'error': error.toString(),
+      'Stack': stack.toString(),
+    };
+    final ret = new Response<String>(JSON.encode(data), statusCode: statusCode);
+    ret.headers.contentType = ContentType.HTML;
+    return ret;
   }
+}
 
-  String description = _getStatusDescription(statusCode);
+class HtmlErrorWriter implements ErrorWriter {
+  const HtmlErrorWriter();
 
-  String formattedStack = null;
-  if (stack != null) {
-    formattedStack = Trace.format(stack);
-  }
+  /// Writes error page
+  Response writeError(String resource, Object error,
+      [StackTrace stack, int statusCode]) {
+    if (error is JaguarError) {
+      statusCode = error.statusCode;
+    }
 
-  String errorTemplate = '''<!DOCTYPE>
+    String description = _getStatusDescription(statusCode);
+
+    String formattedStack = null;
+    if (stack != null) {
+      formattedStack = Trace.format(stack);
+    }
+
+    String errorTemplate = '''<!DOCTYPE>
 <html>
 <head>
   <title>Jaguar Server - ${description != null ? description : statusCode}</title>
@@ -76,23 +100,23 @@ void writeErrorPage(HttpResponse response, String resource, Object error,
 </body>
 </html>''';
 
-  response.statusCode = statusCode;
-  response.headers.set("content-type", "text/html");
-  response.write(errorTemplate);
-  response.close();
-}
+    final ret = new Response<String>(errorTemplate, statusCode: statusCode);
+    ret.headers.contentType = ContentType.HTML;
+    return ret;
+  }
 
-String _getStatusDescription(int statusCode) {
-  switch (statusCode) {
-    case HttpStatus.BAD_REQUEST:
-      return "BAD REQUEST";
-    case HttpStatus.NOT_FOUND:
-      return "NOT FOUND";
-    case HttpStatus.METHOD_NOT_ALLOWED:
-      return "METHOD NOT ALLOWED";
-    case HttpStatus.INTERNAL_SERVER_ERROR:
-      return "INTERNAL SERVER ERROR";
-    default:
-      return null;
+  String _getStatusDescription(int statusCode) {
+    switch (statusCode) {
+      case HttpStatus.BAD_REQUEST:
+        return "BAD REQUEST";
+      case HttpStatus.NOT_FOUND:
+        return "NOT FOUND";
+      case HttpStatus.METHOD_NOT_ALLOWED:
+        return "METHOD NOT ALLOWED";
+      case HttpStatus.INTERNAL_SERVER_ERROR:
+        return "INTERNAL SERVER ERROR";
+      default:
+        return null;
+    }
   }
 }

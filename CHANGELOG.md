@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.10
+
+- Expose Logger to `Interceptors` and `Routes`
+- Configurable `ErrorWriter`
+
 ## 0.5.9
 
 - Fixed writing headers to response by `Response`
