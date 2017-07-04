@@ -62,7 +62,7 @@ class Jaguar {
   }
 
   Future _handleRequest(HttpRequest request) async {
-    final jaguarRequest = new Request(request);
+    final jaguarRequest = new Request(request, log);
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
     try {
       Response response;

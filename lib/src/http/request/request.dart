@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
+import 'package:logging/logging.dart';
 
 /// Splits given path to composing segments
 List<String> splitPathToSegments(final String paths) {
@@ -22,7 +23,9 @@ List<String> splitPathToSegments(final String paths) {
 class Request {
   final HttpRequest _request;
 
-  Request(this._request);
+  final Logger log;
+
+  Request(this._request, this.log);
 
   /// The client certificate of the client making the request.
   X509Certificate get certificate => _request.certificate;

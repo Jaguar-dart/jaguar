@@ -3,6 +3,7 @@ library jaguar.src.http.context;
 
 import 'package:quiver_hashcode/hashcode.dart' show hash2;
 import 'package:jaguar/jaguar.dart';
+import 'package:logging/logging.dart';
 
 class _IdiedType {
   final Type interceptor;
@@ -58,6 +59,8 @@ class Context {
   final _variables = <_IdiedType, dynamic>{};
 
   Context(this.req);
+
+  Logger get log => req.log;
 
   /// Gets input by [Interceptor] and [id]
   T getInput<T>(Type interceptor, {String id}) {
