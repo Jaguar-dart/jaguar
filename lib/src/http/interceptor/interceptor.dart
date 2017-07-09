@@ -42,7 +42,6 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
   /// Executes a route chain
   static Future<Response<RespType>> chain<RespType, RouteRespType>(
       final Context ctx,
-      final List<InterceptorCreator> creators,
       final RouteFunc<RouteRespType> routeHandler,
       final RouteBase routeInfo) async {
     Response resp;
@@ -50,7 +49,7 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
     final exceptList = <Interceptor>[];
 
     try {
-      for (InterceptorCreator creator in creators) {
+      for (InterceptorCreator creator in ctx.interceptorCreators) {
         final Interceptor interceptor = creator(ctx);
         exceptList.add(interceptor);
         final output = await interceptor.pre(ctx);
