@@ -14,18 +14,16 @@ class JaguarBooksApi implements RequestHandler {
 
   JaguarBooksApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/book';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for addBook
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.addBook, routes[0]);
+          ctx, interceptors, _internal.addBook, routes[0]);
     }
 
     return null;

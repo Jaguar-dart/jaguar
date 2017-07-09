@@ -10,12 +10,25 @@ abstract class RequestHandler {
 /// It servers the provided APIs on the given `address` and `port`
 /// `securityContext``is used to add HTTPS support
 class Jaguar {
+  /// Address on which the API is serviced
   final String address;
+
+  /// Port on which the API is serviced
   final int port;
+
+  /// Security context
   final SecurityContext securityContext;
+
+  /// Should the port be servicable from multiple isolates
   final bool multiThread;
+
+  /// [RequestHandler]s
   final List<RequestHandler> apis = <RequestHandler>[];
+
+  /// Should the response be auto-compressed
   final bool autoCompress;
+
+  /// Base path
   final String basePath;
 
   HttpServer _server;
@@ -65,13 +78,14 @@ class Jaguar {
   }
 
   Future _handleRequest(HttpRequest request) async {
-    final jaguarRequest = new Context(new Request(request, log));
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
+    final ctx = new Context(new Request(request, log));
+    ctx.addInterceptors(_interceptorCreators);
     try {
       Response response;
       for (RequestHandler requestHandler in apis) {
         response =
-            await requestHandler.handleRequest(jaguarRequest, prefix: basePath);
+            await requestHandler.handleRequest(ctx, prefix: basePath);
         if (response is Response) {
           break;
         }
@@ -91,4 +105,9 @@ class Jaguar {
       await request.response.close();
     }
   }
+
+  final _interceptorCreators = <InterceptorCreator>[];
+
+  UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
+      new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
 }

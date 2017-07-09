@@ -19,36 +19,32 @@ class JaguarRedirectExampleApi implements RequestHandler {
 
   JaguarRedirectExampleApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getBookById
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getBookById, routes[0]);
+          ctx, interceptors, _internal.getBookById, routes[0]);
     }
 
 //Handler for redirectMe
-    match = routes[1]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.redirectMe, routes[1]);
+          ctx, interceptors, _internal.redirectMe, routes[1]);
     }
 
 //Handler for redirectWithQuery
-    match = routes[2]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.redirectWithQuery, routes[2]);
+          ctx, interceptors, _internal.redirectWithQuery, routes[2]);
     }
 
     return null;

@@ -14,20 +14,18 @@ class JaguarBooksApi implements RequestHandler {
 
   JaguarBooksApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/book';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getJaguarInfo
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
-      interceptorCreators.add(_internal.genRandom);
-      interceptorCreators.add(_internal.usesRandom);
+      final interceptors = <InterceptorCreator>[];
+      interceptors.add(_internal.genRandom);
+      interceptors.add(_internal.usesRandom);
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getJaguarInfo, routes[0]);
+          ctx, interceptors, _internal.getJaguarInfo, routes[0]);
     }
 
     return null;

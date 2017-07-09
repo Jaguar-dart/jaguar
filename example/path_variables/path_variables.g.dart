@@ -19,45 +19,40 @@ class JaguarBooksApi implements RequestHandler {
 
   JaguarBooksApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getAsString
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getAsString, routes[0]);
+          ctx, interceptors, _internal.getAsString, routes[0]);
     }
 
 //Handler for getAsInt
-    match = routes[1]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getAsInt, routes[1]);
+          ctx, interceptors, _internal.getAsInt, routes[1]);
     }
 
 //Handler for getAsDouble
-    match = routes[2]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getAsDouble, routes[2]);
+          ctx, interceptors, _internal.getAsDouble, routes[2]);
     }
 
 //Handler for getAsNum
-    match = routes[3]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getAsNum, routes[3]);
+          ctx, interceptors, _internal.getAsNum, routes[3]);
     }
 
     return null;

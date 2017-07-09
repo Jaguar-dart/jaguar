@@ -1,6 +1,8 @@
 /// Declares the Jaguar `Context` class
 library jaguar.src.http.context;
 
+import 'dart:collection';
+
 import 'package:quiver_hashcode/hashcode.dart' show hash2;
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
@@ -58,7 +60,10 @@ class Context {
   }
 
   /// Interceptors for the route
-  final List<Interceptor> interceptors = [];
+  final _interceptorCreators = <InterceptorCreator>[];
+
+  UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
+      new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
 
   final _inputs = <_IdiedType, dynamic>{};
 
@@ -67,6 +72,12 @@ class Context {
   Context(this.req);
 
   Logger get log => req.log;
+
+  void addInterceptor(InterceptorCreator interceptor) =>
+      _interceptorCreators.add(interceptor);
+
+  void addInterceptors(Iterable<InterceptorCreator> interceptors) =>
+      _interceptorCreators.addAll(interceptors);
 
   /// Gets input by [Interceptor] and [id]
   T getInput<T>(Type interceptor, {String id}) {
@@ -89,7 +100,6 @@ class Context {
       throw new Exception(
           "Context already has output from an interceptor of type:$interceptorType and id:$id!");
     }
-    interceptors.add(interceptor);
     _inputs[idied] = value;
   }
 

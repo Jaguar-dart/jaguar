@@ -20,7 +20,7 @@ class ValidationExceptionHandler extends ExceptionHandler<ValidationException> {
   const ValidationExceptionHandler();
 
   Future<Response<String>> onRouteException(
-      Request request, ValidationException e, StackTrace trace) async {
+      Context ctx, ValidationException e, StackTrace trace) async {
     final String value = '{"Field": ${e.field}, "Message": "${e.message} }';
     return new Response<String>(value, statusCode: 400);
   }

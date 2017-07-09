@@ -17,40 +17,37 @@ class JaguarExampleApi implements RequestHandler {
 
   JaguarExampleApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getUser
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
       try {
-        final interceptorCreators = <InterceptorCreator>[];
+        final interceptors = <InterceptorCreator>[];
         return await Interceptor.chain(
-            ctx, interceptorCreators, _internal.getUser, routes[0]);
+            ctx, interceptors, _internal.getUser, routes[0]);
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
-        return await handler.onRouteException(request, e, s);
+        return await handler.onRouteException(ctx, e, s);
       } on CustomException catch (e, s) {
         CustomExceptionHandler handler = new CustomExceptionHandler();
-        return await handler.onRouteException(request, e, s);
+        return await handler.onRouteException(ctx, e, s);
       }
     }
 
 //Handler for post
-    match = routes[1]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
       try {
-        final interceptorCreators = <InterceptorCreator>[];
-        interceptorCreators.add(_internal.userParser);
+        final interceptors = <InterceptorCreator>[];
+        interceptors.add(_internal.userParser);
         return await Interceptor.chain(
-            ctx, interceptorCreators, _internal.post, routes[1]);
+            ctx, interceptors, _internal.post, routes[1]);
       } on ValidationException catch (e, s) {
         ValidationExceptionHandler handler = new ValidationExceptionHandler();
-        return await handler.onRouteException(request, e, s);
+        return await handler.onRouteException(ctx, e, s);
       }
     }
 

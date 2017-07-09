@@ -22,72 +22,64 @@ class JaguarExampleApi implements RequestHandler {
 
   JaguarExampleApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for getUser
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getUser, routes[0]);
+          ctx, interceptors, _internal.getUser, routes[0]);
     }
 
 //Handler for statusCode
-    match = routes[1]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.statusCode, routes[1]);
+          ctx, interceptors, _internal.statusCode, routes[1]);
     }
 
 //Handler for paramAndQuery
-    match = routes[2]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.paramAndQuery, routes[2]);
+          ctx, interceptors, _internal.paramAndQuery, routes[2]);
     }
 
 //Handler for inputHeader
-    match = routes[3]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.inputHeader, routes[3]);
+          ctx, interceptors, _internal.inputHeader, routes[3]);
     }
 
 //Handler for inputHeaders
-    match = routes[4]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[4].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.inputHeaders, routes[4]);
+          ctx, interceptors, _internal.inputHeaders, routes[4]);
     }
 
 //Handler for inputCookie
-    match = routes[5]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[5].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.inputCookie, routes[5]);
+          ctx, interceptors, _internal.inputCookie, routes[5]);
     }
 
 //Handler for inputCookies
-    match = routes[6]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[6].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.inputCookies, routes[6]);
+          ctx, interceptors, _internal.inputCookies, routes[6]);
     }
 
     return null;

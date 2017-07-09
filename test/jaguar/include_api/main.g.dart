@@ -18,26 +18,23 @@ class JaguarUserApi implements RequestHandler {
 
   JaguarUserApi(this._internal);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
-    final ctx = new Context(request);
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     bool match = false;
 
 //Handler for getUser
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.getUser, routes[0]);
+          ctx, interceptors, _internal.getUser, routes[0]);
     }
 
 //Handler for statusCode
-    match = routes[1]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.statusCode, routes[1]);
+          ctx, interceptors, _internal.statusCode, routes[1]);
     }
 
     return null;
@@ -62,23 +59,21 @@ class JaguarExampleApi implements RequestHandler {
       : _userInternal = new JaguarUserApi(_internal.user),
         _bookInternal = new JaguarBookApi(_internal.book);
 
-  Future<Response> handleRequest(Request request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    final ctx = new Context(request);
     bool match = false;
 
 //Handler for statusCode
-    match = routes[0]
-        .match(request.uri.path, request.method, prefix, ctx.pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptorCreators = <InterceptorCreator>[];
+      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptorCreators, _internal.statusCode, routes[0]);
+          ctx, interceptors, _internal.statusCode, routes[0]);
     }
 
     {
       Response response =
-          await _userInternal.handleRequest(request, prefix: prefix + '/user');
+          await _userInternal.handleRequest(ctx, prefix: prefix + '/user');
       if (response is Response) {
         return response;
       }
@@ -86,7 +81,7 @@ class JaguarExampleApi implements RequestHandler {
 
     {
       Response response =
-          await _bookInternal.handleRequest(request, prefix: prefix + '/book');
+          await _bookInternal.handleRequest(ctx, prefix: prefix + '/book');
       if (response is Response) {
         return response;
       }
