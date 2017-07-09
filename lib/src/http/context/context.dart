@@ -33,6 +33,12 @@ class _IdiedType {
 /// 5. Route variables
 /// 6. Interceptors
 class Context {
+  Uri get uri => req.uri;
+
+  String get path => uri.path;
+
+  String get method => req.method;
+
   /// Request
   final Request req;
 

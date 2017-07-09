@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+
+- `Context` based `RequestHandler`
+
 ## 0.5.10
 
 - Expose Logger to `Interceptors` and `Routes`

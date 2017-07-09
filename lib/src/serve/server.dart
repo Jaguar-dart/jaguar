@@ -2,7 +2,7 @@ part of jaguar.src.serve;
 
 /// Base class for Request handlers
 abstract class RequestHandler {
-  Future<Response> handleRequest(Request request, {String prefix});
+  Future<Response> handleRequest(Context ctx, {String prefix});
 }
 
 /// The Jaguar server
@@ -65,7 +65,7 @@ class Jaguar {
   }
 
   Future _handleRequest(HttpRequest request) async {
-    final jaguarRequest = new Request(request, log);
+    final jaguarRequest = new Context(new Request(request, log));
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
     try {
       Response response;
@@ -79,7 +79,7 @@ class Jaguar {
       if (response is Response) {
         await response.writeResponse(request.response);
       } else {
-        throw new NotFoundError("This path ${request.uri.path} is not found");
+        throw new NotFoundError("The path ${request.uri.path} is not found!");
       }
     } catch (e, stack) {
       log.severe(
