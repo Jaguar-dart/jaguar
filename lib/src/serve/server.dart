@@ -23,7 +23,7 @@ class Jaguar {
   final bool multiThread;
 
   /// [RequestHandler]s
-  final List<RequestHandler> apis = <RequestHandler>[];
+  final List<RequestHandler> _apis = <RequestHandler>[];
 
   /// Should the response be auto-compressed
   final bool autoCompress;
@@ -55,7 +55,7 @@ class Jaguar {
 
   /// Adds given API [api] to list of API that will be served
   void addApi(RequestHandler api) {
-    apis.add(api);
+    _apis.add(api);
   }
 
   /// Starts serving the provided APIs
@@ -83,9 +83,8 @@ class Jaguar {
     ctx.addInterceptors(_interceptorCreators);
     try {
       Response response;
-      for (RequestHandler requestHandler in apis) {
-        response =
-            await requestHandler.handleRequest(ctx, prefix: basePath);
+      for (RequestHandler requestHandler in _apis) {
+        response = await requestHandler.handleRequest(ctx, prefix: basePath);
         if (response is Response) {
           break;
         }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1
+
+- Global interceptors
+
 ## 0.6.0
 
 - `Context` based `RequestHandler`
