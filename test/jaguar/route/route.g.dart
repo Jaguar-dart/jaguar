@@ -29,50 +29,43 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for getUser
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.getUser, routes[0]);
+      return await Interceptor.chain(ctx, _internal.getUser, routes[0]);
     }
 
 //Handler for statusCode
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.statusCode, routes[1]);
+      return await Interceptor.chain(ctx, _internal.statusCode, routes[1]);
     }
 
 //Handler for paramAndQuery
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.paramAndQuery, routes[2]);
+      return await Interceptor.chain(ctx, _internal.paramAndQuery, routes[2]);
     }
 
 //Handler for inputHeader
     match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.inputHeader, routes[3]);
+      return await Interceptor.chain(ctx, _internal.inputHeader, routes[3]);
     }
 
 //Handler for inputHeaders
     match = routes[4].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.inputHeaders, routes[4]);
+      return await Interceptor.chain(ctx, _internal.inputHeaders, routes[4]);
     }
 
 //Handler for inputCookie
     match = routes[5].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.inputCookie, routes[5]);
+      return await Interceptor.chain(ctx, _internal.inputCookie, routes[5]);
     }
 
 //Handler for inputCookies
     match = routes[6].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.inputCookies, routes[6]);
+      return await Interceptor.chain(ctx, _internal.inputCookies, routes[6]);
     }
 
     return null;

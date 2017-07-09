@@ -21,8 +21,7 @@ class JaguarBooksApi implements RequestHandler {
 //Handler for addBook
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.addBook, routes[0]);
+      return await Interceptor.chain(ctx, _internal.addBook, routes[0]);
     }
 
     return null;

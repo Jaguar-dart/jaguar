@@ -25,22 +25,19 @@ class JaguarJsonDecode implements RequestHandler {
 //Handler for addOne
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.addOne, routes[0]);
+      return await Interceptor.chain(ctx, _internal.addOne, routes[0]);
     }
 
 //Handler for addMany
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.addMany, routes[1]);
+      return await Interceptor.chain(ctx, _internal.addMany, routes[1]);
     }
 
 //Handler for doubled
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.doubled, routes[2]);
+      return await Interceptor.chain(ctx, _internal.doubled, routes[2]);
     }
 
     return null;

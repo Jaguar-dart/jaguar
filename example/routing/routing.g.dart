@@ -29,29 +29,26 @@ class JaguarBooksApi implements RequestHandler {
 //Handler for getFive
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.getFive, routes[0]);
+      return await Interceptor.chain(ctx, _internal.getFive, routes[0]);
     }
 
 //Handler for getName
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.getName, routes[1]);
+      return await Interceptor.chain(ctx, _internal.getName, routes[1]);
     }
 
 //Handler for getMoto
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.getMoto, routes[2]);
+      return await Interceptor.chain(ctx, _internal.getMoto, routes[2]);
     }
 
 //Handler for defaultStatusAndHeader
     match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, ctx.interceptorCreators,
-          _internal.defaultStatusAndHeader, routes[3]);
+      return await Interceptor.chain(
+          ctx, _internal.defaultStatusAndHeader, routes[3]);
     }
 
     return null;

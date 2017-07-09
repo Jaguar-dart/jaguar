@@ -23,8 +23,7 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for getStream
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, ctx.interceptorCreators, _internal.getStream, routes[0]);
+      return await Interceptor.chain(ctx, _internal.getStream, routes[0]);
     }
 
     return null;
