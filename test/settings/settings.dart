@@ -9,7 +9,7 @@ void main() {
       "interval": "1",
     };
 
-    Settings.parse(<String>['-s', 'test/jaguar/settings/settings.yaml'],
+    Settings.parse(<String>['-s', 'test/settings/settings.yaml'],
         settingsMap: localSettings);
 
     test('from map', () async {

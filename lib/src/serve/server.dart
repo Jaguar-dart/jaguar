@@ -22,9 +22,6 @@ class Jaguar {
   /// Should the port be servicable from multiple isolates
   final bool multiThread;
 
-  /// [RequestHandler]s
-  final List<RequestHandler> _apis = <RequestHandler>[];
-
   /// Should the response be auto-compressed
   final bool autoCompress;
 
@@ -53,15 +50,11 @@ class Jaguar {
       this.basePath: '',
       this.errorWriter: const HtmlErrorWriter()});
 
-  /// Adds given API [api] to list of API that will be served
-  void addApi(RequestHandler api) {
-    _apis.add(api);
-  }
-
   /// Starts serving the provided APIs
   Future<Null> serve() async {
     if (_server != null) throw new Exception('Already serving!');
     log.severe("Running on $resourceName");
+    _buildHandlers();
     if (securityContext != null) {
       _server = await HttpServer.bindSecure(address, port, securityContext);
     } else {
@@ -75,6 +68,7 @@ class Jaguar {
   Future<Null> close() async {
     await _server.close(force: true);
     _server = null;
+    _builtHandlers.clear();
   }
 
   Future _handleRequest(HttpRequest request) async {
@@ -83,7 +77,7 @@ class Jaguar {
     ctx.addInterceptors(_interceptorCreators);
     try {
       Response response;
-      for (RequestHandler requestHandler in _apis) {
+      for (RequestHandler requestHandler in _builtHandlers) {
         response = await requestHandler.handleRequest(ctx, prefix: basePath);
         if (response is Response) {
           break;
@@ -109,4 +103,100 @@ class Jaguar {
 
   UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
       new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
+
+  final _builtHandlers = <RequestHandler>[];
+
+  /// [RequestHandler]s
+  final List<RequestHandler> _apis = <RequestHandler>[];
+
+  /// Adds given API [api] to list of API that will be served
+  void addApi(RequestHandler api) {
+    if (_server != null) {
+      throw new Exception('Cannot add routes after server has been started!');
+    }
+    _apis.add(api);
+  }
+
+  // Adds give Api class using reflection
+  void addApiReflected(api) => addApi(new JaguarReflected(api));
+
+  final _unbuiltRoutes = <RouteBuilder>[];
+
+  /// Adds the [route] to be served
+  RouteBuilder addRoute(RouteBuilder route) {
+    if (_server != null) {
+      throw new Exception('Cannot add routes after server has been started!');
+    }
+
+    _unbuiltRoutes.add(route);
+    return route;
+  }
+
+  /// Add a route to be served
+  RouteBuilder route(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE']}) {
+    final route =
+        new RouteBuilder(path, handler, pathRegEx: pathRegEx, methods: methods);
+    return addRoute(route);
+  }
+
+  /// Add a route with GET method to be served
+  RouteBuilder get(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx}) {
+    final route = new RouteBuilder.get(path, handler, pathRegEx: pathRegEx);
+    return addRoute(route);
+  }
+
+  /// Add a route with POST method to be served
+  RouteBuilder post(String path, Function handler,
+      {Map<String, String> pathRegEx}) {
+    final route = new RouteBuilder.post(path, handler, pathRegEx: pathRegEx);
+    return addRoute(route);
+  }
+
+  /// Add a route with PUT method to be served
+  RouteBuilder put(String path, Function handler,
+      {Map<String, String> pathRegEx}) {
+    final route = new RouteBuilder.put(path, handler, pathRegEx: pathRegEx);
+    return addRoute(route);
+  }
+
+  /// Add a route with DELETE method to be served
+  RouteBuilder delete(String path, Function handler,
+      {Map<String, String> pathRegEx}) {
+    final route = new RouteBuilder.delete(path, handler, pathRegEx: pathRegEx);
+    return addRoute(route);
+  }
+
+  /// Add a route with PATCH method to be served
+  RouteBuilder patch(String path, Function handler,
+      {Map<String, String> pathRegEx}) {
+    final route = new RouteBuilder.patch(path, handler, pathRegEx: pathRegEx);
+    return addRoute(route);
+  }
+
+  /// Add a route with OPTIONS method to be served
+  RouteBuilder options(String path, Function handler,
+      {Map<String, String> pathRegEx}) {
+    final route = new RouteBuilder.options(path, handler, pathRegEx: pathRegEx);
+    return addRoute(route);
+  }
+
+  /// Create a new route group
+  GroupBuilder group([String path = '']) {
+    return new GroupBuilder(this, path: path);
+  }
+
+  /// Builds handlers to be served
+  void _buildHandlers() {
+    _builtHandlers.clear();
+    _builtHandlers.addAll(_apis);
+    for (RouteBuilder route in _unbuiltRoutes) {
+      Route jRoute = new Route(
+          path: route.path, methods: route.methods, pathRegEx: route.pathRegEx);
+      _builtHandlers.add(new ReflectedRoute.build(route.handler, jRoute, '',
+          route.interceptors, route.exceptionHandlers));
+    }
+  }
 }

@@ -53,78 +53,97 @@ void main() {
       await server.close();
     });
 
-    test('GET', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/user');
-      http.Response response = await http.get(uri);
+    grouped();
+  });
 
-      print(response.body);
-      expect(response.statusCode, 200);
-      expect(response.body, 'Get user');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
+  group('route reflected', () {
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApiReflected(new ExampleApi());
+      await server.serve();
     });
 
-    test('DefaultStatusCode', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/statuscode');
-      http.Response response = await http.get(uri);
-
-      expect(response.body, 'status code');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
-      expect(response.statusCode, 201);
+    tearDownAll(() async {
+      await server.close();
     });
 
-    test('ParamAndQuery', () async {
-      Uri uri = new Uri.http(
-          'localhost:8080', '/api/paramandquery/hello', {'query': 'world'});
-      http.Response response = await http.get(uri);
+    grouped();
+  });
+}
 
-      expect(response.body, 'hello world');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
-      expect(response.statusCode, 200);
-    });
+grouped() {
+  test('GET', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/user');
+    http.Response response = await http.get(uri);
 
-    test('InputHeader', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/input/header');
-      http.Response response = await http.get(uri, headers: {'user': 'teja'});
+    print(response.body);
+    expect(response.statusCode, 200);
+    expect(response.body, 'Get user');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+  });
 
-      expect(response.body, 'teja');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
-      expect(response.statusCode, 200);
-    });
+  test('DefaultStatusCode', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/statuscode');
+    http.Response response = await http.get(uri);
 
-    test('InputHeaders', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/input/headers');
-      http.Response response = await http.get(uri, headers: {'user': 'kleak'});
+    expect(response.body, 'status code');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+    expect(response.statusCode, 201);
+  });
 
-      expect(response.body, 'kleak');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
-      expect(response.statusCode, 200);
-    });
+  test('ParamAndQuery', () async {
+    Uri uri = new Uri.http(
+        'localhost:8080', '/api/paramandquery/hello', {'query': 'world'});
+    http.Response response = await http.get(uri);
 
-    test('InputCookie', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/input/cookie');
-      http.Response response =
-          await http.get(uri, headers: {'cookie': 'user=teja'});
+    expect(response.body, 'hello world');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+    expect(response.statusCode, 200);
+  });
 
-      expect(response.body, 'teja');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
-      expect(response.statusCode, 200);
-    });
+  test('InputHeader', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/input/header');
+    http.Response response = await http.get(uri, headers: {'user': 'teja'});
 
-    test('InputCookies', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/input/cookies');
-      http.Response response =
-          await http.get(uri, headers: {'cookie': 'user=kleak'});
+    expect(response.body, 'teja');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+    expect(response.statusCode, 200);
+  });
 
-      expect(response.body, 'kleak');
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
-      expect(response.statusCode, 200);
-    });
+  test('InputHeaders', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/input/headers');
+    http.Response response = await http.get(uri, headers: {'user': 'kleak'});
+
+    expect(response.body, 'kleak');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+    expect(response.statusCode, 200);
+  });
+
+  test('InputCookie', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/input/cookie');
+    http.Response response =
+        await http.get(uri, headers: {'cookie': 'user=teja'});
+
+    expect(response.body, 'teja');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+    expect(response.statusCode, 200);
+  });
+
+  test('InputCookies', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/input/cookies');
+    http.Response response =
+        await http.get(uri, headers: {'cookie': 'user=kleak'});
+
+    expect(response.body, 'kleak');
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'text/plain; charset=utf-8');
+    expect(response.statusCode, 200);
   });
 }

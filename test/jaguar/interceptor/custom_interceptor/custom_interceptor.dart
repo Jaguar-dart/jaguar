@@ -47,15 +47,34 @@ void main() {
       await server.close();
     });
 
-    test('one interceptor', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/random');
-      http.Response response = await http.get(uri);
+    grouped();
+  });
 
-      expect(response.statusCode, 200);
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'application/json; charset=utf-8');
-      Map body = JSON.decode(response.body);
-      expect(body['Random'] * 2, body['Doubled']);
+  group('Custom interceptor reflected', () {
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApiReflected(new ExampleApi());
+      await server.serve();
     });
+
+    tearDownAll(() async {
+      await server.close();
+    });
+
+    grouped();
+  });
+}
+
+grouped() {
+  test('one interceptor', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/random');
+    http.Response response = await http.get(uri);
+
+    expect(response.statusCode, 200);
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'application/json; charset=utf-8');
+    Map body = JSON.decode(response.body);
+    expect(body['Random'] * 2, body['Doubled']);
   });
 }

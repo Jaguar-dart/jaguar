@@ -36,14 +36,33 @@ void main() {
       await server.close();
     });
 
-    test('inject request', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/echo/uri');
-      http.Response response = await http.get(uri);
+    grouped();
+  });
 
-      expect(response.statusCode, 200);
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'application/json; charset=utf-8');
-      expect(response.body, r'{"Uri":"/api/echo/uri"}');
+  group('Inject Request into interceptor reflected', () {
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar();
+      server.addApiReflected(new ExampleApi());
+      await server.serve();
     });
+
+    tearDownAll(() async {
+      await server.close();
+    });
+
+    grouped();
+  });
+}
+
+grouped() {
+  test('inject request', () async {
+    Uri uri = new Uri.http('localhost:8080', '/api/echo/uri');
+    http.Response response = await http.get(uri);
+
+    expect(response.statusCode, 200);
+    expect(response.headers[HttpHeaders.CONTENT_TYPE],
+        'application/json; charset=utf-8');
+    expect(response.body, r'{"Uri":"/api/echo/uri"}');
   });
 }

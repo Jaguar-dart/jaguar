@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.5
+
+- Merged jaguar_reflect and jaguar_mux into jaguar core
+
 ## 0.6.1
 
 - Global interceptors
