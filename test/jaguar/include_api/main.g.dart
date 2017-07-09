@@ -24,17 +24,15 @@ class JaguarUserApi implements RequestHandler {
 //Handler for getUser
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getUser, routes[0]);
+          ctx, ctx.interceptorCreators, _internal.getUser, routes[0]);
     }
 
 //Handler for statusCode
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.statusCode, routes[1]);
+          ctx, ctx.interceptorCreators, _internal.statusCode, routes[1]);
     }
 
     return null;
@@ -66,9 +64,8 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for statusCode
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.statusCode, routes[0]);
+          ctx, ctx.interceptorCreators, _internal.statusCode, routes[0]);
     }
 
     {

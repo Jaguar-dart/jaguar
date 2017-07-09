@@ -23,10 +23,9 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for getJaguarInfo
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
-      interceptors.add(_internal.usesRequest);
+      ctx.addInterceptor(_internal.usesRequest);
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getJaguarInfo, routes[0]);
+          ctx, ctx.interceptorCreators, _internal.getJaguarInfo, routes[0]);
     }
 
     return null;

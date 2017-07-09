@@ -21,11 +21,10 @@ class JaguarBooksApi implements RequestHandler {
 //Handler for getJaguarInfo
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
-      interceptors.add(_internal.genRandom);
-      interceptors.add(_internal.usesRandom);
+      ctx.addInterceptor(_internal.genRandom);
+      ctx.addInterceptor(_internal.usesRandom);
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getJaguarInfo, routes[0]);
+          ctx, ctx.interceptorCreators, _internal.getJaguarInfo, routes[0]);
     }
 
     return null;

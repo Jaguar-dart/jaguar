@@ -26,25 +26,22 @@ class JaguarRedirectExampleApi implements RequestHandler {
 //Handler for getBookById
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.getBookById, routes[0]);
+          ctx, ctx.interceptorCreators, _internal.getBookById, routes[0]);
     }
 
 //Handler for redirectMe
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.redirectMe, routes[1]);
+          ctx, ctx.interceptorCreators, _internal.redirectMe, routes[1]);
     }
 
 //Handler for redirectWithQuery
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      final interceptors = <InterceptorCreator>[];
       return await Interceptor.chain(
-          ctx, interceptors, _internal.redirectWithQuery, routes[2]);
+          ctx, ctx.interceptorCreators, _internal.redirectWithQuery, routes[2]);
     }
 
     return null;
