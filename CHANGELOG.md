@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.7
+
+- `wrap` method on `Jaguar`
+
 ## 0.6.6
 
 - XML rendering support

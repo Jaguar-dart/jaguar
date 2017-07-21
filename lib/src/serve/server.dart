@@ -120,6 +120,9 @@ class Jaguar {
   UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
       new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
 
+  /// Wraps interceptor creator around all routes
+  void wrap(InterceptorCreator creator) => _interceptorCreators.add(creator);
+
   final _builtHandlers = <RequestHandler>[];
 
   /// [RequestHandler]s
