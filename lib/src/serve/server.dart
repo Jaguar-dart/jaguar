@@ -35,6 +35,8 @@ class Jaguar {
   /// Logger
   final Logger log = new Logger('J');
 
+  final DebugStream debugStream;
+
   /// Returns protocol string
   String get protocolStr => securityContext == null ? 'http' : 'https';
 
@@ -48,12 +50,14 @@ class Jaguar {
       this.securityContext: null,
       this.autoCompress: false,
       this.basePath: '',
-      this.errorWriter: const HtmlErrorWriter()});
+      ErrorWriter errorWriter,
+      this.debugStream})
+      : errorWriter = errorWriter ?? new DefaultErrorWriter();
 
   /// Starts serving the provided APIs
   Future<Null> serve() async {
     if (_server != null) throw new Exception('Already serving!');
-    log.severe("Running on $resourceName");
+    log.info("Running on $resourceName");
     _buildHandlers();
     if (securityContext != null) {
       _server = await HttpServer.bindSecure(address, port, securityContext);
@@ -72,6 +76,7 @@ class Jaguar {
   }
 
   Future _handleRequest(HttpRequest request) async {
+    final start = new DateTime.now();
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
     final ctx = new Context(new Request(request, log));
     ctx.addInterceptors(_interceptorCreators);
@@ -85,15 +90,26 @@ class Jaguar {
       }
       if (response is Response) {
         await response.writeResponse(request.response);
+        debugStream?._add(new DebugInfo.make(ctx, response, start));
       } else {
-        throw new NotFoundError("The path ${request.uri.path} is not found!");
+        throw errorWriter.make404(ctx);
       }
     } catch (e, stack) {
       log.severe(
           "ReqErr => Method: ${request.method} Url: ${request.uri} E: $e Stack: $stack");
-      final Response resp =
-          errorWriter.writeError(request.uri.toString(), e, stack, 500);
-      await resp.writeResponse(request.response);
+
+      if (e is Response) {
+        await e.writeResponse(request.response);
+        debugStream?._add(new DebugInfo.make(ctx, e, start));
+      } else if (e is ResponseError) {
+        final Response resp = e.response(ctx);
+        await resp.writeResponse(request.response);
+        debugStream?._add(new DebugInfo.make(ctx, resp, start));
+      } else {
+        final Response resp = errorWriter.make500(ctx, e, stack);
+        await resp.writeResponse(request.response);
+        debugStream?._add(new DebugInfo.make(ctx, resp, start));
+      }
     } finally {
       await request.response.close();
     }
@@ -198,5 +214,60 @@ class Jaguar {
       _builtHandlers.add(new ReflectedRoute.build(route.handler, jRoute, '',
           route.interceptors, route.exceptionHandlers));
     }
+  }
+}
+
+/// An exception that can make an error [Response]
+abstract class ResponseError {
+  /// Creates [Response] from error
+  Response response(Context ctx);
+}
+
+class DebugInfo {
+  DateTime time;
+
+  Duration duration;
+
+  String path;
+
+  String method;
+
+  final Map<String, List<String>> reqHeaders = <String, List<String>>{};
+
+  int statusCode;
+
+  final Map<String, List<String>> respHeaders = <String, List<String>>{};
+
+  final List<String> messages = <String>[];
+
+  DebugInfo();
+
+  factory DebugInfo.make(Context ctx, Response resp, DateTime start) {
+    final ret = new DebugInfo();
+    ret.path = ctx.path;
+    ret.method = ctx.method;
+    ctx.req.headers.forEach(
+        (String key, List<String> values) => ret.reqHeaders[key] = values);
+    resp.headers.forEach(
+        (String key, List<String> values) => ret.reqHeaders[key] = values);
+    ret.statusCode = resp.statusCode;
+    ret.time = start;
+    ret.duration = new DateTime.now().difference(start);
+    ret.messages.addAll(ctx.debugMsgs);
+    return ret;
+  }
+}
+
+class DebugStream {
+  final StreamController<DebugInfo> _controller =
+      new StreamController<DebugInfo>.broadcast();
+
+  Stream<DebugInfo> get onRequest => _controller.stream;
+
+  Stream<DebugInfo> get onError => onRequest.where(
+      (DebugInfo info) => info.statusCode < 200 && info.statusCode > 299);
+
+  void _add(DebugInfo info) {
+    _controller.add(info);
   }
 }

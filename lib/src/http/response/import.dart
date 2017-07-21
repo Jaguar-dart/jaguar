@@ -80,6 +80,29 @@ class Response<ValueType> {
     return new Response<String>(t.renderString(viewVars));
   }
 
+  static Response<String> xml(dynamic data,
+      {Response incoming,
+      int statusCode: 200,
+      Map<String, dynamic> headers: const {},
+      String mimeType: 'application/xml'}) {
+    Response<String> ret;
+
+    final String value = JSON.encode(data); //TODO encode with XML
+
+    if (incoming != null) {
+      ret = new Response<String>.cloneExceptValue(incoming);
+      ret.value = value;
+    } else {
+      ret =
+          new Response<String>(value, statusCode: statusCode, headers: headers);
+    }
+
+    ret.headers.mimeType = mimeType;
+    ret.headers.charset = 'utf-8';
+
+    return ret;
+  }
+
   /// Clones another [Response] object except the value
   Response.cloneExceptValue(Response incoming) {
     statusCode = incoming.statusCode;

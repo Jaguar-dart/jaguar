@@ -2,7 +2,6 @@
 library jaguar;
 
 export 'src/annotations/import.dart';
-export 'src/error.dart';
 export 'src/serve/import.dart';
 export 'src/http/http.dart';
 export 'src/utils/string/import.dart';

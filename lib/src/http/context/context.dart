@@ -69,6 +69,8 @@ class Context {
 
   final _variables = <_IdiedType, dynamic>{};
 
+  final List<String> debugMsgs = <String>[];
+
   Context(this.req);
 
   Logger get log => req.log;

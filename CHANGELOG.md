@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.6
+
+- XML rendering support
+- **New error rendering mechanism**
+- Debug stream
+
 ## 0.6.5
 
 - Merged jaguar_reflect and jaguar_mux into jaguar core

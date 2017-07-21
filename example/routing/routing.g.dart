@@ -4,10 +4,10 @@ part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class BooksApi
+// Target: class ExampApi
 // **************************************************************************
 
-class JaguarBooksApi implements RequestHandler {
+class JaguarExampApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/books'),
     const Route(path: '/books', methods: const <String>['GET']),
@@ -18,9 +18,9 @@ class JaguarBooksApi implements RequestHandler {
         headers: const {'custom-header': 'custom data'})
   ];
 
-  final BooksApi _internal;
+  final ExampApi _internal;
 
-  JaguarBooksApi(this._internal);
+  JaguarExampApi(this._internal);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/book';

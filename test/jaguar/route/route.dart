@@ -77,7 +77,6 @@ grouped() {
     Uri uri = new Uri.http('localhost:8080', '/api/user');
     http.Response response = await http.get(uri);
 
-    print(response.body);
     expect(response.statusCode, 200);
     expect(response.body, 'Get user');
     expect(response.headers[HttpHeaders.CONTENT_TYPE],

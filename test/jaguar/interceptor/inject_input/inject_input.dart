@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 
-part 'inject_request.g.dart';
+part 'inject_input.g.dart';
 
 class UsesRequest extends Interceptor {
   String pre(Context ctx) => ctx.req.uri.toString();
