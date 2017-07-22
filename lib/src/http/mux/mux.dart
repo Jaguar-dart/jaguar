@@ -8,30 +8,76 @@ class RouteBuilder {
 
   final List<String> methods;
 
+  /// Default status code for the route response
+  final int statusCode;
+
+  /// Default mime-type for route response
+  final String mimeType;
+
+  /// Default charset for route response
+  final String charset;
+
+  /// Default headers for route response
+  final Map<String, String> headers;
+
   final Map<String, String> pathRegEx;
 
   final RouteFunc handler;
 
   RouteBuilder(this.path, this.handler,
       {this.methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
-      this.pathRegEx});
+      this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers});
 
-  RouteBuilder.get(this.path, this.handler, {this.pathRegEx})
+  RouteBuilder.get(this.path, this.handler,
+      {this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers})
       : methods = ['GET'];
 
-  RouteBuilder.post(this.path, this.handler, {this.pathRegEx})
+  RouteBuilder.post(this.path, this.handler,
+      {this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers})
       : methods = ['POST'];
 
-  RouteBuilder.put(this.path, this.handler, {this.pathRegEx})
+  RouteBuilder.put(this.path, this.handler,
+      {this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers})
       : methods = ['PUT'];
 
-  RouteBuilder.delete(this.path, this.handler, {this.pathRegEx})
+  RouteBuilder.delete(this.path, this.handler,
+      {this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers})
       : methods = ['DELETE'];
 
-  RouteBuilder.patch(this.path, this.handler, {this.pathRegEx})
+  RouteBuilder.patch(this.path, this.handler,
+      {this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers})
       : methods = ['PATCH'];
 
-  RouteBuilder.options(this.path, this.handler, {this.pathRegEx})
+  RouteBuilder.options(this.path, this.handler,
+      {this.pathRegEx,
+      this.statusCode,
+      this.mimeType,
+      this.charset,
+      this.headers})
       : methods = ['OPTIONS'];
 
   final _interceptors = <InterceptorCreator>[];
@@ -65,9 +111,18 @@ class RouteBuilder {
     _exceptionHandlers.addAll(exceptions);
     return this;
   }
+
+  RouteBuilder cloneWithPath(String newPath) =>
+      new RouteBuilder(newPath, handler,
+          methods: methods,
+          pathRegEx: this.pathRegEx,
+          statusCode: this.statusCode,
+          mimeType: this.mimeType,
+          charset: this.charset,
+          headers: this.headers);
 }
 
-class GroupBuilder {
+class GroupBuilder extends Object with Muxable {
   final Jaguar server;
 
   final String pathPrefix;
@@ -102,60 +157,13 @@ class GroupBuilder {
     return this;
   }
 
-  RouteBuilder route(String path, Function handler,
-      {Map<String, String> pathRegEx,
-      List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE']}) {
-    final route = new RouteBuilder(pathPrefix + (path ?? ''), handler,
-        pathRegEx: pathRegEx, methods: methods);
-    route.wrapAll(_wrappers);
-    route.onExceptionAll(exceptionHandlers);
-    server.addRoute(route);
+  RouteBuilder addRoute(RouteBuilder route) {
+    final route1 = route.cloneWithPath(pathPrefix + route.path);
+    route1.wrapAll(_wrappers);
+    route1.onExceptionAll(exceptionHandlers);
+    server.addRoute(route1);
     _wrapsFinalized = true;
-    return route;
-  }
-
-  RouteBuilder get(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.get(pathPrefix + (path ?? ''), handler,
-        pathRegEx: pathRegEx);
-    route.wrapAll(_wrappers);
-    route.onExceptionAll(exceptionHandlers);
-    server.addRoute(route);
-    _wrapsFinalized = true;
-    return route;
-  }
-
-  RouteBuilder post(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.post(pathPrefix + (path ?? ''), handler,
-        pathRegEx: pathRegEx);
-    route.wrapAll(_wrappers);
-    route.onExceptionAll(exceptionHandlers);
-    server.addRoute(route);
-    _wrapsFinalized = true;
-    return route;
-  }
-
-  RouteBuilder put(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.put(pathPrefix + (path ?? ''), handler,
-        pathRegEx: pathRegEx);
-    route.wrapAll(_wrappers);
-    route.onExceptionAll(exceptionHandlers);
-    server.addRoute(route);
-    _wrapsFinalized = true;
-    return route;
-  }
-
-  RouteBuilder delete(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.delete(pathPrefix + (path ?? ''), handler,
-        pathRegEx: pathRegEx);
-    route.wrapAll(_wrappers);
-    route.onExceptionAll(exceptionHandlers);
-    server.addRoute(route);
-    _wrapsFinalized = true;
-    return route;
+    return route1;
   }
 
   RouteBuilder clone(RouteBuilder clone) {
@@ -172,5 +180,123 @@ class GroupBuilder {
 
   GroupBuilder group({String pathPrefix: ''}) {
     return new GroupBuilder(server, path: this.pathPrefix + (pathPrefix ?? ''));
+  }
+}
+
+abstract class Muxable {
+  RouteBuilder addRoute(RouteBuilder route);
+
+  /// Add a route to be served
+  RouteBuilder route(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder(path, handler,
+        pathRegEx: pathRegEx,
+        methods: methods,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
+  }
+
+  /// Add a route with GET method to be served
+  RouteBuilder get(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder.get(path, handler,
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
+  }
+
+  /// Add a route with POST method to be served
+  RouteBuilder post(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder.post(path, handler,
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
+  }
+
+  /// Add a route with PUT method to be served
+  RouteBuilder put(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder.put(path, handler,
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
+  }
+
+  /// Add a route with DELETE method to be served
+  RouteBuilder delete(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder.delete(path, handler,
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
+  }
+
+  /// Add a route with PATCH method to be served
+  RouteBuilder patch(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder.patch(path, handler,
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
+  }
+
+  /// Add a route with OPTIONS method to be served
+  RouteBuilder options(String path, RouteFunc handler,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    final route = new RouteBuilder.options(path, handler,
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: charset,
+        headers: headers);
+    return addRoute(route);
   }
 }

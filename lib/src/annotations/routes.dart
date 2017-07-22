@@ -1,11 +1,14 @@
 part of jaguar.src.annotations;
 
 const String _kDefaultContentType = 'text/plain; charset=utf-8';
-const String _kDefaultMimeType = 'text/plain';
-const String _kDefaultCharset = 'utf-8';
+const String kDefaultMimeType = 'text/plain';
+const String kDefaultCharset = 'utf-8';
 
 /// Function type for a route handler
 typedef dynamic RouteFunc<RespType>(Context ctx);
+
+/// Function type for a route handler
+typedef Response<RespType> RouteHandlerFunc<RespType>(Context ctx);
 
 /// Base class for route specification
 abstract class RouteBase {
@@ -142,8 +145,8 @@ class Route extends RouteBase {
         'OPTIONS'
       ],
       this.statusCode: 200,
-      this.mimeType: _kDefaultMimeType,
-      this.charset: _kDefaultCharset,
+      this.mimeType: kDefaultMimeType,
+      this.charset: kDefaultCharset,
       this.headers,
       this.pathRegEx});
 }
@@ -173,8 +176,8 @@ class Get extends RouteBase {
   const Get(
       {this.path,
       this.statusCode: 200,
-      this.mimeType: _kDefaultMimeType,
-      this.charset: _kDefaultCharset,
+      this.mimeType: kDefaultMimeType,
+      this.charset: kDefaultCharset,
       this.headers,
       this.pathRegEx});
 
@@ -206,8 +209,8 @@ class Post extends RouteBase {
   const Post(
       {this.path,
       this.statusCode: 200,
-      this.mimeType: _kDefaultMimeType,
-      this.charset: _kDefaultCharset,
+      this.mimeType: kDefaultMimeType,
+      this.charset: kDefaultCharset,
       this.headers,
       this.pathRegEx});
 
@@ -239,8 +242,8 @@ class Put extends RouteBase {
   const Put(
       {this.path,
       this.statusCode: 200,
-      this.mimeType: _kDefaultMimeType,
-      this.charset: _kDefaultCharset,
+      this.mimeType: kDefaultMimeType,
+      this.charset: kDefaultCharset,
       this.headers,
       this.pathRegEx});
 
@@ -272,8 +275,8 @@ class Delete extends RouteBase {
   const Delete(
       {this.path,
       this.statusCode: 200,
-      this.mimeType: _kDefaultMimeType,
-      this.charset: _kDefaultCharset,
+      this.mimeType: kDefaultMimeType,
+      this.charset: kDefaultCharset,
       this.headers,
       this.pathRegEx});
 

@@ -9,7 +9,7 @@ abstract class RequestHandler {
 ///
 /// It servers the provided APIs on the given `address` and `port`
 /// `securityContext``is used to add HTTPS support
-class Jaguar {
+class Jaguar extends Object with Muxable {
   /// Address on which the API is serviced
   final String address;
 
@@ -149,57 +149,6 @@ class Jaguar {
 
     _unbuiltRoutes.add(route);
     return route;
-  }
-
-  /// Add a route to be served
-  RouteBuilder route(String path, RouteFunc handler,
-      {Map<String, String> pathRegEx,
-      List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE']}) {
-    final route =
-        new RouteBuilder(path, handler, pathRegEx: pathRegEx, methods: methods);
-    return addRoute(route);
-  }
-
-  /// Add a route with GET method to be served
-  RouteBuilder get(String path, RouteFunc handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.get(path, handler, pathRegEx: pathRegEx);
-    return addRoute(route);
-  }
-
-  /// Add a route with POST method to be served
-  RouteBuilder post(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.post(path, handler, pathRegEx: pathRegEx);
-    return addRoute(route);
-  }
-
-  /// Add a route with PUT method to be served
-  RouteBuilder put(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.put(path, handler, pathRegEx: pathRegEx);
-    return addRoute(route);
-  }
-
-  /// Add a route with DELETE method to be served
-  RouteBuilder delete(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.delete(path, handler, pathRegEx: pathRegEx);
-    return addRoute(route);
-  }
-
-  /// Add a route with PATCH method to be served
-  RouteBuilder patch(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.patch(path, handler, pathRegEx: pathRegEx);
-    return addRoute(route);
-  }
-
-  /// Add a route with OPTIONS method to be served
-  RouteBuilder options(String path, Function handler,
-      {Map<String, String> pathRegEx}) {
-    final route = new RouteBuilder.options(path, handler, pathRegEx: pathRegEx);
-    return addRoute(route);
   }
 
   /// Create a new route group

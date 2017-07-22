@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.8
+
+- Mux methods now take response members
+- Definition of `RouteHandlerFunc`
+
 ## 0.6.7
 
 - `wrap` method on `Jaguar`
