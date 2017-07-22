@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.9
+
+- Return types of route handlers are now `FutureOr` 
+
 ## 0.6.8
 
 - Mux methods now take response members

@@ -2,7 +2,7 @@ part of jaguar.src.serve;
 
 /// Base class for Request handlers
 abstract class RequestHandler {
-  Future<Response> handleRequest(Context ctx, {String prefix});
+  FutureOr<Response> handleRequest(Context ctx, {String prefix});
 }
 
 /// The Jaguar server

@@ -5,10 +5,10 @@ const String kDefaultMimeType = 'text/plain';
 const String kDefaultCharset = 'utf-8';
 
 /// Function type for a route handler
-typedef dynamic RouteFunc<RespType>(Context ctx);
+typedef FutureOr<dynamic> RouteFunc<RespType>(Context ctx);
 
 /// Function type for a route handler
-typedef Response<RespType> RouteHandlerFunc<RespType>(Context ctx);
+typedef FutureOr<Response<RespType>> RouteHandlerFunc<RespType>(Context ctx);
 
 /// Base class for route specification
 abstract class RouteBase {
