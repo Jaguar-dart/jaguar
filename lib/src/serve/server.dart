@@ -95,9 +95,6 @@ class Jaguar extends Object with Muxable {
         throw errorWriter.make404(ctx);
       }
     } catch (e, stack) {
-      log.severe(
-          "ReqErr => Method: ${request.method} Url: ${request.uri} E: $e Stack: $stack");
-
       if (e is Response) {
         await e.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, e, start));
@@ -106,6 +103,9 @@ class Jaguar extends Object with Muxable {
         await resp.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, resp, start));
       } else {
+        log.severe(
+            "ReqErr => Method: ${request.method} Url: ${request.uri} E: $e Stack: $stack");
+
         final Response resp = errorWriter.make500(ctx, e, stack);
         await resp.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, resp, start));

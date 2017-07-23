@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.10
+
+- Jaguar shall log only unknown exceptions
+
 ## 0.6.9
 
 - Return types of route handlers are now `FutureOr` 
