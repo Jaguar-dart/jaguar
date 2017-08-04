@@ -4,16 +4,15 @@ part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampApi
 // **************************************************************************
 
 class JaguarExampApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route(path: '/books'),
-    const Route(path: '/books', methods: const <String>['GET']),
-    const Get(path: '/books'),
+    const Route(path: '/five'),
+    const Route(path: '/name', methods: const <String>['GET']),
+    const Get(path: '/moto'),
     const Post(
-        path: '/inject/httprequest',
+        path: '/default',
         statusCode: 200,
         headers: const {'custom-header': 'custom data'})
   ];

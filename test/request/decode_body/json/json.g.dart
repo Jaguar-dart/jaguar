@@ -4,7 +4,6 @@ part of test.jaguar.decode_body.json;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class JsonDecode
 // **************************************************************************
 
 class JaguarJsonDecode implements RequestHandler {

@@ -1,5 +1,5 @@
 name: jaguar
-version: 0.6.10
+version: 0.6.11
 description: Jaguar is a production ready server framework built for **speed, simplicity and extensiblity**
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
@@ -22,8 +22,10 @@ dependencies:
   quiver_hashcode: '>=1.0.0 <2.0.0'
   mustache: ">=0.2.5+1 <0.3.0"
   collection: ">=1.14.1 <2.0.0"
+  dice: ^1.7.0
 
 dev_dependencies:
   cookies:
-  test: 0.12.15+10
+  test: ^0.12.15+10
   http:
+  jaguar_client: ^0.1.4

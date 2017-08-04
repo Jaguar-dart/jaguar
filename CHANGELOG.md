@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.11
+
+- Bootstrapping root APIs using `bootstrap` method
+- Supports `package:dice` based DI during bootstrapping
+
 ## 0.6.10
 
 - Jaguar shall log only unknown exceptions

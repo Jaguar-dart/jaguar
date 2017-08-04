@@ -4,7 +4,6 @@ part of example.routes;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class BooksApi
 // **************************************************************************
 
 class JaguarBooksApi implements RequestHandler {

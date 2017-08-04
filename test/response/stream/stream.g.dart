@@ -4,7 +4,6 @@ part of test.response.stream;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
 // **************************************************************************
 
 class JaguarExampleApi implements RequestHandler {

@@ -14,7 +14,9 @@ class Api {
   /// Path prefix of the child routes and included APIs in the API class
   final String path;
 
-  const Api({this.path: ''});
+  final bool isRoot;
+
+  const Api({this.path: '', this.isRoot: false});
 }
 
 /// Includes the route handlers into the parent API class

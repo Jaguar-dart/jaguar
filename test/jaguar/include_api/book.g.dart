@@ -4,7 +4,6 @@ part of test.jaguar.group.normal.book;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class BookApi
 // **************************************************************************
 
 class JaguarBookApi implements RequestHandler {

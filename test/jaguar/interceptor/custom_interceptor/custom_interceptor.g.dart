@@ -4,7 +4,6 @@ part of test.jaguar.interceptor.custom_interceptor;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
 // **************************************************************************
 
 class JaguarExampleApi implements RequestHandler {

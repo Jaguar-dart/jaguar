@@ -4,7 +4,6 @@ part of test.jaguar.route;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
 // **************************************************************************
 
 class JaguarExampleApi implements RequestHandler {

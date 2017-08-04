@@ -4,7 +4,6 @@ part of test.jaguar.response.json;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
 // **************************************************************************
 
 class JaguarExampleApi implements RequestHandler {

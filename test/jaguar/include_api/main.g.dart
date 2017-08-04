@@ -4,7 +4,6 @@ part of test.jaguar.group;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class UserApi
 // **************************************************************************
 
 class JaguarUserApi implements RequestHandler {
@@ -36,11 +35,6 @@ class JaguarUserApi implements RequestHandler {
     return null;
   }
 }
-
-// **************************************************************************
-// Generator: ApiGenerator
-// Target: class ExampleApi
-// **************************************************************************
 
 class JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[

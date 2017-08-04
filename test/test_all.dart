@@ -17,6 +17,8 @@ import 'settings/settings.dart' as settings;
 
 //TODO import 'jaguar/websocket/websocket.dart' as websocket;
 
+import 'bootstrap/serve.dart' as bootstrap;
+
 void main() {
   exceptionExcept.main();
   includeApi.main();
@@ -33,4 +35,6 @@ void main() {
   settings.main();
 
 //  TODO websocket.main();
+
+  bootstrap.main();
 }

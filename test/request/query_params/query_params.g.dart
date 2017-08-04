@@ -4,7 +4,6 @@ part of test.jaguar.query_params;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class QueryParamsExampleApi
 // **************************************************************************
 
 class JaguarQueryParamsExampleApi implements RequestHandler {

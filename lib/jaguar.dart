@@ -1,4 +1,4 @@
-//Main library that should be imported to write APIs using Jaguar
+/// Main library that should be imported to write APIs using Jaguar
 library jaguar;
 
 export 'src/annotations/import.dart';

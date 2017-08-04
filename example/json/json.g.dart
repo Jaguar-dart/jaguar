@@ -4,7 +4,6 @@ part of example.body.json;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class BooksApi
 // **************************************************************************
 
 class JaguarBooksApi implements RequestHandler {

@@ -1,28 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of example.routes;
+part of bootstrap.gen;
 
 // **************************************************************************
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarBooksApi implements RequestHandler {
+class JaguarAuthorRoutes implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[const Get()];
 
-  final BooksApi _internal;
+  final AuthorRoutes _internal;
 
-  JaguarBooksApi(this._internal);
+  JaguarAuthorRoutes(this._internal);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
-    prefix += '/api/book';
+    prefix += '/api/author';
     bool match = false;
 
-//Handler for getJaguarInfo
+//Handler for get
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      ctx.addInterceptor(_internal.genRandom);
-      ctx.addInterceptor(_internal.usesRandom);
-      return await Interceptor.chain(ctx, _internal.getJaguarInfo, routes[0]);
+      return await Interceptor.chain(ctx, _internal.get, routes[0]);
     }
 
     return null;
