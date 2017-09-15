@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.12
+
+- Upgraded intl dependency
+
 ## 0.6.11
 
 - Bootstrapping root APIs using `bootstrap` method
