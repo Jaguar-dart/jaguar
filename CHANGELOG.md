@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.13
+
+- `bodyAsText`'s encoding parameter is optional
+
 ## 0.6.12
 
 - Upgraded intl dependency

@@ -81,7 +81,7 @@ class Request {
   }
 
   /// Returns body as text
-  Future<String> bodyAsText(Encoding encoding) async {
+  Future<String> bodyAsText([Encoding encoding = UTF8]) async {
     return encoding.decode(await body);
   }
 
