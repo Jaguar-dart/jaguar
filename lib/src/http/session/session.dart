@@ -105,12 +105,12 @@ class CookieSessionManager implements SessionManager {
       return new Session.newSession({});
     }
 
-    if (values['sid'] != String) {
+    if (values['sid'] is! String) {
       return new Session.newSession({});
     }
 
     final String timeStr = values['sct'];
-    if (timeStr == null) {
+    if (timeStr is! String) {
       return new Session.newSession({});
     }
 
