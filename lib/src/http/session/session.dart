@@ -9,15 +9,27 @@ import 'package:meta/meta.dart';
 import 'package:jaguar/src/http/request/request.dart';
 import 'package:jaguar/src/http/response/import.dart';
 
-/// A session
+/// A per request object containing session information of the request
+///
+/// [id] field uniquely identifies the session.
+/// [isNew] reflects if the session is creates during the current request.
+/// [createdTime] is the time at which the session was created. It can be used
+/// to implement expiry of the session.
+///
+/// [Session] implements a [Map<String, String>] interface. The session data
+/// can be obtained and manipulated using normal [Map] operators and methods.
+///
+///     session['email'] = email;
+///     String name = session['name'];
+///
+/// In addition, [getInt] and [getDouble] methods can be used to cast the [String]
+/// session value to [int] and [double] respectively.
 class Session extends Object with MapMixin<String, String> {
   /// Session ID
-  ///
-  /// Do not use this
   final String id;
 
   /// Session data
-  final Map<String, String> data = <String, String>{};
+  final Map<String, String> _data = <String, String>{};
 
   /// Indicates whether session is newly created
   final bool isNew;
@@ -25,40 +37,47 @@ class Session extends Object with MapMixin<String, String> {
   /// CreatedTime is when the session was created
   final DateTime createdTime;
 
+  /// Creates a session object for existing session with given [data], [id] and
+  /// [createdTime]
   Session(this.id, Map<String, String> data, this.createdTime,
       {this.isNew: false}) {
     if (data is Map) addAll(data);
   }
 
-  // TODO create unique id
+  /// Create new session with given [data], [id] and [createdTime]
+  ///
+  /// If [id] is not given, it tries to create a new unique id.
+  /// If [createdTime] is not given, it sets the [createdTime] to current time
   Session.newSession(Map<String, String> data,
       {String id, DateTime createdTime})
-      : id = id ?? '1',
+      : id = id ?? '1', // TODO create unique id
         isNew = true,
         createdTime = createdTime ?? new DateTime.now() {
     if (data is Map) addAll(data);
   }
 
-  String operator [](@checked String key) => data[key];
+  String operator [](@checked String key) => _data[key];
 
-  operator []=(String key, String value) => data[key] = value;
+  operator []=(String key, String value) => _data[key] = value;
 
-  String remove(@checked String key) => data.remove(key);
+  String remove(@checked String key) => _data.remove(key);
 
-  void clear() => data.clear();
+  void clear() => _data.clear();
 
-  Iterable<String> get keys => data.keys;
+  Iterable<String> get keys => _data.keys;
 
+  /// Returns a session value as int
   int getInt(String key, [int defaultVal]) {
-    final String val = data[key];
+    final String val = _data[key];
 
     if (val == null) return defaultVal;
 
     return int.parse(val, onError: (_) => defaultVal);
   }
 
+  /// Returns a session value as double
   double getDouble(String key, [double defaultVal]) {
-    final String val = data[key];
+    final String val = _data[key];
 
     if (val == null) return defaultVal;
 
