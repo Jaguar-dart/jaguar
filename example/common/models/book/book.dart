@@ -10,7 +10,7 @@ class Book {
   Book.make(this.id, this.name, this.authors);
 
   Book.FromQueryParam(QueryParams params) {
-    fromMap({'name': params.name, 'authors': params.authors});
+    fromMap({'name': params['name'], 'authors': params['authors']});
   }
 
   /// Id of the book

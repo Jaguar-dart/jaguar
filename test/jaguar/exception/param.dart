@@ -31,26 +31,26 @@ class UserParser extends Interceptor {
 
   User pre(Context ctx) {
     QueryParams queryParams = ctx.queryParams;
-    if (queryParams.name is! String) {
+    if (queryParams['name'] is! String) {
       throw new ValidationException('name', 'is required!');
     } else {
-      String value = queryParams.name;
+      String value = queryParams['name'];
 
       if (value.isEmpty) {
         throw new ValidationException('name', 'Cannot be empty!');
       }
     }
 
-    if (queryParams.age is! String) {
+    if (queryParams['age'] is! String) {
       throw new ValidationException('age', 'Is required!');
     } else {
-      int value = queryParams.age;
+      int value = queryParams['age'];
 
       if (value <= 0) {
         throw new ValidationException('age', 'Must be positive!');
       }
     }
 
-    return new User(queryParams.name, queryParams.age);
+    return new User(queryParams['name'], queryParams['age']);
   }
 }

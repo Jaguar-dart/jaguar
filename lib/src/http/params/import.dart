@@ -126,6 +126,7 @@ class PathParams extends DynamicDottableMap {
 }
 
 /// Class to hold query parameters
+/// @proxy
 class QueryParams extends DynamicDottableMap {
   QueryParams(Map<String, dynamic> map) : super(map);
 
