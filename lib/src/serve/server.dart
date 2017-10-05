@@ -28,14 +28,17 @@ class Jaguar extends Object with Muxable {
   /// Base path
   final String basePath;
 
-  HttpServer _server;
-
   final ErrorWriter errorWriter;
+
+  /// Session manager to parse and update session data for requests
+  final SessionManager sessionManager;
 
   /// Logger
   final Logger log = new Logger('J');
 
   final DebugStream debugStream;
+
+  HttpServer _server;
 
   /// Returns protocol string
   String get protocolStr => securityContext == null ? 'http' : 'https';
@@ -51,8 +54,10 @@ class Jaguar extends Object with Muxable {
       this.autoCompress: false,
       this.basePath: '',
       ErrorWriter errorWriter,
-      this.debugStream})
-      : errorWriter = errorWriter ?? new DefaultErrorWriter();
+      this.debugStream,
+      SessionManager sessionManager})
+      : errorWriter = errorWriter ?? new DefaultErrorWriter(),
+        sessionManager = sessionManager ?? new CookieSessionManager();
 
   /// Starts serving the provided APIs
   Future<Null> serve() async {
@@ -78,7 +83,7 @@ class Jaguar extends Object with Muxable {
   Future _handleRequest(HttpRequest request) async {
     final start = new DateTime.now();
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
-    final ctx = new Context(new Request(request, log));
+    final ctx = new Context(new Request(request, sessionManager, log));
     ctx.addInterceptors(_interceptorCreators);
     try {
       Response response;
@@ -89,6 +94,7 @@ class Jaguar extends Object with Muxable {
         }
       }
       if (response is Response) {
+        await sessionManager.write(ctx.req, response);
         await response.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, response, start));
       } else {

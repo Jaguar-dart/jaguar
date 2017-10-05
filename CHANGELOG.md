@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.14
+
+- `Session` in `Request`
+- `SessionManager` in `Jaguar` to parse and write session data
+
 ## 0.6.13
 
 - `bodyAsText`'s encoding parameter is optional
