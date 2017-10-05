@@ -26,7 +26,9 @@ class Session extends Object with MapMixin<String, String> {
   final DateTime createdTime;
 
   Session(this.id, Map<String, String> data, this.createdTime,
-      {this.isNew: false});
+      {this.isNew: false}) {
+    if (data is Map) addAll(data);
+  }
 
   // TODO create unique id
   Session.newSession(Map<String, String> data,
