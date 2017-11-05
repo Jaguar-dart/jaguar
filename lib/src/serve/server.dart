@@ -19,7 +19,7 @@ class Jaguar extends Object with Muxable {
   /// Security context
   final SecurityContext securityContext;
 
-  /// Should the port be servicable from multiple isolates
+  /// Should the port be service-able from multiple isolates
   final bool multiThread;
 
   /// Should the response be auto-compressed
@@ -94,7 +94,8 @@ class Jaguar extends Object with Muxable {
         }
       }
       if (response is Response) {
-        await sessionManager.write(ctx.req, response);
+        if (ctx.req.sessionNeedsUpdate)
+          await sessionManager.write(ctx.req, response);
         await response.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, response, start));
       } else {

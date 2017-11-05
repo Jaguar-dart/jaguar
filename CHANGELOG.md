@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.18
+
+- Sessions are now only written when necessary
+- Added HMAC based signing to session data
+
 ## 0.6.14
 
 - `Session` in `Request`

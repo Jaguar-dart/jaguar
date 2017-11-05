@@ -58,6 +58,16 @@ abstract class Request {
   /// The session for the given request
   Future<Session> get session;
 
+  /// Does session need an update?
+  ///
+  /// Shall be used when writing response or closing a request.
+  bool get sessionNeedsUpdate;
+
+  /// Parsed session
+  ///
+  /// Returns [null], if the session is not parsed yet.
+  Session get parsedSession;
+
   /// Connection information of the request
   HttpConnectionInfo get connectionInfo;
 
@@ -148,6 +158,12 @@ class _Request implements Request {
 
   /// The requested URI for the request.
   Uri get requestedUri => _request.requestedUri;
+
+  /// Does the session need update?
+  bool get sessionNeedsUpdate => _session != null && _session.needsUpdate;
+
+  /// Parsed session. Returns null, if the session is not parsed yet.
+  Session get parsedSession => _session;
 
   /// The session for the given request.
   Future<Session> get session async {
