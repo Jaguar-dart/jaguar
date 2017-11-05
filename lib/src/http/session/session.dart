@@ -42,7 +42,7 @@ class Session {
   /// [createdTime]
   Session(this.id, Map<String, String> data, this.createdTime,
       {this.needsUpdate: false}) {
-    if (data is Map) addAll(data);
+    if (data is Map) _data.addAll(data);
   }
 
   /// Create new session with given [data], [id] and [createdTime]

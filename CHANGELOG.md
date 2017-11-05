@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.19
+
+- Bug fix for `Session`
+
 ## 0.6.18
 
 - Sessions are now only written when necessary
