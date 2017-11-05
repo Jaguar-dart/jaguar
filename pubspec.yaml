@@ -23,6 +23,8 @@ dependencies:
   mustache: ">=0.2.5+1 <0.3.0"
   collection: ">=1.14.1 <2.0.0"
   dice: ^1.7.0
+  crypto: ^2.0.2
+  meta: ^1.1.2
 
 dev_dependencies:
   cookies:
