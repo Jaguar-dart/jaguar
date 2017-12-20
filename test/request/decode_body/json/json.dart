@@ -53,7 +53,7 @@ void main() {
   group('Decode Json', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarJsonDecode(new JsonDecode()));
       await server.serve();
     });
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('Decode Map', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/add/one');
+      Uri uri = new Uri.http('localhost:8000', '/api/add/one');
       http.Response response =
           await http.post(uri, body: '{"input1": 5, "input2": 15}');
 
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('Decode List', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/add/many');
+      Uri uri = new Uri.http('localhost:8000', '/api/add/many');
       http.Response response = await http.post(uri,
           body: '[{"input1": 5, "input2": 15}, {"input1": 50, "input2": 55}]');
 
@@ -85,7 +85,7 @@ void main() {
     });
 
     test('Decode int', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/add/doubled');
+      Uri uri = new Uri.http('localhost:8000', '/api/add/doubled');
       http.Response response = await http.post(uri, body: '4');
 
       expect(response.statusCode, 200);

@@ -24,7 +24,7 @@ void main() {
   group('JSON response', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('render json Map', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/info');
+      Uri uri = new Uri.http('localhost:8000', '/api/info');
       http.Response response = await http.get(uri);
       expect(response.body,
           '{"Name":"Jaguar","Features":["Speed","Simplicity","Extensiblity"]}');
@@ -44,7 +44,7 @@ void main() {
     });
 
     test('Render json List', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/info');
+      Uri uri = new Uri.http('localhost:8000', '/api/info');
       http.Response response = await http.post(uri);
 
       expect(response.body, '[1,2,3]');

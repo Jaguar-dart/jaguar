@@ -44,7 +44,7 @@ void main() {
   group('route', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server
           .addApi(new JaguarQueryParamsExampleApi(new QueryParamsExampleApi()));
       await server.serve();
@@ -56,7 +56,7 @@ void main() {
 
     test('stringParam', () async {
       Uri uri = new Uri.http(
-          'localhost:8080', '/api/stringParam', {'strParam': 'hello'});
+          'localhost:8000', '/api/stringParam', {'strParam': 'hello'});
       http.Response response = await http.get(uri);
 
       expect(response.body, 'hello');
@@ -65,7 +65,7 @@ void main() {
 
     test('intParam', () async {
       Uri uri =
-          new Uri.http('localhost:8080', '/api/intParam', {'intParam': '5'});
+          new Uri.http('localhost:8000', '/api/intParam', {'intParam': '5'});
       http.Response response = await http.get(uri);
 
       expect(response.body, '25');
@@ -74,7 +74,7 @@ void main() {
 
     test('doubleParam', () async {
       Uri uri = new Uri.http(
-          'localhost:8080', '/api/doubleParam', {'doubleParam': '1.25'});
+          'localhost:8000', '/api/doubleParam', {'doubleParam': '1.25'});
       http.Response response = await http.get(uri);
 
       expect(response.body, '2.5');
@@ -83,7 +83,7 @@ void main() {
 
     test('numParam', () async {
       Uri uri =
-          new Uri.http('localhost:8080', '/api/numParam', {'numParam': '1.25'});
+          new Uri.http('localhost:8000', '/api/numParam', {'numParam': '1.25'});
       http.Response response = await http.get(uri);
 
       expect(response.body, '2.5');
@@ -91,7 +91,7 @@ void main() {
     });
 
     test('defStringParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defStringParam');
+      Uri uri = new Uri.http('localhost:8000', '/api/defStringParam');
       http.Response response = await http.get(uri);
 
       expect(response.body, 'default');
@@ -99,7 +99,7 @@ void main() {
     });
 
     test('defIntParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defIntParam');
+      Uri uri = new Uri.http('localhost:8000', '/api/defIntParam');
       http.Response response = await http.get(uri);
 
       expect(response.body, '2500');
@@ -107,7 +107,7 @@ void main() {
     });
 
     test('defDoubleParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defDoubleParam');
+      Uri uri = new Uri.http('localhost:8000', '/api/defDoubleParam');
       http.Response response = await http.get(uri);
 
       expect(response.body, '25.5');
@@ -115,7 +115,7 @@ void main() {
     });
 
     test('defNumParam', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/defNumParam');
+      Uri uri = new Uri.http('localhost:8000', '/api/defNumParam');
       http.Response response = await http.get(uri);
 
       expect(response.body, '10.5');

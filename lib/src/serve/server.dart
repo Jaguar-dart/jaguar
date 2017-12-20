@@ -132,21 +132,18 @@ class Jaguar extends Object with Muxable {
 
   final _builtHandlers = <RequestHandler>[];
 
-  /// [RequestHandler]s
-  final List<RequestHandler> _apis = <RequestHandler>[];
+  final _unbuiltRoutes = <dynamic>[];
 
   /// Adds given API [api] to list of API that will be served
   void addApi(RequestHandler api) {
     if (_server != null) {
       throw new Exception('Cannot add routes after server has been started!');
     }
-    _apis.add(api);
+    _unbuiltRoutes.add(api);
   }
 
   // Adds give Api class using reflection
   void addApiReflected(api) => addApi(new JaguarReflected(api));
-
-  final _unbuiltRoutes = <RouteBuilder>[];
 
   /// Adds the [route] to be served
   RouteBuilder addRoute(RouteBuilder route) {
@@ -166,12 +163,17 @@ class Jaguar extends Object with Muxable {
   /// Builds handlers to be served
   void _buildHandlers() {
     _builtHandlers.clear();
-    _builtHandlers.addAll(_apis);
-    for (RouteBuilder route in _unbuiltRoutes) {
-      Route jRoute = new Route(
-          path: route.path, methods: route.methods, pathRegEx: route.pathRegEx);
-      _builtHandlers.add(new ReflectedRoute.build(route.handler, jRoute, '',
-          route.interceptors, route.exceptionHandlers));
+    for (dynamic handler in _unbuiltRoutes) {
+      if (handler is RequestHandler) {
+        _builtHandlers.add(handler);
+      } else if (handler is RouteBuilder) {
+        Route jRoute = new Route(
+            path: handler.path,
+            methods: handler.methods,
+            pathRegEx: handler.pathRegEx);
+        _builtHandlers.add(new ReflectedRoute.build(handler.handler, jRoute, '',
+            handler.interceptors, handler.exceptionHandlers));
+      }
     }
   }
 }

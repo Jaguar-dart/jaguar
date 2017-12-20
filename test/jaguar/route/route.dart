@@ -44,7 +44,7 @@ void main() {
   group('route', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
@@ -59,7 +59,7 @@ void main() {
   group('route reflected', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApiReflected(new ExampleApi());
       await server.serve();
     });
@@ -74,7 +74,7 @@ void main() {
 
 grouped() {
   test('GET', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user');
+    Uri uri = new Uri.http('localhost:8000', '/api/user');
     http.Response response = await http.get(uri);
 
     expect(response.statusCode, 200);
@@ -84,7 +84,7 @@ grouped() {
   });
 
   test('DefaultStatusCode', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/statuscode');
+    Uri uri = new Uri.http('localhost:8000', '/api/statuscode');
     http.Response response = await http.get(uri);
 
     expect(response.body, 'status code');
@@ -95,7 +95,7 @@ grouped() {
 
   test('ParamAndQuery', () async {
     Uri uri = new Uri.http(
-        'localhost:8080', '/api/paramandquery/hello', {'query': 'world'});
+        'localhost:8000', '/api/paramandquery/hello', {'query': 'world'});
     http.Response response = await http.get(uri);
 
     expect(response.body, 'hello world');
@@ -105,7 +105,7 @@ grouped() {
   });
 
   test('InputHeader', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/input/header');
+    Uri uri = new Uri.http('localhost:8000', '/api/input/header');
     http.Response response = await http.get(uri, headers: {'user': 'teja'});
 
     expect(response.body, 'teja');
@@ -115,7 +115,7 @@ grouped() {
   });
 
   test('InputHeaders', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/input/headers');
+    Uri uri = new Uri.http('localhost:8000', '/api/input/headers');
     http.Response response = await http.get(uri, headers: {'user': 'kleak'});
 
     expect(response.body, 'kleak');
@@ -125,7 +125,7 @@ grouped() {
   });
 
   test('InputCookie', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/input/cookie');
+    Uri uri = new Uri.http('localhost:8000', '/api/input/cookie');
     http.Response response =
         await http.get(uri, headers: {'cookie': 'user=teja'});
 
@@ -136,7 +136,7 @@ grouped() {
   });
 
   test('InputCookies', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/input/cookies');
+    Uri uri = new Uri.http('localhost:8000', '/api/input/cookies');
     http.Response response =
         await http.get(uri, headers: {'cookie': 'user=kleak'});
 

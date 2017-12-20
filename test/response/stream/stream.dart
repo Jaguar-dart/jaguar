@@ -27,7 +27,7 @@ void main() {
   group('route', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
@@ -37,7 +37,7 @@ void main() {
     });
 
     test('stream', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/stream');
+      Uri uri = new Uri.http('localhost:8000', '/api/stream');
       http.Response response = await http.get(uri);
 
       expect(response.body, '\x01\x02\x03\x04\x05\x06\x07\b');

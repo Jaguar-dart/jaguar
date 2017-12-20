@@ -27,7 +27,7 @@ void main() {
   group('Inject Request into interceptor', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
@@ -42,7 +42,7 @@ void main() {
   group('Inject Request into interceptor reflected', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApiReflected(new ExampleApi());
       await server.serve();
     });
@@ -57,7 +57,7 @@ void main() {
 
 grouped() {
   test('inject request', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/echo/uri');
+    Uri uri = new Uri.http('localhost:8000', '/api/echo/uri');
     http.Response response = await http.get(uri);
 
     expect(response.statusCode, 200);

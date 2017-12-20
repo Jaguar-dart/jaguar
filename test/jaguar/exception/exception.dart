@@ -35,7 +35,7 @@ void main() {
     Jaguar server;
 
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
@@ -51,7 +51,7 @@ void main() {
     Jaguar server;
 
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApiReflected(new ExampleApi());
       await server.serve();
     });
@@ -66,7 +66,7 @@ void main() {
 
 grouped() {
   test('Exception message', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user', {'who1': 'kleak'});
+    Uri uri = new Uri.http('localhost:8000', '/api/user', {'who1': 'kleak'});
     http.Response response = await http.get(uri);
 
     expect(response.body,
@@ -75,7 +75,7 @@ grouped() {
   });
 
   test('No exception', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user', {'who': 'kleak'});
+    Uri uri = new Uri.http('localhost:8000', '/api/user', {'who': 'kleak'});
     http.Response response = await http.get(uri);
 
     expect(response.body, r'kleak');
@@ -83,7 +83,7 @@ grouped() {
   });
 
   test('Class exception', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user', {'name': 'teja'});
+    Uri uri = new Uri.http('localhost:8000', '/api/user', {'name': 'teja'});
     http.Response response = await http.get(uri);
 
     expect(response.body,
@@ -92,7 +92,7 @@ grouped() {
   });
 
   test('Multiple exceptions', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user', {'age': '27'});
+    Uri uri = new Uri.http('localhost:8000', '/api/user', {'age': '27'});
     http.Response response = await http.post(uri);
 
     expect(response.body, r'{"Field": name, "Message": "is required! }');
@@ -100,7 +100,7 @@ grouped() {
   });
 
   test('Exceptions in interceptor', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user', {'name': ''});
+    Uri uri = new Uri.http('localhost:8000', '/api/user', {'name': ''});
     http.Response response = await http.post(uri);
 
     expect(response.body, r'{"Field": name, "Message": "Cannot be empty! }');

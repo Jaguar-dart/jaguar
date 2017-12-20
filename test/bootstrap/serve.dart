@@ -32,7 +32,7 @@ main() async {
 
     setUpAll(() async {
       final injector = new Injector.fromModules([new MyModule()]);
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       bootstrap(server, injector: injector);
       await server.serve();
     });
@@ -43,21 +43,21 @@ main() async {
 
     test('Api from same library', () async {
       final JsonResponse resp =
-          await client.get('http://localhost:8080/api/main');
+          await client.get('http://localhost:8000/api/main');
       expect(resp, hasStatus(200));
       expect(resp, hasBodyStr('main'));
     });
 
     test('Api from different library', () async {
       final JsonResponse resp =
-          await client.get('http://localhost:8080/api/author');
+          await client.get('http://localhost:8000/api/author');
       expect(resp, hasStatus(200));
       expect(resp, hasBodyStr('author Dan Brown'));
     });
 
     test('Api from another different library', () async {
       final JsonResponse resp =
-          await client.get('http://localhost:8080/api/book');
+          await client.get('http://localhost:8000/api/book');
       expect(resp, hasStatus(200));
       expect(resp, hasBodyStr('book'));
     });

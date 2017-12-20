@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.20
+
++ Preserve order of RequestHandlers
+
 ## 0.6.19
 
 - Bug fix for `Session`

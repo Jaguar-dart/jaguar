@@ -34,7 +34,7 @@ void main() {
   group('Group', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApi(new JaguarExampleApi(new ExampleApi()));
       await server.serve();
     });
@@ -49,7 +49,7 @@ void main() {
   group('Group reflected', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar();
+      server = new Jaguar(port: 8000);
       server.addApiReflected(new ExampleApi());
       await server.serve();
     });
@@ -64,7 +64,7 @@ void main() {
 
 grouped() {
   test('Route', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/version');
+    Uri uri = new Uri.http('localhost:8000', '/api/version');
     http.Response response = await http.get(uri);
 
     expect(response.body, '1.0');
@@ -72,7 +72,7 @@ grouped() {
   });
 
   test('Group.GET', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user');
+    Uri uri = new Uri.http('localhost:8000', '/api/user');
     http.Response response = await http.get(uri);
 
     expect(response.body, 'Get user');
@@ -80,7 +80,7 @@ grouped() {
   });
 
   test('Group.DefaultStatusCode', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/user/statuscode');
+    Uri uri = new Uri.http('localhost:8000', '/api/user/statuscode');
     http.Response response = await http.get(uri);
 
     expect(response.body, 'status code');
@@ -88,7 +88,7 @@ grouped() {
   });
 
   test('Group.Imported.GET', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/book');
+    Uri uri = new Uri.http('localhost:8000', '/api/book');
     http.Response response = await http.get(uri);
 
     expect(response.body, 'Get book');
@@ -96,7 +96,7 @@ grouped() {
   });
 
   test('Group.POST.StringParam', () async {
-    Uri uri = new Uri.http('localhost:8080', '/api/book/some/param');
+    Uri uri = new Uri.http('localhost:8000', '/api/book/some/param');
     http.Response response = await http.post(uri);
 
     expect(response.body, 'Some param');
