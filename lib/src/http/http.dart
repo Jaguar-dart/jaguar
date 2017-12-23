@@ -8,3 +8,4 @@ export 'reflect/reflect.dart';
 export 'request/request.dart';
 export 'response/import.dart';
 export 'session/session.dart';
+export 'websocket/websocket.dart';

@@ -85,21 +85,19 @@ class Jaguar extends Object with Muxable {
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
     final ctx = new Context(new Request(request, sessionManager, log));
     ctx.addInterceptors(_interceptorCreators);
+
+    Response response;
     try {
-      Response response;
       for (RequestHandler requestHandler in _builtHandlers) {
         response = await requestHandler.handleRequest(ctx, prefix: basePath);
         if (response is Response) {
           break;
         }
       }
+
       if (response is Response) {
         if (ctx.req.sessionNeedsUpdate)
           await sessionManager.write(ctx.req, response);
-        await response.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, response, start));
-      } else {
-        throw errorWriter.make404(ctx);
       }
     } catch (e, stack) {
       if (e is Response) {
@@ -110,16 +108,27 @@ class Jaguar extends Object with Muxable {
         await resp.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, resp, start));
       } else {
-        log.severe(
-            "ReqErr => Method: ${request.method} Url: ${request.uri} E: $e Stack: $stack");
+        log.severe("ReqErr => Method: ${request.method} Url: ${request
+                .uri} E: $e Stack: $stack");
 
         final Response resp = errorWriter.make500(ctx, e, stack);
         await resp.writeResponse(request.response);
         debugStream?._add(new DebugInfo.make(ctx, resp, start));
       }
-    } finally {
-      await request.response.close();
+      return request.response.close();
     }
+
+    if (response is Response) {
+      debugStream?._add(new DebugInfo.make(ctx, response, start));
+    } else {
+      response = errorWriter.make404(ctx);
+    }
+
+    try {
+      await response.writeResponse(request.response);
+    } catch (_) {}
+
+    return request.response.close();
   }
 
   final _interceptorCreators = <InterceptorCreator>[];

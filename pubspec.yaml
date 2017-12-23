@@ -1,5 +1,5 @@
 name: jaguar
-version: 0.6.20
+version: 0.6.21
 description: Jaguar is a production ready server framework built for speed, simplicity and extensiblity
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
@@ -13,7 +13,7 @@ environment:
 
 dependencies:
   yaml: ^2.1.12
-  args: ">=0.13.7 <0.14.0"
+  args: ^1.2.0
   http_server: ">=0.9.6 <0.10.0"
   mime: ">=0.9.3 <0.10.0"
   logging: ">=0.11.3 <0.12.0"

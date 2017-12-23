@@ -15,7 +15,7 @@ import 'response/stream/stream.dart' as responseStream;
 
 import 'settings/settings.dart' as settings;
 
-//TODO import 'jaguar/websocket/websocket.dart' as websocket;
+import 'websocket/websocket.dart' as websocket;
 
 import 'bootstrap/serve.dart' as bootstrap;
 
@@ -34,7 +34,7 @@ void main() {
 
   settings.main();
 
-//  TODO websocket.main();
+  websocket.main();
 
   bootstrap.main();
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.21
+
++ Added `socketHandler` to make WebSocket handling easier
+
 ## 0.6.20
 
 + Preserve order of RequestHandlers
