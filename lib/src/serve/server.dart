@@ -1,43 +1,81 @@
-part of jaguar.src.serve;
+library jaguar.src.serve;
+
+import 'dart:async';
+import 'dart:io';
+import 'dart:collection';
+
+import 'package:jaguar/jaguar.dart';
+import 'package:logging/logging.dart';
+
+import 'package:jaguar/src/serve/error_writer/import.dart';
+
+import 'package:args/args.dart';
+import 'package:yaml/yaml.dart';
+
+export 'package:jaguar/src/serve/error_writer/import.dart';
+
+part 'debug.dart';
+part 'handler.dart';
+part 'settings.dart';
 
 /// Base class for Request handlers
 abstract class RequestHandler {
   FutureOr<Response> handleRequest(Context ctx, {String prefix});
 }
 
+/// An exception that can make an error [Response]
+abstract class ResponseError {
+  /// Creates [Response] from error
+  Response response(Context ctx);
+}
+
 /// The Jaguar server
 ///
-/// It servers the provided APIs on the given `address` and `port`
-/// `securityContext``is used to add HTTPS support
-class Jaguar extends Object with Muxable {
+///
+class Jaguar extends Object with Muxable, _Handler {
   /// Address on which the API is serviced
   final String address;
 
   /// Port on which the API is serviced
   final int port;
 
-  /// Security context
+  /// Security context for HTTPS
   final SecurityContext securityContext;
 
-  /// Should the port be service-able from multiple isolates
+  /// Should the port be service-able from multiple isolates?
+  ///
+  /// Defaults to false.
   final bool multiThread;
 
-  /// Should the response be auto-compressed
+  /// Should the response be auto-compressed?
+  ///
+  /// Defaults to false.
   final bool autoCompress;
 
-  /// Base path
+  /// Base path of the served api.
+  ///
+  /// Defaults to '' (Aka. No base path).
   final String basePath;
 
+  /// Used to write error pages in case of HTTP errors.
+  ///
+  /// Defaults to [DefaultErrorWriter].
   final ErrorWriter errorWriter;
 
-  /// Session manager to parse and update session data for requests
+  /// Session manager to parse and update session data for requests.
+  ///
+  /// Defaults to [CookieSessionManager].
   final SessionManager sessionManager;
 
-  /// Logger
+  /// Logger used to log concise useful information about the request. This is
+  /// also available in [Context] so that interceptors and route handlers can also
+  /// log.
   final Logger log = new Logger('J');
 
+  /// Stream of information about requests used for debugging purposes.
   final DebugStream debugStream;
 
+  /// Internal http server
   HttpServer _server;
 
   /// Returns protocol string
@@ -46,6 +84,20 @@ class Jaguar extends Object with Muxable {
   /// Base path
   String get resourceName => "$protocolStr://$address:$port/";
 
+  /// Constructs an instance of [Jaguar] with given configuration.
+  ///
+  /// [address]:[port] is the address and port at which the HTTP requests are
+  /// listened.
+  /// [multiThread] determines if the port can be serviced from multiple isolates.
+  /// [securityContext] is used to configure HTTPS support.
+  /// [autoCompress] determines if the response should be automatically compressed.
+  /// [basePath] is the path prefix added to all constituting routes of this
+  /// server.
+  /// [errorWriter] is used to write custom error page [Response] in cases of HTTP
+  /// errors.
+  /// [debugStream] is used to expose information about requests. Very helpful for
+  /// debugging purposes.
+  /// [sessionManager] provides ability to use custom session managers.
   Jaguar(
       {this.address: "0.0.0.0",
       this.port: 8080,
@@ -59,7 +111,7 @@ class Jaguar extends Object with Muxable {
       : errorWriter = errorWriter ?? new DefaultErrorWriter(),
         sessionManager = sessionManager ?? new CookieSessionManager();
 
-  /// Starts serving the provided APIs
+  /// Starts serving the HTTP requests.
   Future<Null> serve() async {
     if (_server != null) throw new Exception('Already serving!');
     log.info("Running on $resourceName");
@@ -80,57 +132,7 @@ class Jaguar extends Object with Muxable {
     _builtHandlers.clear();
   }
 
-  Future _handleRequest(HttpRequest request) async {
-    final start = new DateTime.now();
-    log.info("Req => Method: ${request.method} Url: ${request.uri}");
-    final ctx = new Context(new Request(request, sessionManager, log));
-    ctx.addInterceptors(_interceptorCreators);
-
-    Response response;
-    try {
-      for (RequestHandler requestHandler in _builtHandlers) {
-        response = await requestHandler.handleRequest(ctx, prefix: basePath);
-        if (response is Response) {
-          break;
-        }
-      }
-
-      if (response is Response) {
-        if (ctx.req.sessionNeedsUpdate)
-          await sessionManager.write(ctx.req, response);
-      }
-    } catch (e, stack) {
-      if (e is Response) {
-        await e.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, e, start));
-      } else if (e is ResponseError) {
-        final Response resp = e.response(ctx);
-        await resp.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, resp, start));
-      } else {
-        log.severe("ReqErr => Method: ${request.method} Url: ${request
-                .uri} E: $e Stack: $stack");
-
-        final Response resp = errorWriter.make500(ctx, e, stack);
-        await resp.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, resp, start));
-      }
-      return request.response.close();
-    }
-
-    if (response is Response) {
-      debugStream?._add(new DebugInfo.make(ctx, response, start));
-    } else {
-      response = errorWriter.make404(ctx);
-    }
-
-    try {
-      await response.writeResponse(request.response);
-    } catch (_) {}
-
-    return request.response.close();
-  }
-
+  /// Global interceptors
   final _interceptorCreators = <InterceptorCreator>[];
 
   UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
@@ -139,11 +141,13 @@ class Jaguar extends Object with Muxable {
   /// Wraps interceptor creator around all routes
   void wrap(InterceptorCreator creator) => _interceptorCreators.add(creator);
 
-  final _builtHandlers = <RequestHandler>[];
-
+  /// [RequestHandler]s added to this server
   final _unbuiltRoutes = <dynamic>[];
 
-  /// Adds given API [api] to list of API that will be served
+  /// Built [RequestHandler]s
+  final _builtHandlers = <RequestHandler>[];
+
+  /// Adds the given [api] to list of API that will be served
   void addApi(RequestHandler api) {
     if (_server != null) {
       throw new Exception('Cannot add routes after server has been started!');
@@ -151,7 +155,7 @@ class Jaguar extends Object with Muxable {
     _unbuiltRoutes.add(api);
   }
 
-  // Adds give Api class using reflection
+  // Adds the given [api] to list of API that will be served using reflection.
   void addApiReflected(api) => addApi(new JaguarReflected(api));
 
   /// Adds the [route] to be served
@@ -184,60 +188,5 @@ class Jaguar extends Object with Muxable {
             handler.interceptors, handler.exceptionHandlers));
       }
     }
-  }
-}
-
-/// An exception that can make an error [Response]
-abstract class ResponseError {
-  /// Creates [Response] from error
-  Response response(Context ctx);
-}
-
-class DebugInfo {
-  DateTime time;
-
-  Duration duration;
-
-  String path;
-
-  String method;
-
-  final Map<String, List<String>> reqHeaders = <String, List<String>>{};
-
-  int statusCode;
-
-  final Map<String, List<String>> respHeaders = <String, List<String>>{};
-
-  final List<String> messages = <String>[];
-
-  DebugInfo();
-
-  factory DebugInfo.make(Context ctx, Response resp, DateTime start) {
-    final ret = new DebugInfo();
-    ret.path = ctx.path;
-    ret.method = ctx.method;
-    ctx.req.headers.forEach(
-        (String key, List<String> values) => ret.reqHeaders[key] = values);
-    resp.headers.forEach(
-        (String key, List<String> values) => ret.reqHeaders[key] = values);
-    ret.statusCode = resp.statusCode;
-    ret.time = start;
-    ret.duration = new DateTime.now().difference(start);
-    ret.messages.addAll(ctx.debugMsgs);
-    return ret;
-  }
-}
-
-class DebugStream {
-  final StreamController<DebugInfo> _controller =
-      new StreamController<DebugInfo>.broadcast();
-
-  Stream<DebugInfo> get onRequest => _controller.stream;
-
-  Stream<DebugInfo> get onError => onRequest.where(
-      (DebugInfo info) => info.statusCode < 200 && info.statusCode > 299);
-
-  void _add(DebugInfo info) {
-    _controller.add(info);
   }
 }

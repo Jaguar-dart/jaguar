@@ -1,4 +1,4 @@
-part of jaguar.src.http.request;
+part of jaguar.http.request;
 
 /// Abstract class for fields on `multipart/form-data`
 abstract class FormField<T> {

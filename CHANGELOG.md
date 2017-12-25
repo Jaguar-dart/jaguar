@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.22
++ Added `html`, `json`, `getJson`, `putJson`, `postJson`, `deleteJson` methods to `Muxable` and `RouteBuilder`
+
 ## 0.6.21
 
 + Added `socketHandler` to make WebSocket handling easier
