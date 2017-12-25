@@ -1,7 +1,6 @@
 /// Annotations
 library jaguar.src.annotations;
 
-import 'dart:io';
 import 'dart:async';
 
 import 'package:jaguar/jaguar.dart';

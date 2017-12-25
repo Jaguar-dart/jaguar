@@ -25,6 +25,7 @@ dependencies:
   dice: ^1.7.0
   crypto: ^2.0.2
   meta: ^1.1.2
+  path: ^1.5.1
 
 dev_dependencies:
   cookies:

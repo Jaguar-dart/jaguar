@@ -1,0 +1,10 @@
+analyzer:
+  strong-mode: true
+
+linter:
+  rules:
+    - camel_case_types
+    - iterable_contains_unrelated_type
+    - list_remove_unrelated_type
+    - unrelated_type_equality_checks
+    - valid_regexps

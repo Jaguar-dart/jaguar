@@ -19,7 +19,7 @@ abstract class _Handler {
   Future _handleRequest(HttpRequest request) async {
     final start = new DateTime.now();
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
-    
+
     final ctx = new Context(new Request(request, sessionManager, log));
     ctx.addInterceptors(_interceptorCreators);
 

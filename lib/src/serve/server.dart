@@ -160,6 +160,28 @@ class Jaguar extends Object with Muxable, _Handler {
   void addApiReflected(api) => addApi(new ReflectedApi(api));
 
   /// Serves requests for static files at [path] from [directory]
+  ///
+  /// [stripPrefix] parameter determines if the matched part of the path shall be
+  /// discarded while locating the target file.
+  ///
+  /// When [stripPrefix] is true, the behaviour is similar to 'alias' in Nginx.
+  ///
+  /// With [path] '/static/*', the target file will be located inside [directory]
+  /// in the following way:
+  ///
+  /// /static/html/index.html -> html/index.html
+  ///
+  /// When [stripPrefix] is false, the behavior is similar to 'root' in Nginx.
+  ///
+  /// With [path] '/static/*', the target file will be located inside [directory]
+  /// in the following way:
+  ///
+  /// /static/html/index.html -> static/html/index.html
+  ///
+  /// Example:
+  ///    final server = new Jaguar();
+  ///    server.staticFiles('/static/*', 'static');
+  ///    await server.serve();
   void staticFiles(String path, directory,
       {Map<String, String> pathRegEx,
       int statusCode: 200,
@@ -198,6 +220,11 @@ class Jaguar extends Object with Muxable, _Handler {
   }
 
   /// Serves requests at [path] with content of [file]
+  ///
+  /// Example:
+  ///    final server = new Jaguar();
+  ///    server.staticFile('/hello', p.join('static', 'hello.txt'));
+  ///    await server.serve();
   void staticFile(String path, file,
       {Map<String, String> pathRegEx,
       int statusCode: 200,
