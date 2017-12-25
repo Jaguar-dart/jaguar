@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:mustache/mustache.dart';
+import 'package:path/path.dart' as p;
 
 part 'headers.dart';
 
@@ -28,7 +29,10 @@ class Response<ValueType> {
   final List<Cookie> cookies = [];
 
   Response(this.value,
-      {int statusCode: 200, Map<String, dynamic> headers: const {}}) {
+      {int statusCode: 200,
+      Map<String, dynamic> headers: const {},
+      String mimeType,
+      String charset}) {
     if (statusCode is int) {
       this.statusCode = statusCode;
     }
@@ -38,6 +42,9 @@ class Response<ValueType> {
         this.headers.add(name, value);
       });
     }
+
+    if (mimeType is String) this.headers.mimeType = mimeType;
+    if (charset is String) this.headers.charset = charset;
   }
 
   /// Returns a `Response` object that performs a redirect
@@ -139,5 +146,57 @@ class Response<ValueType> {
     } else {
       resp.write(valueAsString);
     }
+  }
+}
+
+/// A namespace class to expose mime type specific features
+abstract class MimeType {
+  /// Mime type for HTML
+  static const String html = "text/html";
+
+  /// Mime type for Javascript
+  static const String javascript = "application/javascript";
+
+  /// Mime type for CSS
+  static const String css = "text/css";
+
+  /// Mime type for Dart
+  static const String dart = "application/dart";
+
+  /// Mime type for PNG
+  static const String png = "image/png";
+
+  /// Mime type for JPEG
+  static const String jpeg = "image/jpeg";
+
+  /// Mime type for GIF
+  static const String gif = "image/gif";
+
+  /// Map of file extension to mime type
+  static const fromFileExtension = const <String, String>{
+    "html": html,
+    "js": javascript,
+    "css": css,
+    "dart": dart,
+    "png": png,
+    "jpg": jpeg,
+    "jpeg": jpeg,
+    "gif": gif,
+  };
+
+  /// Returns mime type of [file] based on its extension
+  static String ofFile(File file) {
+    String fileExtension = p.extension(file.path);
+
+    if (fileExtension.startsWith('.'))
+      fileExtension = fileExtension.substring(1);
+
+    if (fileExtension.length == 0) return null;
+
+    if (fromFileExtension.containsKey(fileExtension)) {
+      return fromFileExtension[fileExtension];
+    }
+
+    return null;
   }
 }

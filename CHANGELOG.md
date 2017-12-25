@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.23
+
++ Added `staticFiles` method to `Jaguar` to serve static files!
++ Added `staticFile` method to `Jaguar` to serve a single static file!
+
+### Breaking Changed
+
++ Renamed `ReflectedRoute` to `RouteChain`
++ Renamed `JaguarReflected` to `ReflectedApi`
++ Renamed `reflectJaguar` to `reflectApi`
+
 ## 0.6.22
 + Added `html`, `json`, `getJson`, `putJson`, `postJson`, `deleteJson` methods to `Muxable` and `RouteBuilder`
 

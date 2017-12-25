@@ -143,10 +143,10 @@ RequestHandler _mkHandler(ClassMirror cm, api) {
   final LibraryMirror owner = cm.owner;
   DeclarationMirror jdm = owner
       .declarations[new Symbol('Jaguar' + MirrorSystem.getName(cm.simpleName))];
-  if (jdm is! ClassMirror) return reflectJaguar(api);
+  if (jdm is! ClassMirror) return reflectApi(api);
   ClassMirror jcm = jdm as ClassMirror;
   if (jdm.metadata.where((im) => im.reflectee is _Ignore).length != 0)
-    return reflectJaguar(api);
+    return reflectApi(api);
   return jcm.newInstance(new Symbol(''), [api]).reflectee;
 }
 

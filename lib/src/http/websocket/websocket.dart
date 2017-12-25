@@ -44,4 +44,6 @@ RouteFunc socketHandler(WebSocketHandler handler,
       });
     };
   }
+
+  throw new ArgumentError.value(handler, 'handler');
 }

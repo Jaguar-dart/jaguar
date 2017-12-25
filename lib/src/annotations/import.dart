@@ -1,6 +1,7 @@
 /// Annotations
 library jaguar.src.annotations;
 
+import 'dart:io';
 import 'dart:async';
 
 import 'package:jaguar/jaguar.dart';
@@ -25,13 +26,4 @@ class IncludeApi {
   final String path;
 
   const IncludeApi({this.path: ''});
-}
-
-/// JaguarFile represents a file. If the value of `Response` object has `JaguarFile`
-/// object, the file with [filePath] is written to the HTTP response.
-class JaguarFile {
-  /// Path of the file
-  final String filePath;
-
-  const JaguarFile(this.filePath);
 }

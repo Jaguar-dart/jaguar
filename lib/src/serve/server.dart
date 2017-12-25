@@ -13,6 +13,7 @@ import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
 export 'package:jaguar/src/serve/error_writer/import.dart';
+import 'package:path/path.dart' as p;
 
 part 'debug.dart';
 part 'handler.dart';
@@ -122,7 +123,7 @@ class Jaguar extends Object with Muxable, _Handler {
       _server = await HttpServer.bind(address, port, shared: multiThread);
     }
     _server.autoCompress = autoCompress;
-    _server.listen((HttpRequest request) => _handleRequest(request));
+    _server.listen(_handleRequest);
   }
 
   /// Closes the server
@@ -155,8 +156,66 @@ class Jaguar extends Object with Muxable, _Handler {
     _unbuiltRoutes.add(api);
   }
 
-  // Adds the given [api] to list of API that will be served using reflection.
-  void addApiReflected(api) => addApi(new JaguarReflected(api));
+  /// Adds the given [api] to list of API that will be served using reflection.
+  void addApiReflected(api) => addApi(new ReflectedApi(api));
+
+  /// Serves requests for static files at [path] from [directory]
+  void staticFiles(String path, directory,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      bool stripPrefix: true}) {
+    if (directory is String) {
+      directory = new Directory(directory);
+    }
+
+    final Directory dir = directory;
+    if (!dir.existsSync())
+      throw new Exception('Directory ${dir.path} does not exist!');
+
+    List<String> parts = splitPathToSegments(path);
+
+    int len = parts.length;
+    if (parts.last == '*') len--;
+
+    get(path, (Context ctx) async {
+      final List<String> paths = stripPrefix
+          ? ctx.uri.pathSegments.sublist(len)
+          : ctx.uri.pathSegments;
+      final String path = p.join(dir.path, p.joinAll(paths));
+      final File file = new File(path);
+      if (!await file.exists()) return null;
+      return new Response<Stream<List<int>>>(await file.openRead(),
+          mimeType: MimeType.ofFile(file));
+    },
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType,
+        charset: kDefaultCharset,
+        headers: headers);
+  }
+
+  /// Serves requests at [path] with content of [file]
+  void staticFile(String path, file,
+      {Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
+    if (file is String) {
+      file = new File(file);
+    }
+
+    final File f = file;
+    get(path, (_) => f.openRead(),
+        pathRegEx: pathRegEx,
+        statusCode: statusCode,
+        mimeType: mimeType ?? MimeType.ofFile(f) ?? kDefaultMimeType,
+        charset: kDefaultCharset,
+        headers: headers);
+  }
 
   /// Adds the [route] to be served
   RouteBuilder addRoute(RouteBuilder route) {
@@ -180,11 +239,11 @@ class Jaguar extends Object with Muxable, _Handler {
       if (handler is RequestHandler) {
         _builtHandlers.add(handler);
       } else if (handler is RouteBuilder) {
-        Route jRoute = new Route(
+        final Route jRoute = new Route(
             path: handler.path,
             methods: handler.methods,
             pathRegEx: handler.pathRegEx);
-        _builtHandlers.add(new ReflectedRoute.build(handler.handler, jRoute, '',
+        _builtHandlers.add(new RouteChain(jRoute, '', handler.handler,
             handler.interceptors, handler.exceptionHandlers));
       }
     }
