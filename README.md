@@ -23,15 +23,73 @@ main() async {
 
 ## Powerful route matching
 
-> TODO
+### Easily define and access Path parameters
 
-## Easily access Query and Path parameters
+Path segments prefixed with `:` can match any value and are also captured as path variables. Path variables can be accessed
+using `pathParams` member of `Context` object.
 
-> TODO
+```dart
+main(List<String> args) async {
+  final quotes = <String>[
+    'But man is not made for defeat. A man can be destroyed but not defeated.',
+    'When you reach the end of your rope, tie a knot in it and hang on.',
+    'Learning never exhausts the mind.',
+  ];
+
+  final server = new Jaguar();
+  server.get('/api/quote/:index', (ctx) { // The magic!
+    final int index = ctx.pathParams.getInt('index', 1);  // The magic!
+    return quotes[index + 1];
+  });
+  await server.serve();
+}
+```
+
++ A path can have multiple path variables.
++ A path variable can appear at any position in the path.
++ A path variable can be matched against a Regular expression.
++ `getInt`, `getDouble`, `getNum` and `getBool` methods can be used to easily typecast path variables.
++ Using * as the final path segment captures/matches all following segments.
+
+## Easily access Query parameters
+
+Query parameters can be accessed using `queryParams` member of `Context` object.
+
+```dart
+main(List<String> args) async {
+  final quotes = <String>[
+    'But man is not made for defeat. A man can be destroyed but not defeated.',
+    'When you reach the end of your rope, tie a knot in it and hang on.',
+    'Learning never exhausts the mind.',
+  ];
+
+  final server = new Jaguar();
+  server.get('/api/quote', (ctx) {
+    final int index = ctx.queryParams.getInt('index', 1); // The magic!
+    return quotes[index + 1];
+  });
+  await server.serve();
+}
+```
+
+`getInt`, `getDouble`, `getNum` and `getBool` methods can be used to easily typecast query parameters into desired type.
 
 ## One liner to access Forms
 
-> TODO
+```dart
+main(List<String> arguments) async {
+  final server = new Jaguar(port: 8005);
+
+  server.post('/api/add', (ctx) async {
+      final Map<String, String> map = await ctx.req.bodyAsUrlEncodedForm(); // The magic!
+      contacts.add(Contact.create(map));
+      return Response.json(contacts.map((ct) => ct.toMap).toList());
+    });
+
+
+  await server.serve();
+}
+```
 
 ## One liner to serve static files
 
@@ -39,16 +97,20 @@ The method [`staticFiles`][Doc::Jaguar::staticFiles] adds static files to `Jagua
 the request Uri that much be matched and the second argument determines the directory from which the target files are fetched.
 
 ```dart
+main() async {
   final server = new Jaguar();
   server.staticFiles('/static/*', 'static'); // The magic!
   await server.serve();
+}
 ```
 
 ## JSON serialization with little effort
 
+### One liners to decode JSON request
+
 > TODO
 
-## One liners to encode JSON response
+### One liners to encode JSON response
 
 > TODO
 

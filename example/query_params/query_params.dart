@@ -1,28 +1,18 @@
 library example.routes;
 
-import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
-part 'query_params.g.dart';
+main(List<String> args) async {
+  final quotes = <String>[
+    'But man is not made for defeat. A man can be destroyed but not defeated.',
+    'When you reach the end of your rope, tie a knot in it and hang on.',
+    'Learning never exhausts the mind.',
+  ];
 
-@Api(path: '/api/book')
-class BooksApi {
-  @Get()
-  String getAsString(Context ctx) => ctx.queryParams.get('key');
-
-  @Get()
-  int getAsInt(Context ctx) => ctx.queryParams.getInt('key');
-
-  @Get()
-  double getAsDouble(Context ctx) => ctx.queryParams.getDouble('key');
-
-  @Get()
-  num getAsNum(Context ctx) => ctx.queryParams.getNum('key');
-}
-
-Future<Null> main(List<String> args) async {
-  Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new JaguarBooksApi(new BooksApi()));
-
-  await jaguar.serve();
+  final server = new Jaguar();
+  server.get('/api/quote', (ctx) {
+    final int index = ctx.queryParams.getInt('index', 1);
+    return quotes[index + 1];
+  });
+  await server.serve();
 }

@@ -5,7 +5,6 @@ apis:
 - 'example/routing/api_class/routing.dart'
 - 'example/routing/redirect/redirect.dart'
 - 'example/interceptor/interceptor.dart'
-- 'example/query_params/query_params.dart'
 - 'example/redirect/redirect.dart'
 - 'test/jaguar/exception/exception.dart'
 - 'test/jaguar/interceptor/custom_interceptor/custom_interceptor.dart'
