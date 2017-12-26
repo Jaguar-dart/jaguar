@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/Jaguar-dart/jaguar.svg?branch=master)](https://travis-ci.org/Jaguar-dart/jaguar)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/jaguar_dart/jaguar)
 
 # Jaguar
 
@@ -109,7 +110,7 @@ main() async {
 
 ## JSON serialization with little effort
 
-Decoding JSON requests is can't be simpler than using one of the built-in [`bodyAsJson`][Doc::Request::bodyAsJson], 
+Decoding JSON requests can't be simpler than using one of the built-in [`bodyAsJson`][Doc::Request::bodyAsJson], 
 [`bodyAsJsonMap`][Doc::Request::bodyAsJsonMap] or [`bodyAsJsonList`][Doc::Request::bodyAsJsonList] methods on 
 [`Request`][Doc::Request] object.
 
@@ -128,25 +129,42 @@ Future<Null> main(List<String> args) async {
 }
 ```
 
-## Organise route handlers in an API class
+## Out-of-the-box Sessions support
 
-> TODO
+```dart
+main() async {
+  final server = new Jaguar();
+  server.get('/api/add/:item', (ctx) async {
+    final Session session = await ctx.req.session;
+    final String newItem = ctx.pathParams.item;
 
-## Session support
+    final List<String> items = (session['items'] ?? '').split(',');
 
-> TODO
+    // Add item to shopping cart stored on session
+    if (!items.contains(newItem)) {
+      items.add(newItem);
+      session['items'] = items.join(',');
+    }
 
-## Authentication support
+    return Response.redirect('/');
+  });
+  server.get('/api/remove/:item', (ctx) async {
+    final Session session = await ctx.req.session;
+    final String newItem = ctx.pathParams.item;
 
-> TODO
+    final List<String> items = (session['items'] ?? '').split(',');
 
-## Mongo support
+    // Remove item from shopping cart stored on session
+    if (items.contains(newItem)) {
+      items.remove(newItem);
+      session['items'] = items.join(',');
+    }
 
-> TODO
-
-## ORM support for SQL databases
-
-> TODO
+    return Response.redirect('/');
+  });
+  await server.serve();
+}
+```
 
 # Advantages of Jaguar
 
@@ -178,11 +196,6 @@ Future<Null> main(List<String> args) async {
     5. [PostgreSQL](https://github.com/jaguar-examples/boilerplate_postgresql)
     6. [MySQL](https://github.com/jaguar-examples/boilerplate_sqljocky)
     7. [Upload files using Jaguar](https://github.com/jaguar-examples/upload_file)
-
-## Join us on Gitter
-
-- [jaguar](https://gitter.im/jaguar_dart/jaguar)
-- [dart server](https://gitter.im/dart-lang/server)
 
 [Doc::Jaguar]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Jaguar-class.html
 [Doc::Jaguar::get]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/get.html

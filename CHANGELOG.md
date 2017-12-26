@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.24
+
++ Fixed `RouteChain` building issue
+
 ## 0.6.23
 
 + Added `staticFiles` method to `Jaguar` to serve static files!

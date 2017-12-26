@@ -1,3 +1,14 @@
+/// [Request] encapsulates a HTTP requests. It provides various convenience methods
+/// to help writing route handlers easier.
+///
+/// **Decoding JSON requests**
+/// [bodyAsJson], [bodyAsJsonList] and [bodyAsJsonMap] methods decode JSON requests
+/// with a single line of code.
+///
+/// [bodyAsUrlEncodedForm] method decodes url-encoded form requests with a single
+/// line of code.
+///
+/// [bodyAsFormData] decode multipart/form-data requests.
 library jaguar.http.request;
 
 import 'dart:io';
@@ -94,6 +105,7 @@ abstract class Request {
   /// The HTTP protocol version used in the request, either "1.0" or "1.1".
   String get protocolVersion;
 
+  /// Upgrades the request to a websocket request and returns the websocket
   Future<WebSocket> get upgradeToWebSocket;
 
   /// Returns raw body of HTTP request
@@ -103,20 +115,76 @@ abstract class Request {
   Future<Stream<List<int>>> get bodyAsStream;
 
   /// Returns body as text
+  ///
+  /// Example:
+  ///     final server = new Jaguar();
+  ///     server.post('/api/book', (Context ctx) async {
+  ///       // Decode request body as JSON Map
+  ///       final String body = await ctx.req.bodyAsText();
+  ///       // ...
+  ///     });
+  ///     await server.serve();
   Future<String> bodyAsText([Encoding encoding = UTF8]);
 
   /// Decodes JSON body of the request
+  ///
+  /// Example:
+  ///     final server = new Jaguar();
+  ///     server.post('/api/book', (Context ctx) async {
+  ///       // Decode request body as JSON Map
+  ///       final json = await ctx.req.bodyAsJson();
+  ///       // ...
+  ///     });
+  ///     await server.serve();
   Future<dynamic> bodyAsJson({Encoding encoding: UTF8});
 
   /// Decodes JSON body of the request as [Map]
+  ///
+  /// Example:
+  ///     final server = new Jaguar();
+  ///     server.post('/api/book', (Context ctx) async {
+  ///       // Decode request body as JSON Map
+  ///       final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
+  ///       // ...
+  ///     });
+  ///     await server.serve();
   Future<Map> bodyAsJsonMap({Encoding encoding: UTF8});
 
   /// Decodes JSON body of the request as [List]
+  ///
+  /// Example:
+  ///     final server = new Jaguar();
+  ///     server.post('/api/book', (Context ctx) async {
+  ///       // Decode request body as JSON Map
+  ///       final List json = await ctx.req.bodyAsJsonList();
+  ///       // ...
+  ///     });
+  ///     await server.serve();
   Future<List> bodyAsJsonList({Encoding encoding: UTF8});
 
-  /// Decodes url-encoded form from the body and returns Map<String, String>
+  /// Decodes url-encoded form from the body and returns the form as
+  /// Map<String, String>.
+  ///
+  /// Example:
+  ///     final server = new Jaguar();
+  ///     server.post('/add', (ctx) async {
+  ///       final Map<String, String> map = await ctx.req.bodyAsUrlEncodedForm();
+  ///       // ...
+  ///     });
+  ///     await server.serve();
   Future<Map<String, String>> bodyAsUrlEncodedForm({Encoding encoding: UTF8});
 
   /// Decodes `multipart/form-data` body
+  ///
+  /// Example:
+  ///     server.post('/upload', (ctx) async {
+  ///       final Map<String, FormField> formData = await ctx.req.bodyAsFormData();
+  ///       BinaryFileFormField pic = formData['pic'];
+  ///       File file = new File('bin/data/' + pic.filename);
+  ///       IOSink sink = file.openWrite();
+  ///       await sink.addStream(pic.value);
+  ///       await sink.close();
+  ///       return Response.redirect(Uri.parse("/"));
+  ///     });
   Future<Map<String, FormField>> bodyAsFormData({Encoding encoding: UTF8});
 }

@@ -25,7 +25,7 @@ class _IdiedType {
   }
 }
 
-/// Request context
+/// Per-request context object
 ///
 /// Contains:
 /// 1. Request object
@@ -35,23 +35,49 @@ class _IdiedType {
 /// 5. Route variables
 /// 6. Interceptors
 class Context {
+  /// Uri of the HTTP request
   Uri get uri => req.uri;
 
+  /// Path of the HTTP request
   String get path => uri.path;
 
+  /// Method of the HTTP request
   String get method => req.method;
 
-  /// Request
+  /// [Request] object of the current HTTP request.
+  ///
+  /// Example:
+  ///     final server = new Jaguar();
+  ///     server.post('/api/book', (Context ctx) async {
+  ///       // Decode request body as JSON Map
+  ///       final List json = await ctx.req.bodyAsJsonList();
+  ///       // ...
+  ///     });
+  ///     await server.serve();
   final Request req;
 
   /// Path parameters
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/quote/:index', (ctx) { // The magic!
+  ///       final int index = ctx.pathParams.getInt('index', 1);  // The magic!
+  ///       return quotes[index + 1];
+  ///     });
   final PathParams pathParams = new PathParams();
 
   QueryParams _queryParams;
 
-  /// Returns query params for the request
+  /// Returns query parameters of the request
   ///
-  /// Lazily creates query parameters to enhance performance of route handling
+  /// Lazily creates query parameters to enhance performance of route handling.
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/quote', (ctx) {
+  ///       final int index = ctx.queryParams.getInt('index', 1); // The magic!
+  ///       return quotes[index + 1];
+  ///     });
   QueryParams get queryParams {
     if (_queryParams != null) return _queryParams;
 

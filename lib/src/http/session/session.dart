@@ -10,21 +10,24 @@ import 'package:crypto/crypto.dart';
 import 'package:jaguar/src/http/request/request.dart';
 import 'package:jaguar/src/http/response/import.dart';
 
-/// A per request object containing session information of the request
+/// A per-request object containing session information of the request
 ///
 /// [id] field uniquely identifies the session.
-/// [needsUpdate] reflects if the session is creates during the current request.
+///
+/// [needsUpdate] reflects if the session has been updated during the current
+/// request.
+///
 /// [createdTime] is the time at which the session was created. It can be used
 /// to implement expiry of the session.
 ///
-/// [Session] implements a [Map<String, String>] interface. The session data
-/// can be obtained and manipulated using normal [Map] operators and methods.
+/// [Session] implements subscript operator, allowing session data to be
+/// accessed and updated using normal [Map]-like operators and methods.
 ///
 ///     session['email'] = email;
 ///     String name = session['name'];
 ///
 /// In addition, [getInt] and [getDouble] methods can be used to cast the [String]
-/// session value to [int] and [double] respectively.
+/// session value to [int] and [double] values respectively.
 class Session {
   /// Session ID
   final String id;

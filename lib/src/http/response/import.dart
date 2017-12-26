@@ -48,8 +48,9 @@ class Response<ValueType> {
   }
 
   /// Returns a `Response` object that performs a redirect
-  static Response<Uri> redirect(Uri uri,
+  static Response<Uri> redirect(/* Uri | String */ uri,
       {int statusCode: HttpStatus.SEE_OTHER}) {
+    if (uri is String) uri = new Uri(path: uri);
     return new Response<Uri>(uri, statusCode: statusCode);
   }
 

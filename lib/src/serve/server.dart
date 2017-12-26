@@ -269,6 +269,10 @@ class Jaguar extends Object with Muxable, _Handler {
         final Route jRoute = new Route(
             path: handler.path,
             methods: handler.methods,
+            statusCode: handler.statusCode,
+            mimeType: handler.mimeType,
+            charset: handler.charset,
+            headers: handler.headers,
             pathRegEx: handler.pathRegEx);
         _builtHandlers.add(new RouteChain(jRoute, '', handler.handler,
             handler.interceptors, handler.exceptionHandlers));
