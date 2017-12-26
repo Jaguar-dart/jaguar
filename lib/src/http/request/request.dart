@@ -77,7 +77,7 @@ abstract class Request {
 
   /// Parsed session
   ///
-  /// Returns [null], if the session is not parsed yet.
+  /// Returns [null], if the session is not parsed yet by calling [session].
   Session get parsedSession;
 
   /// Connection information of the request

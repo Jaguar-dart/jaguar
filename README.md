@@ -1,3 +1,4 @@
+[![Pub](https://img.shields.io/pub/v/jaguar.svg)](https://pub.dartlang.org/packages/jaguar)
 [![Build Status](https://travis-ci.org/Jaguar-dart/jaguar.svg?branch=master)](https://travis-ci.org/Jaguar-dart/jaguar)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/jaguar_dart/jaguar)
 

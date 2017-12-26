@@ -3,7 +3,7 @@ import 'package:jaguar/jaguar.dart';
 main() async {
   final server = new Jaguar();
   server.get('/api/add/:item', (ctx) async {
-    final Session session = await ctx.req.session;
+    final Session session = await ctx.session;
     final String newItem = ctx.pathParams.item;
 
     final List<String> items = (session['items'] ?? '').split(',');
@@ -17,7 +17,7 @@ main() async {
     return Response.redirect('/');
   });
   server.get('/api/remove/:item', (ctx) async {
-    final Session session = await ctx.req.session;
+    final Session session = await ctx.session;
     final String newItem = ctx.pathParams.item;
 
     final List<String> items = (session['items'] ?? '').split(',');
@@ -31,7 +31,7 @@ main() async {
     return Response.redirect('/');
   });
   server.html('/', (ctx) async {
-    final Session session = await ctx.req.session;
+    final Session session = await ctx.session;
 
     final List<String> items = (session['items'] ?? '').split(',');
 

@@ -60,36 +60,76 @@ class Session {
     if (data is Map) _data.addAll(data);
   }
 
+  /// Access session value by [key]
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/set/:item', (ctx) async {
+  ///       final Session session = await ctx.session;
+  ///       final String oldItem = session['item'];
+  ///       // ...
+  ///     });
   String operator [](@checked String key) => _data[key];
 
+  /// Set session [value] by [key]
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/set/:item', (ctx) async {
+  ///       final Session session = await ctx.session;
+  ///       session['item'] = ctx.pathParams.item;
+  ///       // ...
+  ///     });
   operator []=(String key, String value) {
     _data[key] = value;
     needsUpdate = true;
   }
 
+  /// Set session [value] by [key]
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/set/:item', (ctx) async {
+  ///       final Session session = await ctx.session;
+  ///       session.add('item', ctx.pathParams.item);
+  ///       // ...
+  ///     });
   void add(String key, String value) {
     _data[key] = value;
     needsUpdate = true;
   }
 
+  /// Set multiple session key:value pairs
   void addAll(Map<String, String> values) {
     _data.addAll(values);
     needsUpdate = true;
   }
 
+  /// Remove a session key:value by [key]
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/set/:item', (ctx) async {
+  ///       final Session session = await ctx.session;
+  ///       session.remove('item');
+  ///       // ...
+  ///     });
   String remove(@checked String key) {
     needsUpdate = true;
     return _data.remove(key);
   }
 
+  /// Removes all the session key:value pairs.
   void clear() {
     _data.clear();
     needsUpdate = true;
   }
 
+  /// Returns keys in session store
   Iterable<String> get keys => _data.keys;
 
-  /// Returns a session value as int
+  /// Returns a session value as int by [key]. Returns [defaultVal] if the
+  /// conversion fails.
   int getInt(String key, [int defaultVal]) {
     final String val = _data[key];
 
@@ -98,7 +138,8 @@ class Session {
     return int.parse(val, onError: (_) => defaultVal);
   }
 
-  /// Returns a session value as double
+  /// Returns a session value as double by [key]. Returns [defaultVal] if the
+  /// conversion fails.
   double getDouble(String key, [double defaultVal]) {
     final String val = _data[key];
 
@@ -107,10 +148,13 @@ class Session {
     return double.parse(val, (_) => defaultVal);
   }
 
+  /// Returns the session data as [Map]
   Map<String, String> get asMap => new Map<String, String>.from(_data);
 
+  /// Random number generator used to create session IDs among other things.
   static final Random rand = new Random();
 
+  /// Returns new Session ID
   static String get newId =>
       new DateTime.now().toUtc().millisecondsSinceEpoch.toString() +
       '-' +

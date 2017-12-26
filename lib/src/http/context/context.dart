@@ -2,6 +2,7 @@
 library jaguar.src.http.context;
 
 import 'dart:collection';
+import 'dart:async';
 
 import 'package:quiver_hashcode/hashcode.dart' show hash2;
 import 'package:jaguar/jaguar.dart';
@@ -34,6 +35,7 @@ class _IdiedType {
 /// 4. Route inputs
 /// 5. Route variables
 /// 6. Interceptors
+/// 7. Session object
 class Context {
   /// Uri of the HTTP request
   Uri get uri => req.uri;
@@ -84,6 +86,22 @@ class Context {
     _queryParams = new QueryParams(req.uri.queryParameters);
     return _queryParams;
   }
+
+  /// The session for the given request
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/set/:item', (ctx) async {
+  ///       final Session session = await ctx.session;
+  ///       session['item'] = ctx.pathParams.item;
+  ///       // ...
+  ///     });
+  Future<Session> get session => req.session;
+
+  /// Parsed session
+  ///
+  /// Returns [null], if the session is not parsed yet by calling [session].
+  Session get parsedSession => req.parsedSession;
 
   /// Interceptors for the route
   final _interceptorCreators = <InterceptorCreator>[];

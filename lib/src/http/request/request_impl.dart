@@ -46,6 +46,14 @@ class _Request implements Request {
   Session get parsedSession => _session;
 
   /// The session for the given request.
+  ///
+  /// Example:
+  ///
+  ///     server.get('/api/set/:item', (ctx) async {
+  ///       final Session session = await ctx.req.session;
+  ///       session['item'] = ctx.pathParams.item;
+  ///       // ...
+  ///     });
   Future<Session> get session async {
     if (_session == null) {
       _session = await _sessionManager.parse(this);

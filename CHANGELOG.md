@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.25
+
++ `Context` gets session accessors `session` and `parsedSession`
+
 ## 0.6.24
 
 + Fixed `RouteChain` building issue
