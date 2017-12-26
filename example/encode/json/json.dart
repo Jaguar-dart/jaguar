@@ -15,7 +15,7 @@ class BooksApi {
   Future<Response<String>> addBook(Context ctx) async {
     // Decode request body as JSON Map
     final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
-    Book book = new Book()..fromMap(json);
+    Book book = new Book.fromMap(json);
     print(book.toMap());
     // Encode Map to JSON
     return Response.json(book.toMap());

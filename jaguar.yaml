@@ -1,5 +1,4 @@
 apis:
-- 'example/json/json.dart'
 - 'example/decode/json/json.dart'
 - 'example/encode/json/json.dart'
 - 'example/routing/api_class/routing.dart'

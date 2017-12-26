@@ -76,6 +76,9 @@ main(List<String> args) async {
 
 ## One liner to access Forms
 
+A single line is all it takes to obtain a form as a `Map<String, String>` using method [`bodyAsUrlEncodedForm`][Doc::Request::bodyAsUrlEncodedForm] 
+on [`Request`][Doc::Request] object.
+
 ```dart
 main(List<String> arguments) async {
   final server = new Jaguar(port: 8005);
@@ -106,13 +109,24 @@ main() async {
 
 ## JSON serialization with little effort
 
-### One liners to decode JSON request
+Decoding JSON requests is can't be simpler than using one of the built-in [`bodyAsJson`][Doc::Request::bodyAsJson], 
+[`bodyAsJsonMap`][Doc::Request::bodyAsJsonMap] or [`bodyAsJsonList`][Doc::Request::bodyAsJsonList] methods on 
+[`Request`][Doc::Request] object.
 
-> TODO
+```dart
+Future<Null> main(List<String> args) async {
+  final server = new Jaguar();
+  server.post('/api/book', (Context ctx) async {
+    // Decode request body as JSON Map
+    final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
+    Book book = new Book.fromMap(json);
+    // Encode Map to JSON
+    return Response.json(book.toMap());
+  });
 
-### One liners to encode JSON response
-
-> TODO
+  await server.serve();
+}
+```
 
 ## Organise route handlers in an API class
 
@@ -177,3 +191,8 @@ main() async {
 [Doc::Jaguar::put]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/put.html
 [Doc::Jaguar::options]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/options.html
 [Doc::Jaguar::staticFiles]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/staticFiles.html
+[Doc::Request]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request-class.html
+[Doc::Request::bodyAsJson]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJson.html
+[Doc::Request::bodyAsJsonMap]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonMap.html
+[Doc::Request::bodyAsJsonList]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonList.html
+[Doc::Request::bodyAsUrlEncodedForm]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsUrlEncodedForm.html
