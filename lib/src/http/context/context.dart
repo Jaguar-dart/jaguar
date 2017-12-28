@@ -49,6 +49,7 @@ class Context {
   /// [Request] object of the current HTTP request.
   ///
   /// Example:
+  ///
   ///     final server = new Jaguar();
   ///     server.post('/api/book', (Context ctx) async {
   ///       // Decode request body as JSON Map

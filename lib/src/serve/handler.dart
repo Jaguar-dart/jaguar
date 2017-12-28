@@ -25,6 +25,7 @@ abstract class _Handler {
 
     Response response;
     try {
+      // Try to find a matching route and invoke it.
       for (RequestHandler requestHandler in _builtHandlers) {
         response = await requestHandler.handleRequest(ctx, prefix: basePath);
         if (response is Response) {
@@ -32,35 +33,33 @@ abstract class _Handler {
         }
       }
 
+      // Update session, if required.
       if (response is Response) {
         if (ctx.req.sessionNeedsUpdate)
           await sessionManager.write(ctx.req, response);
       }
     } catch (e, stack) {
       if (e is Response) {
-        await e.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, e, start));
+        // If [Response] object was thrown, write it!
+        response = e;
       } else if (e is ResponseError) {
         final Response resp = e.response(ctx);
-        await resp.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, resp, start));
+        response = resp;
       } else {
         log.severe("ReqErr => Method: ${request.method} Url: ${request
             .uri} E: $e Stack: $stack");
-
-        final Response resp = errorWriter.make500(ctx, e, stack);
-        await resp.writeResponse(request.response);
-        debugStream?._add(new DebugInfo.make(ctx, resp, start));
+        response = errorWriter.make500(ctx, e, stack);
       }
-      return request.response.close();
     }
 
+    // If no response, write 404 error.
     if (response is Response) {
       debugStream?._add(new DebugInfo.make(ctx, response, start));
     } else {
       response = errorWriter.make404(ctx);
     }
 
+    // Write response
     try {
       await response.writeResponse(request.response);
     } catch (_) {}

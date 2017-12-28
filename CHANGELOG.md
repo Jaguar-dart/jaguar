@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.26
+
++ Simplified request handling code
+
 ## 0.6.25
 
 + `Context` gets session accessors `session` and `parsedSession`
