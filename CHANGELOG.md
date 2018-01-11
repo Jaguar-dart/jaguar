@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.27
+
++ Widened dependency on meta package
+
+## 0.6.27
+
++ Widened dependency on args package
+
 ## 0.6.26
 
 + Simplified request handling code
