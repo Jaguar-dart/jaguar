@@ -16,13 +16,16 @@ class ValidationException {
   ValidationException(this.field, this.message);
 }
 
-class ValidationExceptionHandler extends ExceptionHandler<ValidationException> {
+class ValidationExceptionHandler extends ExceptionHandler {
   const ValidationExceptionHandler();
 
   Future<Response<String>> onRouteException(
-      Context ctx, ValidationException e, StackTrace trace) async {
-    final String value = '{"Field": ${e.field}, "Message": "${e.message} }';
-    return new Response<String>(value, statusCode: 400);
+      Context ctx, e, StackTrace trace) async {
+    if (e is ValidationException) {
+      final String value = '{"Field": ${e.field}, "Message": "${e.message} }';
+      return new Response<String>(value, statusCode: 400);
+    }
+    return null;
   }
 }
 
@@ -30,7 +33,7 @@ class UserParser extends Interceptor {
   UserParser();
 
   User pre(Context ctx) {
-    QueryParams queryParams = ctx.queryParams;
+    QueryParams queryParams = ctx.query;
     if (queryParams['name'] is! String) {
       throw new ValidationException('name', 'is required!');
     } else {

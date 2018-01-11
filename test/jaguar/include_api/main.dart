@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 import 'book.dart';
 
@@ -50,7 +51,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApiReflected(new ExampleApi());
+      server.addApi(reflect(new ExampleApi()));
       await server.serve();
     });
 

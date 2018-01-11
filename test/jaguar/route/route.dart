@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 part 'route.g.dart';
 
@@ -18,7 +19,7 @@ class ExampleApi {
 
   @Get(path: '/paramandquery/:param')
   String paramAndQuery(Context ctx) =>
-      '${ctx.pathParams['param']} ${ctx.queryParams['query']}';
+      '${ctx.pathParams['param']} ${ctx.query['query']}';
 
   @Get(path: '/input/header')
   String inputHeader(Context ctx) => ctx.req.headers.value('user');
@@ -60,7 +61,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApiReflected(new ExampleApi());
+      server.addApi(reflect(new ExampleApi()));
       await server.serve();
     });
 

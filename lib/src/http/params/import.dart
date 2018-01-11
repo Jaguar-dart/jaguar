@@ -1,7 +1,6 @@
 /// Provides parsing path and query parameters
 library jaguar.src.http.params;
 
-import 'dart:mirrors';
 import 'package:collection/collection.dart' show DelegatingMap;
 
 import 'package:jaguar/src/utils/string/import.dart';
@@ -20,8 +19,9 @@ class DottableMap<V> extends DelegatingMap<String, V> {
     return this[key];
   }
 
+  /* Reimplement it without Mirrors
   dynamic noSuchMethod(Invocation invocation) {
-    var key = MirrorSystem.getName(invocation.memberName);
+    var key = invocation.memberName;
     if (invocation.isGetter) {
       return get(key);
     } else if (invocation.isSetter) {
@@ -32,6 +32,7 @@ class DottableMap<V> extends DelegatingMap<String, V> {
       return super.noSuchMethod(invocation);
     }
   }
+  */
 }
 
 class DynamicDottableMap extends DottableMap<dynamic> {

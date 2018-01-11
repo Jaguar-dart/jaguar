@@ -8,12 +8,15 @@ class CustomException {
   CustomException(this.code, this.message);
 }
 
-class CustomExceptionHandler extends ExceptionHandler<CustomException> {
+class CustomExceptionHandler extends ExceptionHandler {
   const CustomExceptionHandler();
 
   Future<Response<String>> onRouteException(
-      Context ctx, CustomException e, StackTrace trace) async {
-    final String value = '{"Code": ${e.code}, "Message": "${e.message} }';
-    return new Response<String>(value, statusCode: 400);
+      Context ctx, e, StackTrace trace) async {
+    if (e is CustomException) {
+      final String value = '{"Code": ${e.code}, "Message": "${e.message} }';
+      return new Response<String>(value, statusCode: 400);
+    }
+    return null;
   }
 }

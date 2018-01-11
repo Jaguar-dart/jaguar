@@ -24,7 +24,7 @@ class Login extends Interceptor {
   const Login(this.checker, {this.state});
 
   void pre(Context ctx) {
-    final db = ctx.getInput(MongoDb, id: 'Admin') as Db;
+    final db = ctx.getInterceptorResult(MongoDb, id: 'Admin') as Db;
     print(db);
   }
 }

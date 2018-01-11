@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'dart:convert';
 
 part 'custom_interceptor.g.dart';
@@ -17,7 +18,7 @@ class GenRandom extends Interceptor {
 }
 
 class UsesRandom extends Interceptor {
-  int pre(Context ctx) => ctx.getInput(GenRandom) * 2;
+  int pre(Context ctx) => ctx.getInterceptorResult(GenRandom) * 2;
 }
 
 @Api(path: '/api')
@@ -29,8 +30,8 @@ class ExampleApi {
   @Get(path: '/random')
   @Wrap(const [#genRandom, #usesRandom])
   Response<String> getRandom(Context ctx) => Response.json({
-        'Random': ctx.getInput(GenRandom),
-        'Doubled': ctx.getInput(UsesRandom),
+        'Random': ctx.getInterceptorResult(GenRandom),
+        'Doubled': ctx.getInterceptorResult(UsesRandom),
       });
 }
 
@@ -54,7 +55,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApiReflected(new ExampleApi());
+      server.addApi(reflect(new ExampleApi()));
       await server.serve();
     });
 

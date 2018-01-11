@@ -156,9 +156,6 @@ class Jaguar extends Object with Muxable, _Handler {
     _unbuiltRoutes.add(api);
   }
 
-  /// Adds the given [api] to list of API that will be served using reflection.
-  void addApiReflected(api) => addApi(new ReflectedApi(api));
-
   /// Serves requests for static files at [path] from [directory]
   ///
   /// [stripPrefix] parameter determines if the matched part of the path shall be
@@ -274,8 +271,14 @@ class Jaguar extends Object with Muxable, _Handler {
             charset: handler.charset,
             headers: handler.headers,
             pathRegEx: handler.pathRegEx);
-        _builtHandlers.add(new RouteChain(jRoute, '', handler.handler,
-            handler.interceptors, handler.exceptionHandlers));
+
+        if (handler.interceptors.length == 0 &&
+            handler.exceptionHandlers.length == 0) {
+          _builtHandlers.add(new RouteChainSimple(jRoute, '', handler.handler));
+        } else {
+          _builtHandlers.add(new RouteChain(jRoute, '', handler.handler,
+              handler.interceptors, handler.exceptionHandlers));
+        }
       }
     }
   }

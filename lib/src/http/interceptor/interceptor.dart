@@ -53,7 +53,7 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
         final Interceptor interceptor = creator(ctx);
         exceptList.add(interceptor);
         final output = await interceptor.pre(ctx);
-        ctx.addOutput(
+        ctx.addInterceptorResult(
             interceptor.runtimeType, interceptor.id, interceptor, output);
       }
 

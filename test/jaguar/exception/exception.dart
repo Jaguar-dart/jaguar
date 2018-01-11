@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 part 'param.dart';
 part 'custom.dart';
@@ -15,7 +16,7 @@ class ExampleApi {
   @Get(path: '/user')
   @CustomExceptionHandler()
   String getUser(Context ctx) {
-    String who = ctx.queryParams['who'];
+    String who = ctx.query['who'];
     if (who == null) {
       throw new CustomException(5, '`who` query parameter must be provided!');
     }
@@ -27,7 +28,7 @@ class ExampleApi {
 
   @Post(path: '/user')
   @Wrap(const [#userParser])
-  User post(Context ctx) => ctx.getInput(UserParser);
+  User post(Context ctx) => ctx.getInterceptorResult(UserParser);
 }
 
 void main() {
@@ -52,7 +53,7 @@ void main() {
 
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApiReflected(new ExampleApi());
+      server.addApi(reflect(new ExampleApi()));
       await server.serve();
     });
 

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 part 'inject_input.g.dart';
 
@@ -19,7 +20,7 @@ class ExampleApi {
   @Get(path: '/echo/uri')
   @Wrap(const [#usesRequest])
   Response<String> getJaguarInfo(Context ctx) => Response.json({
-        'Uri': ctx.getInput(UsesRequest),
+        'Uri': ctx.getInterceptorResult(UsesRequest),
       });
 }
 
@@ -43,7 +44,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApiReflected(new ExampleApi());
+      server.addApi(reflect(new ExampleApi()));
       await server.serve();
     });
 

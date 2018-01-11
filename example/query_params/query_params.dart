@@ -11,7 +11,7 @@ main(List<String> args) async {
 
   final server = new Jaguar();
   server.get('/api/quote', (ctx) {
-    final int index = ctx.queryParams.getInt('index', 1);
+    final int index = ctx.query.getInt('index', 1);
     return quotes[index + 1];
   });
   await server.serve();

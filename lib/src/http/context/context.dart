@@ -8,24 +8,6 @@ import 'package:quiver_hashcode/hashcode.dart' show hash2;
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
 
-class _IdiedType {
-  final Type interceptor;
-
-  final String id;
-
-  const _IdiedType(this.interceptor, {this.id});
-
-  @override
-  int get hashCode => hash2(interceptor, id);
-
-  @override
-  bool operator ==(final other) {
-    if (other is! _IdiedType) return false;
-
-    return interceptor == other.interceptor && id == other.id;
-  }
-}
-
 /// Per-request context object
 ///
 /// Contains:
@@ -42,6 +24,9 @@ class Context {
 
   /// Path of the HTTP request
   String get path => uri.path;
+
+  /// Path segments of the HTTP request
+  List<String> get pathSegments => uri.pathSegments;
 
   /// Method of the HTTP request
   String get method => req.method;
@@ -69,7 +54,7 @@ class Context {
   ///     });
   final PathParams pathParams = new PathParams();
 
-  QueryParams _queryParams;
+  QueryParams _query;
 
   /// Returns query parameters of the request
   ///
@@ -78,14 +63,14 @@ class Context {
   /// Example:
   ///
   ///     server.get('/api/quote', (ctx) {
-  ///       final int index = ctx.queryParams.getInt('index', 1); // The magic!
+  ///       final int index = ctx.query.getInt('index', 1); // The magic!
   ///       return quotes[index + 1];
   ///     });
-  QueryParams get queryParams {
-    if (_queryParams != null) return _queryParams;
+  QueryParams get query {
+    if (_query != null) return _query;
 
-    _queryParams = new QueryParams(req.uri.queryParameters);
-    return _queryParams;
+    _query = new QueryParams(req.uri.queryParameters);
+    return _query;
   }
 
   /// The session for the given request
@@ -110,10 +95,6 @@ class Context {
   UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
       new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
 
-  final _inputs = <_IdiedType, dynamic>{};
-
-  final _variables = <_IdiedType, dynamic>{};
-
   final List<String> debugMsgs = <String>[];
 
   Context(this.req);
@@ -126,29 +107,33 @@ class Context {
   void addInterceptors(Iterable<InterceptorCreator> interceptors) =>
       _interceptorCreators.addAll(interceptors);
 
-  /// Gets input by [Interceptor] and [id]
-  T getInput<T>(Type interceptor, {String id}) {
+  final _interceptorResults = <_IdiedType, dynamic>{};
+
+  /// Gets interceptor result by [Interceptor] and [id]
+  T getInterceptorResult<T>(Type interceptor, {String id}) {
     final idied = new _IdiedType(interceptor, id: id);
     // Throw if the requested interceptor has not been executed yet
-    if (!_inputs.containsKey(idied)) {
+    if (!_interceptorResults.containsKey(idied)) {
       throw new Exception(
           "Context does not have output from an interceptor of type:$interceptor and id:$id!");
     }
-    final ret = _inputs[idied];
+    final ret = _interceptorResults[idied];
     // TODO[teja] change to `ret is! T` when Dart supports reified generic types
     return ret as T;
   }
 
   /// Adds output of an Interceptor by id
-  void addOutput(
+  void addInterceptorResult(
       Type interceptorType, String id, Interceptor interceptor, dynamic value) {
     final idied = new _IdiedType(interceptorType, id: id);
-    if (_inputs.containsKey(idied)) {
+    if (_interceptorResults.containsKey(idied)) {
       throw new Exception(
           "Context already has output from an interceptor of type:$interceptorType and id:$id!");
     }
-    _inputs[idied] = value;
+    _interceptorResults[idied] = value;
   }
+
+  final _variables = <_IdiedType, dynamic>{};
 
   /// Gets variable by type and id
   T getVariable<T>({String id}) {
@@ -169,5 +154,23 @@ class Context {
           "Context already has variable of type:$T and id:$id!");
     }
     _variables[idied] = value;
+  }
+}
+
+class _IdiedType {
+  final Type interceptor;
+
+  final String id;
+
+  const _IdiedType(this.interceptor, {this.id});
+
+  @override
+  int get hashCode => hash2(interceptor, id);
+
+  @override
+  bool operator ==(final other) {
+    if (other is! _IdiedType) return false;
+
+    return interceptor == other.interceptor && id == other.id;
   }
 }

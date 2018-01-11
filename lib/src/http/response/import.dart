@@ -3,7 +3,6 @@ library jaguar.src.http.response;
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:mustache/mustache.dart';
 import 'package:path/path.dart' as p;
 
 part 'headers.dart';
@@ -76,16 +75,6 @@ class Response<ValueType> {
     ret.headers.charset = 'utf-8';
 
     return ret;
-  }
-
-  /// Renders a mustach template with given template and variables and returns
-  /// the `Response`
-  static Response<String> mustache(String template, dynamic viewVars,
-      {Response incoming,
-      int statusCode: 200,
-      Map<String, dynamic> headers: const {}}) {
-    final Template t = new Template(template);
-    return new Response<String>(t.renderString(viewVars));
   }
 
   static Response<String> xml(dynamic data,

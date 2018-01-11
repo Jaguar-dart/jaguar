@@ -2,10 +2,9 @@ library jaguar.http.route_chain;
 
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
-import 'dart:mirrors';
 
-/// Encapsulates the whole chain of a route including the [handler], [interceptors]
-/// and [exceptionHandlers].
+/// Encapsulates the whole chain of a route including the [handler],
+/// [interceptors] and [exceptionHandlers].
 class RouteChain implements RequestHandler {
   /// Static information about the route
   final RouteBase route;
@@ -35,62 +34,47 @@ class RouteChain implements RequestHandler {
       return await Interceptor.chain(ctx, handler, route);
     } catch (e, s) {
       for (ExceptionHandler handler in exceptionHandlers) {
-        InstanceMirror im = reflect(e);
-        if (im.type.isAssignableTo(reflectType(handler.exceptionType()))) {
-          return handler.onRouteException(ctx, e, s);
+        final Response resp = await handler.onRouteException(ctx, e, s);
+        if (resp is Response) {
+          return resp;
         }
       }
       rethrow;
     }
   }
-
-  /// Builds the route for class based routes
-  factory RouteChain.reflectClass(
-      RouteFunc handler,
-      RouteBase jRoute,
-      String prefix,
-      List<Symbol> wraps,
-      InstanceMirror groupIm,
-      List<ExceptionHandler> exceptionHandlers) {
-    final interceptors = <InterceptorCreator>[];
-
-    for (final Symbol wrap in wraps) {
-      MethodMirror mm = _checkCreator(groupIm.type, wrap);
-      if (mm == null)
-        throw new Exception("Interceptor creater " +
-            MirrorSystem.getName(wrap) +
-            " not found!");
-      interceptors.add((Context ctx) => groupIm.invoke(wrap, [ctx]).reflectee);
-    }
-
-    return new RouteChain(
-        jRoute, prefix, handler, interceptors, exceptionHandlers);
-  }
 }
 
-MethodMirror _checkCreator(ClassMirror cm, Symbol method) {
-  DeclarationMirror dm = cm.declarations[method];
+/// Encapsulates the whole chain of a route including the [handler]. Does not
+/// support interceptors and exception handlers.
+class RouteChainSimple implements RequestHandler {
+  /// Static information about the route
+  final RouteBase route;
 
-  if (dm != null) {
-    if (dm is MethodMirror) return dm;
-    throw new Exception("Interceptor creater must be method!");
-  }
+  /// Prefix to the route
+  final String prefix;
 
-  dm = _checkCreator(cm.superclass, method);
+  /// The handler method, function or closure
+  final RouteFunc handler;
 
-  if (dm != null) {
-    if (dm is MethodMirror) return dm;
-    throw new Exception("Interceptor creater must be method!");
-  }
+  RouteChainSimple(this.route, this.prefix, this.handler);
 
-  for (ClassMirror scm in cm.superinterfaces) {
-    dm = _checkCreator(scm, method);
-
-    if (dm != null) {
-      if (dm is MethodMirror) return dm;
-      throw new Exception("Interceptor creater must be method!");
+  /// Handles requests
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
+    if (!route.match(
+        ctx.path, ctx.method, prefix + this.prefix, ctx.pathParams)) {
+      return null;
     }
-  }
 
-  return null;
+    final res = await handler(ctx);
+    if (res is Response) {
+      return res;
+    } else if (res != null) {
+      final resp = new Response(res,
+          headers: route.headers, statusCode: route.statusCode);
+      resp.headers.mimeType = route.mimeType;
+      resp.headers.charset = route.charset;
+      return resp;
+    }
+    return null;
+  }
 }

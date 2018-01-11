@@ -10,34 +10,31 @@ part 'query_params.g.dart';
 @Api(path: '/api')
 class QueryParamsExampleApi {
   @Get(path: '/stringParam')
-  String stringParam(Context ctx) => ctx.queryParams['strParam'];
+  String stringParam(Context ctx) => ctx.query['strParam'];
 
   @Get(path: '/intParam')
   String intParam(Context ctx) =>
-      '${ctx.queryParams.getInt('intParam')*ctx.queryParams.getInt('intParam')}';
+      '${ctx.query.getInt('intParam')*ctx.query.getInt('intParam')}';
 
   @Get(path: '/doubleParam')
-  String doubleParam(Context ctx) =>
-      '${ctx.queryParams.getDouble('doubleParam')*2}';
+  String doubleParam(Context ctx) => '${ctx.query.getDouble('doubleParam')*2}';
 
   @Get(path: '/numParam')
-  String numParam(Context ctx) => '${ctx.queryParams.getNum('numParam')*2}';
+  String numParam(Context ctx) => '${ctx.query.getNum('numParam')*2}';
 
   @Get(path: '/defStringParam')
-  String defStringParam(Context ctx) =>
-      ctx.queryParams.get('strParam', 'default');
+  String defStringParam(Context ctx) => ctx.query.get('strParam', 'default');
 
   @Get(path: '/defIntParam')
   String defIntParam(Context ctx) =>
-      '${ctx.queryParams.getInt('intParam', 50)*ctx.queryParams.getInt('intParam', 50)}';
+      '${ctx.query.getInt('intParam', 50)*ctx.query.getInt('intParam', 50)}';
 
   @Get(path: '/defDoubleParam')
   String defDoubleParam(Context ctx) =>
-      '${ctx.queryParams.getDouble('doubleParam', 12.75)*2}';
+      '${ctx.query.getDouble('doubleParam', 12.75)*2}';
 
   @Get(path: '/defNumParam')
-  String defDumParam(Context ctx) =>
-      '${ctx.queryParams.getNum('numParam', 5.25)*2}';
+  String defDumParam(Context ctx) => '${ctx.query.getNum('numParam', 5.25)*2}';
 }
 
 void main() {

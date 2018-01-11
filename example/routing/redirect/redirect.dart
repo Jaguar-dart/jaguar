@@ -3,6 +3,7 @@ library example.routes;
 import 'dart:io' show HttpStatus;
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 @Api(path: '/api')
 class RedirectExampleApi {
@@ -22,7 +23,7 @@ class RedirectExampleApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApiReflected(new RedirectExampleApi());
+  jaguar.addApi(reflect(new RedirectExampleApi()));
 
   await jaguar.serve();
 }

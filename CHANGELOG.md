@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.1
+
++ Stripped out all mirror dependent elements to `jaguar_reflect`
++ Added `RouteChainSimple` to improve performance
++ Renamed `queryParams` to `query`
+
 ## 0.6.27
 
 + Widened dependency on meta package

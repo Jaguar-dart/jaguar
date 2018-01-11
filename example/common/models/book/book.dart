@@ -1,7 +1,6 @@
 library jwt_auth.example.models;
 
 import 'dart:convert';
-import 'package:jaguar/jaguar.dart';
 
 /// Model for Book
 class Book {
