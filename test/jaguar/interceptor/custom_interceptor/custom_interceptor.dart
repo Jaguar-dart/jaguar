@@ -23,12 +23,12 @@ class UsesRandom extends Interceptor {
 
 @Api(path: '/api')
 class ExampleApi {
-  GenRandom genRandom(Context ctx) => new GenRandom();
+  static GenRandom genRandom(Context ctx) => new GenRandom();
 
-  UsesRandom usesRandom(Context ctx) => new UsesRandom();
+  static UsesRandom usesRandom(Context ctx) => new UsesRandom();
 
   @Get(path: '/random')
-  @Wrap(const [#genRandom, #usesRandom])
+  @Wrap(const [genRandom, usesRandom])
   Response<String> getRandom(Context ctx) => Response.json({
         'Random': ctx.getInterceptorResult(GenRandom),
         'Doubled': ctx.getInterceptorResult(UsesRandom),

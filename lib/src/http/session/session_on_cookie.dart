@@ -21,9 +21,9 @@ class CookieSessionManager implements SessionManager {
             hmacKey != null ? new Hmac(sha256, hmacKey.codeUnits) : null;
 
   /// Parses session from the given [request]
-  Session parse(Request request) {
+  Session parse(Context ctx) {
     Map<String, String> values;
-    for (Cookie cook in request.cookies) {
+    for (Cookie cook in ctx.req.cookies) {
       if (cook.name == cookieName) {
         dynamic valueMap = _decode(cook.value);
         if (valueMap is Map<String, String>) {
@@ -65,10 +65,10 @@ class CookieSessionManager implements SessionManager {
 
   /// Writes session data ([session]) to the Response ([resp]) and returns new
   /// response
-  Response write(Request request, Response resp) {
-    if (!request.sessionNeedsUpdate) return resp;
+  Response write(Context ctx, Response resp) {
+    if (!ctx.sessionNeedsUpdate) return resp;
 
-    final Session session = request.parsedSession;
+    final Session session = ctx.parsedSession;
     final Map<String, String> values = session.asMap;
     values['sid'] = session.id;
     values['sct'] = session.createdTime.millisecondsSinceEpoch.toString();

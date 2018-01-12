@@ -6,11 +6,7 @@ class _Request implements Request {
 
   final Logger log;
 
-  final SessionManager _sessionManager;
-
-  Session _session;
-
-  _Request(this._request, this._sessionManager, this.log);
+  _Request(this._request, this.log);
 
   /// The client certificate of the client making the request.
   X509Certificate get certificate => _request.certificate;
@@ -38,28 +34,6 @@ class _Request implements Request {
 
   /// The requested URI for the request.
   Uri get requestedUri => _request.requestedUri;
-
-  /// Does the session need update?
-  bool get sessionNeedsUpdate => _session != null && _session.needsUpdate;
-
-  /// Parsed session. Returns null, if the session is not parsed yet.
-  Session get parsedSession => _session;
-
-  /// The session for the given request.
-  ///
-  /// Example:
-  ///
-  ///     server.get('/api/set/:item', (ctx) async {
-  ///       final Session session = await ctx.req.session;
-  ///       session['item'] = ctx.pathParams.item;
-  ///       // ...
-  ///     });
-  Future<Session> get session async {
-    if (_session == null) {
-      _session = await _sessionManager.parse(this);
-    }
-    return this._session;
-  }
 
   /// The URI for the request.
   Uri get uri => _request.uri;

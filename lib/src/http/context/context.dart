@@ -73,21 +73,31 @@ class Context {
     return _query;
   }
 
-  /// The session for the given request
+  final SessionManager _sessionManager;
+
+  Session _session;
+
+  /// Does the session need update?
+  bool get sessionNeedsUpdate => _session != null && _session.needsUpdate;
+
+  /// Parsed session. Returns null, if the session is not parsed yet.
+  Session get parsedSession => _session;
+
+  /// The session for the given request.
   ///
   /// Example:
   ///
   ///     server.get('/api/set/:item', (ctx) async {
-  ///       final Session session = await ctx.session;
+  ///       final Session session = await ctx.req.session;
   ///       session['item'] = ctx.pathParams.item;
   ///       // ...
   ///     });
-  Future<Session> get session => req.session;
-
-  /// Parsed session
-  ///
-  /// Returns [null], if the session is not parsed yet by calling [session].
-  Session get parsedSession => req.parsedSession;
+  Future<Session> get session async {
+    if (_session == null) {
+      _session = await _sessionManager.parse(this);
+    }
+    return this._session;
+  }
 
   /// Interceptors for the route
   final _interceptorCreators = <InterceptorCreator>[];
@@ -97,7 +107,7 @@ class Context {
 
   final List<String> debugMsgs = <String>[];
 
-  Context(this.req);
+  Context(this.req, this._sessionManager);
 
   Logger get log => req.log;
 

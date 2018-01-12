@@ -5,7 +5,8 @@ import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
 /// Signature of interceptor creator method
-typedef Interceptor InterceptorCreator(Context ctx);
+typedef Interceptor<OutputType, ResponseType, InResponseType> InterceptorCreator<
+    OutputType, ResponseType, InResponseType>(Context ctx);
 
 /// An interceptor wraps a route and performs an action before and
 /// after the route handler.

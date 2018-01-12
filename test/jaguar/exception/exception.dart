@@ -24,11 +24,11 @@ class ExampleApi {
     return who;
   }
 
-  UserParser userParser(Context ctx) => new UserParser();
-
   @Post(path: '/user')
-  @Wrap(const [#userParser])
+  @Wrap(const [userParser])
   User post(Context ctx) => ctx.getInterceptorResult(UserParser);
+
+  static UserParser userParser(Context ctx) => new UserParser();
 }
 
 void main() {

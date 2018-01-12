@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:crypto/crypto.dart';
 
+import 'package:jaguar/src/http/context/context.dart';
 import 'package:jaguar/src/http/request/request.dart';
 import 'package:jaguar/src/http/response/import.dart';
 
@@ -165,10 +166,10 @@ class Session {
 
 /// Session manager to parse and write session data
 abstract class SessionManager {
-  /// Parses session from the given [request]
-  FutureOr<Session> parse(Request request);
+  /// Parses session from the given [context]
+  FutureOr<Session> parse(Context context);
 
   /// Writes session data ([session]) to the Response ([resp]) and returns new
   /// response
-  FutureOr<Response> write(Request request, Response resp);
+  FutureOr<Response> write(Context ctx, Response resp);
 }

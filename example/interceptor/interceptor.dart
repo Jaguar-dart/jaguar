@@ -38,13 +38,13 @@ class UsesRandom extends Interceptor {
 
 @Api(path: '/api/book')
 class BooksApi {
-  GenRandom genRandom(Context ctx) => new GenRandom();
+  static GenRandom genRandom(Context ctx) => new GenRandom();
 
-  UsesRandom usesRandom(Context ctx) => new UsesRandom();
+  static UsesRandom usesRandom(Context ctx) => new UsesRandom();
 
   /// TODO add documentation
   @Get()
-  @Wrap(const [#genRandom, #usesRandom])
+  @Wrap(const [genRandom, usesRandom])
   Response<String> getJaguarInfo(Context ctx) => Response.json({
         'Name': 'Jaguar',
         'Features': ['Speed', 'Simplicity', 'Extensiblity'],

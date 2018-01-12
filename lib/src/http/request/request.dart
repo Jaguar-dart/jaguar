@@ -37,9 +37,8 @@ List<String> splitPathToSegments(final String paths) {
 
 /// [Request] contains information about HTTP request
 abstract class Request {
-  factory Request(
-          HttpRequest request, SessionManager sessionManager, Logger log) =>
-      new _Request(request, sessionManager, log);
+  factory Request(HttpRequest request, Logger log) =>
+      new _Request(request, log);
 
   /// The URI for the request
   ///
@@ -66,19 +65,6 @@ abstract class Request {
 
   /// The cookies in the request, from the Cookie headers.
   List<Cookie> get cookies;
-
-  /// The session for the given request
-  Future<Session> get session;
-
-  /// Does session need an update?
-  ///
-  /// Shall be used when writing response or closing a request.
-  bool get sessionNeedsUpdate;
-
-  /// Parsed session
-  ///
-  /// Returns [null], if the session is not parsed yet by calling [session].
-  Session get parsedSession;
 
   /// Connection information of the request
   HttpConnectionInfo get connectionInfo;

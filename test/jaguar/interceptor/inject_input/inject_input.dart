@@ -15,10 +15,10 @@ class UsesRequest extends Interceptor {
 
 @Api(path: '/api')
 class ExampleApi {
-  UsesRequest usesRequest(Context ctx) => new UsesRequest();
+  static UsesRequest usesRequest(Context ctx) => new UsesRequest();
 
   @Get(path: '/echo/uri')
-  @Wrap(const [#usesRequest])
+  @Wrap(const [usesRequest])
   Response<String> getJaguarInfo(Context ctx) => Response.json({
         'Uri': ctx.getInterceptorResult(UsesRequest),
       });

@@ -20,7 +20,7 @@ abstract class _Handler {
     final start = new DateTime.now();
     log.info("Req => Method: ${request.method} Url: ${request.uri}");
 
-    final ctx = new Context(new Request(request, sessionManager, log));
+    final ctx = new Context(new Request(request, log), sessionManager);
     ctx.addInterceptors(_interceptorCreators);
 
     Response response;
@@ -35,8 +35,8 @@ abstract class _Handler {
 
       // Update session, if required.
       if (response is Response) {
-        if (ctx.req.sessionNeedsUpdate)
-          await sessionManager.write(ctx.req, response);
+        if (ctx.sessionNeedsUpdate)
+          await sessionManager.write(ctx, response);
       }
     } catch (e, stack) {
       if (e is Response) {

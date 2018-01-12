@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
++ `Wrap` and `WrapOne` take function as interceptor creator
++ `parse` and `write` methods of `SessionManager` takes `Context` instead of `Request`
++ Removed session related methods and fields from `Request`
+
 ## 0.7.1
 
 + Stripped out all mirror dependent elements to `jaguar_reflect`
