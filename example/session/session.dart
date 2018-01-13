@@ -4,7 +4,7 @@ main() async {
   final server = new Jaguar();
   server.get('/api/add/:item', (ctx) async {
     final Session session = await ctx.session;
-    final String newItem = ctx.pathParams.item;
+    final String newItem = ctx.pathParams['item'];
 
     final List<String> items = (session['items'] ?? '').split(',');
 
@@ -18,7 +18,7 @@ main() async {
   });
   server.get('/api/remove/:item', (ctx) async {
     final Session session = await ctx.session;
-    final String newItem = ctx.pathParams.item;
+    final String newItem = ctx.pathParams['item'];
 
     final List<String> items = (session['items'] ?? '').split(',');
 

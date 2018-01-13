@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.6
+
++ `Wrap` and `WrapOne` take function or `Symbol` as interceptor creator
+
 ## 1.2.2-dev
 
 + Loosened type of `WrapOne`
