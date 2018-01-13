@@ -6,12 +6,10 @@ part of bootstrap.gen;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarAuthorRoutes implements RequestHandler {
+abstract class _$JaguarAuthorRoutes implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[const Get()];
 
-  final AuthorRoutes _internal;
-
-  JaguarAuthorRoutes(this._internal);
+  String get(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/author';
@@ -20,7 +18,7 @@ class JaguarAuthorRoutes implements RequestHandler {
 //Handler for get
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.get, routes[0]);
+      return await Interceptor.chain(ctx, get, routes[0]);
     }
 
     return null;

@@ -35,8 +35,7 @@ abstract class _Handler {
 
       // Update session, if required.
       if (response is Response) {
-        if (ctx.sessionNeedsUpdate)
-          await sessionManager.write(ctx, response);
+        if (ctx.sessionNeedsUpdate) await sessionManager.write(ctx, response);
       }
     } catch (e, stack) {
       if (e is Response) {

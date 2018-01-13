@@ -22,7 +22,7 @@ class UsesRandom extends Interceptor {
 }
 
 @Api(path: '/api')
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   static GenRandom genRandom(Context ctx) => new GenRandom();
 
   static UsesRandom usesRandom(Context ctx) => new UsesRandom();
@@ -40,7 +40,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

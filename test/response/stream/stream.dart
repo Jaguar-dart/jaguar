@@ -8,7 +8,7 @@ import 'package:jaguar/jaguar.dart';
 part 'stream.g.dart';
 
 @Api(path: '/api')
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   @Get(path: '/stream')
   Stream<List<int>> getStream(Context ctx) {
     StreamController<List<int>> streamCon = new StreamController<List<int>>();
@@ -28,7 +28,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

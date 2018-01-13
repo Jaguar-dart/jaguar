@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.2.1
+## 1.2.2-dev
+
++ Loosened type of `WrapOne`
+
+## 1.2.1-dev
 
 + `Wrap` and `WrapOne` take function as interceptor creator
 + `parse` and `write` methods of `SessionManager` takes `Context` instead of `Request`

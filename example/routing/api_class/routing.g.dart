@@ -6,7 +6,7 @@ part of example.routes;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarExampApi implements RequestHandler {
+abstract class _$JaguarExampApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/five'),
     const Route(path: '/name', methods: const <String>['GET']),
@@ -17,9 +17,10 @@ class JaguarExampApi implements RequestHandler {
         headers: const {'custom-header': 'custom data'})
   ];
 
-  final ExampApi _internal;
-
-  JaguarExampApi(this._internal);
+  int getFive(Context ctx);
+  String getName(Context ctx);
+  String getMoto(Context ctx);
+  void defaultStatusAndHeader(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/book';
@@ -28,26 +29,25 @@ class JaguarExampApi implements RequestHandler {
 //Handler for getFive
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getFive, routes[0]);
+      return await Interceptor.chain(ctx, getFive, routes[0]);
     }
 
 //Handler for getName
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getName, routes[1]);
+      return await Interceptor.chain(ctx, getName, routes[1]);
     }
 
 //Handler for getMoto
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getMoto, routes[2]);
+      return await Interceptor.chain(ctx, getMoto, routes[2]);
     }
 
 //Handler for defaultStatusAndHeader
     match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, _internal.defaultStatusAndHeader, routes[3]);
+      return await Interceptor.chain(ctx, defaultStatusAndHeader, routes[3]);
     }
 
     return null;

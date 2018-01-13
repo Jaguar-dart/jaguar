@@ -1,10 +1,9 @@
 part of jaguar.src.annotations;
 
 /// Annotation to wrap one interceptor around a route
-class WrapOne<OutputType, ResponseType, InResponseType> {
+class WrapOne {
   /// Symbol of the method on the RouteClass that creates the interceptor
-  final InterceptorCreator<OutputType, ResponseType, InResponseType>
-      interceptor;
+  final InterceptorCreator interceptor;
 
   const WrapOne(this.interceptor);
 }

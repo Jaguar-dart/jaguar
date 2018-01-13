@@ -25,7 +25,7 @@ class AddInput {
 }
 
 @Api(path: '/api/add')
-class JsonDecode {
+class JsonDecode extends _$JaguarJsonDecode {
   @Post(path: '/one')
   Future<String> addOne(Context ctx) async {
     final Map body = await ctx.req.bodyAsJsonMap();
@@ -54,7 +54,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarJsonDecode(new JsonDecode()));
+      server.addApi(new JsonDecode());
       await server.serve();
     });
 

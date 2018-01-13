@@ -1,4 +1,4 @@
-library example.body.json;
+library example.decode.json;
 
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
@@ -10,7 +10,7 @@ part 'json.g.dart';
 final book = new Book.make('0', 'Book1', ['Author1', 'Author2']);
 
 @Api(path: '/api/book')
-class BooksApi {
+class BooksApi extends _$JaguarBooksApi {
   @Post()
   Future<Response<String>> addBook(Context ctx) async {
     // Decode request body as JSON Map
@@ -24,7 +24,7 @@ class BooksApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new JaguarBooksApi(new BooksApi()));
+  jaguar.addApi(new BooksApi());
 
   await jaguar.serve();
 }

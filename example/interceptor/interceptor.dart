@@ -37,7 +37,7 @@ class UsesRandom extends Interceptor {
 }
 
 @Api(path: '/api/book')
-class BooksApi {
+class BooksApi extends _$JaguarBooksApi {
   static GenRandom genRandom(Context ctx) => new GenRandom();
 
   static UsesRandom usesRandom(Context ctx) => new UsesRandom();
@@ -53,7 +53,7 @@ class BooksApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new JaguarBooksApi(new BooksApi()));
+  jaguar.addApi(new BooksApi());
 
   await jaguar.serve();
 }

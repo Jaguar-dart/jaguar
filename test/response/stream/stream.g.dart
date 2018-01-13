@@ -6,14 +6,12 @@ part of test.response.stream;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarExampleApi implements RequestHandler {
+abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/stream')
   ];
 
-  final ExampleApi _internal;
-
-  JaguarExampleApi(this._internal);
+  Stream<List<int>> getStream(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
@@ -22,7 +20,7 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for getStream
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getStream, routes[0]);
+      return await Interceptor.chain(ctx, getStream, routes[0]);
     }
 
     return null;

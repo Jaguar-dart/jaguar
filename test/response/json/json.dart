@@ -9,7 +9,7 @@ import 'package:jaguar/jaguar.dart';
 part 'json.g.dart';
 
 @Api(path: '/api')
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   @Get(path: '/info')
   Response<String> getJaguarInfo(Context ctx) => Response.json({
         'Name': 'Jaguar',
@@ -25,7 +25,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

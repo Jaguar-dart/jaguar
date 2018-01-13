@@ -1,0 +1,18 @@
+targets:
+  jaguar:
+    sources: ["lib/**"]
+  example:
+    sources: ["example/**"]
+    builders:
+      jaguar_generator:
+        generate_for:
+          exclude:
+            - example/routing/redirect/redirect.dart
+  test:
+    sources: ["test/**"]
+    builders:
+      jaguar_generator:
+        generate_for:
+          exclude:
+            - test/bootstrap/book/book.dart
+            - test/bootstrap/serve.dart

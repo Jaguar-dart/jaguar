@@ -6,7 +6,7 @@ import 'package:jaguar/jaguar.dart';
 part 'book.g.dart';
 
 @Api()
-class BookApi {
+class BookApi extends _$JaguarBookApi {
   @Route(methods: const <String>['GET'])
   String getBook(Context ctx) => 'Get book';
 

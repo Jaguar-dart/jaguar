@@ -10,7 +10,7 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 part 'route.g.dart';
 
 @Api(path: '/api')
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   @Route(path: '/user', methods: const <String>['GET'])
   String getUser(Context ctx) => 'Get user';
 
@@ -46,7 +46,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

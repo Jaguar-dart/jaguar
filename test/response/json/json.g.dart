@@ -6,15 +6,14 @@ part of test.jaguar.response.json;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarExampleApi implements RequestHandler {
+abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/info'),
     const Post(path: '/info')
   ];
 
-  final ExampleApi _internal;
-
-  JaguarExampleApi(this._internal);
+  Response<String> getJaguarInfo(Context ctx);
+  Response<String> createJaguarInfo(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
@@ -23,14 +22,13 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for getJaguarInfo
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getJaguarInfo, routes[0]);
+      return await Interceptor.chain(ctx, getJaguarInfo, routes[0]);
     }
 
 //Handler for createJaguarInfo
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(
-          ctx, _internal.createJaguarInfo, routes[1]);
+      return await Interceptor.chain(ctx, createJaguarInfo, routes[1]);
     }
 
     return null;

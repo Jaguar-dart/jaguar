@@ -14,7 +14,7 @@ class UsesRequest extends Interceptor {
 }
 
 @Api(path: '/api')
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   static UsesRequest usesRequest(Context ctx) => new UsesRequest();
 
   @Get(path: '/echo/uri')
@@ -29,7 +29,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

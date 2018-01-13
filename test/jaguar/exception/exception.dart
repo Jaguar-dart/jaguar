@@ -12,7 +12,7 @@ part 'exception.g.dart';
 
 @Api(path: '/api')
 @ValidationExceptionHandler()
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   @Get(path: '/user')
   @CustomExceptionHandler()
   String getUser(Context ctx) {
@@ -37,7 +37,7 @@ void main() {
 
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

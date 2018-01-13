@@ -6,14 +6,12 @@ part of test.jaguar.interceptor.inject_request;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarExampleApi implements RequestHandler {
+abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Get(path: '/echo/uri')
   ];
 
-  final ExampleApi _internal;
-
-  JaguarExampleApi(this._internal);
+  Response<String> getJaguarInfo(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
@@ -22,8 +20,8 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for getJaguarInfo
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      ctx.addInterceptor(_internal.usesRequest);
-      return await Interceptor.chain(ctx, _internal.getJaguarInfo, routes[0]);
+      ctx.addInterceptor(ExampleApi.usesRequest);
+      return await Interceptor.chain(ctx, getJaguarInfo, routes[0]);
     }
 
     return null;

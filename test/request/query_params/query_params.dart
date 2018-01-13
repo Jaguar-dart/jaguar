@@ -8,7 +8,7 @@ import 'package:jaguar/jaguar.dart';
 part 'query_params.g.dart';
 
 @Api(path: '/api')
-class QueryParamsExampleApi {
+class QueryParamsExampleApi extends _$JaguarQueryParamsExampleApi {
   @Get(path: '/stringParam')
   String stringParam(Context ctx) => ctx.query['strParam'];
 
@@ -42,8 +42,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server
-          .addApi(new JaguarQueryParamsExampleApi(new QueryParamsExampleApi()));
+      server.addApi(new QueryParamsExampleApi());
       await server.serve();
     });
 

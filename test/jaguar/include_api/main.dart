@@ -11,7 +11,7 @@ import 'book.dart';
 part 'main.g.dart';
 
 @Api()
-class UserApi {
+class UserApi extends _$JaguarUserApi {
   @Route(methods: const <String>['GET'])
   String getUser(Context ctx) => 'Get user';
 
@@ -20,7 +20,7 @@ class UserApi {
 }
 
 @Api(path: '/api')
-class ExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   @IncludeApi(path: '/user')
   final UserApi user = new UserApi();
 
@@ -36,7 +36,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JaguarExampleApi(new ExampleApi()));
+      server.addApi(new ExampleApi());
       await server.serve();
     });
 

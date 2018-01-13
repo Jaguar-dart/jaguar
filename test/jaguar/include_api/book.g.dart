@@ -6,15 +6,14 @@ part of test.jaguar.group.normal.book;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarBookApi implements RequestHandler {
+abstract class _$JaguarBookApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(methods: const <String>['GET']),
     const Route(path: '/some/:param1', methods: const <String>['POST'])
   ];
 
-  final BookApi _internal;
-
-  JaguarBookApi(this._internal);
+  String getBook(Context ctx);
+  String some(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     bool match = false;
@@ -22,13 +21,13 @@ class JaguarBookApi implements RequestHandler {
 //Handler for getBook
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getBook, routes[0]);
+      return await Interceptor.chain(ctx, getBook, routes[0]);
     }
 
 //Handler for some
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.some, routes[1]);
+      return await Interceptor.chain(ctx, some, routes[1]);
     }
 
     return null;

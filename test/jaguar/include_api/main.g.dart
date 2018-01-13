@@ -6,16 +6,15 @@ part of test.jaguar.group;
 // Generator: ApiGenerator
 // **************************************************************************
 
-class JaguarUserApi implements RequestHandler {
+abstract class _$JaguarUserApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(methods: const <String>['GET']),
     const Route(
         path: '/statuscode', methods: const <String>['GET'], statusCode: 201)
   ];
 
-  final UserApi _internal;
-
-  JaguarUserApi(this._internal);
+  String getUser(Context ctx);
+  String statusCode(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     bool match = false;
@@ -23,31 +22,28 @@ class JaguarUserApi implements RequestHandler {
 //Handler for getUser
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.getUser, routes[0]);
+      return await Interceptor.chain(ctx, getUser, routes[0]);
     }
 
 //Handler for statusCode
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.statusCode, routes[1]);
+      return await Interceptor.chain(ctx, statusCode, routes[1]);
     }
 
     return null;
   }
 }
 
-class JaguarExampleApi implements RequestHandler {
+abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/version', methods: const <String>['GET'])
   ];
 
-  final ExampleApi _internal;
-  final JaguarUserApi _userInternal;
-  final JaguarBookApi _bookInternal;
+  String statusCode(Context ctx);
 
-  JaguarExampleApi(this._internal)
-      : _userInternal = new JaguarUserApi(_internal.user),
-        _bookInternal = new JaguarBookApi(_internal.book);
+  UserApi get user;
+  BookApi get book;
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
@@ -56,12 +52,12 @@ class JaguarExampleApi implements RequestHandler {
 //Handler for statusCode
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, _internal.statusCode, routes[0]);
+      return await Interceptor.chain(ctx, statusCode, routes[0]);
     }
 
     {
       Response response =
-          await _userInternal.handleRequest(ctx, prefix: prefix + '/user');
+          await user.handleRequest(ctx, prefix: prefix + '/user');
       if (response is Response) {
         return response;
       }
@@ -69,7 +65,7 @@ class JaguarExampleApi implements RequestHandler {
 
     {
       Response response =
-          await _bookInternal.handleRequest(ctx, prefix: prefix + '/book');
+          await book.handleRequest(ctx, prefix: prefix + '/book');
       if (response is Response) {
         return response;
       }

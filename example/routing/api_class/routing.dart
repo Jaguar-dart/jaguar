@@ -6,7 +6,7 @@ import 'package:jaguar/jaguar.dart';
 part 'routing.g.dart';
 
 @Api(path: '/api/book')
-class ExampApi {
+class ExampApi extends _$JaguarExampApi {
   /// Simple [Route] annotation. Specifies path of the route using path argument.
   @Route(path: '/five')
   int getFive(Context ctx) => 5;
@@ -32,7 +32,7 @@ class ExampApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new JaguarExampApi(new ExampApi()));
+  jaguar.addApi(new ExampApi());
 
   await jaguar.serve();
 }
