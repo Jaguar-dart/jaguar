@@ -203,9 +203,21 @@ class Jaguar extends Object with Muxable, _Handler {
       final List<String> paths = stripPrefix
           ? ctx.uri.pathSegments.sublist(len)
           : ctx.uri.pathSegments;
-      final String path = p.join(dir.path, p.joinAll(paths));
-      final File file = new File(path);
-      if (!await file.exists()) return null;
+      String path = p.join(dir.path, p.joinAll(paths));
+      File file = new File(path);
+
+      if (!await file.exists()) {
+        final Directory fileDir = new Directory(path);
+        if (!await fileDir.exists()) return null;
+
+        path = p.join(path, 'index.html');
+        file = new File(path);
+
+        if (!await file.exists()) {
+          // TODO render directory listing
+          return null;
+        }
+      }
       return new Response<Stream<List<int>>>(await file.openRead(),
           mimeType: MimeType.ofFile(file));
     },

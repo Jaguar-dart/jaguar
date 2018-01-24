@@ -1,5 +1,5 @@
 name: jaguar
-version: 1.2.6
+version: 1.2.7
 description: Jaguar is a production ready HTTP server framework built for speed, simplicity and extensiblity
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>

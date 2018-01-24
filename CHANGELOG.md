@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.7
+
++ `staticFiles` now respects `index.html`
+
 ## 1.2.6
 
 + `Wrap` and `WrapOne` take function or `Symbol` as interceptor creator
