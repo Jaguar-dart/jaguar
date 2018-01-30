@@ -23,6 +23,8 @@ class RouteBuilder {
   /// Regex for the route path
   final Map<String, String> pathRegEx;
 
+  final ResponseProcessor responseProcessor;
+
   /// The route handler function
   final RouteFunc handler;
 
@@ -33,7 +35,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers});
+      this.headers,
+      this.responseProcessor});
 
   /// Constructs a [RouteBuilder] for GET method requests
   RouteBuilder.get(this.path, this.handler,
@@ -41,7 +44,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['GET'];
 
   /// Constructs a [RouteBuilder] for POST method requests
@@ -50,7 +54,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['POST'];
 
   /// Constructs a [RouteBuilder] for PUT method requests
@@ -59,7 +64,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['PUT'];
 
   /// Constructs a [RouteBuilder] for DELETE method requests
@@ -68,7 +74,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['DELETE'];
 
   /// Constructs a [RouteBuilder] for PATCH method requests
@@ -77,7 +84,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['PATCH'];
 
   /// Constructs a [RouteBuilder] for OPTIONS method requests
@@ -86,7 +94,8 @@ class RouteBuilder {
       this.statusCode: 200,
       this.mimeType,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['OPTIONS'];
 
   /// Constructs a [RouteBuilder] for HTML requests
@@ -94,9 +103,10 @@ class RouteBuilder {
       {this.pathRegEx,
       this.statusCode: 200,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor})
       : methods = ['GET'],
-        mimeType = 'text/html';
+        mimeType = MimeType.html;
 
   /// Constructs a [RouteBuilder] for JSON requests
   RouteBuilder.json(this.path, this.handler,
@@ -104,44 +114,49 @@ class RouteBuilder {
       this.pathRegEx,
       this.statusCode: 200,
       this.charset: kDefaultCharset,
-      this.headers})
-      : mimeType = 'application/json';
+      this.headers,
+      this.responseProcessor: jsonResponseProcessor})
+      : mimeType = MimeType.json;
 
   /// Constructs a [RouteBuilder] for JSON requests with GET method
   RouteBuilder.getJson(this.path, this.handler,
       {this.pathRegEx,
       this.statusCode: 200,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor: jsonResponseProcessor})
       : methods = ['GET'],
-        mimeType = 'application/json';
+        mimeType = MimeType.json;
 
   /// Constructs a [RouteBuilder] for JSON requests with POST method
   RouteBuilder.postJson(this.path, this.handler,
       {this.pathRegEx,
       this.statusCode: 200,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor: jsonResponseProcessor})
       : methods = ['POST'],
-        mimeType = 'application/json';
+        mimeType = MimeType.json;
 
   /// Constructs a [RouteBuilder] for JSON requests with PUT method
   RouteBuilder.putJson(this.path, this.handler,
       {this.pathRegEx,
       this.statusCode: 200,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor: jsonResponseProcessor})
       : methods = ['PUT'],
-        mimeType = 'application/json';
+        mimeType = MimeType.json;
 
   /// Constructs a [RouteBuilder] for JSON requests with DELETE method
   RouteBuilder.deleteJson(this.path, this.handler,
       {this.pathRegEx,
       this.statusCode: 200,
       this.charset: kDefaultCharset,
-      this.headers})
+      this.headers,
+      this.responseProcessor: jsonResponseProcessor})
       : methods = ['DELETE'],
-        mimeType = 'application/json';
+        mimeType = MimeType.json;
 
   /// Interceptors wrapped around the [handler]
   final _interceptors = <InterceptorCreator>[];
@@ -189,5 +204,16 @@ class RouteBuilder {
           statusCode: this.statusCode,
           mimeType: this.mimeType,
           charset: this.charset,
-          headers: this.headers);
+          headers: this.headers,
+          responseProcessor: responseProcessor);
+
+  Route get routeInfo => new Route(
+      path: path,
+      methods: methods,
+      statusCode: statusCode,
+      mimeType: mimeType,
+      charset: charset,
+      headers: headers,
+      pathRegEx: pathRegEx,
+      responseProcessor: responseProcessor);
 }

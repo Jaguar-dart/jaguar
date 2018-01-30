@@ -1,6 +1,249 @@
 part of jaguar.src.annotations;
 
-const String _kDefaultContentType = 'text/plain; charset=utf-8';
+/// Annotation to declare a method as request handler method that processes GET
+/// requests.
+class Get extends Route {
+  const Get(
+      {String path,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor})
+      : super(
+            path: path,
+            methods: _methods,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+
+  static const List<String> _methods = const <String>['GET'];
+}
+
+/// Annotation to declare a method as request handler method that processes POST
+/// requests.
+class Post extends Route {
+  const Post(
+      {String path,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor})
+      : super(
+            path: path,
+            methods: _methods,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+
+  static const List<String> _methods = const <String>['POST'];
+}
+
+/// Annotation to declare a method as request handler method that processes PUT
+/// requests.
+class Put extends Route {
+  const Put(
+      {String path,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor})
+      : super(
+            path: path,
+            methods: _methods,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+
+  static const List<String> _methods = const <String>['PUT'];
+}
+
+/// Annotation to declare a method as request handler method that processes DELETE
+/// requests.
+class Delete extends Route {
+  const Delete(
+      {String path,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor})
+      : super(
+            path: path,
+            methods: _methods,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+
+  static const List<String> _methods = const <String>['DELETE'];
+}
+
+/// Annotation to declare a method as request handler method that processes GET
+/// requests with JSON response.
+class GetJson extends Get {
+  const GetJson(
+      {String path,
+      int statusCode: 200,
+      String mimeType: MimeType.json,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      final Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor: jsonResponseProcessor})
+      : super(
+            path: path,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+}
+
+/// Annotation to declare a method as request handler method that processes PUT
+/// requests with JSON response.
+class PutJson extends Put {
+  const PutJson(
+      {String path,
+      int statusCode: 200,
+      String mimeType: MimeType.json,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      final Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor: jsonResponseProcessor})
+      : super(
+            path: path,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+}
+
+/// Annotation to declare a method as request handler method that processes POST
+/// requests with JSON response.
+class PostJson extends Post {
+  const PostJson(
+      {String path,
+      int statusCode: 200,
+      String mimeType: MimeType.json,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      final Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor: jsonResponseProcessor})
+      : super(
+            path: path,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+}
+
+/// Annotation to declare a method as request handler method that processes DELETE
+/// requests with JSON response.
+class DeleteJson extends Delete {
+  const DeleteJson(
+      {String path,
+      int statusCode: 200,
+      String mimeType: MimeType.json,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      final Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor: jsonResponseProcessor})
+      : super(
+            path: path,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+}
+
+/// Annotation to declare a method as request handler method that processes GET
+/// requests with HTML response.
+class GetHtml extends Get {
+  const GetHtml(
+      {String path,
+      int statusCode: 200,
+      String mimeType: MimeType.html,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      final Map<String, String> pathRegEx})
+      : super(
+            path: path,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx);
+}
+
+///An annotation to define a route
+class Route extends RouteBase {
+  /// Path of the route
+  final String path;
+
+  /// Methods handled by the route
+  final List<String> methods;
+
+  /// Default status code for the route response
+  final int statusCode;
+
+  /// Default mime-type for route response
+  final String mimeType;
+
+  /// Default charset for route response
+  final String charset;
+
+  /// Default headers for route response
+  final Map<String, String> headers;
+
+  /// Map of regular expression matchers for specific path segment
+  final Map<String, String> pathRegEx;
+
+  final ResponseProcessor responseProcessor;
+
+  const Route(
+      {this.path,
+        this.methods: _methods,
+        this.statusCode: 200,
+        this.mimeType: kDefaultMimeType,
+        this.charset: kDefaultCharset,
+        this.headers,
+        this.pathRegEx,
+        this.responseProcessor});
+
+  static const List<String> _methods = const <String>[
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+  ];
+}
+
 const String kDefaultMimeType = 'text/plain';
 const String kDefaultCharset = 'utf-8';
 
@@ -9,6 +252,10 @@ typedef FutureOr<dynamic> RouteFunc<RespType>(Context ctx);
 
 /// Function type for a route handler
 typedef FutureOr<Response<RespType>> RouteHandlerFunc<RespType>(Context ctx);
+
+typedef dynamic ResponseProcessor(dynamic resp);
+
+dynamic jsonResponseProcessor(dynamic value) => JSON.encode(value);
 
 /// Base class for route specification
 abstract class RouteBase {
@@ -34,6 +281,8 @@ abstract class RouteBase {
 
   /// Map of regular expression matchers for specific path segment
   Map<String, String> get pathRegEx;
+
+  ResponseProcessor get responseProcessor;
 
   /// Returns path with provided prefix
   String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
@@ -78,7 +327,7 @@ abstract class RouteBase {
         }
 
         //TODO move this to generator side
-        {
+            {
           //TODO check that argName is valid Dart variable name
         }
 
@@ -109,176 +358,4 @@ abstract class RouteBase {
 
     return true;
   }
-}
-
-///An annotation to define a route
-class Route extends RouteBase {
-  /// Path of the route
-  final String path;
-
-  /// Methods handled by the route
-  final List<String> methods;
-
-  /// Default status code for the route response
-  final int statusCode;
-
-  /// Default mime-type for route response
-  final String mimeType;
-
-  /// Default charset for route response
-  final String charset;
-
-  /// Default headers for route response
-  final Map<String, String> headers;
-
-  /// Map of regular expression matchers for specific path segment
-  final Map<String, String> pathRegEx;
-
-  const Route(
-      {this.path,
-      this.methods: const <String>[
-        'GET',
-        'POST',
-        'PUT',
-        'PATCH',
-        'DELETE',
-        'OPTIONS'
-      ],
-      this.statusCode: 200,
-      this.mimeType: kDefaultMimeType,
-      this.charset: kDefaultCharset,
-      this.headers,
-      this.pathRegEx});
-}
-
-class Get extends RouteBase {
-  /// Path of the route
-  final String path;
-
-  /// Methods handled by the route
-  final List<String> methods = _methods;
-
-  /// Default status code for the route response
-  final int statusCode;
-
-  /// Default mime-type for route response
-  final String mimeType;
-
-  /// Default charset for route response
-  final String charset;
-
-  /// Default headers for route response
-  final Map<String, String> headers;
-
-  /// Map of regular expression matchers for specific path segment
-  final Map<String, String> pathRegEx;
-
-  const Get(
-      {this.path,
-      this.statusCode: 200,
-      this.mimeType: kDefaultMimeType,
-      this.charset: kDefaultCharset,
-      this.headers,
-      this.pathRegEx});
-
-  static const List<String> _methods = const <String>['GET'];
-}
-
-class Post extends RouteBase {
-  /// Path of the route
-  final String path;
-
-  /// Methods handled by the route
-  final List<String> methods = _methods;
-
-  /// Default status code for the route response
-  final int statusCode;
-
-  /// Default mime-type for route response
-  final String mimeType;
-
-  /// Default charset for route response
-  final String charset;
-
-  /// Default headers for route response
-  final Map<String, String> headers;
-
-  /// Map of regular expression matchers for specific path segment
-  final Map<String, String> pathRegEx;
-
-  const Post(
-      {this.path,
-      this.statusCode: 200,
-      this.mimeType: kDefaultMimeType,
-      this.charset: kDefaultCharset,
-      this.headers,
-      this.pathRegEx});
-
-  static const List<String> _methods = const <String>['POST'];
-}
-
-class Put extends RouteBase {
-  /// Path of the route
-  final String path;
-
-  /// Methods handled by the route
-  final List<String> methods = _methods;
-
-  /// Default status code for the route response
-  final int statusCode;
-
-  /// Default mime-type for route response
-  final String mimeType;
-
-  /// Default charset for route response
-  final String charset;
-
-  /// Default headers for route response
-  final Map<String, String> headers;
-
-  /// Map of regular expression matchers for specific path segment
-  final Map<String, String> pathRegEx;
-
-  const Put(
-      {this.path,
-      this.statusCode: 200,
-      this.mimeType: kDefaultMimeType,
-      this.charset: kDefaultCharset,
-      this.headers,
-      this.pathRegEx});
-
-  static const List<String> _methods = const <String>['PUT'];
-}
-
-class Delete extends RouteBase {
-  /// Path of the route
-  final String path;
-
-  /// Methods handled by the route
-  final List<String> methods = _methods;
-
-  /// Default status code for the route response
-  final int statusCode;
-
-  /// Default mime-type for route response
-  final String mimeType;
-
-  /// Default charset for route response
-  final String charset;
-
-  /// Default headers for route response
-  final Map<String, String> headers;
-
-  /// Map of regular expression matchers for specific path segment
-  final Map<String, String> pathRegEx;
-
-  const Delete(
-      {this.path,
-      this.statusCode: 200,
-      this.mimeType: kDefaultMimeType,
-      this.charset: kDefaultCharset,
-      this.headers,
-      this.pathRegEx});
-
-  static const List<String> _methods = const <String>['DELETE'];
 }

@@ -11,14 +11,16 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder(path, handler,
-        pathRegEx: pathRegEx,
         methods: methods,
+        pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -28,13 +30,15 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.get(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -44,13 +48,15 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.post(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -60,13 +66,15 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.put(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -76,13 +84,15 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.delete(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -92,13 +102,15 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.patch(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -108,13 +120,15 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.options(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -123,12 +137,14 @@ abstract class Muxable {
       {Map<String, String> pathRegEx,
       int statusCode: 200,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor}) {
     final route = new RouteBuilder.html(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -138,13 +154,15 @@ abstract class Muxable {
       List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
       int statusCode: 200,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor: jsonResponseProcessor}) {
     final route = new RouteBuilder.json(path, handler,
         pathRegEx: pathRegEx,
         methods: methods,
         statusCode: statusCode,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -153,12 +171,14 @@ abstract class Muxable {
       {Map<String, String> pathRegEx,
       int statusCode: 200,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor: jsonResponseProcessor}) {
     final route = new RouteBuilder.getJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -167,12 +187,14 @@ abstract class Muxable {
       {Map<String, String> pathRegEx,
       int statusCode: 200,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor: jsonResponseProcessor}) {
     final route = new RouteBuilder.postJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -181,12 +203,14 @@ abstract class Muxable {
       {Map<String, String> pathRegEx,
       int statusCode: 200,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor: jsonResponseProcessor}) {
     final route = new RouteBuilder.putJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 
@@ -195,12 +219,14 @@ abstract class Muxable {
       {Map<String, String> pathRegEx,
       int statusCode: 200,
       String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+      Map<String, String> headers,
+      ResponseProcessor responseProcessor: jsonResponseProcessor}) {
     final route = new RouteBuilder.deleteJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         charset: charset,
-        headers: headers);
+        headers: headers,
+        responseProcessor: responseProcessor);
     return addRoute(route);
   }
 }

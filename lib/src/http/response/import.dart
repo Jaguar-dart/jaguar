@@ -37,9 +37,10 @@ class Response<ValueType> {
     }
 
     if (headers is Map) {
-      headers.forEach((String name, String value) {
+      for(final String name in headers.keys) {
+        final value = headers[name];
         this.headers.add(name, value);
-      });
+      }
     }
 
     if (mimeType is String) this.headers.mimeType = mimeType;
@@ -161,6 +162,9 @@ abstract class MimeType {
 
   /// Mime type for GIF
   static const String gif = "image/gif";
+
+  /// Mime type for JSON
+  static const String json = "application/json";
 
   /// Map of file extension to mime type
   static const fromFileExtension = const <String, String>{

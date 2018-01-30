@@ -65,7 +65,8 @@ class RouteChainSimple implements RequestHandler {
       return null;
     }
 
-    final res = await handler(ctx);
+    var res = await handler(ctx);
+    if(route.responseProcessor != null) res = route.responseProcessor(res);
     if (res is Response) {
       return res;
     } else if (res != null) {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.8
+
++ Added `ResponseProcessor`
++ `Route` now has `responseProcessor` to allow processing response outside handlers
++ `Interceptor.chain` uses `responseProcessor`
++ Added `GetJson`, `PutJson`, `PostJson`, `DeleteJson`, `GetHtml` route annotations
++ JSON route annotations and mux methods now use `responseProcessor`
+
 ## 1.2.7
 
 + `staticFiles` now respects `index.html`

@@ -59,7 +59,9 @@ abstract class Interceptor<OutputType, ResponseType, InResponseType> {
       }
 
       {
-        final res = await routeHandler(ctx);
+        var res = await routeHandler(ctx);
+        if (routeInfo.responseProcessor != null)
+          res = routeInfo.responseProcessor(res);
         if (res is Response) {
           resp = res;
         } else {
