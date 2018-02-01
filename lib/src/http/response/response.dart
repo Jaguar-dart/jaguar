@@ -118,11 +118,11 @@ class Response<ValueType> {
   /// Different [ValueTypes] are differently when they are written
   /// to the response.
   Future writeResponse(HttpResponse resp) async {
-    if (statusCode is int) {
-      resp.statusCode = statusCode;
-    }
+    resp.statusCode = statusCode;
 
-    headers.forEach(resp.headers.set);
+    for(dynamic name in headers.headers.keys) {
+      resp.headers.set(name, headers.headers[name]);
+    }
 
     resp.cookies.addAll(cookies);
 

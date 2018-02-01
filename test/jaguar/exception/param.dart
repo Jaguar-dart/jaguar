@@ -47,13 +47,13 @@ class UserParser extends Interceptor {
     if (queryParams['age'] is! String) {
       throw new ValidationException('age', 'Is required!');
     } else {
-      int value = queryParams['age'];
+      int value = queryParams.getInt('age');
 
       if (value <= 0) {
         throw new ValidationException('age', 'Must be positive!');
       }
     }
 
-    return new User(queryParams['name'], queryParams['age']);
+    return new User(queryParams['name'], queryParams.getInt('age'));
   }
 }

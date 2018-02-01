@@ -1,7 +1,7 @@
 part of jaguar.mux;
 
 class GroupBuilder extends Object with Muxable {
-  final Jaguar server;
+  final Muxable server;
 
   final String pathPrefix;
 
@@ -56,7 +56,6 @@ class GroupBuilder extends Object with Muxable {
     return route;
   }
 
-  GroupBuilder group({String pathPrefix: ''}) {
-    return new GroupBuilder(server, path: this.pathPrefix + (pathPrefix ?? ''));
-  }
+  GroupBuilder group({String pathPrefix: ''}) =>
+      new GroupBuilder(server, path: this.pathPrefix + (pathPrefix ?? ''));
 }

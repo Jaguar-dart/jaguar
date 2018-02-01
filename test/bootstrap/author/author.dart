@@ -1,11 +1,8 @@
 library bootstrap.gen;
 
-import 'dart:async';
 import 'package:dice/dice.dart';
 
 import 'package:jaguar/jaguar.dart';
-
-part 'author.g.dart';
 
 @injectable
 @Api(path: '/api/author', isRoot: true)

@@ -85,10 +85,10 @@ on [`Request`][Doc::Request] object.
 main(List<String> arguments) async {
   final server = new Jaguar(port: 8005);
 
-  server.post('/api/add', (ctx) async {
+  server.postJson('/api/add', (ctx) async {
       final Map<String, String> map = await ctx.req.bodyAsUrlEncodedForm(); // The magic!
       contacts.add(Contact.create(map));
-      return Response.json(contacts.map((ct) => ct.toMap).toList());
+      return contacts.map((ct) => ct.toMap).toList();
     });
 
 
@@ -118,12 +118,12 @@ Decoding JSON requests can't be simpler than using one of the built-in [`bodyAsJ
 ```dart
 Future<Null> main(List<String> args) async {
   final server = new Jaguar();
-  server.post('/api/book', (Context ctx) async {
+  server.postJson('/api/book', (Context ctx) async {
     // Decode request body as JSON Map
     final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
     Book book = new Book.fromMap(json);
     // Encode Map to JSON
-    return Response.json(book.toMap());
+    return book.toMap();
   });
 
   await server.serve();

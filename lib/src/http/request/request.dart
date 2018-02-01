@@ -19,8 +19,6 @@ import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
 import 'package:logging/logging.dart';
 
-import 'package:jaguar/src/http/session/session.dart';
-
 part 'form_field.dart';
 part 'request_impl.dart';
 

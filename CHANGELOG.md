@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.9
+
++ Stream lined request handling
++ Removed global interceptors
++ Removed debug streams
+
 ## 1.2.8
 
 + Added `ResponseProcessor`

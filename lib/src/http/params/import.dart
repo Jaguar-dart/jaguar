@@ -5,38 +5,17 @@ import 'package:collection/collection.dart' show DelegatingMap;
 
 import 'package:jaguar/src/utils/string/import.dart';
 
-/// A [Map] whose keys can be accessed as if they are members of the object
-@proxy
-class DottableMap<V> extends DelegatingMap<String, V> {
-  DottableMap(Map<String, V> map) : super(map);
+class CastableStringMap extends DelegatingMap<String, String> {
+  CastableStringMap(Map<String, String> map) : super(map);
 
   ///Retrieve a value from this map
-  V get(String key, [V defaultValue]) {
+  String get(String key, [String defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
 
     return this[key];
   }
-
-  /* Reimplement it without Mirrors
-  dynamic noSuchMethod(Invocation invocation) {
-    var key = invocation.memberName;
-    if (invocation.isGetter) {
-      return get(key);
-    } else if (invocation.isSetter) {
-      this[key.substring(0, key.length - 1)] =
-          invocation.positionalArguments.first as V;
-      return null;
-    } else {
-      return super.noSuchMethod(invocation);
-    }
-  }
-  */
-}
-
-class DynamicDottableMap extends DottableMap<dynamic> {
-  DynamicDottableMap(Map<String, dynamic> map) : super(map);
 
   ///Retrieve a value from this map
   int getInt(String key, [int defaultValue]) {
@@ -116,7 +95,7 @@ class DynamicDottableMap extends DottableMap<dynamic> {
 }
 
 /// Class to hold path parameters
-class PathParams extends DynamicDottableMap {
+class PathParams extends CastableStringMap {
   PathParams([Map<String, dynamic> map]) : super({}) {
     if (map is Map) {
       addAll(map);
@@ -127,8 +106,7 @@ class PathParams extends DynamicDottableMap {
 }
 
 /// Class to hold query parameters
-/// @proxy
-class QueryParams extends DynamicDottableMap {
+class QueryParams extends CastableStringMap {
   QueryParams(Map<String, dynamic> map) : super(map);
 
   QueryParams.FromQueryParam(QueryParams param) : super(param);

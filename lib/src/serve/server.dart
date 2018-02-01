@@ -2,7 +2,6 @@ library jaguar.src.serve;
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:collection';
 
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
@@ -15,8 +14,6 @@ import 'package:yaml/yaml.dart';
 export 'package:jaguar/src/serve/error_writer/import.dart';
 import 'package:path/path.dart' as p;
 
-part 'debug.dart';
-part 'handler.dart';
 part 'settings.dart';
 
 /// Base class for Request handlers
@@ -24,16 +21,8 @@ abstract class RequestHandler {
   FutureOr<Response> handleRequest(Context ctx, {String prefix});
 }
 
-/// An exception that can make an error [Response]
-abstract class ResponseError {
-  /// Creates [Response] from error
-  Response response(Context ctx);
-}
-
 /// The Jaguar server
-///
-///
-class Jaguar extends Object with Muxable, _Handler {
+class Jaguar extends Object with Muxable {
   /// Address on which the API is serviced
   final String address;
 
@@ -73,17 +62,14 @@ class Jaguar extends Object with Muxable, _Handler {
   /// log.
   final Logger log = new Logger('J');
 
-  /// Stream of information about requests used for debugging purposes.
-  final DebugStream debugStream;
-
-  /// Internal http server
-  HttpServer _server;
-
   /// Returns protocol string
   String get protocolStr => securityContext == null ? 'http' : 'https';
 
   /// Base path
   String get resourceName => "$protocolStr://$address:$port/";
+
+  /// Internal http server
+  HttpServer _server;
 
   /// Constructs an instance of [Jaguar] with given configuration.
   ///
@@ -96,8 +82,6 @@ class Jaguar extends Object with Muxable, _Handler {
   /// server.
   /// [errorWriter] is used to write custom error page [Response] in cases of HTTP
   /// errors.
-  /// [debugStream] is used to expose information about requests. Very helpful for
-  /// debugging purposes.
   /// [sessionManager] provides ability to use custom session managers.
   Jaguar(
       {this.address: "0.0.0.0",
@@ -107,46 +91,77 @@ class Jaguar extends Object with Muxable, _Handler {
       this.autoCompress: false,
       this.basePath: '',
       ErrorWriter errorWriter,
-      this.debugStream,
       SessionManager sessionManager})
       : errorWriter = errorWriter ?? new DefaultErrorWriter(),
         sessionManager = sessionManager ?? new CookieSessionManager();
 
   /// Starts serving the HTTP requests.
-  Future<Null> serve() async {
+  Future<Null> serve({bool logRequests: false}) async {
     if (_server != null) throw new Exception('Already serving!');
     log.info("Running on $resourceName");
-    _buildHandlers();
+    _handlers = _buildHandlers();
     if (securityContext != null) {
       _server = await HttpServer.bindSecure(address, port, securityContext);
     } else {
       _server = await HttpServer.bind(address, port, shared: multiThread);
     }
     _server.autoCompress = autoCompress;
-    _server.listen(_handleRequest);
+    if(logRequests) {
+      _server.listen((HttpRequest r) {
+        log.info("Req => Method: ${r.method} Url: ${r.uri}");
+        _handler(r);
+      });
+    } else {
+      _server.listen(_handler);
+    }
+  }
+
+  Future _handler(HttpRequest request) async {
+    final ctx = new Context(new Request(request, log), sessionManager);
+
+    Response response;
+    try {
+      // Try to find a matching route and invoke it.
+      for (RequestHandler requestHandler in _handlers) {
+        response = await requestHandler.handleRequest(ctx, prefix: basePath);
+        if (response != null) break;
+      }
+
+      // If no response, write 404 error.
+      if (response == null) {
+        response = errorWriter.make404(ctx);
+      }
+    } catch (e, stack) {
+      if (e is Response) {
+        // If [Response] object was thrown, write it!
+        response = e;
+      } else {
+        response = errorWriter.make500(ctx, e, stack);
+      }
+    }
+
+    try {
+      // Update session, if required.
+      if (ctx.sessionNeedsUpdate) await sessionManager.write(ctx, response);
+    } catch (_) {}
+
+    // Write response
+    try {
+      await response.writeResponse(request.response);
+    } catch (_) {}
+
+    return request.response.close();
   }
 
   /// Closes the server
   Future<Null> close() async {
     await _server.close(force: true);
     _server = null;
-    _builtHandlers.clear();
+    _handlers.clear();
   }
 
-  /// Global interceptors
-  final _interceptorCreators = <InterceptorCreator>[];
-
-  UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
-      new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
-
-  /// Wraps interceptor creator around all routes
-  void wrap(InterceptorCreator creator) => _interceptorCreators.add(creator);
-
-  /// [RequestHandler]s added to this server
-  final _unbuiltRoutes = <dynamic>[];
-
   /// Built [RequestHandler]s
-  final _builtHandlers = <RequestHandler>[];
+  List<RequestHandler> _handlers = <RequestHandler>[];
 
   /// Adds the given [api] to list of API that will be served
   void addApi(RequestHandler api) {
@@ -155,6 +170,21 @@ class Jaguar extends Object with Muxable, _Handler {
     }
     _unbuiltRoutes.add(api);
   }
+
+  /// Adds the [route] to be served
+  RouteBuilder addRoute(RouteBuilder route) {
+    if (_server != null) {
+      throw new Exception('Cannot add routes after server has been started!');
+    }
+    _unbuiltRoutes.add(route);
+    return route;
+  }
+
+  /// [RequestHandler]s added to this server
+  List _unbuiltRoutes = [];
+
+  /// Create a new route group
+  GroupBuilder group([String path = '']) => new GroupBuilder(this, path: path);
 
   /// Serves requests for static files at [path] from [directory]
   ///
@@ -253,38 +283,24 @@ class Jaguar extends Object with Muxable, _Handler {
         headers: headers);
   }
 
-  /// Adds the [route] to be served
-  RouteBuilder addRoute(RouteBuilder route) {
-    if (_server != null) {
-      throw new Exception('Cannot add routes after server has been started!');
-    }
-
-    _unbuiltRoutes.add(route);
-    return route;
-  }
-
-  /// Create a new route group
-  GroupBuilder group([String path = '']) {
-    return new GroupBuilder(this, path: path);
-  }
-
   /// Builds handlers to be served
-  void _buildHandlers() {
-    _builtHandlers.clear();
+  List<RequestHandler> _buildHandlers() {
+    final ret = <RequestHandler>[];
     for (dynamic handler in _unbuiltRoutes) {
       if (handler is RequestHandler) {
-        _builtHandlers.add(handler);
+        ret.add(handler);
       } else if (handler is RouteBuilder) {
         final Route jRoute = handler.routeInfo;
 
         if (handler.interceptors.length == 0 &&
             handler.exceptionHandlers.length == 0) {
-          _builtHandlers.add(new RouteChainSimple(jRoute, '', handler.handler));
+          ret.add(new RouteChainSimple(jRoute, '', handler.handler));
         } else {
-          _builtHandlers.add(new RouteChain(jRoute, '', handler.handler,
+          ret.add(new RouteChain(jRoute, '', handler.handler,
               handler.interceptors, handler.exceptionHandlers));
         }
       }
     }
+    return ret;
   }
 }
