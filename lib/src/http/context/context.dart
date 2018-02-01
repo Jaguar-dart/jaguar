@@ -99,23 +99,11 @@ class Context {
     return this._session;
   }
 
-  /// Interceptors for the route
-  final _interceptorCreators = <InterceptorCreator>[];
-
-  UnmodifiableListView<InterceptorCreator> get interceptorCreators =>
-      new UnmodifiableListView<InterceptorCreator>(_interceptorCreators);
-
   final List<String> debugMsgs = <String>[];
 
   Context(this.req, this._sessionManager);
 
   Logger get log => req.log;
-
-  void addInterceptor(InterceptorCreator interceptor) =>
-      _interceptorCreators.add(interceptor);
-
-  void addInterceptors(Iterable<InterceptorCreator> interceptors) =>
-      _interceptorCreators.addAll(interceptors);
 
   final _interceptorResults = <_IdiedType, dynamic>{};
 

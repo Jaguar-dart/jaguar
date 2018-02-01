@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.10
+
++ More streamlining of route handlers
+
 ## 1.2.9
 
 + Stream lined request handling

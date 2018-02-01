@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:path/path.dart' as p;
+import 'package:jaguar/src/annotations/import.dart';
 
 part 'headers.dart';
 
@@ -37,7 +38,7 @@ class Response<ValueType> {
     }
 
     if (headers is Map) {
-      for(final String name in headers.keys) {
+      for (final String name in headers.keys) {
         final value = headers[name];
         this.headers.add(name, value);
       }
@@ -45,6 +46,22 @@ class Response<ValueType> {
 
     if (mimeType is String) this.headers.mimeType = mimeType;
     if (charset is String) this.headers.charset = charset;
+  }
+
+  Response.fromRoute(dynamic value, Route route) {
+    statusCode = route.statusCode;
+
+    if (route.responseProcessor != null)
+      this.value = route.responseProcessor(value);
+
+    if (route.headers != null) {
+      for (final String name in route.headers.keys) {
+        final value = route.headers[name];
+        this.headers.add(name, value);
+      }
+    }
+    headers.mimeType = route.mimeType;
+    headers.charset = route.charset;
   }
 
   /// Returns a `Response` object that performs a redirect
@@ -120,7 +137,7 @@ class Response<ValueType> {
   Future writeResponse(HttpResponse resp) async {
     resp.statusCode = statusCode;
 
-    for(dynamic name in headers.headers.keys) {
+    for (dynamic name in headers.headers.keys) {
       resp.headers.set(name, headers.headers[name]);
     }
 

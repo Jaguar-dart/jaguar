@@ -30,8 +30,7 @@ class RouteChain implements RequestHandler {
           ctx.path, ctx.method, prefix + this.prefix, ctx.pathParams)) {
         return null;
       }
-      ctx.addInterceptors(interceptors);
-      return await Interceptor.chain(ctx, handler, route);
+      return await Interceptor.chain(ctx, interceptors, handler, route);
     } catch (e, s) {
       for (ExceptionHandler handler in exceptionHandlers) {
         final Response resp = await handler.onRouteException(ctx, e, s);
@@ -66,16 +65,10 @@ class RouteChainSimple implements RequestHandler {
     }
 
     var res = await handler(ctx);
-    if(route.responseProcessor != null) res = route.responseProcessor(res);
     if (res is Response) {
       return res;
-    } else if (res != null) {
-      final resp = new Response(res,
-          headers: route.headers, statusCode: route.statusCode);
-      resp.headers.mimeType = route.mimeType;
-      resp.headers.charset = route.charset;
-      return resp;
+    } else {
+      return new Response.fromRoute(res, route);
     }
-    return null;
   }
 }
