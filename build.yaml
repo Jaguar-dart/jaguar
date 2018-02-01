@@ -14,5 +14,5 @@ targets:
       jaguar_generator:
         generate_for:
           exclude:
-            - test/bootstrap/book/book.dart
+            - test/bootstrap/**
             - test/bootstrap/serve.dart

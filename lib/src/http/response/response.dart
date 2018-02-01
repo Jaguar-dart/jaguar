@@ -51,8 +51,9 @@ class Response<ValueType> {
   Response.fromRoute(dynamic value, Route route) {
     statusCode = route.statusCode;
 
-    if (route.responseProcessor != null)
-      this.value = route.responseProcessor(value);
+    this.value = route.responseProcessor != null
+        ? route.responseProcessor(value)
+        : value;
 
     if (route.headers != null) {
       for (final String name in route.headers.keys) {

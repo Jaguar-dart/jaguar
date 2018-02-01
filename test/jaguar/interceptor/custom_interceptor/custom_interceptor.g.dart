@@ -20,9 +20,11 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 //Handler for getRandom
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      ctx.addInterceptor(ExampleApi.genRandom);
-      ctx.addInterceptor(ExampleApi.usesRandom);
-      return await Interceptor.chain(ctx, getRandom, routes[0]);
+      final interceptors = <InterceptorCreator>[
+        ExampleApi.genRandom,
+        ExampleApi.doublesRandom,
+      ];
+      return await Interceptor.chain(ctx, interceptors, getRandom, routes[0]);
     }
 
     return null;

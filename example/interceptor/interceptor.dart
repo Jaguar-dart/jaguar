@@ -9,30 +9,33 @@ part 'interceptor.g.dart';
 
 final Random rand = new Random.secure();
 
-class GenRandom extends Interceptor {
-  int pre(Context ctx) {
+class GenRandom extends FullInterceptor<int, dynamic, dynamic> {
+  int output;
+
+  before(Context ctx) {
     print("Executes before request handler!");
-    return rand.nextInt(1000);
+    output = rand.nextInt(1000);
+    ctx.addInterceptor(GenRandom, id, this);
   }
 
-  Null post(Context ctx, Response incoming) {
+  after(Context ctx, Response incoming) {
     print("Executes after request handler!");
-    return null;
   }
 }
 
 class UsesRandom extends Interceptor {
+  dynamic output;
+
   /// [HttpRequest] object of the current request is automatically provided when
   /// first argument of interceptor method is [HttpRequest]
-  void pre(Context ctx) {
+  before(Context ctx) {
     print("Executes before request handler on path: ${ctx.req.uri}!");
   }
 
   /// [HttpRequest] object of the current request is automatically provided when
   /// first argument of interceptor method is [HttpRequest]
-  Null post(Context ctx, Response incoming) {
+  after(Context ctx, Response incoming) {
     print("Executes after request handler on path: ${ctx.req.uri}!");
-    return null;
   }
 }
 

@@ -18,8 +18,11 @@ abstract class _$JaguarExampApi implements RequestHandler {
   ];
 
   int getFive(Context ctx);
+
   String getName(Context ctx);
+
   String getMoto(Context ctx);
+
   void defaultStatusAndHeader(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
@@ -29,25 +32,25 @@ abstract class _$JaguarExampApi implements RequestHandler {
 //Handler for getFive
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getFive, routes[0]);
+      return new Response.fromRoute(getFive(ctx), routes[0]);
     }
 
 //Handler for getName
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getName, routes[1]);
+      return new Response.fromRoute(getName(ctx), routes[1]);
     }
 
 //Handler for getMoto
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getMoto, routes[2]);
+      return new Response.fromRoute(getMoto(ctx), routes[2]);
     }
 
 //Handler for defaultStatusAndHeader
     match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, defaultStatusAndHeader, routes[3]);
+      return new Response.fromRoute(defaultStatusAndHeader(ctx), routes[3]);
     }
 
     return null;

@@ -13,6 +13,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
   ];
 
   Response<String> getJaguarInfo(Context ctx);
+
   Response<String> createJaguarInfo(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
@@ -22,13 +23,13 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 //Handler for getJaguarInfo
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getJaguarInfo, routes[0]);
+      return getJaguarInfo(ctx);
     }
 
 //Handler for createJaguarInfo
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, createJaguarInfo, routes[1]);
+      return createJaguarInfo(ctx);
     }
 
     return null;

@@ -14,6 +14,7 @@ abstract class _$JaguarUserApi implements RequestHandler {
   ];
 
   String getUser(Context ctx);
+
   String statusCode(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
@@ -22,13 +23,13 @@ abstract class _$JaguarUserApi implements RequestHandler {
 //Handler for getUser
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getUser, routes[0]);
+      return new Response.fromRoute(getUser(ctx), routes[0]);
     }
 
 //Handler for statusCode
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, statusCode, routes[1]);
+      return new Response.fromRoute(statusCode(ctx), routes[1]);
     }
 
     return null;
@@ -52,7 +53,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 //Handler for statusCode
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, statusCode, routes[0]);
+      return new Response.fromRoute(statusCode(ctx), routes[0]);
     }
 
     {

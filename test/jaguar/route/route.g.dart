@@ -18,11 +18,17 @@ abstract class _$JaguarExampleApi implements RequestHandler {
   ];
 
   String getUser(Context ctx);
+
   String statusCode(Context ctx);
+
   String paramAndQuery(Context ctx);
+
   String inputHeader(Context ctx);
+
   String inputHeaders(Context ctx);
+
   String inputCookie(Context ctx);
+
   String inputCookies(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
@@ -32,43 +38,43 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 //Handler for getUser
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getUser, routes[0]);
+      return new Response.fromRoute(getUser(ctx), routes[0]);
     }
 
 //Handler for statusCode
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, statusCode, routes[1]);
+      return new Response.fromRoute(statusCode(ctx), routes[1]);
     }
 
 //Handler for paramAndQuery
     match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, paramAndQuery, routes[2]);
+      return new Response.fromRoute(paramAndQuery(ctx), routes[2]);
     }
 
 //Handler for inputHeader
     match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, inputHeader, routes[3]);
+      return new Response.fromRoute(inputHeader(ctx), routes[3]);
     }
 
 //Handler for inputHeaders
     match = routes[4].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, inputHeaders, routes[4]);
+      return new Response.fromRoute(inputHeaders(ctx), routes[4]);
     }
 
 //Handler for inputCookie
     match = routes[5].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, inputCookie, routes[5]);
+      return new Response.fromRoute(inputCookie(ctx), routes[5]);
     }
 
 //Handler for inputCookies
     match = routes[6].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, inputCookies, routes[6]);
+      return new Response.fromRoute(inputCookies(ctx), routes[6]);
     }
 
     return null;

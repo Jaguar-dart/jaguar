@@ -1,10 +1,8 @@
 /// Declares the Jaguar `Context` class
 library jaguar.src.http.context;
 
-import 'dart:collection';
 import 'dart:async';
 
-import 'package:quiver_hashcode/hashcode.dart' show hash2;
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
 
@@ -105,70 +103,44 @@ class Context {
 
   Logger get log => req.log;
 
-  final _interceptorResults = <_IdiedType, dynamic>{};
+  final _interceptorResults = <Type, Map<String, Interceptor>>{};
 
   /// Gets interceptor result by [Interceptor] and [id]
-  T getInterceptorResult<T>(Type interceptor, {String id}) {
-    final idied = new _IdiedType(interceptor, id: id);
-    // Throw if the requested interceptor has not been executed yet
-    if (!_interceptorResults.containsKey(idied)) {
-      throw new Exception(
-          "Context does not have output from an interceptor of type:$interceptor and id:$id!");
-    }
-    final ret = _interceptorResults[idied];
-    // TODO[teja] change to `ret is! T` when Dart supports reified generic types
-    return ret as T;
+  T getInterceptorResult<T>(Type interceptor, {String id}) =>
+      getInterceptor(interceptor, id: id)?.output;
+
+  /// Gets interceptor by [Interceptor] and [id]
+  Interceptor getInterceptor(Type interceptor, {String id}) {
+    Map<String, dynamic> map = _interceptorResults[interceptor];
+    if(map == null) return null;
+    return map[id];
   }
 
   /// Adds output of an Interceptor by id
-  void addInterceptorResult(
-      Type interceptorType, String id, Interceptor interceptor, dynamic value) {
-    final idied = new _IdiedType(interceptorType, id: id);
-    if (_interceptorResults.containsKey(idied)) {
-      throw new Exception(
-          "Context already has output from an interceptor of type:$interceptorType and id:$id!");
+  void addInterceptor(
+      Type interceptorType, String id, Interceptor interceptor) {
+    if (!_interceptorResults.containsKey(interceptorType)) {
+      _interceptorResults[interceptorType] = {id: interceptor};
+    } else {
+      _interceptorResults[interceptorType][id] = interceptor;
     }
-    _interceptorResults[idied] = value;
   }
 
-  final _variables = <_IdiedType, dynamic>{};
+  final _variables = <Type, Map<String, dynamic>>{};
 
   /// Gets variable by type and id
   T getVariable<T>({String id}) {
-    final idied = new _IdiedType(T, id: id);
-    // Throw if the variable is not present
-    if (!_variables.containsKey(idied)) {
-      throw new Exception(
-          "Context does not have variable of type:$T and id:$id!");
-    }
-    return _variables[idied];
+    Map<String, dynamic> map = _variables[T];
+    if(map == null) return null;
+    return map[id];
   }
 
   /// Adds variable by type and id
   void addVariable<T>(T value, {String id}) {
-    final idied = new _IdiedType(T, id: id);
-    if (_variables.containsKey(idied)) {
-      throw new Exception(
-          "Context already has variable of type:$T and id:$id!");
+    if (!_variables.containsKey(value.runtimeType)) {
+      _variables[value.runtimeType] = {id: value};
+    } else {
+      _variables[value.runtimeType][id] = value;
     }
-    _variables[idied] = value;
-  }
-}
-
-class _IdiedType {
-  final Type interceptor;
-
-  final String id;
-
-  const _IdiedType(this.interceptor, {this.id});
-
-  @override
-  int get hashCode => hash2(interceptor, id);
-
-  @override
-  bool operator ==(final other) {
-    if (other is! _IdiedType) return false;
-
-    return interceptor == other.interceptor && id == other.id;
   }
 }

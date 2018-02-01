@@ -14,29 +14,39 @@ part 'custom_interceptor.g.dart';
 final Random rand = new Random.secure();
 
 class GenRandom extends Interceptor {
-  int pre(Context ctx) => rand.nextInt(1000);
+  int output;
+
+  before(Context ctx) {
+    output = rand.nextInt(1000);
+    ctx.addInterceptor(GenRandom, id, this);
+  }
 }
 
-class UsesRandom extends Interceptor {
-  int pre(Context ctx) => ctx.getInterceptorResult(GenRandom) * 2;
+class DoublesRandom extends Interceptor {
+  int output;
+
+  before(Context ctx) {
+    output = ctx.getInterceptorResult(GenRandom) * 2;
+    ctx.addInterceptor(DoublesRandom, id, this);
+  }
 }
 
 @Api(path: '/api')
 class ExampleApi extends _$JaguarExampleApi {
   static GenRandom genRandom(Context ctx) => new GenRandom();
 
-  static UsesRandom usesRandom(Context ctx) => new UsesRandom();
+  static DoublesRandom doublesRandom(Context ctx) => new DoublesRandom();
 
   @Get(path: '/random')
-  @Wrap(const [genRandom, usesRandom])
+  @Wrap(const [genRandom, doublesRandom])
   Response<String> getRandom(Context ctx) => Response.json({
         'Random': ctx.getInterceptorResult(GenRandom),
-        'Doubled': ctx.getInterceptorResult(UsesRandom),
+        'Doubled': ctx.getInterceptorResult(DoublesRandom),
       });
 }
 
 void main() {
-  group('Custom interceptor', () {
+  group('Custom interceptor:Generated', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
@@ -51,7 +61,7 @@ void main() {
     grouped();
   });
 
-  group('Custom interceptor reflected', () {
+  group('Custom interceptor:Reflected', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);

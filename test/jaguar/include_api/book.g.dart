@@ -13,6 +13,7 @@ abstract class _$JaguarBookApi implements RequestHandler {
   ];
 
   String getBook(Context ctx);
+
   String some(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
@@ -21,13 +22,13 @@ abstract class _$JaguarBookApi implements RequestHandler {
 //Handler for getBook
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getBook, routes[0]);
+      return new Response.fromRoute(getBook(ctx), routes[0]);
     }
 
 //Handler for some
     match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, some, routes[1]);
+      return new Response.fromRoute(some(ctx), routes[1]);
     }
 
     return null;

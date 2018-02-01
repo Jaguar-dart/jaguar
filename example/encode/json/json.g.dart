@@ -18,7 +18,7 @@ abstract class _$JaguarBooksApi implements RequestHandler {
 //Handler for addBook
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, addBook, routes[0]);
+      return await addBook(ctx);
     }
 
     return null;

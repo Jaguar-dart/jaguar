@@ -10,7 +10,12 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 part 'inject_input.g.dart';
 
 class UsesRequest extends Interceptor {
-  String pre(Context ctx) => ctx.req.uri.toString();
+  String output;
+
+  before(Context ctx) {
+    output = ctx.req.uri.toString();
+    ctx.addInterceptor(UsesRequest, id, this);
+  }
 }
 
 @Api(path: '/api')
@@ -25,7 +30,7 @@ class ExampleApi extends _$JaguarExampleApi {
 }
 
 void main() {
-  group('Inject Request into interceptor', () {
+  group('Inject input:Generated', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
@@ -40,7 +45,7 @@ void main() {
     grouped();
   });
 
-  group('Inject Request into interceptor reflected', () {
+  group('Inject input:Reflect', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);

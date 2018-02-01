@@ -20,7 +20,7 @@ abstract class _$JaguarExampleApi implements RequestHandler {
 //Handler for getStream
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      return await Interceptor.chain(ctx, getStream, routes[0]);
+      return new Response.fromRoute(getStream(ctx), routes[0]);
     }
 
     return null;

@@ -18,9 +18,12 @@ abstract class _$JaguarBooksApi implements RequestHandler {
 //Handler for getJaguarInfo
     match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      ctx.addInterceptor(BooksApi.genRandom);
-      ctx.addInterceptor(BooksApi.usesRandom);
-      return await Interceptor.chain(ctx, getJaguarInfo, routes[0]);
+      final interceptors = <InterceptorCreator>[
+        BooksApi.genRandom,
+        BooksApi.usesRandom,
+      ];
+      return await Interceptor.chain(
+          ctx, interceptors, getJaguarInfo, routes[0]);
     }
 
     return null;
