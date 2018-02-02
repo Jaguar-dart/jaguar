@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2
+
++ Uses Dart 2's void as type to FutureOr in Interceptor return type
+
 ## 1.3.1
 
 + Faster streamlined request handling

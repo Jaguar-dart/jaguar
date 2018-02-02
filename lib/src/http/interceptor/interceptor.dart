@@ -20,7 +20,7 @@ abstract class FullInterceptor<OutputType, ResponseType, InResponseType>
 
   /// Shall be called if there is an exception in the route chain.
   /// This can be used to clean up resources used by the interceptor.
-  FutureOr<Null> onException() => null;
+  FutureOr<void> onException() => null;
 }
 
 /// An interceptor wraps a route and performs an action before and
@@ -37,7 +37,7 @@ abstract class Interceptor<OutputType> {
   const Interceptor();
 
   /// Shall be called before execution of route handler
-  FutureOr<Null> before(Context ctx);
+  FutureOr<void> before(Context ctx);
 
   /// Executes a route chain
   static Future<Response<RespType>> chain<RespType, RouteRespType>(
@@ -67,9 +67,7 @@ abstract class Interceptor<OutputType> {
       }
 
       while (exceptList.length > 0) {
-        final FullInterceptor interceptor = exceptList.last;
-        final newResp = await interceptor.after(ctx, resp);
-        if (newResp != null) resp = newResp;
+        resp = await exceptList.last.after(ctx, resp);
         exceptList.removeLast();
       }
     } catch (e) {
