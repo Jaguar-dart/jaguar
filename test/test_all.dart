@@ -19,6 +19,8 @@ import 'websocket/websocket.dart' as websocket;
 
 import 'bootstrap/serve.dart' as bootstrap;
 
+import 'others/simpleHandler_retType.dart' as otherSimpleHandlerRetType;
+
 void main() {
   exceptionExcept.main();
   includeApi.main();
@@ -37,4 +39,6 @@ void main() {
   websocket.main();
 
   bootstrap.main();
+
+  otherSimpleHandlerRetType.main();
 }

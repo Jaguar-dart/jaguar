@@ -106,7 +106,7 @@ class Jaguar extends Object with Muxable {
       _server = await HttpServer.bind(address, port, shared: multiThread);
     }
     _server.autoCompress = autoCompress;
-    if(logRequests) {
+    if (logRequests) {
       _server.listen((HttpRequest r) {
         log.info("Req => Method: ${r.method} Url: ${r.uri}");
         _handler(r);
@@ -294,7 +294,7 @@ class Jaguar extends Object with Muxable {
 
         if (handler.interceptors.length == 0 &&
             handler.exceptionHandlers.length == 0) {
-          ret.add(new RouteChainSimple(jRoute, '', handler.handler));
+          ret.add(simpleHandler(jRoute, '', handler.handler));
         } else {
           ret.add(new RouteChain(jRoute, '', handler.handler,
               handler.interceptors, handler.exceptionHandlers));

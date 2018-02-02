@@ -112,7 +112,7 @@ class Context {
   /// Gets interceptor by [Interceptor] and [id]
   Interceptor getInterceptor(Type interceptor, {String id}) {
     Map<String, dynamic> map = _interceptorResults[interceptor];
-    if(map == null) return null;
+    if (map == null) return null;
     return map[id];
   }
 
@@ -131,7 +131,7 @@ class Context {
   /// Gets variable by type and id
   T getVariable<T>({String id}) {
     Map<String, dynamic> map = _variables[T];
-    if(map == null) return null;
+    if (map == null) return null;
     return map[id];
   }
 
