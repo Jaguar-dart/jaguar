@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
++ Faster streamlined request handling
+
 ## 1.2.10
 
 + More streamlining of route handlers
