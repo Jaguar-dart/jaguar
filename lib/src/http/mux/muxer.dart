@@ -132,11 +132,19 @@ abstract class Muxable {
     return addRoute(route);
   }
 
-  void map(Map<String, RouteFunc> handlers,
+  void map(Map<String, /* RouteFunc | RouteBuilder */ dynamic> handlers,
       {/* InterceptorCreator | Iterable<InterceptorCreator> */ intercept,
       /* ExceptionHandler | List<ExceptionHandler> */ onException}) {
     for (String path in handlers.keys) {
-      RouteBuilder rb = addRoute(new RouteBuilder(path, handlers[path]));
+      RouteBuilder rb;
+      dynamic v = handlers[path];
+      if (v is RouteFunc) {
+        rb = addRoute(new RouteBuilder(path, v));
+      } else if (v is RouteBuilder) {
+        rb = addRoute(v);
+      } else {
+        throw new UnsupportedError('Handler not supported!');
+      }
       if (intercept is InterceptorCreator) {
         rb.wrap(intercept);
       } else if (intercept is Iterable<InterceptorCreator>) {

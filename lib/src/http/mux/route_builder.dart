@@ -1,8 +1,9 @@
 part of jaguar.mux;
 
 /// Constructs a [RouteBuilder] for GET method requests
-RouteBuilder get(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder get(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String mimeType,
         String charset: kDefaultCharset,
@@ -17,8 +18,9 @@ RouteBuilder get(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for POST method requests
-RouteBuilder post(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder post(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String mimeType,
         String charset: kDefaultCharset,
@@ -33,8 +35,9 @@ RouteBuilder post(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for PUT method requests
-RouteBuilder put(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder put(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String mimeType,
         String charset: kDefaultCharset,
@@ -49,8 +52,9 @@ RouteBuilder put(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for DELETE method requests
-RouteBuilder delete(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder delete(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String mimeType,
         String charset: kDefaultCharset,
@@ -65,8 +69,9 @@ RouteBuilder delete(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for OPTIONS method requests
-RouteBuilder options(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder options(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String mimeType,
         String charset: kDefaultCharset,
@@ -81,8 +86,9 @@ RouteBuilder options(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for HTML requests
-RouteBuilder html(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder html(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String charset: kDefaultCharset,
         Map<String, String> headers,
@@ -95,8 +101,9 @@ RouteBuilder html(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for JSON requests
-RouteBuilder json(String path, RouteFunc handler,
-        {List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
+RouteBuilder json(RouteFunc handler,
+        {String path,
+        List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
         Map<String, String> pathRegEx,
         int statusCode: 200,
         String charset: kDefaultCharset,
@@ -111,8 +118,9 @@ RouteBuilder json(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for JSON requests with GET method
-RouteBuilder getJson(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder getJson(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String charset: kDefaultCharset,
         Map<String, String> headers,
@@ -125,8 +133,9 @@ RouteBuilder getJson(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for JSON requests with POST method
-RouteBuilder postJson(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder postJson(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String charset: kDefaultCharset,
         Map<String, String> headers,
@@ -139,8 +148,9 @@ RouteBuilder postJson(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for JSON requests with PUT method
-RouteBuilder putJson(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder putJson(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String charset: kDefaultCharset,
         Map<String, String> headers,
@@ -153,8 +163,9 @@ RouteBuilder putJson(String path, RouteFunc handler,
         responseProcessor: responseProcessor);
 
 /// Constructs a [RouteBuilder] for JSON requests with DELETE method
-RouteBuilder deleteJson(String path, RouteFunc handler,
-        {Map<String, String> pathRegEx,
+RouteBuilder deleteJson(RouteFunc handler,
+        {String path,
+        Map<String, String> pathRegEx,
         int statusCode: 200,
         String charset: kDefaultCharset,
         Map<String, String> headers,
@@ -169,30 +180,30 @@ RouteBuilder deleteJson(String path, RouteFunc handler,
 /// Helps builds a route handler with its interceptors and exception handlers
 class RouteBuilder {
   /// Path of the route
-  final String path;
+  String path;
 
   /// Methods handled by the route
-  final List<String> methods;
+  List<String> methods;
 
   /// Default status code for the route response
-  final int statusCode;
+  int statusCode;
 
   /// Default mime-type for route response
-  final String mimeType;
+  String mimeType;
 
   /// Default charset for route response
-  final String charset;
+  String charset;
 
   /// Default headers for route response
-  final Map<String, String> headers;
+  Map<String, String> headers;
 
   /// Regex for the route path
-  final Map<String, String> pathRegEx;
+  Map<String, String> pathRegEx;
 
-  final ResponseProcessor responseProcessor;
+  ResponseProcessor responseProcessor;
 
   /// The route handler function
-  final RouteFunc handler;
+  RouteFunc handler;
 
   /// Constructs a [RouteBuilder]
   RouteBuilder(this.path, this.handler,

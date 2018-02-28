@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.7
+
++ Fixed RouteBuilder functions
+
 ## 1.3.6
 
 + Fixed to `map` method in `Muxable`

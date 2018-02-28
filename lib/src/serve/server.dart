@@ -229,7 +229,7 @@ class Jaguar extends Object with Muxable {
     int len = parts.length;
     if (parts.last == '*') len--;
 
-    get(path, (Context ctx) async {
+    this.get(path, (Context ctx) async {
       final List<String> paths = stripPrefix
           ? ctx.uri.pathSegments.sublist(len)
           : ctx.uri.pathSegments;
@@ -275,7 +275,7 @@ class Jaguar extends Object with Muxable {
     }
 
     final File f = file;
-    get(path, (_) => f.openRead(),
+    this.get(path, (_) => f.openRead(),
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType ?? MimeType.ofFile(f) ?? kDefaultMimeType,
