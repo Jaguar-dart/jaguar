@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.5
+
++ RouteBuilder functions
++ Route `map`er for `Muxable`
+
 ## 1.3.2
 
 + Uses Dart 2's void as type to FutureOr in Interceptor return type

@@ -132,6 +132,24 @@ abstract class Muxable {
     return addRoute(route);
   }
 
+  void map(Map<String, RouteBuilder> routes,
+      {/* InterceptorCreator | Iterable<InterceptorCreator> */ intercept,
+      /* ExceptionHandler | List<ExceptionHandler> */ onException}) {
+    for (String path in routes.keys) {
+      RouteBuilder rb = addRoute(routes[path]);
+      if (intercept is InterceptorCreator) {
+        rb.wrap(intercept);
+      } else if (intercept is Iterable<InterceptorCreator>) {
+        rb.wrapAll(intercept);
+      }
+      if (onException is ExceptionHandler) {
+        rb.onException(onException);
+      } else if (onException is Iterable<ExceptionHandler>) {
+        rb.onExceptionAll(onException);
+      }
+    }
+  }
+
   /// Adds a route with GET method to be served
   RouteBuilder html(String path, RouteFunc handler,
       {Map<String, String> pathRegEx,
