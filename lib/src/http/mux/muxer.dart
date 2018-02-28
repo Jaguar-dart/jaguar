@@ -132,11 +132,11 @@ abstract class Muxable {
     return addRoute(route);
   }
 
-  void map(Map<String, RouteBuilder> routes,
+  void map(Map<String, RouteFunc> handlers,
       {/* InterceptorCreator | Iterable<InterceptorCreator> */ intercept,
       /* ExceptionHandler | List<ExceptionHandler> */ onException}) {
-    for (String path in routes.keys) {
-      RouteBuilder rb = addRoute(routes[path]);
+    for (String path in handlers.keys) {
+      RouteBuilder rb = addRoute(new RouteBuilder(path, handlers[path]));
       if (intercept is InterceptorCreator) {
         rb.wrap(intercept);
       } else if (intercept is Iterable<InterceptorCreator>) {
