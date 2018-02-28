@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.8
+
++ More stuff for `map`
+
 ## 1.3.7
 
 + Fixed RouteBuilder functions

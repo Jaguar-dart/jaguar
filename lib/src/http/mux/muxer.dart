@@ -132,7 +132,11 @@ abstract class Muxable {
     return addRoute(route);
   }
 
-  void map(Map<String, /* RouteFunc | RouteBuilder */ dynamic> handlers,
+  void map(
+      Map<
+              String,
+              /* RouteFunc | RouteBuilder | Iterable<RouteFunc> | Iterable<RouteBuilder> */ dynamic>
+          handlers,
       {/* InterceptorCreator | Iterable<InterceptorCreator> */ intercept,
       /* ExceptionHandler | List<ExceptionHandler> */ onException}) {
     for (String path in handlers.keys) {
@@ -140,20 +144,58 @@ abstract class Muxable {
       dynamic v = handlers[path];
       if (v is RouteFunc) {
         rb = addRoute(new RouteBuilder(path, v));
+        if (intercept is InterceptorCreator) {
+          rb.wrap(intercept);
+        } else if (intercept is Iterable<InterceptorCreator>) {
+          rb.wrapAll(intercept);
+        }
+        if (onException is ExceptionHandler) {
+          rb.onException(onException);
+        } else if (onException is Iterable<ExceptionHandler>) {
+          rb.onExceptionAll(onException);
+        }
       } else if (v is RouteBuilder) {
         rb = addRoute(v);
+        if (intercept is InterceptorCreator) {
+          rb.wrap(intercept);
+        } else if (intercept is Iterable<InterceptorCreator>) {
+          rb.wrapAll(intercept);
+        }
+        if (onException is ExceptionHandler) {
+          rb.onException(onException);
+        } else if (onException is Iterable<ExceptionHandler>) {
+          rb.onExceptionAll(onException);
+        }
+      } else if (v is Iterable<RouteFunc>) {
+        for (RouteFunc v1 in v) {
+          rb = addRoute(new RouteBuilder(path, v1));
+          if (intercept is InterceptorCreator) {
+            rb.wrap(intercept);
+          } else if (intercept is Iterable<InterceptorCreator>) {
+            rb.wrapAll(intercept);
+          }
+          if (onException is ExceptionHandler) {
+            rb.onException(onException);
+          } else if (onException is Iterable<ExceptionHandler>) {
+            rb.onExceptionAll(onException);
+          }
+        }
+      } else if (v is Iterable<RouteBuilder>) {
+        for (RouteBuilder v1 in v) {
+          rb = addRoute(v1);
+          if (intercept is InterceptorCreator) {
+            rb.wrap(intercept);
+          } else if (intercept is Iterable<InterceptorCreator>) {
+            rb.wrapAll(intercept);
+          }
+          if (onException is ExceptionHandler) {
+            rb.onException(onException);
+          } else if (onException is Iterable<ExceptionHandler>) {
+            rb.onExceptionAll(onException);
+          }
+        }
       } else {
         throw new UnsupportedError('Handler not supported!');
-      }
-      if (intercept is InterceptorCreator) {
-        rb.wrap(intercept);
-      } else if (intercept is Iterable<InterceptorCreator>) {
-        rb.wrapAll(intercept);
-      }
-      if (onException is ExceptionHandler) {
-        rb.onException(onException);
-      } else if (onException is Iterable<ExceptionHandler>) {
-        rb.onExceptionAll(onException);
       }
     }
   }
