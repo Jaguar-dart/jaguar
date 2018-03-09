@@ -71,6 +71,7 @@ class _Request implements Request {
   Future<T> bodyAsJson<T, F>({Encoding encoding: UTF8, T convert(F d)}) async {
     final String text = await bodyAsText(encoding);
     if(convert == null) return json.decode(text);
+    print(text);
     return convert(json.decode(text));
   }
 

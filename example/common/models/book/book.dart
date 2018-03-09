@@ -1,7 +1,5 @@
 library jwt_auth.example.models;
 
-import 'dart:convert';
-
 /// Model for Book
 class Book {
   Book();
@@ -9,16 +7,8 @@ class Book {
   Book.make(this.id, this.name, this.authors);
 
   Book.fromMap(Map map) {
-    if (map['name'] is String) {
-      name = map['name'];
-    }
-
-    if (map['authors'] is List) {
-      List<String> value = map['authors'] as List<String>;
-      if (value.every((el) => el is String)) {
-        authors = value;
-      }
-    }
+    name = map['name'];
+    authors = (map['authors'] as List).cast<String>() ?? <String>[];
   }
 
   static Book map(Map map) => new Book.fromMap(map);
@@ -33,39 +23,10 @@ class Book {
   List<String> authors;
 
   /// Converts to Map
-  Map toMap() => {
+  Map toJson() => {
         'name': name,
         'authors': authors.toList(),
       };
 
-  // Converts to JSON
-  String toJson() {
-    return JSON.encode(toMap());
-  }
-
-  void validate() {
-    if (id is! String) {
-      throw new Exception('Id is Required!');
-    }
-
-    if (id.isEmpty) {
-      throw new Exception('Id must not be empty!');
-    }
-
-    if (name is! String) {
-      throw new Exception('Name is required!');
-    }
-
-    if (name.isEmpty) {
-      throw new Exception('Name must not be empty!');
-    }
-
-    if (authors is! List<String>) {
-      throw new Exception('Authors is required!');
-    }
-
-    if (!authors.every((el) => el is String)) {
-      throw new Exception('Authors is required!');
-    }
-  }
+  String toString() => toJson().toString();
 }

@@ -1,23 +1,22 @@
 library test.jaguar.response.json;
 
 import 'dart:io';
-import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-
-part 'json.g.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 @Api(path: '/api')
-class ExampleApi extends _$JaguarExampleApi {
-  @Get(path: '/info')
-  Response<String> getJaguarInfo(Context ctx) => Response.json({
+class ExampleApi {
+  @GetJson(path: '/info')
+  Map getJaguarInfo(Context ctx) => {
         'Name': 'Jaguar',
         'Features': ['Speed', 'Simplicity', 'Extensiblity'],
-      });
+      };
 
-  @Post(path: '/info')
-  Response<String> createJaguarInfo(Context ctx) => Response.json([1, 2, 3]);
+  @PostJson(path: '/info')
+  List<int> createJaguarInfo(Context ctx) => <int>[1, 2, 3];
 }
 
 void main() {
@@ -25,7 +24,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new ExampleApi());
+      server.addApi(reflect(new ExampleApi()));
       await server.serve();
     });
 
@@ -34,13 +33,12 @@ void main() {
     });
 
     test('render json Map', () async {
-      Uri uri = new Uri.http('localhost:8000', '/api/info');
-      http.Response response = await http.get(uri);
-      expect(response.body,
-          '{"Name":"Jaguar","Features":["Speed","Simplicity","Extensiblity"]}');
-      expect(response.statusCode, 200);
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'application/json; charset=utf-8');
+      await resty.get('/api/info').authority('http://localhost:8080').expect([
+        resty.statusCodeIs(200),
+        resty.contentTypeIsJson,
+        resty.bodyIs(
+            '{"Name":"Jaguar","Features":["Speed","Simplicity","Extensiblity"]}')
+      ]);
     });
 
     test('Render json List', () async {
