@@ -255,7 +255,7 @@ typedef FutureOr<Response<RespType>> RouteHandlerFunc<RespType>(Context ctx);
 
 typedef dynamic ResponseProcessor(dynamic resp);
 
-dynamic jsonResponseProcessor(dynamic value) => JSON.encode(value);
+dynamic jsonResponseProcessor(dynamic value) => converters.json.encode(value);
 
 /// Base class for route specification
 abstract class RouteBase {

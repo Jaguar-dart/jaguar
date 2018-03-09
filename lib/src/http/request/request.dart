@@ -120,7 +120,7 @@ abstract class Request {
   ///       // ...
   ///     });
   ///     await server.serve();
-  Future<dynamic> bodyAsJson({Encoding encoding: UTF8});
+  Future<T> bodyAsJson<T, F>({Encoding encoding: UTF8, T convert(F d)});
 
   /// Decodes JSON body of the request as [Map]
   ///
@@ -144,7 +144,7 @@ abstract class Request {
   ///       // ...
   ///     });
   ///     await server.serve();
-  Future<List> bodyAsJsonList({Encoding encoding: UTF8});
+  Future<List> bodyAsJsonList<T, F>({Encoding encoding: UTF8, T convert(F d)});
 
   /// Decodes url-encoded form from the body and returns the form as
   /// Map<String, String>.

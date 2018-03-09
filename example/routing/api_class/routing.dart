@@ -27,7 +27,7 @@ class ExampApi extends _$JaguarExampApi {
       path: '/default',
       statusCode: 200,
       headers: const {'custom-header': 'custom data'})
-  void defaultStatusAndHeader(Context ctx) {}
+  Null defaultStatusAndHeader(Context ctx) => null;
 }
 
 Future<Null> main(List<String> args) async {

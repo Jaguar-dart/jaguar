@@ -2,29 +2,26 @@ library example.body.json;
 
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 import '../../common/models/book/book.dart';
-
-part 'json.g.dart';
 
 final book = new Book.make('0', 'Book1', ['Author1', 'Author2']);
 
 @Api(path: '/api/book')
-class BooksApi extends _$JaguarBooksApi {
-  @Post()
-  Future<Response<String>> addBook(Context ctx) async {
+class BooksApi {
+  @PostJson()
+  Future<Book> addBook(Context ctx) async {
     // Decode request body as JSON Map
-    final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
-    Book book = new Book.fromMap(json);
+    final Book book = await ctx.req.bodyAsJson(convert: Book.map);
     print(book.toMap());
     // Encode Map to JSON
-    return Response.json(book.toMap());
+    return book;
   }
 }
 
 Future<Null> main(List<String> args) async {
-  Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new BooksApi());
-
-  await jaguar.serve();
+  final server = new Jaguar();
+  server.addApi(reflect(new BooksApi()));
+  await server.serve();
 }

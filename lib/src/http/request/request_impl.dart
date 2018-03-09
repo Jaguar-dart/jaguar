@@ -68,32 +68,25 @@ class _Request implements Request {
   }
 
   /// Decodes JSON body of the request
-  Future<dynamic> bodyAsJson({Encoding encoding: UTF8}) async {
+  Future<T> bodyAsJson<T, F>({Encoding encoding: UTF8, T convert(F d)}) async {
     final String text = await bodyAsText(encoding);
-    return JSON.decode(text);
+    if(convert == null) return json.decode(text);
+    return convert(json.decode(text));
   }
 
   /// Decodes JSON body of the request as [Map]
   Future<Map> bodyAsJsonMap({Encoding encoding: UTF8}) async {
     final String text = await bodyAsText(encoding);
-    final ret = JSON.decode(text);
-
-    if (ret == null) return null;
-
-    if (ret is! Map) throw new Exception("Json body is not a Map!");
-
+    final ret = json.decode(text);
     return ret;
   }
 
   /// Decodes JSON body of the request as [List]
-  Future<List> bodyAsJsonList({Encoding encoding: UTF8}) async {
+  Future<List<T>> bodyAsJsonList<T, F>(
+      {Encoding encoding: UTF8, T convert(F d)}) async {
     final String text = await bodyAsText(encoding);
-    final ret = JSON.decode(text);
-
-    if (ret == null) return null;
-
-    if (ret is! List) throw new Exception("Json body is not a List!");
-
+    final ret = json.decode(text);
+    if(convert != null) return (ret as List).cast<F>().map(convert).toList();
     return ret;
   }
 

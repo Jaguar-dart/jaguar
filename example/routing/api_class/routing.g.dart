@@ -23,7 +23,7 @@ abstract class _$JaguarExampApi implements RequestHandler {
 
   String getMoto(Context ctx);
 
-  void defaultStatusAndHeader(Context ctx);
+  Null defaultStatusAndHeader(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/book';

@@ -7,12 +7,11 @@ import '../common/models/book/book.dart';
 
 Future<Null> main(List<String> args) async {
   final server = new Jaguar();
-  server.post('/api/book', (Context ctx) async {
+  server.postJson('/api/book', (Context ctx) async {
     // Decode request body as JSON Map
-    final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
-    Book book = new Book.fromMap(json);
+    Book book = await ctx.req.bodyAsJson(convert: Book.map);
     // Encode Map to JSON
-    return Response.json(book.toMap());
+    return book.toMap();
   });
 
   await server.serve();

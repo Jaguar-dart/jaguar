@@ -21,6 +21,8 @@ class Book {
     }
   }
 
+  static Book map(Map map) => new Book.fromMap(map);
+
   /// Id of the book
   String id;
 
