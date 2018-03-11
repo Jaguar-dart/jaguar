@@ -1,8 +1,6 @@
 library test.jaguar.decode_body.json;
 
-import 'dart:io';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;

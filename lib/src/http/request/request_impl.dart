@@ -70,7 +70,7 @@ class _Request implements Request {
   /// Decodes JSON body of the request
   Future<T> bodyAsJson<T, F>({Encoding encoding: UTF8, T convert(F d)}) async {
     final String text = await bodyAsText(encoding);
-    if(convert == null) return json.decode(text);
+    if (convert == null) return json.decode(text);
     print(text);
     return convert(json.decode(text));
   }
@@ -87,7 +87,7 @@ class _Request implements Request {
       {Encoding encoding: UTF8, T convert(F d)}) async {
     final String text = await bodyAsText(encoding);
     final ret = json.decode(text);
-    if(convert != null) return (ret as List).cast<F>().map(convert).toList();
+    if (convert != null) return (ret as List).cast<F>().map(convert).toList();
     return ret;
   }
 

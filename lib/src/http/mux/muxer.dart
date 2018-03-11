@@ -297,4 +297,21 @@ abstract class Muxable {
         responseProcessor: responseProcessor);
     return addRoute(route);
   }
+
+  /// Example:
+  ///     server.ws('/ws', (String data) => int.parse(data) + 1);
+  RouteBuilder ws(String path, WsTransformer handler,
+      {Map<String, String> pathRegEx, ResponseProcessor responseProcessor}) {
+    return addRoute(new RouteBuilder.get(path, socketHandler(handler),
+        pathRegEx: pathRegEx, responseProcessor: responseProcessor));
+  }
+
+  /// Example:
+  ///     server.wsJson('/ws', (Map data) => {'data': data});
+  RouteBuilder wsJson(String path, WsTransformer handler,
+      {Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor: jsonResponseProcessor}) {
+    return addRoute(new RouteBuilder.get(path, socketHandler(handler),
+        pathRegEx: pathRegEx, responseProcessor: responseProcessor));
+  }
 }

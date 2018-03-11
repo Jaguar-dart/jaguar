@@ -1,6 +1,5 @@
 library test.jaguar.interceptor.inject_request;
 
-import 'dart:io';
 import 'dart:async';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';

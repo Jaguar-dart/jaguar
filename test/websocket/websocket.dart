@@ -4,17 +4,14 @@ import 'dart:io';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 
-String incrementerSocket(dynamic data, [WebSocket ws]) {
-  final int ret = int.parse(data) + 1;
-  return ret.toString();
-}
+int incrementerSocket(dynamic data) => int.parse(data) + 1;
 
 void main() {
   group('route', () {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.get('/ws', socketHandler(incrementerSocket));
+      server.ws('/ws', incrementerSocket);
       await server.serve();
     });
 
@@ -25,9 +22,7 @@ void main() {
     test('GET', () async {
       final WebSocket socket =
           await WebSocket.connect('ws://localhost:8000/ws');
-
       socket.add('5');
-
       expect(await socket.first, '6');
     });
   });

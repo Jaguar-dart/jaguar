@@ -2,46 +2,70 @@ library jaguar.websocket;
 
 import 'dart:io';
 import 'dart:async';
-import 'package:meta/meta.dart';
 import 'package:jaguar/jaguar.dart';
 
 /// Function prototype of a websocket handler
 ///
-/// [socketHandler] function converts the [WebSocketHandler] into
+/// [socketHandler] function converts the [WsHandler] into
 /// [RouteFunc], so it can be directly added to [Jaguar] server.
-///
-/// TODO example
-@experimental
-typedef FutureOr<dynamic> WebSocketHandler(dynamic data, [WebSocket socket]);
+typedef FutureOr<dynamic> WsHandler(dynamic data, [WebSocket socket]);
 
-@experimental
-typedef FutureOr<dynamic> WebSocketHandlerSimple(dynamic data);
+typedef FutureOr<dynamic> WsTransformer(dynamic data);
 
-/// An utility function to upgrade Websocket request and also handle incoming
-/// data.
+/// Converts [WsHandler] to [RouteFunc]
 ///
 /// [handler] is called on reception of data. The return value from [handler]
 /// is written to the websocket.
 ///
-/// TODO example
-@experimental
-RouteFunc socketHandler(WebSocketHandler handler,
-    {void onConnect(Context ctx, WebSocket ws)}) {
-  if (handler is WebSocketHandlerSimple) {
+/// If [responseProcessor] is provided, the data returned by [handler] is
+/// processed before writing to the websocket.
+///
+/// [onConnect] is called when a websocket connection is established.
+///
+/// Example:
+///     server.get('/ws', socketHandler((String data) => int.parse(data) + 1));
+RouteFunc socketHandler(WsTransformer handler,
+    {FutureOr onConnect(Context ctx, WebSocket ws),
+    ResponseProcessor responseProcessor}) {
+  if (handler is WsTransformer) {
     return (Context ctx) async {
-      final WebSocket websocket = await ctx.req.upgradeToWebSocket;
-      websocket.listen((data) async {
-        final resp = await handler(data);
-        if (resp != null) websocket.add(resp);
-      });
+      final WebSocket ws = await ctx.req.upgradeToWebSocket;
+      if (onConnect != null) await onConnect(ctx, ws);
+      if (responseProcessor == null) {
+        ws.listen((data) async {
+          final resp = await handler(data);
+          if (resp != null)
+            ws.add(
+                resp is String || resp is List<int> ? resp : resp.toString());
+        });
+      } else {
+        ws.listen((data) async {
+          final resp = await handler(data);
+          if (resp != null)
+            ws.add(responseProcessor(
+                resp is String || resp is List<int> ? resp : resp.toString()));
+        });
+      }
     };
-  } else if (handler is WebSocketHandler) {
+  } else if (handler is WsHandler) {
     return (Context ctx) async {
-      final WebSocket websocket = await ctx.req.upgradeToWebSocket;
-      websocket.listen((data) async {
-        final resp = await handler(data, websocket);
-        if (resp != null) websocket.add(resp);
-      });
+      final WebSocket ws = await ctx.req.upgradeToWebSocket;
+      if (onConnect != null) await onConnect(ctx, ws);
+      if (responseProcessor == null) {
+        ws.listen((data) async {
+          final resp = await handler(data, ws);
+          if (resp != null)
+            ws.add(
+                resp is String || resp is List<int> ? resp : resp.toString());
+        });
+      } else {
+        ws.listen((data) async {
+          final resp = await handler(data, ws);
+          if (resp != null)
+            ws.add(responseProcessor(
+                resp is String || resp is List<int> ? resp : resp.toString()));
+        });
+      }
     };
   }
 

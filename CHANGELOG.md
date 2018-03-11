@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.10
+
++ Work on websockets
+
 ## 1.3.9
 
 + Better JSON decoding and encoding support

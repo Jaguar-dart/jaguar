@@ -6,7 +6,6 @@ import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
-import 'package:http/http.dart' as http;
 
 part 'route.g.dart';
 
