@@ -2,10 +2,11 @@ library test.jaguar.route;
 
 import 'dart:io';
 import 'dart:async';
-import 'package:http/http.dart' as http;
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
+import 'package:http/http.dart' as http;
 
 part 'route.g.dart';
 
@@ -75,75 +76,40 @@ void main() {
 
 grouped() {
   test('GET', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user');
-    http.Response response = await http.get(uri);
-
-    expect(response.statusCode, 200);
-    expect(response.body, 'Get user');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
+    await resty
+        .get('/api/user')
+        .authority('http://localhost:8000')
+        .exact(statusCode: 200, mimeType: 'text/plain', body: 'Get user');
   });
 
   test('DefaultStatusCode', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/statuscode');
-    http.Response response = await http.get(uri);
-
-    expect(response.body, 'status code');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
-    expect(response.statusCode, 201);
+    await resty
+        .get('/api/statuscode')
+        .authority('http://localhost:8000')
+        .exact(statusCode: 201, mimeType: 'text/plain', body: 'status code');
   });
 
   test('ParamAndQuery', () async {
-    Uri uri = new Uri.http(
-        'localhost:8000', '/api/paramandquery/hello', {'query': 'world'});
-    http.Response response = await http.get(uri);
-
-    expect(response.body, 'hello world');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
-    expect(response.statusCode, 200);
+    await resty
+        .get('/api/paramandquery/hello')
+        .authority('http://localhost:8000')
+        .query('query', 'world')
+        .exact(statusCode: 200, mimeType: 'text/plain', body: 'hello world');
   });
 
   test('InputHeader', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/input/header');
-    http.Response response = await http.get(uri, headers: {'user': 'teja'});
-
-    expect(response.body, 'teja');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
-    expect(response.statusCode, 200);
-  });
-
-  test('InputHeaders', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/input/headers');
-    http.Response response = await http.get(uri, headers: {'user': 'kleak'});
-
-    expect(response.body, 'kleak');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
-    expect(response.statusCode, 200);
+    await resty
+        .get('/api/input/header')
+        .authority('http://localhost:8000')
+        .header('user', 'teja')
+        .exact(statusCode: 200, mimeType: 'text/plain', body: 'teja');
   });
 
   test('InputCookie', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/input/cookie');
-    http.Response response =
-        await http.get(uri, headers: {'cookie': 'user=teja'});
-
-    expect(response.body, 'teja');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
-    expect(response.statusCode, 200);
-  });
-
-  test('InputCookies', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/input/cookies');
-    http.Response response =
-        await http.get(uri, headers: {'cookie': 'user=kleak'});
-
-    expect(response.body, 'kleak');
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'text/plain; charset=utf-8');
-    expect(response.statusCode, 200);
+    await resty
+        .get('/api/input/cookie')
+        .authority('http://localhost:8000')
+        .header('cookie', 'user=teja')
+        .exact(statusCode: 200, mimeType: 'text/plain', body: 'teja');
   });
 }

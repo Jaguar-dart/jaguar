@@ -24,43 +24,43 @@ abstract class RequestHandler {
 /// The Jaguar server
 class Jaguar extends Object with Muxable {
   /// Address on which the API is serviced
-  final String address;
+  String address;
 
   /// Port on which the API is serviced
-  final int port;
+  int port;
 
   /// Security context for HTTPS
-  final SecurityContext securityContext;
+  SecurityContext securityContext;
 
   /// Should the port be service-able from multiple isolates?
   ///
   /// Defaults to false.
-  final bool multiThread;
+  bool multiThread;
 
   /// Should the response be auto-compressed?
   ///
   /// Defaults to false.
-  final bool autoCompress;
+  bool autoCompress;
 
   /// Base path of the served api.
   ///
   /// Defaults to '' (Aka. No base path).
-  final String basePath;
+  String basePath;
 
   /// Used to write error pages in case of HTTP errors.
   ///
   /// Defaults to [DefaultErrorWriter].
-  final ErrorWriter errorWriter;
+  ErrorWriter errorWriter;
 
   /// Session manager to parse and update session data for requests.
   ///
   /// Defaults to [CookieSessionManager].
-  final SessionManager sessionManager;
+  SessionManager sessionManager;
 
   /// Logger used to log concise useful information about the request. This is
   /// also available in [Context] so that interceptors and route handlers can also
   /// log.
-  final Logger log = new Logger('J');
+  Logger log = new Logger('J');
 
   /// Returns protocol string
   String get protocolStr => securityContext == null ? 'http' : 'https';

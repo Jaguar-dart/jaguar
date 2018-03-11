@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 part 'json.g.dart';
 
@@ -20,32 +22,32 @@ class AddInput {
   static AddInput fromJson(Map<String, dynamic> map) =>
       new AddInput(map['input1'], map['input2']);
 
-  static List<AddInput> fromJsonList(List<Map<String, dynamic>> json) =>
-      json.map((Map<String, dynamic> map) => fromJson(map)).toList();
+  Map toJson() => {
+        'input1': input1,
+        'input2': input2,
+      };
 }
 
 @Api(path: '/api/add')
 class JsonDecode extends _$JaguarJsonDecode {
   @Post(path: '/one')
-  Future<String> addOne(Context ctx) async {
+  Future<int> addOne(Context ctx) async {
     final Map body = await ctx.req.bodyAsJsonMap();
     final AddInput input = AddInput.fromJson(body);
-    return input.add().toString();
+    return input.add();
   }
 
-  @Post(path: '/many')
-  Future<String> addMany(Context ctx) async {
-    final List body = await ctx.req.bodyAsJsonList();
-    final List<AddInput> inputs = AddInput.fromJsonList(body);
-    return '[' +
-        inputs.map((AddInput input) => input.add().toString()).join(',') +
-        ']';
+  @PostJson(path: '/many')
+  Future<List<int>> addMany(Context ctx) async {
+    final List<AddInput> inputs =
+        await ctx.req.bodyAsJsonList(convert: (AddInput.fromJson));
+    return inputs.map((AddInput input) => input.add()).toList();
   }
 
   @Post(path: '/doubled')
-  Future<String> doubled(Context ctx) async {
+  Future<num> doubled(Context ctx) async {
     final num body = await ctx.req.bodyAsJson();
-    return (body * 2).toString();
+    return body * 2;
   }
 }
 
@@ -54,7 +56,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 8000);
-      server.addApi(new JsonDecode());
+      server.addApi(reflect(new JsonDecode()));
       await server.serve();
     });
 
@@ -63,35 +65,27 @@ void main() {
     });
 
     test('Decode Map', () async {
-      Uri uri = new Uri.http('localhost:8000', '/api/add/one');
-      http.Response response =
-          await http.post(uri, body: '{"input1": 5, "input2": 15}');
-
-      expect(response.statusCode, 200);
-      expect(response.body, "20");
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
+      await resty
+          .post('/api/add/one')
+          .authority('http://localhost:8000')
+          .json(new AddInput(5, 15))
+          .exact(statusCode: 200, body: '20', mimeType: 'text/plain');
     });
 
     test('Decode List', () async {
-      Uri uri = new Uri.http('localhost:8000', '/api/add/many');
-      http.Response response = await http.post(uri,
-          body: '[{"input1": 5, "input2": 15}, {"input1": 50, "input2": 55}]');
-
-      expect(response.statusCode, 200);
-      expect(response.body, "[20,105]");
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
+      await resty
+          .post('/api/add/many')
+          .authority('http://localhost:8000')
+          .json([new AddInput(5, 15), new AddInput(50, 55)]).exact(
+              statusCode: 200, body: '[20,105]', mimeType: MimeType.json);
     });
 
     test('Decode int', () async {
-      Uri uri = new Uri.http('localhost:8000', '/api/add/doubled');
-      http.Response response = await http.post(uri, body: '4');
-
-      expect(response.statusCode, 200);
-      expect(response.body, "8");
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'text/plain; charset=utf-8');
+      await resty
+          .post('/api/add/doubled')
+          .authority('http://localhost:8000')
+          .body('4')
+          .exact(statusCode: 200, body: '8', mimeType: 'text/plain');
     });
   });
 }

@@ -2,7 +2,7 @@ library test.jaguar.interceptor.inject_request;
 
 import 'dart:io';
 import 'dart:async';
-import 'package:http/http.dart' as http;
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
@@ -63,12 +63,9 @@ void main() {
 
 grouped() {
   test('inject request', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/echo/uri');
-    http.Response response = await http.get(uri);
-
-    expect(response.statusCode, 200);
-    expect(response.headers[HttpHeaders.CONTENT_TYPE],
-        'application/json; charset=utf-8');
-    expect(response.body, r'{"Uri":"/api/echo/uri"}');
+    await resty.get('/api/echo/uri').authority('http://localhost:8000').exact(
+        statusCode: 200,
+        mimeType: MimeType.json,
+        body: r'{"Uri":"/api/echo/uri"}');
   });
 }

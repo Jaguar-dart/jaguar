@@ -2,11 +2,9 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
-import 'package:jaguar_client/jaguar_client.dart';
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 import 'package:dice/dice.dart';
-
-import 'package:jaguar_client/testing.dart';
 
 // ignore: unused_import
 import 'author/author.dart';
@@ -28,7 +26,6 @@ class MyModule extends Module {
 main() async {
   group('bootstrap', () {
     Jaguar server;
-    final client = new JsonClient(new http.Client());
 
     setUpAll(() async {
       final injector = new Injector.fromModules([new MyModule()]);
@@ -41,25 +38,25 @@ main() async {
       await server.close();
     });
 
-    test('Api from same library', () async {
-      final JsonResponse resp =
-          await client.get('http://localhost:8000/api/main');
-      expect(resp, hasStatus(200));
-      expect(resp, hasBodyStr('main'));
-    });
+    test(
+        'Api from same library',
+        () => resty
+            .get('/api/main')
+            .authority('http://localhost:8000')
+            .exact(statusCode: 200, body: 'main'));
 
-    test('Api from different library', () async {
-      final JsonResponse resp =
-          await client.get('http://localhost:8000/api/author');
-      expect(resp, hasStatus(200));
-      expect(resp, hasBodyStr('author Dan Brown'));
-    });
+    test(
+        'Api from different library',
+        () => resty
+            .get('/api/author')
+            .authority('http://localhost:8000')
+            .exact(statusCode: 200, body: 'author Dan Brown'));
 
-    test('Api from another different library', () async {
-      final JsonResponse resp =
-          await client.get('http://localhost:8000/api/book');
-      expect(resp, hasStatus(200));
-      expect(resp, hasBodyStr('book'));
-    });
+    test(
+        'Api from another different library',
+        () => resty
+            .get('/api/book')
+            .authority('http://localhost:8000')
+            .exact(statusCode: 200, body: 'book'));
   });
 }

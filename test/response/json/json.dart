@@ -1,21 +1,30 @@
 library test.jaguar.response.json;
 
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
+class _Info {
+  String name;
+
+  List<String> motto;
+
+  _Info(this.name, this.motto);
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'motto': motto,
+      };
+}
+
 @Api(path: '/api')
 class ExampleApi {
   @GetJson(path: '/info')
-  Map getJaguarInfo(Context ctx) => {
-        'Name': 'Jaguar',
-        'Features': ['Speed', 'Simplicity', 'Extensiblity'],
-      };
+  _Info getJaguarInfo(Context ctx) =>
+      new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']);
 
-  @PostJson(path: '/info')
+  @GetJson(path: '/nums')
   List<int> createJaguarInfo(Context ctx) => <int>[1, 2, 3];
 }
 
@@ -32,23 +41,19 @@ void main() {
       await server.close();
     });
 
-    test('render json Map', () async {
-      await resty.get('/api/info').authority('http://localhost:8080').expect([
-        resty.statusCodeIs(200),
-        resty.contentTypeIsJson,
-        resty.bodyIs(
-            '{"Name":"Jaguar","Features":["Speed","Simplicity","Extensiblity"]}')
-      ]);
+    test('EncodeJsonPodo', () async {
+      await resty.get('/api/info').authority('http://localhost:8000').exact(
+          statusCode: 200,
+          mimeType: MimeType.json,
+          body:
+              r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
     });
 
-    test('Render json List', () async {
-      Uri uri = new Uri.http('localhost:8000', '/api/info');
-      http.Response response = await http.post(uri);
-
-      expect(response.body, '[1,2,3]');
-      expect(response.statusCode, 200);
-      expect(response.headers[HttpHeaders.CONTENT_TYPE],
-          'application/json; charset=utf-8');
+    test('EncodeJsonList', () async {
+      await resty
+          .get('/api/nums')
+          .authority('http://localhost:8000')
+          .exact(statusCode: 200, mimeType: MimeType.json, body: '[1,2,3]');
     });
   });
 }

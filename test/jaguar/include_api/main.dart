@@ -1,10 +1,10 @@
 library test.jaguar.group;
 
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 import 'book.dart';
 
@@ -64,43 +64,38 @@ void main() {
 }
 
 grouped() {
-  test('Route', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/version');
-    http.Response response = await http.get(uri);
+  test(
+      'Route',
+      () => resty
+          .get('/api/version')
+          .authority('http://localhost:8000')
+          .exact(statusCode: 200, body: '1.0'));
 
-    expect(response.body, '1.0');
-    expect(response.statusCode, 200);
-  });
+  test(
+      'Group.GET',
+      () => resty
+          .get('/api/user')
+          .authority('http://localhost:8000')
+          .exact(statusCode: 200, body: 'Get user'));
 
-  test('Group.GET', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user');
-    http.Response response = await http.get(uri);
+  test(
+      'Group.DefaultStatusCode',
+      () => resty
+          .get('/api/user/statuscode')
+          .authority('http://localhost:8000')
+          .exact(statusCode: 201, body: 'status code'));
 
-    expect(response.body, 'Get user');
-    expect(response.statusCode, 200);
-  });
+  test(
+      'Group.Imported.GET',
+      () => resty
+          .get('/api/book')
+          .authority('http://localhost:8000')
+          .exact(statusCode: 200, body: 'Get book'));
 
-  test('Group.DefaultStatusCode', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user/statuscode');
-    http.Response response = await http.get(uri);
-
-    expect(response.body, 'status code');
-    expect(response.statusCode, 201);
-  });
-
-  test('Group.Imported.GET', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/book');
-    http.Response response = await http.get(uri);
-
-    expect(response.body, 'Get book');
-    expect(response.statusCode, 200);
-  });
-
-  test('Group.POST.StringParam', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/book/some/param');
-    http.Response response = await http.post(uri);
-
-    expect(response.body, 'Some param');
-    expect(response.statusCode, 200);
-  });
+  test(
+      'Group.POST.StringParam',
+      () => resty
+          .post('/api/book/some/param')
+          .authority('http://localhost:8000')
+          .exact(statusCode: 200, body: 'Some param'));
 }

@@ -78,7 +78,7 @@ class DefaultErrorWriter implements ErrorWriter {
       return Response.xml(data, statusCode: 500);
     } else {
       final resp = new Response<String>(_write500Html(ctx, error, stack),
-          statusCode: HttpStatus.NOT_FOUND);
+          statusCode: 500);
       resp.headers.contentType = ContentType.HTML;
       return resp;
     }

@@ -9,15 +9,15 @@ part of test.jaguar.decode_body.json;
 abstract class _$JaguarJsonDecode implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Post(path: '/one'),
-    const Post(path: '/many'),
+    const PostJson(path: '/many'),
     const Post(path: '/doubled')
   ];
 
-  Future<String> addOne(Context ctx);
+  Future<int> addOne(Context ctx);
 
-  Future<String> addMany(Context ctx);
+  Future<List<int>> addMany(Context ctx);
 
-  Future<String> doubled(Context ctx);
+  Future<num> doubled(Context ctx);
 
   Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api/add';

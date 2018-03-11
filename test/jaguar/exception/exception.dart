@@ -1,10 +1,11 @@
 library test.exception.exception;
 
 import 'dart:async';
-import 'package:http/http.dart' as http;
+import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
+import 'package:http/http.dart' as http;
 
 part 'param.dart';
 part 'custom.dart';
@@ -66,45 +67,53 @@ void main() {
 }
 
 grouped() {
-  test('Exception message', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user', {'who1': 'kleak'});
-    http.Response response = await http.get(uri);
+  test(
+      'Exception message',
+      () => resty
+          .get('/api/user')
+          .authority('http://localhost:8000')
+          .query('who1', 'kleak')
+          .exact(
+              statusCode: 400,
+              body:
+                  r'{"Code": 5, "Message": "`who` query parameter must be provided! }'));
 
-    expect(response.body,
-        r'{"Code": 5, "Message": "`who` query parameter must be provided! }');
-    expect(response.statusCode, 400);
-  });
+  test(
+      'No exception',
+      () => resty
+          .get('/api/user')
+          .authority('http://localhost:8000')
+          .query('who', 'kleak')
+          .exact(statusCode: 200, body: r'kleak'));
 
-  test('No exception', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user', {'who': 'kleak'});
-    http.Response response = await http.get(uri);
+  test(
+      'Class exception',
+      () => resty
+          .get('/api/user')
+          .authority('http://localhost:8000')
+          .query('name', 'teja')
+          .exact(
+              statusCode: 400,
+              body:
+                  r'{"Code": 5, "Message": "`who` query parameter must be provided! }'));
 
-    expect(response.body, r'kleak');
-    expect(response.statusCode, 200);
-  });
+  test(
+      'Multiple exceptions',
+      () => resty
+          .post('/api/user')
+          .authority('http://localhost:8000')
+          .query('age', '27')
+          .exact(
+              statusCode: 400,
+              body: r'{"Field": name, "Message": "is required! }'));
 
-  test('Class exception', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user', {'name': 'teja'});
-    http.Response response = await http.get(uri);
-
-    expect(response.body,
-        r'{"Code": 5, "Message": "`who` query parameter must be provided! }');
-    expect(response.statusCode, 400);
-  });
-
-  test('Multiple exceptions', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user', {'age': '27'});
-    http.Response response = await http.post(uri);
-
-    expect(response.body, r'{"Field": name, "Message": "is required! }');
-    expect(response.statusCode, 400);
-  });
-
-  test('Exceptions in interceptor', () async {
-    Uri uri = new Uri.http('localhost:8000', '/api/user', {'name': ''});
-    http.Response response = await http.post(uri);
-
-    expect(response.body, r'{"Field": name, "Message": "Cannot be empty! }');
-    expect(response.statusCode, 400);
-  });
+  test(
+      'Exceptions in interceptor',
+      () => resty
+          .post('/api/user')
+          .authority('http://localhost:8000')
+          .query('name', '')
+          .exact(
+              statusCode: 400,
+              body: r'{"Field": name, "Message": "Cannot be empty! }'));
 }

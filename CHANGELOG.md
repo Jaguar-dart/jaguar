@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.9
+
++ Better JSON decoding and encoding support
++ Mutable `Jaguar` fields
+
 ## 1.3.8
 
 + More stuff for `map`
