@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.11
+
++ Fixed `args` package dependency issue
+
 ## 1.3.10
 
 + Work on websockets
