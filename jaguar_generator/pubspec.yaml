@@ -1,0 +1,30 @@
+name: jaguar_generator
+description: Generator for Jaguar
+version: 2.0.0-dev
+authors:
+- Ravi Teja Gudapati <tejainece@gmail.com>
+- Kevin Segaud <segaud.kevin@gmail.com>
+homepage: http://jaguar-dart.github.io
+
+environment:
+  sdk: ">=2.0.0-dev.35.0 <2.0.0"
+
+dependencies:
+  build_runner: ^0.8.0
+  source_gen: ^0.7.6
+  build: ^0.12.0+2
+  analyzer: ^0.31.1
+  jaguar: 2.0.0-dev
+
+##### TODO: REMOVE BEFORE PUBLISHING #####
+dependency_overrides:
+  jaguar:
+    path: ../jaguar
+##########################################
+
+
+dev_dependencies:
+  test:
+
+executables:
+  jaguar_gen:
