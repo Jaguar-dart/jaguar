@@ -1,5 +1,6 @@
 library test.jaguar.response.json;
 
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
@@ -29,6 +30,8 @@ class ExampleApi {
 }
 
 void main() {
+  resty.globalClient = new http.IOClient();
+
   group('JSON response', () {
     Jaguar server;
     setUpAll(() async {

@@ -14,7 +14,7 @@ class BooksApi {
   @PostJson()
   Future<List<Book>> addBook(Context ctx) async {
     // Decode request body as JSON Map
-    final Book book = await ctx.req.bodyAsJson(convert: Book.map);
+    final Book book = await ctx.bodyAsJson(convert: Book.map);
     books.add(book);
     // Encode Map to JSON
     return books;

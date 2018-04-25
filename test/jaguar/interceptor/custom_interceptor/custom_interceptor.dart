@@ -1,5 +1,6 @@
 library test.jaguar.interceptor.custom_interceptor;
 
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:math';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
@@ -12,11 +13,8 @@ part 'custom_interceptor.g.dart';
 final Random rand = new Random.secure();
 
 class GenRandom extends Interceptor {
-  int output;
-
   before(Context ctx) {
-    output = rand.nextInt(1000);
-    ctx.addInterceptor(GenRandom, id, this);
+    ctx.addVariable(rand.nextInt(1000), id: 'randomInt');
   }
 }
 
@@ -24,8 +22,8 @@ class DoublesRandom extends Interceptor {
   int output;
 
   before(Context ctx) {
-    output = ctx.getInterceptorResult(GenRandom) * 2;
-    ctx.addInterceptor(DoublesRandom, id, this);
+    int randomInt = ctx.getVariable<int>(id: 'randomInt');
+    ctx.addVariable(randomInt * 2, id: 'doubledRandomInt');
   }
 }
 
@@ -38,12 +36,14 @@ class ExampleApi extends _$JaguarExampleApi {
   @Get(path: '/random')
   @Wrap(const [genRandom, doublesRandom])
   Response<String> getRandom(Context ctx) => Response.json({
-        'Random': ctx.getInterceptorResult(GenRandom),
-        'Doubled': ctx.getInterceptorResult(DoublesRandom),
+        'Random': ctx.getVariable<int>(id: 'randomInt'),
+        'Doubled': ctx.getVariable<int>(id: 'doubledRandomInt'),
       });
 }
 
 void main() {
+  resty.globalClient = new http.IOClient();
+
   group('Custom interceptor:Generated', () {
     Jaguar server;
     setUpAll(() async {

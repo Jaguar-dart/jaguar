@@ -1,5 +1,6 @@
 library example.body.json;
 
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';

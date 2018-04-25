@@ -117,7 +117,7 @@ class Jaguar extends Object with Muxable {
   }
 
   Future _handler(HttpRequest request) async {
-    final ctx = new Context(new Request(request, log), sessionManager);
+    final ctx = new Context(new Request(request), sessionManager, log);
 
     Response response;
     try {

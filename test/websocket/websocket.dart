@@ -1,5 +1,6 @@
 library test.jaguar.websocket;
 
+import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';

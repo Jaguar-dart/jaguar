@@ -1,5 +1,6 @@
 library test.jaguar.interceptor.inject_request;
 
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
@@ -9,11 +10,8 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 part 'inject_input.g.dart';
 
 class UsesRequest extends Interceptor {
-  String output;
-
   before(Context ctx) {
-    output = ctx.req.uri.toString();
-    ctx.addInterceptor(UsesRequest, id, this);
+    ctx.addVariable(ctx.req.uri.toString());
   }
 }
 
@@ -24,11 +22,13 @@ class ExampleApi extends _$JaguarExampleApi {
   @Get(path: '/echo/uri')
   @Wrap(const [usesRequest])
   Response<String> getJaguarInfo(Context ctx) => Response.json({
-        'Uri': ctx.getInterceptorResult(UsesRequest),
+        'Uri': ctx.getVariable<String>(),
       });
 }
 
 void main() {
+  resty.globalClient = new http.IOClient();
+
   group('Inject input:Generated', () {
     Jaguar server;
     setUpAll(() async {

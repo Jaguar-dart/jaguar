@@ -5,34 +5,27 @@ import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
 /// Signature of interceptor creator method
-typedef Interceptor<OutputType> InterceptorCreator<OutputType>(Context ctx);
+typedef Interceptor InterceptorCreator(Context ctx);
 
 /// [onException] is executed if there is an exception in the route chain.
 /// This can be used to clean up resources used by the interceptor.
 abstract class FullInterceptor<OutputType, ResponseType, InResponseType>
-    extends Interceptor<OutputType> {
+    extends Interceptor {
   /// Shall be called after execution of route handler
   /// \param ctx    Request context
   /// \param inResp Incoming response
   /// \returns      Transformed response
   FutureOr<Response<ResponseType>> after(
       Context ctx, Response<InResponseType> inResp);
-
-  /// Shall be called if there is an exception in the route chain.
-  /// This can be used to clean up resources used by the interceptor.
-  FutureOr<void> onException() => null;
 }
 
 /// An interceptor wraps a route and performs an action before and
 /// after the route handler.
 ///
 /// [before] is the code that is executed before route handler
-abstract class Interceptor<OutputType> {
+abstract class Interceptor {
   /// Identifies an interceptor in the interceptor chain
   String get id => null;
-
-  /// Output of the interceptor after executing [before] method
-  OutputType get output;
 
   const Interceptor();
 
@@ -47,13 +40,13 @@ abstract class Interceptor<OutputType> {
       final RouteBase routeInfo) async {
     Response resp;
 
-    final exceptList = <FullInterceptor>[];
+    final afterList = <FullInterceptor>[];
 
     try {
       for (InterceptorCreator creator in interceptorCreators) {
         final Interceptor interceptor = creator(ctx);
         await interceptor.before(ctx);
-        if (interceptor is FullInterceptor) exceptList.add(interceptor);
+        if (interceptor is FullInterceptor) afterList.add(interceptor);
       }
 
       {
@@ -66,13 +59,13 @@ abstract class Interceptor<OutputType> {
         }
       }
 
-      while (exceptList.length > 0) {
-        resp = await exceptList.last.after(ctx, resp);
-        exceptList.removeLast();
+      while (afterList.length > 0) {
+        resp = await afterList.last.after(ctx, resp);
+        afterList.removeLast();
       }
     } catch (e) {
-      for (FullInterceptor interceptor in exceptList.reversed) {
-        await interceptor.onException();
+      for (OnException onException in ctx.onException.reversed) {
+        await onException(ctx);
       }
       rethrow;
     }

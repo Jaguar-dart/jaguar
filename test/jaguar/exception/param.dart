@@ -32,8 +32,6 @@ class ValidationExceptionHandler extends ExceptionHandler {
 class UserParser extends Interceptor {
   UserParser();
 
-  User output;
-
   before(Context ctx) {
     QueryParams queryParams = ctx.query;
     if (queryParams['name'] is! String) {
@@ -56,6 +54,6 @@ class UserParser extends Interceptor {
       }
     }
 
-    output = new User(queryParams['name'], queryParams.getInt('age'));
+    ctx.addVariable(new User(queryParams['name'], queryParams.getInt('age')));
   }
 }

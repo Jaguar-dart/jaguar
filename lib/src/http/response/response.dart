@@ -2,7 +2,7 @@ library jaguar.src.http.response;
 
 import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
+import 'dart:convert' as cnv;
 import 'package:path/path.dart' as p;
 import 'package:jaguar/src/annotations/import.dart';
 
@@ -80,7 +80,7 @@ class Response<ValueType> {
       String mimeType: 'application/json'}) {
     Response<String> ret;
 
-    final String value = JSON.encode(data);
+    final String value = cnv.json.encode(data);
 
     if (incoming != null) {
       ret = new Response<String>.cloneExceptValue(incoming);
@@ -103,7 +103,7 @@ class Response<ValueType> {
       String mimeType: 'application/xml'}) {
     Response<String> ret;
 
-    final String value = JSON.encode(data); //TODO encode with XML
+    final String value = cnv.json.encode(data); //TODO encode with XML
 
     if (incoming != null) {
       ret = new Response<String>.cloneExceptValue(incoming);

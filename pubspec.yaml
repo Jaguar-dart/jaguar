@@ -32,4 +32,4 @@ dev_dependencies:
   jaguar_generator: ^1.3.1
   build_runner: ^0.7.0
   mongo_dart:
-  jaguar_resty: ^1.1.1
+  jaguar_resty: ^1.1.8

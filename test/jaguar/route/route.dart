@@ -1,5 +1,6 @@
 library test.jaguar.route;
 
+import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:async';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
@@ -42,6 +43,8 @@ class ExampleApi extends _$JaguarExampleApi {
 }
 
 void main() {
+  resty.globalClient = new http.IOClient();
+
   group('route', () {
     Jaguar server;
     setUpAll(() async {

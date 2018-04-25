@@ -1,9 +1,10 @@
 library test.exception.exception;
 
+import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
-import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 part 'param.dart';
@@ -26,12 +27,14 @@ class ExampleApi extends _$JaguarExampleApi {
 
   @Post(path: '/user')
   @Wrap(const [userParser])
-  User post(Context ctx) => ctx.getInterceptorResult(UserParser);
+  User post(Context ctx) => ctx.getVariable<User>();
 
   static UserParser userParser(Context ctx) => new UserParser();
 }
 
 void main() {
+  resty.globalClient = new http.IOClient();
+
   group('Exception', () {
     Jaguar server;
 

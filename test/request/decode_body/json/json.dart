@@ -1,5 +1,6 @@
 library test.jaguar.decode_body.json;
 
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
@@ -30,7 +31,7 @@ class AddInput {
 class JsonDecode extends _$JaguarJsonDecode {
   @Post(path: '/one')
   Future<int> addOne(Context ctx) async {
-    final Map body = await ctx.req.bodyAsJsonMap();
+    final Map body = await ctx.bodyAsJsonMap();
     final AddInput input = AddInput.fromJson(body);
     return input.add();
   }
@@ -38,18 +39,20 @@ class JsonDecode extends _$JaguarJsonDecode {
   @PostJson(path: '/many')
   Future<List<int>> addMany(Context ctx) async {
     final List<AddInput> inputs =
-        await ctx.req.bodyAsJsonList(convert: (AddInput.fromJson));
+        await ctx.bodyAsJsonList(convert: (AddInput.fromJson));
     return inputs.map((AddInput input) => input.add()).toList();
   }
 
   @Post(path: '/doubled')
   Future<num> doubled(Context ctx) async {
-    final num body = await ctx.req.bodyAsJson();
+    final num body = await ctx.bodyAsJson();
     return body * 2;
   }
 }
 
 void main() {
+  resty.globalClient = new http.IOClient();
+
   group('Decode Json', () {
     Jaguar server;
     setUpAll(() async {

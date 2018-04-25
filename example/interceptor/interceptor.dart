@@ -10,12 +10,9 @@ part 'interceptor.g.dart';
 final Random rand = new Random.secure();
 
 class GenRandom extends FullInterceptor<int, dynamic, dynamic> {
-  int output;
-
   void before(Context ctx) {
     print("Executes before request handler!");
-    output = rand.nextInt(1000);
-    ctx.addInterceptor(GenRandom, id, this);
+    ctx.addVariable(rand.nextInt(1000));
   }
 
   Response after(Context ctx, Response incoming) {
@@ -25,8 +22,6 @@ class GenRandom extends FullInterceptor<int, dynamic, dynamic> {
 }
 
 class UsesRandom extends Interceptor {
-  dynamic output;
-
   /// [HttpRequest] object of the current request is automatically provided when
   /// first argument of interceptor method is [HttpRequest]
   void before(Context ctx) {

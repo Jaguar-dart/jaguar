@@ -80,18 +80,18 @@ class CookieSessionManager implements SessionManager {
 
   String _encode(Map<String, String> values) {
     // Base64 URL safe encoding
-    String ret = BASE64URL.encode(JSON.encode(values).codeUnits);
+    String ret = base64Url.encode(json.encode(values).codeUnits);
     // If there is no encrypter, skip signature
     if (_encrypter == null) return ret;
     return ret +
         '.' +
-        BASE64URL.encode(_encrypter.convert(ret.codeUnits).bytes);
+        base64Url.encode(_encrypter.convert(ret.codeUnits).bytes);
   }
 
   Map<String, String> _decode(String data) {
     if (_encrypter == null) {
       try {
-        return JSON.decode(new String.fromCharCodes(BASE64URL.decode(data)));
+        return json.decode(new String.fromCharCodes(base64Url.decode(data)));
       } catch (e) {
         return null;
       }
@@ -99,11 +99,11 @@ class CookieSessionManager implements SessionManager {
       List<String> parts = data.split('.');
       if (parts.length != 2) return null;
       try {
-        if (BASE64URL.encode(_encrypter.convert(parts.first.codeUnits).bytes) !=
+        if (base64Url.encode(_encrypter.convert(parts.first.codeUnits).bytes) !=
             parts[1]) return null;
 
-        return JSON
-            .decode(new String.fromCharCodes(BASE64URL.decode(parts.first)));
+        return json
+            .decode(new String.fromCharCodes(base64Url.decode(parts.first)));
       } catch (e) {
         return null;
       }
