@@ -1,0 +1,18 @@
+targets:
+  jaguar_generator:
+    sources: ["lib/**"]
+  example:
+    sources: ["example/**"]
+    builders:
+      jaguar_generator:
+        generate_for:
+          - example/simple.dart
+
+builders:
+  jaguar_generator:
+    target: ":jaguar_generator"
+    import: "package:jaguar_generator/builder.dart"
+    builder_factories: ["jaguar"]
+    build_extensions: {".dart": [".g.dart"]}
+    auto_apply: dependents
+    build_to: source
