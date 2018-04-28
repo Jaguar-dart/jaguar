@@ -12,7 +12,6 @@ import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
 export 'package:jaguar/src/serve/error_writer/import.dart';
-import 'package:path/path.dart' as p;
 
 part 'settings.dart';
 
@@ -99,7 +98,6 @@ class Jaguar extends Object with Muxable {
   Future<Null> serve({bool logRequests: false}) async {
     if (_server != null) throw new Exception('Already serving!');
     log.info("Running on $resourceName");
-    _handlers = _buildHandlers();
     if (securityContext != null) {
       _server = await HttpServer.bindSecure(address, port, securityContext);
     } else {
@@ -159,142 +157,26 @@ class Jaguar extends Object with Muxable {
     _handlers.clear();
   }
 
-  /// Built [RequestHandler]s
-  List<RequestHandler> _handlers = <RequestHandler>[];
+  /// [RequestHandler]s
+  final List<RequestHandler> _handlers = [];
 
   /// Adds the given [api] to list of API that will be served
   void addApi(RequestHandler api) {
     if (_server != null) {
       throw new Exception('Cannot add routes after server has been started!');
     }
-    _unbuiltRoutes.add(api);
+    _handlers.add(api);
   }
 
   /// Adds the [route] to be served
-  RouteBuilder addRoute(RouteBuilder route) {
+  Route addRoute(Route route) {
     if (_server != null) {
       throw new Exception('Cannot add routes after server has been started!');
     }
-    _unbuiltRoutes.add(route);
+    _handlers.add(route);
     return route;
   }
 
-  /// [RequestHandler]s added to this server
-  List _unbuiltRoutes = [];
-
   /// Create a new route group
   GroupBuilder group([String path = '']) => new GroupBuilder(this, path: path);
-
-  /// Serves requests for static files at [path] from [directory]
-  ///
-  /// [stripPrefix] parameter determines if the matched part of the path shall be
-  /// discarded while locating the target file.
-  ///
-  /// When [stripPrefix] is true, the behaviour is similar to 'alias' in Nginx.
-  ///
-  /// With [path] '/static/*', the target file will be located inside [directory]
-  /// in the following way:
-  ///
-  /// /static/html/index.html -> html/index.html
-  ///
-  /// When [stripPrefix] is false, the behavior is similar to 'root' in Nginx.
-  ///
-  /// With [path] '/static/*', the target file will be located inside [directory]
-  /// in the following way:
-  ///
-  /// /static/html/index.html -> static/html/index.html
-  ///
-  /// Example:
-  ///    final server = new Jaguar();
-  ///    server.staticFiles('/static/*', 'static');
-  ///    await server.serve();
-  void staticFiles(String path, directory,
-      {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
-      bool stripPrefix: true}) {
-    if (directory is String) {
-      directory = new Directory(directory);
-    }
-
-    final Directory dir = directory;
-    if (!dir.existsSync())
-      throw new Exception('Directory ${dir.path} does not exist!');
-
-    List<String> parts = splitPathToSegments(path);
-
-    int len = parts.length;
-    if (parts.last == '*') len--;
-
-    this.get(path, (Context ctx) async {
-      final List<String> paths = stripPrefix
-          ? ctx.uri.pathSegments.sublist(len)
-          : ctx.uri.pathSegments;
-      String path = p.join(dir.path, p.joinAll(paths));
-      File file = new File(path);
-
-      if (!await file.exists()) {
-        final Directory fileDir = new Directory(path);
-        if (!await fileDir.exists()) return null;
-
-        path = p.join(path, 'index.html');
-        file = new File(path);
-
-        if (!await file.exists()) {
-          // TODO render directory listing
-          return null;
-        }
-      }
-      return new Response<Stream<List<int>>>(await file.openRead(),
-          mimeType: MimeType.ofFile(file));
-    },
-        pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: kDefaultCharset,
-        headers: headers);
-  }
-
-  /// Serves requests at [path] with content of [file]
-  ///
-  /// Example:
-  ///    final server = new Jaguar();
-  ///    server.staticFile('/hello', p.join('static', 'hello.txt'));
-  ///    await server.serve();
-  void staticFile(String path, file,
-      {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers}) {
-    if (file is String) {
-      file = new File(file);
-    }
-
-    final File f = file;
-    this.get(path, (_) => f.openRead(),
-        pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType ?? MimeType.ofFile(f) ?? kDefaultMimeType,
-        charset: kDefaultCharset,
-        headers: headers);
-  }
-
-  /// Builds handlers to be served
-  List<RequestHandler> _buildHandlers() {
-    final ret = <RequestHandler>[];
-    for (dynamic handler in _unbuiltRoutes) {
-      if (handler is RequestHandler) {
-        ret.add(handler);
-      } else if (handler is RouteBuilder) {
-        ret.add(new RouteChain(handler.routeInfo, '', handler.handler,
-            before: handler.before,
-            after: handler.after,
-            onException: handler.onException));
-      }
-    }
-    return ret;
-  }
 }

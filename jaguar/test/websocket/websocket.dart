@@ -11,7 +11,7 @@ void main() {
   group('route', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 8000);
+      server = new Jaguar(port: 10000);
       server.ws('/ws', incrementerSocket);
       await server.serve();
     });
@@ -22,7 +22,7 @@ void main() {
 
     test('GET', () async {
       final WebSocket socket =
-          await WebSocket.connect('ws://localhost:8000/ws');
+          await WebSocket.connect('ws://localhost:10000/ws');
       socket.add('5');
       expect(await socket.first, '6');
     });

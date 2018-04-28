@@ -116,7 +116,7 @@ class Context {
   final List<String> debugMsgs = <String>[];
 
   Context(this.req, this._sessionManager, this.log,
-      {this.beforeGlobal, this.afterGlobal});
+      {this.beforeGlobal: const [], this.afterGlobal: const []});
 
   final _variables = <Type, Map<String, dynamic>>{};
 
@@ -321,4 +321,16 @@ class Context {
   final before = <RouteFunc>[];
 
   final after = <RouteFunc>[];
+
+  Map<String, Cookie> get cookies => _cookies ??= _parseCookies();
+
+  Map<String, Cookie> _cookies;
+
+  Map<String, Cookie> _parseCookies() {
+    final ret = <String, Cookie>{};
+    for(Cookie cookie in req.cookies) {
+      ret[cookie.name] = cookie;
+    }
+    return ret;
+  }
 }

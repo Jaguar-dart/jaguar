@@ -139,4 +139,6 @@ class JaguarHttpHeaders {
       }
     }
   }
+
+  Iterable<String> get keys => headers.keys;
 }

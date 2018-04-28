@@ -19,24 +19,25 @@ class _Info {
       };
 }
 
-@Api(path: '/api')
-class ExampleApi {
-  @GetJson(path: '/info')
-  _Info getJaguarInfo(Context ctx) =>
-      new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']);
-
-  @GetJson(path: '/nums')
-  List<int> createJaguarInfo(Context ctx) => <int>[1, 2, 3];
-}
-
 void main() {
   resty.globalClient = new http.IOClient();
 
-  group('JSON response', () {
+  group('Response.Json', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 8000);
-      server.addApi(reflect(new ExampleApi()));
+      server = new Jaguar(port: 10000);
+      server
+        ..getJson(
+            '/response_processor/podo',
+            (Context ctx) =>
+                new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']))
+        ..getJson('/response_processor/nums', (Context ctx) => <int>[1, 2, 3])
+        ..get(
+            '/strresponse/podo',
+            (Context ctx) => new StrResponse.json(
+                new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity'])))
+        ..get('/strresponse/nums',
+            (Context ctx) => new StrResponse.json(<int>[1, 2, 3]));
       await server.serve();
     });
 
@@ -44,18 +45,33 @@ void main() {
       await server.close();
     });
 
-    test('EncodeJsonPodo', () async {
-      await resty.get('/api/info').authority('http://localhost:8000').exact(
+    test('ResponseProcessor.Podo', () async {
+      await resty.get('/response_processor/podo').authority('http://localhost:10000').exact(
           statusCode: 200,
           mimeType: MimeType.json,
           body:
               r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
     });
 
-    test('EncodeJsonList', () async {
+    test('ResponseProcessor.List', () async {
       await resty
-          .get('/api/nums')
-          .authority('http://localhost:8000')
+          .get('/response_processor/nums')
+          .authority('http://localhost:10000')
+          .exact(statusCode: 200, mimeType: MimeType.json, body: '[1,2,3]');
+    });
+
+    test('StrResponse.Podo', () async {
+      await resty.get('/strresponse/podo').authority('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: MimeType.json,
+          body:
+          r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
+    });
+
+    test('StrResponse.List', () async {
+      await resty
+          .get('/strresponse/nums')
+          .authority('http://localhost:10000')
           .exact(statusCode: 200, mimeType: MimeType.json, body: '[1,2,3]');
     });
   });

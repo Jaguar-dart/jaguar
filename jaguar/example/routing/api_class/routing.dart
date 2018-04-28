@@ -5,15 +5,15 @@ import 'package:jaguar/jaguar.dart';
 
 part 'routing.g.dart';
 
-@Api(path: '/api/book')
+@Controller(path: '/api/book')
 class ExampApi extends _$JaguarExampApi {
-  /// Simple [Route] annotation. Specifies path of the route using path argument.
-  @Route(path: '/five')
+  /// Simple [HttpMethod] annotation. Specifies path of the route using path argument.
+  @HttpMethod(path: '/five')
   int getFive(Context ctx) => 5;
 
   /// [methods] lets routes specify methods the route should respond to. By default,
   /// a route will respond to GET, POST, PUT, PATCH, DELETE and OPTIONS methods.
-  @Route(path: '/name', methods: const <String>['GET'])
+  @HttpMethod(path: '/name', methods: const <String>['GET'])
   String getName(Context ctx) => "Jaguar";
 
   /// [Get] is a sugar to respond to only GET requests. Similarly sugars exist for

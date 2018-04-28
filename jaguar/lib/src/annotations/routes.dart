@@ -6,7 +6,7 @@ dynamic jsonResponseProcessor(dynamic value) => converters.json.encode(value);
 
 /// Annotation to declare a method as request handler method that processes GET
 /// requests.
-class Get extends Route {
+class Get extends HttpMethod {
   const Get(
       {String path,
       int statusCode: 200,
@@ -30,7 +30,7 @@ class Get extends Route {
 
 /// Annotation to declare a method as request handler method that processes POST
 /// requests.
-class Post extends Route {
+class Post extends HttpMethod {
   const Post(
       {String path,
       int statusCode: 200,
@@ -54,7 +54,7 @@ class Post extends Route {
 
 /// Annotation to declare a method as request handler method that processes PUT
 /// requests.
-class Put extends Route {
+class Put extends HttpMethod {
   const Put(
       {String path,
       int statusCode: 200,
@@ -78,7 +78,7 @@ class Put extends Route {
 
 /// Annotation to declare a method as request handler method that processes DELETE
 /// requests.
-class Delete extends Route {
+class Delete extends HttpMethod {
   const Delete(
       {String path,
       int statusCode: 200,
@@ -98,6 +98,30 @@ class Delete extends Route {
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['DELETE'];
+}
+
+/// Annotation to declare a method as request handler method that processes
+/// OPTIONS requests.
+class OptionsMethod extends HttpMethod {
+  const OptionsMethod(
+      {String path,
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor})
+      : super(
+            path: path,
+            methods: _methods,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers,
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
+
+  static const List<String> _methods = const <String>['OPTIONS'];
 }
 
 /// Annotation to declare a method as request handler method that processes GET
@@ -193,18 +217,20 @@ class GetHtml extends Get {
       String mimeType: MimeType.html,
       String charset: kDefaultCharset,
       Map<String, String> headers,
-      final Map<String, String> pathRegEx})
+      final Map<String, String> pathRegEx,
+      ResponseProcessor responseProcessor})
       : super(
             path: path,
             statusCode: statusCode,
             mimeType: mimeType,
             charset: charset,
             headers: headers,
-            pathRegEx: pathRegEx);
+            pathRegEx: pathRegEx,
+            responseProcessor: responseProcessor);
 }
 
 ///An annotation to define a route
-class Route {
+class HttpMethod {
   /// Path of the route
   final String path;
 
@@ -228,7 +254,7 @@ class Route {
 
   final ResponseProcessor responseProcessor;
 
-  const Route(
+  const HttpMethod(
       {this.path,
       this.methods: _methods,
       this.statusCode: 200,
@@ -237,6 +263,23 @@ class Route {
       this.headers,
       this.pathRegEx,
       this.responseProcessor});
+
+  HttpMethod cloneWith(
+          {String path,
+          int statusCode,
+          String mimeType,
+          String charset,
+          Map<String, String> headers,
+          Map<String, String> pathRegEx,
+          ResponseProcessor responseProcessor}) =>
+      new HttpMethod(
+          path: path ?? this.path,
+          statusCode: statusCode ?? this.statusCode,
+          mimeType: mimeType ?? this.mimeType,
+          charset: charset ?? this.charset,
+          headers: headers ?? this.headers,
+          pathRegEx: pathRegEx ?? this.pathRegEx,
+          responseProcessor: responseProcessor ?? this.responseProcessor);
 
   /// Returns path with provided prefix
   String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
@@ -259,10 +302,9 @@ class Route {
 
   bool comparePathSegments(
       List<String> template, List<String> actual, Map<String, dynamic> args) {
-    if (template.length != actual.length &&
-        template.length != 0 &&
-        !template.last.endsWith('*')) {
-      return false;
+    if (template.length != actual.length) {
+      if(template.length == 0) return false;
+      if (!template.last.endsWith('*')) return false;
     }
 
     for (int index = 0; index < template.length; index++) {

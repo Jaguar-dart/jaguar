@@ -1,14 +1,15 @@
 library jaguar.test_all;
 
-import 'jaguar/exception/exception.dart' as exceptionExcept;
-import 'jaguar/include_api/main.dart' as includeApi;
-import 'jaguar/interceptor/custom_interceptor/custom_interceptor.dart'
-    as customInterceptor;
-import 'jaguar/interceptor/inject_input/inject_input.dart' as injectInput;
-import 'jaguar/route/route.dart' as route;
+import 'data/body_json.dart' as dataBodyJson;
+import 'data/cookie.dart' as dataCookie;
+import 'data/path_params.dart' as dataPathParams;
+import 'data/query_params.dart' as dataQueryParams;
 
-import 'request/decode_body/json/json.dart' as decodeJson;
-import 'request/query_params/query_params.dart' as queryParams;
+import 'interceptor/after/after.dart' as interceptAfter;
+import 'interceptor/before/before.dart' as interceptBefore;
+import 'interceptor/exception/exception.dart' as interceptException;
+
+import 'mux/mux.dart' as mux;
 
 import 'response/json/json.dart' as responseJson;
 import 'response/stream/stream.dart' as responseStream;
@@ -17,19 +18,17 @@ import 'settings/settings.dart' as settings;
 
 import 'websocket/websocket.dart' as websocket;
 
-import 'bootstrap/serve.dart' as bootstrap;
-
-import 'others/simpleHandler_retType.dart' as otherSimpleHandlerRetType;
-
 void main() {
-  exceptionExcept.main();
-  includeApi.main();
-  customInterceptor.main();
-  injectInput.main();
-  route.main();
+  dataBodyJson.main();
+  dataCookie.main();
+  dataPathParams.main();
+  dataQueryParams.main();
 
-  decodeJson.main();
-  queryParams.main();
+  interceptAfter.main();
+  interceptBefore.main();
+  interceptException.main();
+
+  mux.main();
 
   responseJson.main();
   responseStream.main();
@@ -37,8 +36,4 @@ void main() {
   settings.main();
 
   websocket.main();
-
-  bootstrap.main();
-
-  otherSimpleHandlerRetType.main();
 }

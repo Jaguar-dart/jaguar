@@ -13,8 +13,8 @@ class GroupBuilder extends Object with Muxable {
 
   GroupBuilder(this.server, {String path: ''}) : pathPrefix = path ?? '';
 
-  RouteBuilder addRoute(RouteBuilder route) {
-    final route1 = route.cloneWithPath(pathPrefix + route.path);
+  Route addRoute(Route route) {
+    final route1 = route.cloneWith(path: pathPrefix + route.info.path);
     route1.before.insertAll(0, before);
     route1.after.insertAll(0, after);
     route1.onException.insertAll(0, onException);

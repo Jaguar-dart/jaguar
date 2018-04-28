@@ -9,7 +9,7 @@ import '../common/models/book/book.dart';
 
 final books = <Book>[];
 
-@Api(path: '/book')
+@Controller(path: '/book')
 class BooksApi {
   @PostJson()
   Future<List<Book>> addBook(Context ctx) async {

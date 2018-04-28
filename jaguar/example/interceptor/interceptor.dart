@@ -24,7 +24,7 @@ void usesRandom(Context ctx) {
   });
 }
 
-@Api(path: '/api/book')
+@Controller(path: '/api/book')
 class BooksApi extends _$JaguarBooksApi {
   @Get()
   @Intercept([genRandom, usesRandom])

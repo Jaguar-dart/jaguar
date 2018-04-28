@@ -8,8 +8,8 @@ part of example.routes;
 
 abstract class _$JaguarExampApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
-    const Route(path: '/five'),
-    const Route(path: '/name', methods: const <String>['GET']),
+    const HttpMethod(path: '/five'),
+    const HttpMethod(path: '/name', methods: const <String>['GET']),
     const Get(path: '/moto'),
     const Post(
         path: '/default',

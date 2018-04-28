@@ -33,3 +33,9 @@ dev_dependencies:
   build_runner: ^0.7.0
   mongo_dart:
   jaguar_resty: ^1.1.8
+
+dependency_overrides:
+  jaguar_reflect:
+    path: ../jaguar_reflect
+  jaguar_resty: #^1.1.8
+    path: ../../resty

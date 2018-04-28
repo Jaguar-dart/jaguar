@@ -7,6 +7,5 @@ export 'mux/mux.dart';
 export 'params/import.dart';
 export 'request/request.dart';
 export 'response/response.dart';
-export 'route_chain/route_chain.dart';
 export 'session/session.dart';
 export 'websocket/websocket.dart';

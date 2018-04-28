@@ -31,20 +31,20 @@ class DefaultErrorWriter implements ErrorWriter {
       return;
     } else if (acceptList.contains('application/json') ||
         acceptList.contains('text/json')) {
-      ctx.response = Response.json({
+      ctx.response = new StrResponse.json({
         'Path': ctx.path,
         'Method': ctx.method,
         'Message': 'Not found!',
       }, statusCode: HttpStatus.NOT_FOUND);
       return;
-    } else if (acceptList.contains('application/xml')) {
+    } /* TODO else if (acceptList.contains('application/xml')) {
       ctx.response = Response.xml({
         'Path': ctx.path,
         'Method': ctx.method,
         'Message': 'Not found!',
       }, statusCode: HttpStatus.NOT_FOUND);
       return;
-    } else {
+    } */ else {
       ctx.response = new Response<String>(_write404Html(ctx),
           statusCode: HttpStatus.NOT_FOUND)
         ..headers.contentType = ContentType.HTML;
@@ -71,15 +71,16 @@ class DefaultErrorWriter implements ErrorWriter {
       };
       if (stack != null) data['stack'] = Trace.format(stack);
 
-      return Response.json(data, statusCode: 500);
-    } else if (acceptList.contains('application/xml')) {
+      return new StrResponse.json(data, statusCode: 500);
+    } /* TODO else if (acceptList.contains('application/xml')) {
       final data = <String, dynamic>{
         'error': error.toString(),
       };
       if (stack != null) data['stack'] = Trace.format(stack);
 
       return Response.xml(data, statusCode: 500);
-    } else {
+    } */
+    else {
       final resp = new Response<String>(_write500Html(ctx, error, stack),
           statusCode: 500);
       resp.headers.contentType = ContentType.HTML;

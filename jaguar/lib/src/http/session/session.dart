@@ -8,7 +8,6 @@ import 'package:meta/meta.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:jaguar/src/http/context/context.dart';
-import 'package:jaguar/src/http/response/response.dart';
 
 part 'session_on_cookie.dart';
 

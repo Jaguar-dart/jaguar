@@ -28,7 +28,7 @@ abstract class Do {
   static Future<void> chain<RespType, RouteRespType>(
       final Context ctx,
       final RouteHandler<RouteRespType> routeHandler,
-      final Route routeInfo) async {
+      final HttpMethod routeInfo) async {
     try {
       for (RouteFunc before in ctx.beforeGlobal) {
         final res = before(ctx);
@@ -41,12 +41,12 @@ abstract class Do {
 
       {
         dynamic res = routeHandler(ctx);
-        if(res is Future) res = await res;
-        if (res != null) {
+        if (res is Future) res = await res;
+        if (ctx.response == null) {
           if (res is Response)
-            ctx.response ??= res;
+            ctx.response = res;
           else
-            ctx.response ??= new Response<RespType>.fromRoute(res, routeInfo);
+            ctx.response = new Response<RespType>.fromRoute(res, routeInfo);
         }
       }
 
