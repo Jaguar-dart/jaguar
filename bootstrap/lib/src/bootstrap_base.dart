@@ -28,7 +28,7 @@ void bootstrap(Jaguar server, {List<Symbol> filter, Injector injector}) {
             "Bootstrap requires injector to instantiate constructor with parameters!");
       api = _fromDi(cm, constructor, injector);
     }
-    server.addApi(_mkHandler(cm, api));
+    server.addkHandler(cm, api));
   }
 }
 
@@ -158,7 +158,7 @@ dynamic _fromDi(ClassMirror cm, MethodMirror constructor, Injector injector) {
     if (!param.isOptional || !param.isNamed) {
       //TODO check for @inject
       InstanceMirror nm = param.metadata.firstWhere(
-          (InstanceMirror im) => im.reflectee is Named,
+              (InstanceMirror im) => im.reflectee is Named,
           orElse: null);
       posArgs.add(injector.getInstance(param.type.reflectedType,
           named: nm?.reflectee?.name));
@@ -168,3 +168,4 @@ dynamic _fromDi(ClassMirror cm, MethodMirror constructor, Injector injector) {
       .newInstance(constructor.constructorName, posArgs, namedArgs)
       .reflectee;
 }
+

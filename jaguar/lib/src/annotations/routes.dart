@@ -266,6 +266,7 @@ class HttpMethod {
 
   HttpMethod cloneWith(
           {String path,
+          List<String> methods,
           int statusCode,
           String mimeType,
           String charset,
@@ -274,6 +275,7 @@ class HttpMethod {
           ResponseProcessor responseProcessor}) =>
       new HttpMethod(
           path: path ?? this.path,
+          methods: methods ?? this.methods,
           statusCode: statusCode ?? this.statusCode,
           mimeType: mimeType ?? this.mimeType,
           charset: charset ?? this.charset,
@@ -303,7 +305,7 @@ class HttpMethod {
   bool comparePathSegments(
       List<String> template, List<String> actual, Map<String, dynamic> args) {
     if (template.length != actual.length) {
-      if(template.length == 0) return false;
+      if (template.length == 0) return false;
       if (!template.last.endsWith('*')) return false;
     }
 
@@ -358,6 +360,8 @@ class HttpMethod {
     'DELETE',
     'OPTIONS'
   ];
+
+  String toString() => '$methods $path';
 }
 
 const String kDefaultMimeType = 'text/plain';

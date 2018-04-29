@@ -36,7 +36,7 @@ class BooksApi extends _$JaguarBooksApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new BooksApi());
+  jaguar.add(new BooksApi());
 
   await jaguar.serve();
 }

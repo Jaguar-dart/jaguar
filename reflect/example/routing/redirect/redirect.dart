@@ -23,7 +23,7 @@ class RedirectExampleApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApi(reflect(new RedirectExampleApi()));
+  jaguar.add(reflect(new RedirectExampleApi()));
 
   await jaguar.serve();
 }

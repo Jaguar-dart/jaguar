@@ -31,7 +31,7 @@ class BooksApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar(port: 10000);
-  jaguar.addApi(reflect(new BooksApi()));
+  jaguar.add(reflect(new BooksApi()));
 
   await jaguar.serve();
 }

@@ -24,7 +24,7 @@ class BooksApi {
 Future<Null> main(List<String> args) async {
   // Serve
   final server = new Jaguar(port: 8000);
-  server.addApi(reflect(new BooksApi()));
+  server.add(reflect(new BooksApi()));
   await server.serve();
 
   // Lets test the server

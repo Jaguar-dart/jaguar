@@ -71,6 +71,6 @@ class MotherGroup extends _$JaguarMotherGroup {
 
 main() async {
   final server = new Jaguar();
-  server.addApi(new MotherGroup());
+  server.add(new MotherGroup());
   await server.serve();
 }

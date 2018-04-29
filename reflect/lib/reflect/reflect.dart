@@ -58,13 +58,13 @@ class ReflectedController implements RequestHandler {
       {List<RouteFunc> topBefore: const [],
       List<RouteFunc> topAfter: const [],
       List<ExceptionHandler> topExceptionHandlers: const []}) {
-    im.type.declarations.forEach((Symbol s, DeclarationMirror decl) {
-      if (decl.isPrivate) return;
+    for (DeclarationMirror decl in im.type.declarations.values) {
+      if (decl.isPrivate) continue;
 
       // Collect IncludeApi
       if (decl is VariableMirror) {
-        _parseGroup(pathPrefix, decl, im.getField(s));
-        return;
+        _parseGroup(pathPrefix, decl, im.getField(decl.simpleName));
+        continue;
       }
 
       // Collect routes
@@ -72,9 +72,9 @@ class ReflectedController implements RequestHandler {
       if (decl is MethodMirror) {
         _parseRoute(
             im, pathPrefix, decl, topBefore, topAfter, topExceptionHandlers);
-        return;
+        continue;
       }
-    });
+    }
   }
 
   void _parseGroup(String pathPrefix, VariableMirror decl, InstanceMirror gim) {
@@ -114,22 +114,21 @@ class ReflectedController implements RequestHandler {
         .toList() as List<HttpMethod>;
     if (routes.length == 0) return;
 
-    final List<RouteFunc> before = _detectBefore(im, decl.metadata);
-    final List<RouteFunc> after = _detectAfter(im, decl.metadata);
-    final List<ExceptionHandler> onException =
-        _detectExceptionHandlers(im, decl.metadata);
-
-    before.insertAll(0, topBefore);
-    after.insertAll(0, topAfter);
-    onException.insertAll(0, topExceptionHandlers);
+    final List<RouteFunc> before = topBefore.toList()
+      ..addAll(_detectBefore(im, decl.metadata));
+    final List<RouteFunc> after = topAfter.toList()
+      ..addAll(_detectAfter(im, decl.metadata));
+    final List<ExceptionHandler> onException = topExceptionHandlers.toList()
+      ..addAll(_detectExceptionHandlers(im, decl.metadata));
 
     InstanceMirror method = im.getField(decl.simpleName);
 
-    routes
-        .map((HttpMethod route) => new Route.fromInfo(
-            route.cloneWith(path: pathPrefix + route.path), method.reflectee,
-            before: before, after: after, onException: onException))
-        .forEach(_routes.add);
+    for (HttpMethod route in routes) {
+      final cloned = route.cloneWith(path: pathPrefix + route.path);
+      final r = new Route.fromInfo(cloned, method.reflectee,
+          before: before, after: after, onException: onException);
+      _routes.add(r);
+    }
   }
 
   /// Detects interceptor wrappers on a method or function

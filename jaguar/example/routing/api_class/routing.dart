@@ -32,7 +32,7 @@ class ExampApi extends _$JaguarExampApi {
 
 Future<Null> main(List<String> args) async {
   Jaguar jaguar = new Jaguar();
-  jaguar.addApi(new ExampApi());
+  jaguar.add(new ExampApi());
 
   await jaguar.serve();
 }

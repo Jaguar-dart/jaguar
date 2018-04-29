@@ -8,45 +8,46 @@ import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 @Controller()
-class ExampleApi {
+class ExampleController {
   @HttpMethod(path: '/hello', methods: const <String>['GET'])
-  String hello(Context ctx) => 'Hello world!';
+  void hello(Context ctx) => ctx.response = new StrResponse('Hello world!');
 
-  @Get(path: '/statuscode', statusCode: 201)
-  String statusCode(Context ctx) => 'status code';
+  @Get(path: '/returnValue')
+  String returnValue(Context ctx) => 'Hello world, Champ!';
 
-  @Get(path: '/paramandquery/:param')
-  String paramAndQuery(Context ctx) =>
-      '${ctx.pathParams['param']} ${ctx.query['query']}';
+  @Get(path: '/returnResponse')
+  Response<int> returnResponse(Context ctx) => new Response(5);
 
-  @Get(path: '/input/header')
-  String inputHeader(Context ctx) => ctx.req.headers.value('user');
+  @Post(path: '/')
+  String post(_) => 'Post';
 
-  @Get(path: '/input/headers')
-  String inputHeaders(Context ctx) {
-    HttpHeaders headers = ctx.req.headers;
-    return headers.value('user');
-  }
+  @Put(path: '/')
+  String put(_) => 'Put';
 
-  @Get(path: '/input/cookie')
-  String inputCookie(Context ctx) =>
-      ctx.req.cookies.firstWhere((Cookie c) => c.name == 'user')?.value;
+  @Delete(path: '/')
+  String delete(_) => 'Delete';
 
-  @Get(path: '/input/cookies')
-  String inputCookies(Context ctx) {
-    List<Cookie> cookies = ctx.req.cookies;
-    return cookies.firstWhere((Cookie cook) => cook.name == 'user')?.value;
-  }
+  @GetJson(path: '/json')
+  Map getJson(_) => {'method': 'get'};
+
+  @PostJson(path: '/json')
+  Map postJson(_) => {'method': 'post'};
+
+  @PutJson(path: '/json')
+  Map putJson(_) => {'method': 'put'};
+
+  @DeleteJson(path: '/json')
+  Map deleteJson(_) => {'method': 'delete'};
 }
 
 void main() {
   resty.globalClient = new http.IOClient();
 
-  group('route', () {
+  group('Controller', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 8000);
-      server.addApi(new ExampleApi());
+      server = new Jaguar(port: 10000);
+      server.add(reflect(new ExampleController()));
       await server.serve();
     });
 
@@ -54,61 +55,72 @@ void main() {
       await server.close();
     });
 
-    grouped();
-  });
-
-  group('route reflected', () {
-    Jaguar server;
-    setUpAll(() async {
-      server = new Jaguar(port: 8000);
-      server.addApi(reflect(new ExampleApi()));
-      await server.serve();
+    test('GET.SetResponse', () async {
+      await resty
+          .get('/hello')
+          .authority('http://localhost:10000')
+          .exact(statusCode: 200, mimeType: 'text/plain', body: 'Hello world!');
     });
 
-    tearDownAll(() async {
-      await server.close();
+    test('GET.ReturnValue', () async {
+      await resty.get('/returnValue').authority('http://localhost:10000').exact(
+          statusCode: 200, mimeType: 'text/plain', body: 'Hello world, Champ!');
     });
 
-    grouped();
-  });
-}
+    test('GET.ReturnResponse', () async {
+      await resty
+          .get('/returnResponse')
+          .authority('http://localhost:10000')
+          .exact(statusCode: 200, mimeType: 'text/plain', body: '5');
+    });
 
-grouped() {
-  test('GET', () async {
-    await resty
-        .get('/api/user')
-        .authority('http://localhost:8000')
-        .exact(statusCode: 200, mimeType: 'text/plain', body: 'Get user');
-  });
+    test('Post', () async {
+      await resty
+          .post('/')
+          .authority('http://localhost:10000')
+          .exact(statusCode: 200, mimeType: 'text/plain', body: 'Post');
+    });
 
-  test('DefaultStatusCode', () async {
-    await resty
-        .get('/api/statuscode')
-        .authority('http://localhost:8000')
-        .exact(statusCode: 201, mimeType: 'text/plain', body: 'status code');
-  });
+    test('Put', () async {
+      await resty
+          .put('/')
+          .authority('http://localhost:10000')
+          .exact(statusCode: 200, mimeType: 'text/plain', body: 'Put');
+    });
 
-  test('ParamAndQuery', () async {
-    await resty
-        .get('/api/paramandquery/hello')
-        .authority('http://localhost:8000')
-        .query('query', 'world')
-        .exact(statusCode: 200, mimeType: 'text/plain', body: 'hello world');
-  });
+    test('Delete', () async {
+      await resty
+          .delete('/')
+          .authority('http://localhost:10000')
+          .exact(statusCode: 200, mimeType: 'text/plain', body: 'Delete');
+    });
 
-  test('InputHeader', () async {
-    await resty
-        .get('/api/input/header')
-        .authority('http://localhost:8000')
-        .header('user', 'teja')
-        .exact(statusCode: 200, mimeType: 'text/plain', body: 'teja');
-  });
+    test('GetJson', () async {
+      await resty.get('/json').authority('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: 'application/json',
+          body: '{"method":"get"}');
+    });
 
-  test('InputCookie', () async {
-    await resty
-        .get('/api/input/cookie')
-        .authority('http://localhost:8000')
-        .header('cookie', 'user=teja')
-        .exact(statusCode: 200, mimeType: 'text/plain', body: 'teja');
+    test('PostJson', () async {
+      await resty.post('/json').authority('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: 'application/json',
+          body: '{"method":"post"}');
+    });
+
+    test('PutJson', () async {
+      await resty.put('/json').authority('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: 'application/json',
+          body: '{"method":"put"}');
+    });
+
+    test('DeleteJson', () async {
+      await resty.delete('/json').authority('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: 'application/json',
+          body: '{"method":"delete"}');
+    });
   });
 }

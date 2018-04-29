@@ -160,15 +160,15 @@ class Jaguar extends Object with Muxable {
   /// [RequestHandler]s
   final List<RequestHandler> _handlers = [];
 
-  /// Adds the given [api] to list of API that will be served
-  void addApi(RequestHandler api) {
+  /// Adds the given [RequestHandler] to be served
+  void add(RequestHandler api) {
     if (_server != null) {
       throw new Exception('Cannot add routes after server has been started!');
     }
     _handlers.add(api);
   }
 
-  /// Adds the [route] to be served
+  /// Adds the [Route] to be served
   Route addRoute(Route route) {
     if (_server != null) {
       throw new Exception('Cannot add routes after server has been started!');

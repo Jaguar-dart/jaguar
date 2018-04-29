@@ -6,10 +6,9 @@
 /// More dartdocs go here.
 library jaguar_reflect;
 
-import 'src/reflect.dart';
+import 'reflect/reflect.dart';
 
-export 'src/reflect.dart';
-export 'src/bootstrap.dart';
+export 'reflect/reflect.dart';
 
 /// Reflects the given [api] and returns an instance of [ReflectedController]
 ReflectedController reflect(Object api) => new ReflectedController(api);
