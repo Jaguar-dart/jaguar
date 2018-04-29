@@ -50,18 +50,18 @@ abstract class Do {
         }
       }
 
-      for (int i = ctx.after.length - 1; i >= 0; i++) {
+      for (int i = ctx.after.length - 1; i >= 0; i--) {
         RouteFunc after = ctx.after[i];
         final res = after(ctx);
         if (res is Future) await res;
       }
-      for (int i = ctx.afterGlobal.length - 1; i >= 0; i++) {
+      for (int i = ctx.afterGlobal.length - 1; i >= 0; i--) {
         RouteFunc after = ctx.afterGlobal[i];
         final res = after(ctx);
         if (res is Future) await res;
       }
     } catch (e, s) {
-      for (int i = ctx.onException.length - 1; i >= 0; i++) {
+      for (int i = ctx.onException.length - 1; i >= 0; i--) {
         await ctx.onException[i](ctx, e, s);
       }
       rethrow;

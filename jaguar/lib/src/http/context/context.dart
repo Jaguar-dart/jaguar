@@ -122,7 +122,8 @@ class Context {
 
   /// Gets variable by type and id
   T getVariable<T>({String id}) {
-    Map<String, dynamic> map = _variables[T];
+    Type type = T;
+    Map<String, dynamic> map = _variables[type];
     if (map != null) {
       if (id == null)
         return map.values.first;

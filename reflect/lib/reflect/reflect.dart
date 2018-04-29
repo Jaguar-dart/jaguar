@@ -68,7 +68,6 @@ class ReflectedController implements RequestHandler {
       }
 
       // Collect routes
-
       if (decl is MethodMirror) {
         _parseRoute(
             im, pathPrefix, decl, topBefore, topAfter, topExceptionHandlers);
@@ -91,10 +90,13 @@ class ReflectedController implements RequestHandler {
     if (rg == null)
       throw new Exception('Included API must be annotated with Api!');
 
-    final List<RouteFunc> before = _detectBefore(gim, gim.type.metadata);
-    final List<RouteFunc> after = _detectAfter(gim, gim.type.metadata);
+    final List<RouteFunc> before = _detectBefore(gim, decl.metadata)
+      ..addAll(_detectBefore(gim, gim.type.metadata));
+    final List<RouteFunc> after = _detectAfter(gim, decl.metadata)
+      ..addAll(_detectAfter(gim, gim.type.metadata));
     final List<ExceptionHandler> onException =
-        _detectExceptionHandlers(gim, gim.type.metadata);
+        _detectExceptionHandlers(gim, decl.metadata)
+          ..addAll(_detectExceptionHandlers(gim, gim.type.metadata));
 
     _parse(gim, pathPrefix + group.path + rg.path,
         topBefore: before, topAfter: after, topExceptionHandlers: onException);
