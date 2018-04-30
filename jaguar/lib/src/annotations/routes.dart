@@ -8,7 +8,7 @@ dynamic jsonResponseProcessor(dynamic value) => converters.json.encode(value);
 /// requests.
 class Get extends HttpMethod {
   const Get(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
@@ -32,7 +32,7 @@ class Get extends HttpMethod {
 /// requests.
 class Post extends HttpMethod {
   const Post(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
@@ -56,7 +56,7 @@ class Post extends HttpMethod {
 /// requests.
 class Put extends HttpMethod {
   const Put(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
@@ -80,7 +80,7 @@ class Put extends HttpMethod {
 /// requests.
 class Delete extends HttpMethod {
   const Delete(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
@@ -104,7 +104,7 @@ class Delete extends HttpMethod {
 /// OPTIONS requests.
 class OptionsMethod extends HttpMethod {
   const OptionsMethod(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
@@ -128,7 +128,7 @@ class OptionsMethod extends HttpMethod {
 /// requests with JSON response.
 class GetJson extends Get {
   const GetJson(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: MimeType.json,
       String charset: kDefaultCharset,
@@ -149,7 +149,7 @@ class GetJson extends Get {
 /// requests with JSON response.
 class PutJson extends Put {
   const PutJson(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: MimeType.json,
       String charset: kDefaultCharset,
@@ -170,7 +170,7 @@ class PutJson extends Put {
 /// requests with JSON response.
 class PostJson extends Post {
   const PostJson(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: MimeType.json,
       String charset: kDefaultCharset,
@@ -191,7 +191,7 @@ class PostJson extends Post {
 /// requests with JSON response.
 class DeleteJson extends Delete {
   const DeleteJson(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: MimeType.json,
       String charset: kDefaultCharset,
@@ -212,7 +212,7 @@ class DeleteJson extends Delete {
 /// requests with HTML response.
 class GetHtml extends Get {
   const GetHtml(
-      {String path,
+      {String path: '',
       int statusCode: 200,
       String mimeType: MimeType.html,
       String charset: kDefaultCharset,
@@ -255,7 +255,7 @@ class HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const HttpMethod(
-      {this.path,
+      {this.path: '',
       this.methods: _methods,
       this.statusCode: 200,
       this.mimeType: kDefaultMimeType,

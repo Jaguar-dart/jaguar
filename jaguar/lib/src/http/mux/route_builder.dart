@@ -137,7 +137,7 @@ Route html(RouteHandler handler,
         onException: onException);
 
 /// Constructs a [Route] for JSON requests
-Route json(RouteHandler handler,
+Route jsonMethod(RouteHandler handler,
         {String path,
         List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
         Map<String, String> pathRegEx,

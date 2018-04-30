@@ -30,12 +30,12 @@ class Book {
 
   // Converts to JSON
   String toJson() {
-    return JSON.encode(toMap());
+    return json.encode(toMap());
   }
 
   /// Builds from JSON
-  void fromJson(String json) {
-    dynamic map = JSON.decode(json);
+  void fromJson(String value) {
+    dynamic map = json.decode(value);
 
     if (map is Map) {
       fromMap(map);

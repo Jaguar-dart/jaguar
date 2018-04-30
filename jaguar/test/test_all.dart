@@ -1,9 +1,9 @@
 library jaguar.test_all;
 
-import 'data/body_json.dart' as dataBodyJson;
-import 'data/cookie.dart' as dataCookie;
-import 'data/path_params.dart' as dataPathParams;
-import 'data/query_params.dart' as dataQueryParams;
+import 'body/body_json.dart' as dataBodyJson;
+import 'body/cookie.dart' as dataCookie;
+import 'body/path_params.dart' as dataPathParams;
+import 'body/query_params.dart' as dataQueryParams;
 
 import 'interceptor/after/after.dart' as interceptAfter;
 import 'interceptor/before/before.dart' as interceptBefore;
