@@ -1,4 +1,4 @@
-library jaguar.src.http.response;
+ library jaguar.src.http.response;
 
 import 'dart:io';
 import 'dart:async';
