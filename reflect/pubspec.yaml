@@ -20,5 +20,3 @@ dev_dependencies:
 dependency_overrides:
   jaguar:
     path: ../jaguar
-  jaguar_resty:
-    path: ../../resty

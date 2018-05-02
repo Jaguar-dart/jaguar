@@ -1,4 +1,4 @@
-library test.jaguar.route;
+library test.jaguar.routes;
 
 import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
