@@ -53,50 +53,45 @@ main() {
 
     test('ParseNUpdate', () async {
       await resty
-          .get('/api/add/Dog')
-          .authority('http://localhost:10000')
-          .interceptBefore(jar.cookieStoreInterceptor)
-          .fetchResponse
+          .get('http://localhost:10000', '/api/add/Dog')
+          .interceptBefore(jar.intercept)
+          .go()
           .json<Map, Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Added"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('/api/add/Cat')
-          .authority('http://localhost:10000')
-          .interceptBefore(jar.cookieStoreInterceptor)
-          .fetchResponse
+          .get('http://localhost:10000', '/api/add/Cat')
+          .interceptBefore(jar.intercept)
+          .go()
           .json<Map, Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Added"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('/api/add/Mink')
-          .authority('http://localhost:10000')
-          .interceptBefore(jar.cookieStoreInterceptor)
-          .fetchResponse
+          .get('http://localhost:10000', '/api/add/Mink')
+          .interceptBefore(jar.intercept)
+          .go()
           .json<Map, Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Added"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('/api/remove/Cat')
-          .authority('http://localhost:10000')
-          .interceptBefore(jar.cookieStoreInterceptor)
-          .fetchResponse
+          .get('http://localhost:10000', '/api/remove/Cat')
+          .interceptBefore(jar.intercept)
+          .go()
           .json<Map, Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Removed"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('/api/remove/Cat')
-          .authority('http://localhost:10000')
-          .interceptBefore(jar.cookieStoreInterceptor)
-          .fetchResponse
+          .get('http://localhost:10000', '/api/remove/Cat')
+          .interceptBefore(jar.intercept)
+          .go()
           .json<Map, Map>()
           .expect([
         resty.bodyIs({"Action": "Not present"},

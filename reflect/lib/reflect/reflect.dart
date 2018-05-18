@@ -29,9 +29,9 @@ class ReflectedController implements RequestHandler {
   }
 
   /// Handles requests
-  Future<void> handleRequest(Context ctx, {String prefix: ''}) async {
+  Future<void> handleRequest(Context ctx) async {
     for (RequestHandler route in _routes) {
-      await route.handleRequest(ctx, prefix: prefix);
+      await route.handleRequest(ctx);
       if (ctx.response is Response) return null;
     }
     return null;
@@ -45,8 +45,8 @@ class ReflectedController implements RequestHandler {
       throw new Exception(
           'Handler is not decorated with Controller annotation!');
 
-    final List<RouteFunc> before = _detectBefore(im, im.type.metadata);
-    final List<RouteFunc> after = _detectAfter(im, im.type.metadata);
+    final List<RouteInterceptor> before = _detectBefore(im, im.type.metadata);
+    final List<RouteInterceptor> after = _detectAfter(im, im.type.metadata);
     final List<ExceptionHandler> onException =
         _detectExceptionHandlers(im, im.type.metadata);
 
@@ -55,8 +55,8 @@ class ReflectedController implements RequestHandler {
   }
 
   void _parse(InstanceMirror im, String pathPrefix,
-      {List<RouteFunc> topBefore: const [],
-      List<RouteFunc> topAfter: const [],
+      {List<RouteInterceptor> topBefore: const [],
+      List<RouteInterceptor> topAfter: const [],
       List<ExceptionHandler> topExceptionHandlers: const []}) {
     for (DeclarationMirror decl in im.type.declarations.values) {
       if (decl.isPrivate) continue;
@@ -90,9 +90,9 @@ class ReflectedController implements RequestHandler {
     if (rg == null)
       throw new Exception('Included API must be annotated with Api!');
 
-    final List<RouteFunc> before = _detectBefore(gim, decl.metadata)
+    final List<RouteInterceptor> before = _detectBefore(gim, decl.metadata)
       ..addAll(_detectBefore(gim, gim.type.metadata));
-    final List<RouteFunc> after = _detectAfter(gim, decl.metadata)
+    final List<RouteInterceptor> after = _detectAfter(gim, decl.metadata)
       ..addAll(_detectAfter(gim, gim.type.metadata));
     final List<ExceptionHandler> onException =
         _detectExceptionHandlers(gim, decl.metadata)
@@ -107,8 +107,8 @@ class ReflectedController implements RequestHandler {
       InstanceMirror im,
       String pathPrefix,
       MethodMirror decl,
-      List<RouteFunc> topBefore,
-      List<RouteFunc> topAfter,
+      List<RouteInterceptor> topBefore,
+      List<RouteInterceptor> topAfter,
       List<ExceptionHandler> topExceptionHandlers) {
     final List<HttpMethod> routes = decl.metadata
         .where((InstanceMirror annot) => annot.reflectee is HttpMethod)
@@ -116,9 +116,9 @@ class ReflectedController implements RequestHandler {
         .toList() as List<HttpMethod>;
     if (routes.length == 0) return;
 
-    final List<RouteFunc> before = topBefore.toList()
+    final List<RouteInterceptor> before = topBefore.toList()
       ..addAll(_detectBefore(im, decl.metadata));
-    final List<RouteFunc> after = topAfter.toList()
+    final List<RouteInterceptor> after = topAfter.toList()
       ..addAll(_detectAfter(im, decl.metadata));
     final List<ExceptionHandler> onException = topExceptionHandlers.toList()
       ..addAll(_detectExceptionHandlers(im, decl.metadata));
@@ -134,9 +134,9 @@ class ReflectedController implements RequestHandler {
   }
 
   /// Detects interceptor wrappers on a method or function
-  List<RouteFunc> _detectBefore(
+  List<RouteInterceptor> _detectBefore(
       InstanceMirror im, List<InstanceMirror> annots) {
-    final wrappers = <RouteFunc>[];
+    final wrappers = <RouteInterceptor>[];
 
     for (InstanceMirror annot in annots) {
       dynamic ref = annot.reflectee;
@@ -155,8 +155,8 @@ class ReflectedController implements RequestHandler {
   }
 
   /// Detects interceptor wrappers on a method or function
-  List<RouteFunc> _detectAfter(InstanceMirror im, List<InstanceMirror> annots) {
-    final wrappers = <RouteFunc>[];
+  List<RouteInterceptor> _detectAfter(InstanceMirror im, List<InstanceMirror> annots) {
+    final wrappers = <RouteInterceptor>[];
 
     for (InstanceMirror annot in annots) {
       dynamic ref = annot.reflectee;

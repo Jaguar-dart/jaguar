@@ -19,7 +19,7 @@ part 'request_impl.dart';
 
 /// Splits given path to composing segments
 List<String> splitPathToSegments(final String paths) {
-  final List<String> segments = paths.split(new RegExp('/+'));
+  final List<String> segments = paths.split(new RegExp(r'/+'));
   final res = <String>[];
   for (String part in segments) {
     if (part.length == 0) continue;

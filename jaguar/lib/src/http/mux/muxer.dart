@@ -13,8 +13,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route(path, handler,
         methods: methods,
@@ -38,8 +38,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.get(path, handler,
         pathRegEx: pathRegEx,
@@ -62,8 +62,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.post(path, handler,
         pathRegEx: pathRegEx,
@@ -86,8 +86,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.put(path, handler,
         pathRegEx: pathRegEx,
@@ -110,8 +110,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.delete(path, handler,
         pathRegEx: pathRegEx,
@@ -134,8 +134,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.patch(path, handler,
         pathRegEx: pathRegEx,
@@ -158,8 +158,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.options(path, handler,
         pathRegEx: pathRegEx,
@@ -179,8 +179,8 @@ abstract class Muxable {
               String,
               /* RouteFunc | RouteBuilder | Iterable<RouteFunc> | Iterable<RouteBuilder> */ dynamic>
           handlers,
-      {List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      {List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     for (String path in handlers.keys) {
       Route rb;
@@ -222,8 +222,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.html(path, handler,
         pathRegEx: pathRegEx,
@@ -245,8 +245,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.json(path, handler,
         pathRegEx: pathRegEx,
@@ -268,8 +268,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.getJson(path, handler,
         pathRegEx: pathRegEx,
@@ -290,8 +290,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.postJson(path, handler,
         pathRegEx: pathRegEx,
@@ -312,8 +312,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.putJson(path, handler,
         pathRegEx: pathRegEx,
@@ -334,8 +334,8 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     final route = new Route.deleteJson(path, handler,
         pathRegEx: pathRegEx,
@@ -354,8 +354,8 @@ abstract class Muxable {
   Route ws(String path, WsTransformer handler,
       {Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     return addRoute(new Route.get(path, socketHandler(handler),
         pathRegEx: pathRegEx,
@@ -370,8 +370,8 @@ abstract class Muxable {
   Route wsJson(String path, WsTransformer handler,
       {Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteFunc> before: const [],
-      List<RouteFunc> after: const [],
+      List<RouteInterceptor> before: const [],
+      List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
     return addRoute(new Route.get(path, socketHandler(handler),
         pathRegEx: pathRegEx,

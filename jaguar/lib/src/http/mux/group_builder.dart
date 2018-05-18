@@ -5,9 +5,9 @@ class GroupBuilder extends Object with Muxable {
 
   final String pathPrefix;
 
-  final List<RouteFunc> before = [];
+  final List<RouteInterceptor> before = [];
 
-  final List<RouteFunc> after = [];
+  final List<RouteInterceptor> after = [];
 
   final List<ExceptionHandler> onException = [];
 

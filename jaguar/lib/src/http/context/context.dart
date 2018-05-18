@@ -11,22 +11,13 @@ import 'dart:convert' as conv;
 import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
 
-typedef FutureOr<void> ExceptionHandler<ET>(
-    Context ctx, ET exception, StackTrace trace);
-
-/// Prototype of route handler that returns [Response]
-typedef FutureOr<void> RouteFunc(Context ctx);
-
-/// Function type for a route handler
-typedef FutureOr<RespType> RouteHandler<RespType>(Context ctx);
-
 /// Per-request context object
 ///
 /// Contains:
 /// 1. Request object
 /// 2. Path parameters
 /// 3. Query parameters
-/// 4. Route inputs
+/// 4. Body parsers
 /// 5. Route variables
 /// 6. Interceptors
 /// 7. Session object
@@ -315,13 +306,13 @@ class Context {
 
   final List<ExceptionHandler> onException = <ExceptionHandler>[];
 
-  final List<RouteFunc> beforeGlobal;
+  final List<RouteInterceptor> beforeGlobal;
 
-  final List<RouteFunc> afterGlobal;
+  final List<RouteInterceptor> afterGlobal;
 
-  final before = <RouteFunc>[];
+  final before = <RouteInterceptor>[];
 
-  final after = <RouteFunc>[];
+  final after = <RouteInterceptor>[];
 
   Map<String, Cookie> get cookies => _cookies ??= _parseCookies();
 
@@ -334,4 +325,6 @@ class Context {
     }
     return ret;
   }
+
+  String prefix = "";
 }

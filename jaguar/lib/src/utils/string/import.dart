@@ -5,7 +5,7 @@ int stringToInt(String value, [int defaultValue]) {
     return defaultValue;
   }
 
-  return int.parse(value, onError: (_) => defaultValue);
+  return int.tryParse(value) ?? defaultValue;
 }
 
 double stringToDouble(String value, [double defaultValue]) {
@@ -13,7 +13,7 @@ double stringToDouble(String value, [double defaultValue]) {
     return defaultValue;
   }
 
-  return double.parse(value, (_) => defaultValue);
+  return double.tryParse(value) ?? defaultValue;
 }
 
 num stringToNum(String value, [num defaultValue]) {
@@ -21,7 +21,7 @@ num stringToNum(String value, [num defaultValue]) {
     return defaultValue;
   }
 
-  return num.parse(value, (_) => defaultValue);
+  return num.tryParse(value) ?? defaultValue;
 }
 
 bool stringToBool(String value, [bool defaultValue]) {

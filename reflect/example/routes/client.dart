@@ -28,13 +28,11 @@ main() async {
       .post('/math/addition')
       .authority('http://localhost:10000')
       .json(new InputModel(20, 5))
-      .fetchResponse
-      .then((r) => print(r.body));
+      .go((r) => print(r.body));
 
   await resty
       .post('/math/subtraction')
       .authority('http://localhost:10000')
       .json(new InputModel(60, 5))
-      .fetchResponse
-      .then((r) => print(r.body));
+      .go((r) => print(r.body));
 }

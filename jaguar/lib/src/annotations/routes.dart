@@ -283,9 +283,7 @@ class HttpMethod {
           pathRegEx: pathRegEx ?? this.pathRegEx,
           responseProcessor: responseProcessor ?? this.responseProcessor);
 
-  /// Returns path with provided prefix
-  String prefixedPath(String prefix) => '' + (prefix ?? '') + (path ?? '');
-
+  /* TODO
   /// Returns if this route matches the given request path and method
   bool match(String requestPath, String method, String prefix,
       Map<String, dynamic> params) {
@@ -351,6 +349,7 @@ class HttpMethod {
 
     return true;
   }
+  */
 
   static const List<String> _methods = const <String>[
     'GET',

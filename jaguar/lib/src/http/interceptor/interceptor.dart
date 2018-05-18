@@ -30,11 +30,11 @@ abstract class Do {
       final RouteHandler<RouteRespType> routeHandler,
       final HttpMethod routeInfo) async {
     try {
-      for (RouteFunc before in ctx.beforeGlobal) {
+      for (RouteInterceptor before in ctx.beforeGlobal) {
         final res = before(ctx);
         if (res is Future) await res;
       }
-      for (RouteFunc before in ctx.before) {
+      for (RouteInterceptor before in ctx.before) {
         final res = before(ctx);
         if (res is Future) await res;
       }
@@ -51,12 +51,12 @@ abstract class Do {
       }
 
       for (int i = ctx.after.length - 1; i >= 0; i--) {
-        RouteFunc after = ctx.after[i];
+        RouteInterceptor after = ctx.after[i];
         final res = after(ctx);
         if (res is Future) await res;
       }
       for (int i = ctx.afterGlobal.length - 1; i >= 0; i--) {
-        RouteFunc after = ctx.afterGlobal[i];
+        RouteInterceptor after = ctx.afterGlobal[i];
         final res = after(ctx);
         if (res is Future) await res;
       }

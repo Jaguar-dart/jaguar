@@ -49,7 +49,7 @@ void main() {
                 .get('/two')
                 .authority('http://localhost:8000')
                 .exact(statusCode: 200, mimeType: 'application/json')
-                .json<Map, Map>()
+                .decode<Map, Map>()
                 .then((Map body) {
               expect(body['Random'] * 2, body['Doubled']);
             }));

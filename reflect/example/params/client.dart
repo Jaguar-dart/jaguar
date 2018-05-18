@@ -7,13 +7,13 @@ main() async {
   await resty
       .get('http://localhost:10000', '/api/query')
       .query('msg', 'Hello!')
-      .fetchResponse
+      .go()
       .body
       .then(print);
 
   await resty
       .get('http://localhost:10000', '/api/path/123')
-      .fetchResponse
+      .go()
       .body
       .then(print);
 }

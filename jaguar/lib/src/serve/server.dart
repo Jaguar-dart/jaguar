@@ -17,7 +17,7 @@ part 'settings.dart';
 
 /// Base class for Request handlers
 abstract class RequestHandler {
-  FutureOr<void> handleRequest(Context ctx, {String prefix});
+  FutureOr<void> handleRequest(Context ctx);
 }
 
 /// The Jaguar server
@@ -116,11 +116,12 @@ class Jaguar extends Object with Muxable {
 
   Future _handler(HttpRequest request) async {
     final ctx = new Context(new Request(request), sessionManager, log);
+    ctx.prefix = basePath;
 
     try {
       // Try to find a matching route and invoke it.
       for (RequestHandler requestHandler in _handlers) {
-        await requestHandler.handleRequest(ctx, prefix: basePath);
+        await requestHandler.handleRequest(ctx);
         if (ctx.response != null) break;
       }
 

@@ -23,11 +23,11 @@ main() async {
 
   await resty
       .get('http://localhost:10000', '/info/jaguar')
-      .fetch(Info.fromJson)
+      .one(Info.fromJson)
       .then(print);
 
   await resty
       .get('http://localhost:10000', '/info/grizzly')
-      .fetch(Info.fromJson)
+      .one(Info.fromJson)
       .then(print);
 }

@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:client_cookie/client_cookie.dart';
 
 class InputModel {
   InputModel(this.input1, this.input2);
@@ -67,40 +66,35 @@ void main() {
     test(
         'One.Map',
         () => resty
-            .post('/one/map')
-            .authority('http://localhost:10000')
+            .post('http://localhost:10000', '/one/map')
             .json(new InputModel(5, 15))
             .exact(statusCode: 200, body: '20', mimeType: 'text/plain'));
 
     test(
         'One.Convert',
         () => resty
-            .post('/one/convert')
-            .authority('http://localhost:10000')
+            .post('http://localhost:10000', '/one/convert')
             .json(new InputModel(30, 5))
             .exact(statusCode: 200, body: '25', mimeType: 'text/plain'));
 
     test(
         'Many.List',
         () => resty
-            .post('/many/list')
-            .authority('http://localhost:10000')
+            .post('http://localhost:10000', '/many/list')
             .json([new InputModel(5, 15), new InputModel(50, 55)]).exact(
                 statusCode: 200, body: '(20, 105)', mimeType: 'text/plain'));
 
     test(
         'Many.Convert',
         () => resty
-            .post('/many/convert')
-            .authority('http://localhost:10000')
+            .post('http://localhost:10000', '/many/convert')
             .json([new InputModel(30, 5), new InputModel(75, 20)]).exact(
                 statusCode: 200, body: '(25, 55)', mimeType: 'text/plain'));
 
     test(
         'primitive',
         () => resty
-            .put('/primitive')
-            .authority('http://localhost:10000')
+            .put('http://localhost:10000', '/primitive')
             .body('4')
             .exact(statusCode: 200, body: '8', mimeType: 'text/plain'));
   });
