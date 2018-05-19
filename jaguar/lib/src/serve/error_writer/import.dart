@@ -44,7 +44,8 @@ class DefaultErrorWriter implements ErrorWriter {
         'Message': 'Not found!',
       }, statusCode: HttpStatus.NOT_FOUND);
       return;
-    } */ else {
+    } */
+    else {
       ctx.response = new Response<String>(_write404Html(ctx),
           statusCode: HttpStatus.NOT_FOUND)
         ..headers.contentType = ContentType.HTML;
@@ -55,7 +56,7 @@ class DefaultErrorWriter implements ErrorWriter {
   /// Makes [Response] for 500 error
   ///
   /// Respects 'accept' request header and returns corresponding [Response]
-  Response<String> make500(Context ctx, Object error, [StackTrace stack]) {
+  void make500(Context ctx, Object error, [StackTrace stack]) {
     final String accept = ctx.req.headers.value(HttpHeaders.ACCEPT) ?? '';
     final List<String> acceptList = accept.split(',');
 
@@ -63,15 +64,18 @@ class DefaultErrorWriter implements ErrorWriter {
       final resp = new Response<String>(_write500Html(ctx, error, stack),
           statusCode: HttpStatus.NOT_FOUND);
       resp.headers.contentType = ContentType.HTML;
-      return resp;
+      ctx.response = resp;
+      return;
     } else if (acceptList.contains('application/json') ||
         acceptList.contains('text/json')) {
       final data = <String, dynamic>{
         'error': error.toString(),
       };
-      if (stack != null) data['stack'] = Trace.format(stack);
+      if (stack != null)
+        data['stack'] =
+            new Trace.from(stack).frames.map((f) => f.toString()).toList();
 
-      return new StrResponse.json(data, statusCode: 500);
+      ctx.response = new StrResponse.json(data, statusCode: 500);
     } /* TODO else if (acceptList.contains('application/xml')) {
       final data = <String, dynamic>{
         'error': error.toString(),
@@ -84,7 +88,7 @@ class DefaultErrorWriter implements ErrorWriter {
       final resp = new Response<String>(_write500Html(ctx, error, stack),
           statusCode: 500);
       resp.headers.contentType = ContentType.HTML;
-      return resp;
+      ctx.response = resp;
     }
   }
 }
