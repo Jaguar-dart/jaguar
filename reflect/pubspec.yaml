@@ -1,6 +1,6 @@
 name: jaguar_reflect
 description: Reflection based alternative for Jaguar
-version: 2.0.2
+version: 2.1.1
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
@@ -10,7 +10,7 @@ environment:
   sdk: ">=1.8.0 <2.0.0"
 
 dependencies:
-  jaguar: ^2.0.2
+  jaguar: ^2.1.1
 
 dev_dependencies:
   jaguar_resty: ^2.2.2

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
++ Simplified authenticator
+
 ## 1.2.14
 
 + Uses Jaguar 1.2.14 style Interceptor

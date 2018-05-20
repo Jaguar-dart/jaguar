@@ -7,15 +7,17 @@ part of jaguar_auth.authenticators;
 /// with "Basic" scheme.
 ///
 /// Arguments:
-/// It uses [modelManager] to fetch user model for the authentication request
+/// It uses [userFetcher] to fetch user model for the authentication request
 /// and authenticate against the password
 ///
 /// Outputs ans Variables:
 /// The authenticated user model is injected into the context as input
-class BasicAuth {
+class BasicAuth implements Interceptor {
   /// Model manager is used to fetch user model for the authentication request
   /// and authenticate against the password
-  final AuthModelManager modelManager;
+  final UserFetcher<PasswordUser> userFetcher;
+
+  final Hasher hasher;
 
   /// The key by which authorizationId shall be stored in session data
   final String authorizationIdKey;
@@ -26,38 +28,46 @@ class BasicAuth {
   /// If set to false, session creation and update must be done manually
   final bool manageSession;
 
-  BasicAuth(this.modelManager,
-      {this.authorizationIdKey: 'id', this.manageSession: true});
+  const BasicAuth(this.userFetcher,
+      {this.authorizationIdKey: 'id',
+      this.manageSession: true,
+      this.hasher: const NoHasher()});
 
   /// Parses the session from request, fetches the user model and authenticates
   /// it against the password.
   ///
   /// On successful login, injects authenticated user model as context input and
   /// session manager as context variable.
-  Future before(Context ctx) async {
-    String header = ctx.req.headers.value(HttpHeaders.AUTHORIZATION);
-    final basic =
-        new AuthHeaderItem.fromHeaderBySchema(header, kBasicAuthScheme);
+  Future<void> call(Context ctx) async {
+    String basic = ctx.authHeader(kBasicAuthScheme);
 
-    if (basic == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
+    if (basic == null)
+      throw new Response(
+          "Invalid request! Basic authorization header not found!",
+          statusCode: HttpStatus.UNAUTHORIZED);
+
+    final String credentials = _decodeCredentials(basic);
+    final int splitIdx = credentials.indexOf(':');
+
+    String username;
+    String password;
+    if (splitIdx != -1 && splitIdx < (credentials.length - 1)) {
+      username = credentials.substring(0, splitIdx);
+      password = credentials.substring(splitIdx + 1);
+    } else {
+      username = credentials;
+      password = "";
     }
 
-    final credentials = _decodeCredentials(basic);
-    final usernamePassword = credentials.split(':');
+    final subject = await userFetcher.getByAuthenticationId(ctx, username);
 
-    if (usernamePassword.length != 2) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
+    if (subject == null)
+      throw new Response("User not found!",
+          statusCode: HttpStatus.UNAUTHORIZED);
 
-    final String username = usernamePassword[0];
-    final String password = usernamePassword[1];
-
-    final subject = await modelManager.authenticate(ctx, username, password);
-
-    if (subject == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
+    if (!hasher.verify(password, subject.password))
+      throw new Response("Invalid password",
+          statusCode: HttpStatus.UNAUTHORIZED);
 
     if (manageSession is bool && manageSession) {
       final Session session = await ctx.session;
@@ -71,10 +81,9 @@ class BasicAuth {
     ctx.addVariable(subject);
   }
 
-  static String _decodeCredentials(AuthHeaderItem authHeader) {
+  static String _decodeCredentials(String credentials) {
     try {
-      return new String.fromCharCodes(
-          const Base64Codec.urlSafe().decode(authHeader.credentials));
+      return new String.fromCharCodes(base64Url.decode(credentials));
     } on FormatException catch (_) {
       return '';
     }
@@ -82,43 +91,15 @@ class BasicAuth {
 
   static const kBasicAuthScheme = 'Basic';
 
-  static Future<ModelType> authenticate<ModelType extends AuthorizationUser>(
-      Context ctx, AuthModelManager modelManager,
-      {String authorizationIdKey: 'id', bool manageSession: true}) async {
-    String header = ctx.req.headers.value(HttpHeaders.AUTHORIZATION);
-    final basic =
-        new AuthHeaderItem.fromHeaderBySchema(header, kBasicAuthScheme);
-
-    if (basic == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    final credentials = _decodeCredentials(basic);
-    final usernamePassword = credentials.split(':');
-
-    if (usernamePassword.length != 2) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    final String username = usernamePassword[0];
-    final String password = usernamePassword[1];
-
-    final ModelType subject =
-        await modelManager.authenticate(ctx, username, password);
-
-    if (subject == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    if (manageSession is bool && manageSession) {
-      final Session session = await ctx.session;
-      // Invalidate old session data
-      session.clear();
-      // Add new session data
-      session.addAll(
-          <String, String>{authorizationIdKey: subject.authorizationId});
-    }
-
-    return subject;
+  static Future<ModelType> authenticate<ModelType extends PasswordUser>(
+      Context ctx, UserFetcher userFetcher,
+      {String authorizationIdKey: 'id',
+      bool manageSession: true,
+      Hasher hasher: const NoHasher()}) async {
+    await new BasicAuth(userFetcher,
+        authorizationIdKey: authorizationIdKey,
+        manageSession: manageSession,
+        hasher: hasher).call(ctx);
+    return ctx.getVariable<ModelType>();
   }
 }

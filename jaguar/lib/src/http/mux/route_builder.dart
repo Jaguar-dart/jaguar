@@ -596,6 +596,16 @@ class Route implements RequestHandler {
     }
   }
 
+  Route intercept(RouteInterceptor interceptor) {
+    before.add(interceptor);
+    return this;
+  }
+
+  Route interceptAfter(RouteInterceptor interceptor) {
+    after.add(interceptor);
+    return this;
+  }
+
   /// Helps while debugging in variables window
   String toString() => '${info.methods} ${info.path}';
 }

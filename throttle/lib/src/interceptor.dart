@@ -1,7 +1,7 @@
 part of jaguar.throttle;
 
 /// Interceptor to rate-limit routes
-class Throttler {
+class Throttler implements Interceptor {
   /// Maximum number of requests allowed for the given [interval]
   final Rate quota;
 
@@ -48,7 +48,7 @@ class Throttler {
 
   ThrottleState state;
 
-  Future<void> before(Context ctx) async {
+  Future<void> call(Context ctx) async {
     final String throttleId = await idMaker(ctx);
     final ThrottleData count = await _visit(throttleId, quota.interval);
 
@@ -61,6 +61,7 @@ class Throttler {
           ? await failResponse(ctx)
           : new Response('Limit exceeded', statusCode: 429);
 
+    ctx.after.add(after);
     ctx.addVariable(state);
   }
 

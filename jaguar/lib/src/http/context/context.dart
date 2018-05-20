@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
 import 'dart:convert' as conv;
+import 'package:auth_header/auth_header.dart';
 
 import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
@@ -327,4 +328,14 @@ class Context {
   }
 
   String prefix = "";
+
+  AuthHeaders _authHeader;
+
+  String authHeader(String scheme) {
+    if (_authHeader == null) {
+      _authHeader = new AuthHeaders.fromHeaderStr(
+          req.headers.value(HttpHeaders.AUTHORIZATION));
+    }
+    return _authHeader.items[scheme]?.credentials;
+  }
 }

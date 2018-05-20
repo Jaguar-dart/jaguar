@@ -8,20 +8,20 @@ import 'package:jaguar_auth/src/entity/entity.dart';
 /// Authorizes the request
 ///
 /// Arguments:
-/// It uses [modelManager] to fetch user model of the logged-in user
+/// It uses [userFetcher] to fetch user model of the logged-in user
 ///
 /// Outputs ans Variables:
 /// The authorised user model is injected into the context as input
-class Authorizer {
+class Authorizer implements Interceptor {
   /// Model manager used to fetch user model of the logged-in user
-  final AuthModelManager modelManager;
+  final UserFetcher userFetcher;
 
   /// The key by which authorizationId is stored in session data
   final String authorizationIdKey;
 
-  Authorizer(this.modelManager, {this.authorizationIdKey: 'id'});
+  const Authorizer(this.userFetcher, {this.authorizationIdKey: 'id'});
 
-  Future before(Context ctx) async {
+  Future<void> call(Context ctx) async {
     final Session session = await ctx.session;
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
@@ -29,7 +29,7 @@ class Authorizer {
     }
 
     AuthorizationUser subject =
-        await modelManager.fetchByAuthorizationId(ctx, authId);
+        await userFetcher.getByAuthorizationId(ctx, authId);
 
     if (subject == null) {
       throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
@@ -38,9 +38,9 @@ class Authorizer {
     ctx.addVariable(subject);
   }
 
-  /// Authorizes a request with the given [AuthModelManager]
+  /// Authorizes a request with the given [UserFetcher]
   static Future<ModelType> authorize<ModelType extends AuthorizationUser>(
-      Context ctx, AuthModelManager<ModelType> modelManager,
+      Context ctx, UserFetcher<ModelType> userFetcher,
       {String authorizationIdKey: 'id'}) async {
     final Session session = await ctx.session;
     final String id = session[authorizationIdKey];
@@ -48,7 +48,7 @@ class Authorizer {
       throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
     }
 
-    ModelType subject = await modelManager.fetchByAuthorizationId(ctx, id);
+    ModelType subject = await userFetcher.getByAuthorizationId(ctx, id);
 
     if (subject == null) {
       throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);

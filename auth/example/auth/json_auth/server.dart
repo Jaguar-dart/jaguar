@@ -8,13 +8,6 @@ import 'package:jaguar_auth/jaguar_auth.dart';
 import '../../model/model.dart';
 import '../../model/auth_model_manager.dart';
 
-final Map<String, User> kUsers = {
-  '0': new User(id: '0', username: 'teja', password: 'word'),
-};
-
-final WhiteListPasswordChecker kModelManager =
-    new WhiteListPasswordChecker(kUsers);
-
 final Map<String, Book> _books = {
   '0': new Book(id: '0', name: 'Book0'),
   '1': new Book(id: '1', name: 'Book1'),
@@ -24,7 +17,7 @@ final Map<String, Book> _books = {
 @Controller()
 class AuthRoutes {
   @PostJson(path: '/login')
-  @Intercept(const [jsonAuth])
+  @Intercept(const [const JsonAuth(WhiteListUserFetcher.userFetcher)])
   User login(Context ctx) => ctx.getVariable<User>();
 
   @Post(path: '/logout')
@@ -32,10 +25,6 @@ class AuthRoutes {
     // Clear session data
     (await ctx.session).clear();
   }
-
-  /// The authenticator
-  static Future jsonAuth(Context ctx) =>
-      new JsonAuth(kModelManager).before(ctx);
 }
 
 /// Collection of routes students can also access
@@ -44,7 +33,7 @@ class StudentRoutes {
   @GetJson()
   Future<List<Book>> getAllBooks(Context ctx) async {
     // Authorize. Throws 401 http error, if authorization fails!
-    await Authorizer.authorize(ctx, kModelManager);
+    await Authorizer.authorize(ctx, WhiteListUserFetcher.userFetcher);
 
     return _books.values.toList();
   }
@@ -52,7 +41,7 @@ class StudentRoutes {
   @GetJson(path: '/:id')
   Future<Book> getBook(Context ctx) async {
     // Authorize. Throws 401 http error, if authorization fails!
-    await Authorizer.authorize(ctx, kModelManager);
+    await Authorizer.authorize(ctx, WhiteListUserFetcher.userFetcher);
 
     String id = ctx.pathParams.get('id');
     return _books[id];

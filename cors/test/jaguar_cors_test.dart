@@ -18,14 +18,14 @@ void main() {
     Jaguar server = new Jaguar(port: 10000);
 
     setUp(() async {
-      server.get('/none', (_) => 'none', before: [cors(new CorsOptions())]);
+      server.get('/none', (_) => 'none', before: [new Cors(new CorsOptions())]);
 
       {
         final options = new CorsOptions(
             allowedOrigins: ['http://example.com', 'http://example1.com'],
             allowAllMethods: true,
             allowAllHeaders: true);
-        server.get('/origins', (_) => 'origins', before: [cors(options)]);
+        server.get('/origins', (_) => 'origins', before: [new Cors(options)]);
       }
 
       {
@@ -34,7 +34,7 @@ void main() {
             allowAllMethods: true,
             allowAllHeaders: true);
         server.route('/origins', (_) => 'preflight',
-            methods: ['OPTIONS'], before: [cors(options)]);
+            methods: ['OPTIONS'], before: [new Cors(options)]);
       }
 
       await server.serve();

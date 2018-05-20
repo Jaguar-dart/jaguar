@@ -1,6 +1,6 @@
 name: jaguar_auth
 description: Authentication interceptors and helper functions for Jaguar
-version: 2.0.1
+version: 2.1.1
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
@@ -12,18 +12,13 @@ environment:
   sdk: '>=1.20.0 <2.0.0'
 
 dependencies:
-  auth_header: ^0.0.2
-  jaguar: ^2.0.2
-  matcher: "^0.12.0"
+  jaguar: ^2.1.1
   jaguar_common: ^0.2.0
   crypto: ^2.0.3
 
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'
   http: ^0.11.3
-  jaguar_reflect: ^2.0.2
+  jaguar_reflect: ^2.1.1
   jaguar_client: ^2.0.3
-
-dependency_overrides:
-  jaguar:
-    path: ../jaguar
+  jaguar_resty:

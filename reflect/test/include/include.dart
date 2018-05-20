@@ -126,91 +126,91 @@ void main() {
         'top.start',
         () => resty
             .get('/hello')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'Hello!'));
 
     test(
         'top.end',
         () => resty
             .get('/hello1')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'Hello1!'));
 
     test(
         'Intercept',
         () => resty
             .get('/api/sub/intercept')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '25'));
 
     test(
         'Include.TopIntercept',
         () => resty
             .get('/sub1/intercept')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '25'));
 
     test(
         'Include.TopIntercept.BottomIntercept',
         () => resty
             .get('/sub1/intercept1')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '50'));
 
     test(
         'Include.TopIntercept.ProgAfter',
         () => resty
             .get('/sub1/progaft')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '50'));
 
     test(
         'Include.TopIntercept.ClassIntercept',
         () => resty
             .get('/sub2/intercept')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '50'));
 
     test(
         'Include.TopIntercept.ClassIntercept.BottomIntercept',
         () => resty
             .get('/sub2/intercept1')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '60'));
 
     test(
         'Get',
         () => resty
             .get('/api/sub')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'Get'));
 
     test(
         'Post',
         () => resty
             .post('/api/sub')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'Post'));
 
     test(
         'Put',
         () => resty
             .put('/api/sub')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'Put'));
 
     test(
         'Delete',
         () => resty
             .delete('/api/sub')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'Delete'));
 
     test(
         'GetJson',
         () => resty
             .get('/api/sub/json')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(
                 statusCode: 200,
                 mimeType: 'application/json',
@@ -219,7 +219,7 @@ void main() {
     test('PostJson', () async {
       await resty
           .post('/api/sub/json')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(
               statusCode: 200,
               mimeType: 'application/json',
@@ -229,7 +229,7 @@ void main() {
     test('PutJson', () async {
       await resty
           .put('/api/sub/json')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(
               statusCode: 200,
               mimeType: 'application/json',
@@ -239,7 +239,7 @@ void main() {
     test('DeleteJson', () async {
       await resty
           .delete('/api/sub/json')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(
               statusCode: 200,
               mimeType: 'application/json',
@@ -249,14 +249,14 @@ void main() {
     test('Exception', () async {
       await resty
           .get('/sub1/except')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'except1');
     });
 
     test('Exception', () async {
       await resty
           .get('/sub2/except')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'except1');
     });
   });

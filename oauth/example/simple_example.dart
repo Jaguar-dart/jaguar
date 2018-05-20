@@ -3,11 +3,12 @@
 
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_oauth/jaguar_oauth.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:logging/logging.dart';
 
-@Api(path: '/auth')
+@Controller(path: '/auth')
 class AuthRoutes {
   /// Route that initiates the OAuth2 authorization request by redirecting to
   /// authorization endpoint
@@ -34,9 +35,9 @@ class AuthRoutes {
       scopes: ['email']);
 }
 
-@Api(path: '/api')
+@Controller(path: '/api')
 class MyApi {
-  @IncludeApi()
+  @IncludeHandler()
   final AuthRoutes auth = new AuthRoutes();
 }
 
@@ -49,7 +50,7 @@ String get fbOauthSecret => Settings.getString('facebook_oauth_secret',
 main(List<String> args) async {
   await Settings.parse(args);
   final server = new Jaguar(port: 5555);
-  server.addApi(new JaguarReflected(new MyApi()));
+  server.add(reflect(new MyApi()));
 
   server.log.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');

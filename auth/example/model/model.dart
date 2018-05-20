@@ -12,9 +12,9 @@ class Book {
   Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }
 
-class User implements AuthorizationUser {
-  String id, username, password;
-  User({this.id, this.username, this.password});
+class User implements PasswordUser {
+  final String id, username, password;
+  const User({this.id, this.username, this.password});
   static User fromJson(Map map) => new User(
       id: map['id'], username: map['username'], password: map['password']);
   String get authorizationId => id;

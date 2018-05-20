@@ -9,11 +9,8 @@ import 'package:jaguar/jaguar.dart';
 part 'options.dart';
 part 'request_params.dart';
 
-RouteInterceptor cors(CorsOptions options) =>
-    (ctx) => new Cors(options).before(ctx);
-
 /// Interceptor to handle CORS related requests
-class Cors {
+class Cors implements Interceptor {
   final CorsOptions options;
 
   Cors(this.options);
@@ -34,7 +31,7 @@ class Cors {
 
   bool get hasError => _errorMsg != null;
 
-  void before(Context ctx) {
+  void call(Context ctx) {
     final Request req = ctx.req;
     params = new _CorsRequestParams.fromRequest(req);
 

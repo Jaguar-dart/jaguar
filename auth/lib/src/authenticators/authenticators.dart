@@ -15,7 +15,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_auth/src/entity/entity.dart';
-import 'package:auth_header/auth_header.dart';
+import 'package:jaguar_auth/src/hasher/hasher.dart';
 
 part 'basic_auth.dart';
 part 'form_auth.dart';

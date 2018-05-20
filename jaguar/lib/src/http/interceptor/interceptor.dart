@@ -4,6 +4,12 @@ library jaguar.http.interceptor;
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 
+abstract class Interceptor {
+  const Interceptor();
+
+  FutureOr<dynamic> call(Context ctx);
+}
+
 /*
 /// An interceptor wraps a route and performs an action before and
 /// after the route handler.

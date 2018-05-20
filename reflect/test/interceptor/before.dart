@@ -47,9 +47,9 @@ void main() {
         'one interceptor',
         () => resty
                 .get('/two')
-                .authority('http://localhost:8000')
+                .origin('http://localhost:8000')
                 .exact(statusCode: 200, mimeType: 'application/json')
-                .decode<Map, Map>()
+                .decode<Map>()
                 .then((Map body) {
               expect(body['Random'] * 2, body['Doubled']);
             }));

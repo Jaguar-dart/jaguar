@@ -38,7 +38,7 @@ void main() {
         'trigger',
         () => resty
             .get('/except')
-            .authority('http://localhost:10000')
+            .origin('http://localhost:10000')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'exception'));
   });
 }

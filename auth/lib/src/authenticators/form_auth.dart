@@ -6,15 +6,17 @@ part of jaguar_auth.authenticators;
 /// respectively.
 ///
 /// Arguments:
-/// It uses [modelManager] to fetch user model for the authentication request
+/// It uses [userFetcher] to fetch user model for the authentication request
 /// and authenticate against the password
 ///
 /// Outputs ans Variables:
 /// The authenticated user model is injected into the context as input
-class FormAuth {
+class FormAuth implements Interceptor {
   /// Model manager is used to fetch user model for the authentication request
   /// and authenticate against the password
-  final AuthModelManager modelManager;
+  final UserFetcher<PasswordUser> userFetcher;
+
+  final Hasher hasher;
 
   /// The key by which authorizationId shall be stored in session data
   final String authorizationIdKey;
@@ -25,37 +27,39 @@ class FormAuth {
   /// If set to false, session creation and update must be done manually
   final bool manageSession;
 
-  FormAuth(this.modelManager,
-      {this.authorizationIdKey: 'id', this.manageSession: true});
+  const FormAuth(this.userFetcher,
+      {this.authorizationIdKey: 'id',
+      this.manageSession: true,
+      this.hasher: const NoHasher()});
 
   /// Parses the session from request, fetches the user model and authenticates
   /// it against the password.
   ///
   /// On successful login, injects authenticated user model as context input and
   /// session manager as context variable.
-  Future before(Context ctx) async {
+  Future<void> call(Context ctx) async {
     Map<String, String> form = await ctx.bodyAsUrlEncodedForm();
 
-    if (form is! Map<String, String>) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
+    if (form is! Map<String, String>)
+      throw new Response("Invalid request!",
+          statusCode: HttpStatus.UNAUTHORIZED);
 
     final String username = form['username'];
-    final String password = form['password'];
+    final String password = form['password'] ?? '';
 
-    if (username is! String) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
+    if (username == null)
+      throw new Response("Invalid request!",
+          statusCode: HttpStatus.UNAUTHORIZED);
 
-    if (password is! String) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
+    final subject = await userFetcher.getByAuthenticationId(ctx, username);
 
-    final subject = await modelManager.authenticate(ctx, username, password);
+    if (subject == null)
+      throw new Response("User not found!",
+          statusCode: HttpStatus.UNAUTHORIZED);
 
-    if (subject == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
+    if (!hasher.verify(password, subject.password))
+      throw new Response("Invalid password",
+          statusCode: HttpStatus.UNAUTHORIZED);
 
     if (manageSession is bool && manageSession) {
       final Session session = await ctx.session;
@@ -69,41 +73,16 @@ class FormAuth {
     ctx.addVariable(subject);
   }
 
-  static Future<ModelType> authenticate<ModelType extends AuthorizationUser>(
-      Context ctx, AuthModelManager modelManager,
-      {String authorizationIdKey: 'id', bool manageSession: true}) async {
-    Map<String, String> form = await ctx.bodyAsUrlEncodedForm();
-
-    if (form is! Map<String, String>) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    final String username = form['username'];
-    final String password = form['password'];
-
-    if (username is! String) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    if (password is! String) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    final subject = await modelManager.authenticate(ctx, username, password);
-
-    if (subject == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
-    }
-
-    if (manageSession is bool && manageSession) {
-      final Session session = await ctx.session;
-      // Invalidate old session data
-      session.clear();
-      // Add new session data
-      session.addAll(
-          <String, String>{authorizationIdKey: subject.authorizationId});
-    }
-
-    return subject;
+  static Future<ModelType> authenticate<ModelType extends PasswordUser>(
+      Context ctx, UserFetcher userFetcher,
+      {String authorizationIdKey: 'id',
+      bool manageSession: true,
+      Hasher hasher: const NoHasher()}) async {
+    await new FormAuth(userFetcher,
+            authorizationIdKey: authorizationIdKey,
+            manageSession: manageSession,
+            hasher: hasher)
+        .call(ctx);
+    return ctx.getVariable<ModelType>();
   }
 }

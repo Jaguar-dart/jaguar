@@ -57,66 +57,66 @@ void main() {
     test('GET.SetResponse', () async {
       await resty
           .get('/hello')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'Hello world!');
     });
 
     test('GET.ReturnValue', () async {
-      await resty.get('/returnValue').authority('http://localhost:10000').exact(
+      await resty.get('/returnValue').origin('http://localhost:10000').exact(
           statusCode: 200, mimeType: 'text/plain', body: 'Hello world, Champ!');
     });
 
     test('GET.ReturnResponse', () async {
       await resty
           .get('/returnResponse')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '5');
     });
 
     test('Post', () async {
       await resty
           .post('/')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'Post');
     });
 
     test('Put', () async {
       await resty
           .put('/')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'Put');
     });
 
     test('Delete', () async {
       await resty
           .delete('/')
-          .authority('http://localhost:10000')
+          .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'Delete');
     });
 
     test('GetJson', () async {
-      await resty.get('/json').authority('http://localhost:10000').exact(
+      await resty.get('/json').origin('http://localhost:10000').exact(
           statusCode: 200,
           mimeType: 'application/json',
           body: '{"method":"get"}');
     });
 
     test('PostJson', () async {
-      await resty.post('/json').authority('http://localhost:10000').exact(
+      await resty.post('/json').origin('http://localhost:10000').exact(
           statusCode: 200,
           mimeType: 'application/json',
           body: '{"method":"post"}');
     });
 
     test('PutJson', () async {
-      await resty.put('/json').authority('http://localhost:10000').exact(
+      await resty.put('/json').origin('http://localhost:10000').exact(
           statusCode: 200,
           mimeType: 'application/json',
           body: '{"method":"put"}');
     });
 
     test('DeleteJson', () async {
-      await resty.delete('/json').authority('http://localhost:10000').exact(
+      await resty.delete('/json').origin('http://localhost:10000').exact(
           statusCode: 200,
           mimeType: 'application/json',
           body: '{"method":"delete"}');
