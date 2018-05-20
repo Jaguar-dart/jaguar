@@ -1,0 +1,21 @@
+name: jaguar_oauth_facebook
+description: Facebook oauth authentication interceptor
+version: 0.1.0
+authors:
+- Ravi Teja Gudapati <tejainece@gmail.com>
+- Kevin Segaud <segaud.kevin@gmail.com>
+homepage: https://github.com/Jaguar-dart/jaguar_oauth_facebook
+
+environment:
+  sdk: ">=1.8.0 <2.0.0"
+
+dependencies:
+  jaguar: '>=0.5.3 <0.6.0'
+  jaguar_reflect: '>=0.5.1 <0.6.0'
+  jaguar_auth: '>=0.6.2 <0.7.0'
+  jaguar_oauth: '>=0.1.0 <0.2.0'
+  jaguar_facebook_client: '>=0.0.4 <0.1.0'
+
+dev_dependencies:
+  test: '>=0.12.0 <0.13.0'
+  jaguar_session: '>=0.5.1 <0.6.0'
