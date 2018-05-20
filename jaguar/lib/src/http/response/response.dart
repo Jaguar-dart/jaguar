@@ -129,7 +129,7 @@ class StreamResponse implements Response<Stream<List<int>>> {
   }
 
   /// Writes body of the HTTP response from [value] property
-  Future<void> writeResponse(HttpResponse resp) async {
+  Future<void> writeResponse(HttpResponse resp) {
     resp.statusCode = statusCode;
 
     for (dynamic name in headers.keys) {
@@ -137,7 +137,7 @@ class StreamResponse implements Response<Stream<List<int>>> {
     }
 
     resp.cookies.addAll(cookies);
-    resp.addStream(value);
+    return resp.addStream(value);
   }
 
   static Future<StreamResponse> fromPath(String path,
