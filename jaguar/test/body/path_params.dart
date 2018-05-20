@@ -15,8 +15,7 @@ void main() {
       server
         ..get('/str/:id', (ctx) => ctx.pathParams['id'])
         ..get('/int/:id', (ctx) => ctx.pathParams.getInt('id', 5) * 10)
-        ..get('/double/:id',
-            (ctx) => ctx.pathParams.getDouble('id', 5.5) * 10);
+        ..get('/double/:id', (ctx) => ctx.pathParams.getDouble('id', 5.5) * 10);
       await server.serve();
     });
 

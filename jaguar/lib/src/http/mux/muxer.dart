@@ -406,11 +406,11 @@ abstract class Muxable {
   ///    await server.serve();
   void staticFiles(String path, directory,
       {Map<String, String> pathRegEx,
-        int statusCode: 200,
-        String mimeType: kDefaultMimeType,
-        String charset: kDefaultCharset,
-        Map<String, String> headers,
-        bool stripPrefix: true}) {
+      int statusCode: 200,
+      String mimeType: kDefaultMimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers,
+      bool stripPrefix: true}) {
     if (directory is String) {
       directory = new Directory(directory);
     }
@@ -461,10 +461,10 @@ abstract class Muxable {
   ///    await server.serve();
   void staticFile(String path, file,
       {Map<String, String> pathRegEx,
-        int statusCode: 200,
-        String mimeType,
-        String charset: kDefaultCharset,
-        Map<String, String> headers}) {
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
+      Map<String, String> headers}) {
     if (file is String) {
       file = new File(file);
     }

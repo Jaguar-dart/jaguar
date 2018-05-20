@@ -320,7 +320,7 @@ class Context {
 
   Map<String, Cookie> _parseCookies() {
     final ret = <String, Cookie>{};
-    for(Cookie cookie in req.cookies) {
+    for (Cookie cookie in req.cookies) {
       ret[cookie.name] = cookie;
     }
     return ret;

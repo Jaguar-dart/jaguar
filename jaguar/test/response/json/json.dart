@@ -46,11 +46,14 @@ void main() {
     });
 
     test('ResponseProcessor.Podo', () async {
-      await resty.get('/response_processor/podo').authority('http://localhost:10000').exact(
-          statusCode: 200,
-          mimeType: MimeType.json,
-          body:
-              r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
+      await resty
+          .get('/response_processor/podo')
+          .authority('http://localhost:10000')
+          .exact(
+              statusCode: 200,
+              mimeType: MimeType.json,
+              body:
+                  r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
     });
 
     test('ResponseProcessor.List', () async {
@@ -61,11 +64,14 @@ void main() {
     });
 
     test('StrResponse.Podo', () async {
-      await resty.get('/strresponse/podo').authority('http://localhost:10000').exact(
-          statusCode: 200,
-          mimeType: MimeType.json,
-          body:
-          r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
+      await resty
+          .get('/strresponse/podo')
+          .authority('http://localhost:10000')
+          .exact(
+              statusCode: 200,
+              mimeType: MimeType.json,
+              body:
+                  r'{"name":"Jaguar","motto":["Speed","Simplicity","Extensiblity"]}');
     });
 
     test('StrResponse.List', () async {

@@ -1,4 +1,4 @@
- library jaguar.src.http.response;
+library jaguar.src.http.response;
 
 import 'dart:io';
 import 'dart:async';
@@ -34,13 +34,12 @@ class StrResponse implements Response<String> {
     if (charset != null) this.headers.charset = charset;
   }
 
-
   /// Encodes the given value to JSON and returns a `Response`
   StrResponse.json(dynamic value,
       {this.statusCode: 200,
-        Map<String, dynamic> headers: const {},
-        String mimeType: 'application/json',
-        String charset}) {
+      Map<String, dynamic> headers: const {},
+      String mimeType: 'application/json',
+      String charset}) {
     this.value = cnv.json.encode(value);
 
     for (final String name in headers.keys) {
