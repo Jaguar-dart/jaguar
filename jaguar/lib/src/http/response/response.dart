@@ -341,6 +341,9 @@ abstract class MimeType {
   /// Mime type for JSON
   static const String json = "application/json";
 
+  /// Mime type for SVG
+  static const String svg = "image/svg+xml";
+
   /// Map of file extension to mime type
   static const fromFileExtension = const <String, String>{
     "html": html,
@@ -351,6 +354,7 @@ abstract class MimeType {
     "jpg": jpeg,
     "jpeg": jpeg,
     "gif": gif,
+    "svg": svg,
   };
 
   /// Returns mime type of [file] based on its extension
