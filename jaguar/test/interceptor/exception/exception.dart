@@ -9,7 +9,7 @@ import 'package:jaguar/jaguar.dart';
 final Random rand = new Random.secure();
 
 void handleException(Context ctx, e, s) {
-  ctx.response = new StrResponse('exception');
+  throw new StrResponse('exception');
 }
 
 void main() {
@@ -32,8 +32,7 @@ void main() {
     test(
         'trigger',
         () => resty
-            .get('/except')
-            .authority('http://localhost:10000')
+            .get('http://localhost:10000/except')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'exception'));
   });
 }

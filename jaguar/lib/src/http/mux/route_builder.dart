@@ -589,7 +589,7 @@ class Route implements RequestHandler {
       await Do.chain(ctx, handler, info);
       return null;
     } catch (e, s) {
-      for (int i = ctx.onException.length - 1; i >= 0; i++) {
+      for (int i = ctx.onException.length - 1; i >= 0; i--) {
         await ctx.onException[i](ctx, e, s);
       }
       rethrow;

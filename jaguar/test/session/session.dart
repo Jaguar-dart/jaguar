@@ -53,46 +53,46 @@ main() {
 
     test('ParseNUpdate', () async {
       await resty
-          .get('http://localhost:10000', '/api/add/Dog')
+          .get('http://localhost:10000/api/add/Dog')
           .interceptBefore(jar.intercept)
           .go()
-          .json<Map, Map>()
+          .json<Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Added"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('http://localhost:10000', '/api/add/Cat')
+          .get('http://localhost:10000/api/add/Cat')
           .interceptBefore(jar.intercept)
           .go()
-          .json<Map, Map>()
+          .json<Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Added"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('http://localhost:10000', '/api/add/Mink')
+          .get('http://localhost:10000/api/add/Mink')
           .interceptBefore(jar.intercept)
           .go()
-          .json<Map, Map>()
+          .json<Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Added"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('http://localhost:10000', '/api/remove/Cat')
+          .get('http://localhost:10000/api/remove/Cat')
           .interceptBefore(jar.intercept)
           .go()
-          .json<Map, Map>()
+          .json<Map>()
           .expect([
         resty.bodyIs(
             {"Action": "Removed"}, const MapEquality<String, String>().equals)
       ]);
       await resty
-          .get('http://localhost:10000', '/api/remove/Cat')
+          .get('http://localhost:10000/api/remove/Cat')
           .interceptBefore(jar.intercept)
           .go()
-          .json<Map, Map>()
+          .json<Map>()
           .expect([
         resty.bodyIs({"Action": "Not present"},
             const MapEquality<String, String>().equals)

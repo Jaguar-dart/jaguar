@@ -35,7 +35,7 @@ void main() {
 
     test(
         'stream',
-        () => resty.get('http://localhost:10000', '/stream').exact(
+        () => resty.get('http://localhost:10000/stream').exact(
             statusCode: 200,
             bytes: [1, 2, 3, 4, 5, 6, 7, 8],
             mimeType: 'text/plain'));

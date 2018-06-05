@@ -23,7 +23,7 @@ void main() {
   group('Custom interceptor:Generated', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 8000);
+      server = new Jaguar(port: 10000);
       server
         ..getJson(
             '/two',
@@ -42,10 +42,9 @@ void main() {
     test(
         'one interceptor',
         () => resty
-                .get('/two')
-                .authority('http://localhost:8000')
+                .get('http://localhost:10000/two')
                 .exact(statusCode: 200, mimeType: 'application/json')
-                .decode<Map, Map>()
+                .decode<Map>()
                 .then((Map body) {
               expect(body['Random'] * 2, body['Doubled']);
             }));

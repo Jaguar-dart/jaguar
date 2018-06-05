@@ -25,39 +25,34 @@ void main() {
 
     test('string', () async {
       await resty
-          .get('/str')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/str')
           .query('param', 'hello')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'hello');
     });
 
     test('int.nondefault', () async {
       await resty
-          .get('/int')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/int')
           .query('param', '2')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '20');
     });
 
     test('int.default', () async {
       await resty
-          .get('/int')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/int')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '50');
     });
 
     test('double.nondefault', () async {
       await resty
-          .get('/double')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/double')
           .query('param', '2.2')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '22.0');
     });
 
     test('double.default', () async {
       await resty
-          .get('/double')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/double')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '55.0');
     });
   });

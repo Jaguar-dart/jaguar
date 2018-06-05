@@ -27,8 +27,7 @@ void main() {
     test(
         'read',
         () => resty
-            .get('/cookie/read')
-            .authority('http://localhost:10000')
+            .get('http://localhost:10000/cookie/read')
             .cookie(new ClientCookie('user', 'teja', new DateTime.now()))
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'teja'));
   });

@@ -47,8 +47,7 @@ void main() {
 
     test('ResponseProcessor.Podo', () async {
       await resty
-          .get('/response_processor/podo')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/response_processor/podo')
           .exact(
               statusCode: 200,
               mimeType: MimeType.json,
@@ -58,15 +57,13 @@ void main() {
 
     test('ResponseProcessor.List', () async {
       await resty
-          .get('/response_processor/nums')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/response_processor/nums')
           .exact(statusCode: 200, mimeType: MimeType.json, body: '[1,2,3]');
     });
 
     test('StrResponse.Podo', () async {
       await resty
-          .get('/strresponse/podo')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/strresponse/podo')
           .exact(
               statusCode: 200,
               mimeType: MimeType.json,
@@ -76,8 +73,7 @@ void main() {
 
     test('StrResponse.List', () async {
       await resty
-          .get('/strresponse/nums')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/strresponse/nums')
           .exact(statusCode: 200, mimeType: MimeType.json, body: '[1,2,3]');
     });
   });

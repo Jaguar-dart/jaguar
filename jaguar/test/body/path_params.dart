@@ -25,36 +25,31 @@ void main() {
 
     test('string', () async {
       await resty
-          .get('/str/hello')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/str/hello')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'hello');
     });
 
     test('int.nondefault', () async {
       await resty
-          .get('/int/2')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/int/2')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '20');
     });
 
     test('int.default', () async {
       await resty
-          .get('/int/boom')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/int/boom')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '50');
     });
 
     test('double.nondefault', () async {
       await resty
-          .get('/double/2.2')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/double/2.2')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '22.0');
     });
 
     test('double.default', () async {
       await resty
-          .get('/double/boom')
-          .authority('http://localhost:10000')
+          .get('http://localhost:10000/double/boom')
           .exact(statusCode: 200, mimeType: 'text/plain', body: '55.0');
     });
   });

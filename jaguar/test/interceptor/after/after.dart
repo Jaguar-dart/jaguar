@@ -40,22 +40,19 @@ main() {
     test(
         'After',
         () => resty
-            .get('/aft')
-            .authority('http://localhost:10000')
+            .get('http://localhost:10000/aft')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'aft1'));
 
     test(
         'Before&After',
         () => resty
-            .get('/befaft')
-            .authority('http://localhost:10000')
+            .get('http://localhost:10000/befaft')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '25'));
 
     test(
         'ProgramaticAfter',
         () => resty
-            .get('/progaft')
-            .authority('http://localhost:10000')
+            .get('http://localhost:10000/progaft')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '50'));
   });
 }
