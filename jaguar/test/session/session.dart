@@ -58,8 +58,7 @@ main() {
           .go()
           .json<Map>()
           .expect([
-        resty.bodyIs(
-            {"Action": "Added"}, const MapEquality<String, String>().equals)
+        resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
       ]);
       await resty
           .get('http://localhost:10000/api/add/Cat')
@@ -67,8 +66,7 @@ main() {
           .go()
           .json<Map>()
           .expect([
-        resty.bodyIs(
-            {"Action": "Added"}, const MapEquality<String, String>().equals)
+        resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
       ]);
       await resty
           .get('http://localhost:10000/api/add/Mink')
@@ -76,8 +74,7 @@ main() {
           .go()
           .json<Map>()
           .expect([
-        resty.bodyIs(
-            {"Action": "Added"}, const MapEquality<String, String>().equals)
+        resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
       ]);
       await resty
           .get('http://localhost:10000/api/remove/Cat')
@@ -85,8 +82,7 @@ main() {
           .go()
           .json<Map>()
           .expect([
-        resty.bodyIs(
-            {"Action": "Removed"}, const MapEquality<String, String>().equals)
+        resty.bodyIs({"Action": "Removed"}, const MapEquality().equals)
       ]);
       await resty
           .get('http://localhost:10000/api/remove/Cat')
@@ -94,8 +90,7 @@ main() {
           .go()
           .json<Map>()
           .expect([
-        resty.bodyIs({"Action": "Not present"},
-            const MapEquality<String, String>().equals)
+        resty.bodyIs({"Action": "Not present"}, const MapEquality().equals)
       ]);
     });
   });

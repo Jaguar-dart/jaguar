@@ -90,7 +90,8 @@ class CookieSessionManager implements SessionManager {
   Map<String, String> _decode(String data) {
     if (_encrypter == null) {
       try {
-        return json.decode(new String.fromCharCodes(base64Url.decode(data)));
+        String dec = new String.fromCharCodes(base64Url.decode(data));
+        return (json.decode(dec) as Map).cast<String, String>();
       } catch (e) {
         return null;
       }
@@ -101,8 +102,9 @@ class CookieSessionManager implements SessionManager {
         if (base64Url.encode(_encrypter.convert(parts.first.codeUnits).bytes) !=
             parts[1]) return null;
 
-        return json
-            .decode(new String.fromCharCodes(base64Url.decode(parts.first)));
+        return (json.decode(
+                new String.fromCharCodes(base64Url.decode(parts.first))) as Map)
+            .cast<String, String>();
       } catch (e) {
         return null;
       }

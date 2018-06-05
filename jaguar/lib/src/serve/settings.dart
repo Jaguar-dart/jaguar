@@ -62,7 +62,8 @@ class Settings {
       if (settings.isNotEmpty && settings.endsWith(".yaml")) {
         File yaml = new File(settings);
         if (await yaml.exists()) {
-          yamlSettings = loadYaml(await yaml.readAsString());
+          yamlSettings = (loadYaml(await yaml.readAsString()) as Map)
+              .cast<String, dynamic>();
         }
       }
     }

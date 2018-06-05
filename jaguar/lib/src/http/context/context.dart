@@ -219,9 +219,9 @@ class Context {
   Future<List<T>> bodyAsJsonList<T, F>(
       {conv.Encoding encoding: conv.utf8, T convert(F d)}) async {
     final String text = await bodyAsText(encoding);
-    final ret = conv.json.decode(text);
-    if (convert != null) return (ret as List).cast<F>().map(convert).toList();
-    return ret;
+    final List ret = conv.json.decode(text);
+    if (convert != null) return ret.cast<F>().map(convert).toList();
+    return ret.cast<T>();
   }
 
   /// Decodes url-encoded form from the body and returns the form as
