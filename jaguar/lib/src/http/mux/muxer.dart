@@ -443,7 +443,7 @@ abstract class Muxable {
           return null;
         }
       }
-      return new Response<Stream<List<int>>>(await file.openRead(),
+      return new StreamResponse(await file.openRead(),
           mimeType: MimeType.ofFile(file));
     },
         pathRegEx: pathRegEx,
