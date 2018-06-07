@@ -1,8 +1,7 @@
 library test.jaguar.settings;
 
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
-import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_settings/jaguar_settings.dart';
 
 void main() {
   group('settings', () {
@@ -10,7 +9,7 @@ void main() {
       "interval": "1",
     };
 
-    Settings.parse(<String>['-s', 'test/settings/settings.yaml'],
+    Settings.parse(<String>['-s', 'test/settings.yaml'],
         settingsMap: localSettings);
 
     test('from map', () async {

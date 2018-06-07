@@ -1,4 +1,10 @@
-part of jaguar.src.serve;
+// TODO add docs
+library settings;
+
+import 'dart:async';
+import 'dart:io';
+import 'package:args/args.dart';
+import 'package:yaml/yaml.dart';
 
 /// Settings source filter
 ///
@@ -23,7 +29,7 @@ class SettingsFilter {
 
   /// Setting shall be retrieved from either Map or YAML config file
   static const SettingsFilter MapOrYaml =
-      const SettingsFilter._(0, 'MapOrYaml');
+  const SettingsFilter._(0, 'MapOrYaml');
 }
 
 /// {Key: Value} Settings repository. Allows to query settings values based on
@@ -81,7 +87,7 @@ class Settings {
   ///   retrieved
   static String getString(String key,
       {String defaultValue,
-      SettingsFilter settingsFilter: SettingsFilter.MapOrYaml}) {
+        SettingsFilter settingsFilter: SettingsFilter.MapOrYaml}) {
     if (_singletonInstance == null) {
       throw new Exception("Settings are not parsed yet!");
     }

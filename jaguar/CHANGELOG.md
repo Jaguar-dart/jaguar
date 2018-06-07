@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.6
+
++ Moved `Settings` to `jaguar_settings` package
+
 ## 1.3.11
 
 + Fixed `args` package dependency issue

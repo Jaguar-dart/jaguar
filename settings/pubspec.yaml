@@ -1,0 +1,17 @@
+name: jaguar_settings
+version: 2.1.1
+description: Settings parser for Jaguar.
+authors:
+- Ravi Teja Gudapati <tejainece@gmail.com>
+- Kevin Segaud <segaud.kevin@gmail.com>
+homepage: http://jaguar-dart.github.io
+
+environment:
+  sdk: '>=2.0.0-dev.55.0 <2.0.0'
+
+dependencies:
+  args: ">=0.13.7 <2.0.0"
+  yaml: ^2.1.14
+
+dev_dependencies:
+  test: ^0.12.30

@@ -16,8 +16,6 @@ import 'response/stream/stream.dart' as responseStream;
 
 import 'session/session.dart' as session;
 
-import 'settings/settings.dart' as settings;
-
 import 'websocket/websocket.dart' as websocket;
 
 void main() {
@@ -36,8 +34,6 @@ void main() {
   responseStream.main();
 
   session.main();
-
-  settings.main();
 
   websocket.main();
 }
