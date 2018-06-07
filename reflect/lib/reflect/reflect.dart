@@ -113,7 +113,7 @@ class ReflectedController implements RequestHandler {
     final List<HttpMethod> routes = decl.metadata
         .where((InstanceMirror annot) => annot.reflectee is HttpMethod)
         .map((InstanceMirror annot) => annot.reflectee)
-        .toList() as List<HttpMethod>;
+        .toList().cast<HttpMethod>();
     if (routes.length == 0) return;
 
     final List<RouteInterceptor> before = topBefore.toList()
