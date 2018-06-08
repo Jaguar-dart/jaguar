@@ -8,7 +8,6 @@ import 'package:logging/logging.dart';
 
 import 'package:jaguar/src/serve/error_writer/import.dart';
 
-
 export 'package:jaguar/src/serve/error_writer/import.dart';
 
 /// Base class for Request handlers

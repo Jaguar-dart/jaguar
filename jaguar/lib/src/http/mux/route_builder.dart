@@ -623,6 +623,10 @@ bool matchPath(
   final int length = myPath.length;
   if (length != path.length) {
     if (length == 0) return false;
+    if (path.length == 0) {
+      if (length == 1 && myPath.first.endsWith('*')) return true;
+      return false;
+    }
     if (!myPath.last.endsWith('*')) return false;
   }
 

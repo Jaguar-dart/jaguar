@@ -10,8 +10,7 @@ environment:
   sdk: ">=1.8.0 <2.0.0"
 
 dependencies:
-  jaguar: ^2.1.1
-
+  jaguar: ^2.1.6
 dev_dependencies:
   jaguar_resty: ^2.2.2
   test: ^0.12.15+10
