@@ -4,7 +4,7 @@ import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 main() async {
   resty.globalClient = new http.IOClient();
 
-  var template = resty.route('http://localhost:10000', '/');
+  var template = resty.route('http://localhost:10000');
 
   // Get request
   await template.get.go((r) => print(r.body));

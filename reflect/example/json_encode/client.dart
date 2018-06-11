@@ -22,12 +22,12 @@ main() async {
   resty.globalClient = new http.IOClient();
 
   await resty
-      .get('http://localhost:10000', '/info/jaguar')
+      .get('http://localhost:10000/info/jaguar')
       .one(Info.fromJson)
       .then(print);
 
   await resty
-      .get('http://localhost:10000', '/info/grizzly')
+      .get('http://localhost:10000/info/grizzly')
       .one(Info.fromJson)
       .then(print);
 }
