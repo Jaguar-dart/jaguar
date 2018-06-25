@@ -14,6 +14,8 @@ import 'mux/mux.dart' as mux;
 import 'response/json/json.dart' as responseJson;
 import 'response/stream/stream.dart' as responseStream;
 
+import 'serve/restart.dart' as serverRestart;
+
 import 'session/session.dart' as session;
 
 import 'websocket/websocket.dart' as websocket;
@@ -32,6 +34,8 @@ void main() {
 
   responseJson.main();
   responseStream.main();
+
+  serverRestart.main();
 
   session.main();
 

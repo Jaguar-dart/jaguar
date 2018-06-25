@@ -407,7 +407,7 @@ abstract class Muxable {
       int statusCode: 200,
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
-      Map<String, String> headers,
+      Map<String, String> headers: const {},
       bool stripPrefix: true}) {
     if (directory is String) {
       directory = new Directory(directory);
@@ -442,15 +442,11 @@ abstract class Muxable {
         }
       }
       return new StreamResponse(await file.openRead(),
-          mimeType: MimeType.ofFile(file),
-          headers: headers ?? {},
+          statusCode: statusCode,
+          mimeType: MimeType.ofFile(file) ?? mimeType,
+          headers: headers,
           charset: charset ?? kDefaultCharset);
-    },
-        pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: kDefaultCharset,
-        headers: headers);
+    }, pathRegEx: pathRegEx, headers: headers);
   }
 
   /// Serves requests at [path] with content of [file]
@@ -462,7 +458,7 @@ abstract class Muxable {
   void staticFile(String path, file,
       {Map<String, String> pathRegEx,
       int statusCode: 200,
-      String mimeType,
+      String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
       Map<String, String> headers}) {
     if (file is String) {
@@ -473,7 +469,7 @@ abstract class Muxable {
     this.get(path, (_) => f.openRead(),
         pathRegEx: pathRegEx,
         statusCode: statusCode,
-        mimeType: mimeType ?? MimeType.ofFile(f) ?? kDefaultMimeType,
+        mimeType: MimeType.ofFile(f) ?? mimeType,
         charset: kDefaultCharset,
         headers: headers);
   }

@@ -109,24 +109,11 @@ class Jaguar extends Object with Muxable {
     }
   }
 
-  Future<Null> restart({bool logRequests: false}) async {
-    await _server.close(force: true);
-    log.info("restart on $resourceName");
-    if (securityContext != null) {
-      _server = await HttpServer.bindSecure(address, port, securityContext);
-    } else {
-      _server = await HttpServer.bind(address, port, shared: multiThread);
-    }
-    _server.autoCompress = autoCompress;
-    if (logRequests) {
-      _server.listen((HttpRequest r) {
-        log.info("Req => Method: ${r.method} Url: ${r.uri}");
-        _handler(r);
+  Future<Null> restart({bool logRequests: false}) =>
+      _server.close(force: true).then((_) {
+        _server = null;
+        return serve(logRequests: logRequests);
       });
-    } else {
-      _server.listen(_handler);
-    }
-  }
 
   Future _handler(HttpRequest request) async {
     final ctx = new Context(new Request(request), sessionManager, log);
@@ -169,7 +156,6 @@ class Jaguar extends Object with Muxable {
   Future<Null> close() async {
     await _server.close(force: true);
     _server = null;
-    _handlers.clear();
   }
 
   /// [RequestHandler]s
