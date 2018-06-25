@@ -25,14 +25,14 @@ class Authorizer implements Interceptor {
     final Session session = await ctx.session;
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
+      throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
     AuthorizationUser subject =
         await userFetcher.getByAuthorizationId(ctx, authId);
 
     if (subject == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
+      throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
     ctx.addVariable(subject);
@@ -45,13 +45,13 @@ class Authorizer implements Interceptor {
     final Session session = await ctx.session;
     final String id = session[authorizationIdKey];
     if (id is! String || id.isEmpty) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
+      throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
     ModelType subject = await userFetcher.getByAuthorizationId(ctx, id);
 
     if (subject == null) {
-      throw new Response(null, statusCode: HttpStatus.UNAUTHORIZED);
+      throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
     return subject;

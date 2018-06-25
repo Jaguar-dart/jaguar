@@ -190,7 +190,7 @@ class Redirect implements Response<Uri> {
   final List<Cookie> cookies = [];
 
   Redirect(this.value,
-      {this.statusCode: HttpStatus.MOVED_PERMANENTLY,
+      {this.statusCode: HttpStatus.movedPermanently,
       Map<String, dynamic> headers: const {}}) {
     for (final String name in headers.keys) {
       this.headers.add(name, headers[name]);
@@ -198,14 +198,14 @@ class Redirect implements Response<Uri> {
   }
 
   Redirect.found(this.value, {Map<String, dynamic> headers: const {}})
-      : statusCode = HttpStatus.MOVED_TEMPORARILY {
+      : statusCode = HttpStatus.movedTemporarily {
     for (final String name in headers.keys) {
       this.headers.add(name, headers[name]);
     }
   }
 
   Redirect.seeOther(this.value, {Map<String, dynamic> headers: const {}})
-      : statusCode = HttpStatus.SEE_OTHER {
+      : statusCode = HttpStatus.seeOther {
     for (final String name in headers.keys) {
       this.headers.add(name, headers[name]);
     }
@@ -213,7 +213,7 @@ class Redirect implements Response<Uri> {
 
   Redirect.temporaryRedirect(this.value,
       {Map<String, dynamic> headers: const {}})
-      : statusCode = HttpStatus.TEMPORARY_REDIRECT {
+      : statusCode = HttpStatus.temporaryRedirect {
     for (final String name in headers.keys) {
       this.headers.add(name, headers[name]);
     }
@@ -290,13 +290,6 @@ class Response<ValueType> {
     headers.mimeType = route.mimeType;
     headers.charset = route.charset;
   }
-
-  /// Returns a `Response` object that performs a redirect
-  static Response<Uri> redirect(Uri uri,
-          {int statusCode: HttpStatus.MOVED_PERMANENTLY}) =>
-      new Redirect(uri);
-
-  // TODO XML
 
   /// Writes body of the HTTP response from [value] property
   ///

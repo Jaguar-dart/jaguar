@@ -44,7 +44,7 @@ class BasicAuth implements Interceptor {
     if (basic == null)
       throw new Response(
           "Invalid request! Basic authorization header not found!",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     final String credentials = _decodeCredentials(basic);
     final int splitIdx = credentials.indexOf(':');
@@ -63,11 +63,11 @@ class BasicAuth implements Interceptor {
 
     if (subject == null)
       throw new Response("User not found!",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     if (!hasher.verify(password, subject.password))
       throw new Response("Invalid password",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     if (manageSession is bool && manageSession) {
       final Session session = await ctx.session;
