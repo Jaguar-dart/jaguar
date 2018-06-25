@@ -175,10 +175,8 @@ abstract class Muxable {
   }
 
   void map(
-      Map<
-              String,
-              /* RouteFunc | RouteBuilder | Iterable<RouteFunc> | Iterable<RouteBuilder> */ dynamic>
-          handlers,
+      /* RouteFunc | RouteBuilder | Iterable<RouteFunc> | Iterable<RouteBuilder> */
+      Map<String, dynamic> handlers,
       {List<RouteInterceptor> before: const [],
       List<RouteInterceptor> after: const [],
       List<ExceptionHandler> onException: const []}) {
@@ -444,7 +442,9 @@ abstract class Muxable {
         }
       }
       return new StreamResponse(await file.openRead(),
-          mimeType: MimeType.ofFile(file));
+          mimeType: MimeType.ofFile(file),
+          headers: headers ?? {},
+          charset: charset ?? kDefaultCharset);
     },
         pathRegEx: pathRegEx,
         statusCode: statusCode,
