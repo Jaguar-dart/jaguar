@@ -15,8 +15,7 @@ void aft1(Context ctx) => ctx.addVariable(ctx.getVariable<int>() + 5);
 
 void aft2(Context ctx) => ctx.addVariable(ctx.getVariable<int>() + 2);
 
-void onExcept1(Context ctx, dynamic e, s) =>
-    ctx.response = new StrResponse(e.toString());
+void onExcept1(Context ctx, dynamic e, s) => throw StrResponse(e.toString());
 
 void progBef(Context ctx) {
   ctx.addVariable(5);
@@ -68,7 +67,7 @@ class SubController1 {
   void progaft(Context ctx) => null;
 
   @Get(path: '/except')
-  void except1(_) => throw 'except1';
+  void except(_) => throw 'except1';
 }
 
 @Controller()
@@ -208,32 +207,23 @@ void main() {
 
     test(
         'GetJson',
-        () => resty
-            .get('/api/sub/json')
-            .origin('http://localhost:10000')
-            .exact(
-                statusCode: 200,
-                mimeType: 'application/json',
-                body: '{"method":"get"}'));
+        () => resty.get('/api/sub/json').origin('http://localhost:10000').exact(
+            statusCode: 200,
+            mimeType: 'application/json',
+            body: '{"method":"get"}'));
 
     test('PostJson', () async {
-      await resty
-          .post('/api/sub/json')
-          .origin('http://localhost:10000')
-          .exact(
-              statusCode: 200,
-              mimeType: 'application/json',
-              body: '{"method":"post"}');
+      await resty.post('/api/sub/json').origin('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: 'application/json',
+          body: '{"method":"post"}');
     });
 
     test('PutJson', () async {
-      await resty
-          .put('/api/sub/json')
-          .origin('http://localhost:10000')
-          .exact(
-              statusCode: 200,
-              mimeType: 'application/json',
-              body: '{"method":"put"}');
+      await resty.put('/api/sub/json').origin('http://localhost:10000').exact(
+          statusCode: 200,
+          mimeType: 'application/json',
+          body: '{"method":"put"}');
     });
 
     test('DeleteJson', () async {
@@ -246,14 +236,14 @@ void main() {
               body: '{"method":"delete"}');
     });
 
-    test('Exception', () async {
+    test('Exception1', () async {
       await resty
           .get('/sub1/except')
           .origin('http://localhost:10000')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'except1');
     });
 
-    test('Exception', () async {
+    test('Exception2', () async {
       await resty
           .get('/sub2/except')
           .origin('http://localhost:10000')

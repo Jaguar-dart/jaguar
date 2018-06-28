@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.3
+
++ Dart2 fixes
+
 ## 1.3.1
 
 + Faster processing of simple routes

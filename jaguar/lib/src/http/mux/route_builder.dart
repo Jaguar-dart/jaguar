@@ -268,8 +268,13 @@ class Route implements RequestHandler {
   final List<ExceptionHandler> onException;
 
   Route.fromInfo(this.info, this.handler,
-      {this.after: const [], this.before: const [], this.onException: const []})
-      : pathSegments = splitPathToSegments(info.path);
+      {List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
+      : pathSegments = splitPathToSegments(info.path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route]
   Route(String path, this.handler,
@@ -280,9 +285,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new HttpMethod(
             path: path,
             methods: methods,
@@ -292,7 +297,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for GET method requests
   Route.get(String path, this.handler,
@@ -302,9 +310,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new Get(
             path: path,
             statusCode: statusCode,
@@ -313,7 +321,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for POST method requests
   Route.post(String path, this.handler,
@@ -323,9 +334,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new Post(
             path: path,
             statusCode: statusCode,
@@ -334,7 +345,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for PUT method requests
   Route.put(String path, this.handler,
@@ -344,9 +358,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new Put(
             path: path,
             statusCode: statusCode,
@@ -355,7 +369,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for DELETE method requests
   Route.delete(String path, this.handler,
@@ -365,9 +382,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new Delete(
             path: path,
             statusCode: statusCode,
@@ -376,7 +393,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for PATCH method requests
   Route.patch(String path, this.handler,
@@ -386,9 +406,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new HttpMethod(
             path: path,
             methods: ['PATCH'],
@@ -398,7 +418,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for OPTIONS method requests
   Route.options(String path, this.handler,
@@ -408,9 +431,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new OptionsMethod(
             path: path,
             statusCode: statusCode,
@@ -419,7 +442,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for HTML requests
   Route.html(String path, this.handler,
@@ -429,9 +455,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new GetHtml(
             path: path,
             statusCode: statusCode,
@@ -440,7 +466,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for JSON requests
   Route.json(String path, this.handler,
@@ -451,9 +480,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new HttpMethod(
             path: path,
             methods: methods,
@@ -463,7 +492,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for JSON requests with GET method
   Route.getJson(String path, this.handler,
@@ -473,9 +505,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new GetJson(
             path: path,
             statusCode: statusCode,
@@ -484,7 +516,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for JSON requests with POST method
   Route.postJson(String path, this.handler,
@@ -494,9 +529,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new PostJson(
             path: path,
             statusCode: statusCode,
@@ -505,7 +540,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for JSON requests with PUT method
   Route.putJson(String path, this.handler,
@@ -515,9 +553,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new PutJson(
             path: path,
             statusCode: statusCode,
@@ -526,7 +564,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Constructs a [Route] for JSON requests with DELETE method
   Route.deleteJson(String path, this.handler,
@@ -536,9 +577,9 @@ class Route implements RequestHandler {
       Map<String, String> headers,
       Map<String, String> pathRegEx,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
-      this.after: const [],
-      this.before: const [],
-      this.onException: const []})
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException})
       : info = new DeleteJson(
             path: path,
             statusCode: statusCode,
@@ -547,7 +588,10 @@ class Route implements RequestHandler {
             headers: headers,
             pathRegEx: pathRegEx,
             responseProcessor: responseProcessor),
-        pathSegments = splitPathToSegments(path);
+        pathSegments = splitPathToSegments(path),
+        before = before ?? [],
+        after = after ?? [],
+        onException = onException ?? [];
 
   /// Clones this [Route] with the new values if provided
   Route cloneWith(
@@ -558,9 +602,9 @@ class Route implements RequestHandler {
           Map<String, String> headers,
           Map<String, String> pathRegEx,
           ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after: const [],
-          List<RouteInterceptor> before: const [],
-          List<ExceptionHandler> onException: const []}) =>
+          List<RouteInterceptor> after,
+          List<RouteInterceptor> before,
+          List<ExceptionHandler> onException}) =>
       new Route.fromInfo(
           info.cloneWith(
               path: path,
@@ -581,19 +625,11 @@ class Route implements RequestHandler {
   Future<void> handleRequest(Context ctx) async {
     // TODO add prefix
     if (!matchPath(ctx.method, ctx.pathSegments, info.methods, pathSegments,
-        info.pathRegEx, ctx.pathParams)) return null;
-    try {
-      ctx.before.addAll(before);
-      ctx.after.addAll(after);
-      ctx.onException.addAll(onException);
-      await Do.chain(ctx, handler, info);
-      return null;
-    } catch (e, s) {
-      for (int i = ctx.onException.length - 1; i >= 0; i--) {
-        await ctx.onException[i](ctx, e, s);
-      }
-      rethrow;
-    }
+        info.pathRegEx, ctx.pathParams)) return;
+    ctx.before.addAll(before);
+    ctx.after.addAll(after);
+    ctx.onException.addAll(onException);
+    await Do.chain(ctx, handler, info);
   }
 
   Route intercept(RouteInterceptor interceptor) {

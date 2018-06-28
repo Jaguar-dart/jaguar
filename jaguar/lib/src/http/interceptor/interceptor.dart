@@ -67,8 +67,17 @@ abstract class Do {
         if (res is Future) await res;
       }
     } catch (e, s) {
+      Response resp;
       for (int i = ctx.onException.length - 1; i >= 0; i--) {
-        await ctx.onException[i](ctx, e, s);
+        try {
+          await ctx.onException[i](ctx, e, s);
+        } catch (e) {
+          if (e is Response) resp = e;
+        }
+      }
+      if (resp != null) {
+        ctx.response = resp;
+        return;
       }
       rethrow;
     }

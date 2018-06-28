@@ -15,6 +15,4 @@ class ExampleController {
   String hello1(Context ctx) => 'Hello1!';
 }
 
-main() {
-
-}
+main() {}

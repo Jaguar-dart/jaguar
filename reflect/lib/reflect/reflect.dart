@@ -113,7 +113,8 @@ class ReflectedController implements RequestHandler {
     final List<HttpMethod> routes = decl.metadata
         .where((InstanceMirror annot) => annot.reflectee is HttpMethod)
         .map((InstanceMirror annot) => annot.reflectee)
-        .toList().cast<HttpMethod>();
+        .toList()
+        .cast<HttpMethod>();
     if (routes.length == 0) return;
 
     final List<RouteInterceptor> before = topBefore.toList()
@@ -155,7 +156,8 @@ class ReflectedController implements RequestHandler {
   }
 
   /// Detects interceptor wrappers on a method or function
-  List<RouteInterceptor> _detectAfter(InstanceMirror im, List<InstanceMirror> annots) {
+  List<RouteInterceptor> _detectAfter(
+      InstanceMirror im, List<InstanceMirror> annots) {
     final wrappers = <RouteInterceptor>[];
 
     for (InstanceMirror annot in annots) {
