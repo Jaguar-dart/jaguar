@@ -289,12 +289,11 @@ class Context {
         final field = new StringFormField(name, data, contentType: contentType);
         ret[field.name] = field;
       } else if (multipart.isText) {
-        final field = new TextFileFormField(name, multipart as Stream<String>,
+        final field = new TextFileFormField(name, multipart.cast<String>(),
             contentType: contentType, filename: fn);
         ret[field.name] = field;
       } else {
-        final field = new BinaryFileFormField(
-            name, multipart as Stream<List<int>>,
+        final field = new BinaryFileFormField(name, multipart.cast<List<int>>(),
             contentType: contentType, filename: fn);
         ret[field.name] = field;
       }
@@ -334,7 +333,7 @@ class Context {
   String authHeader(String scheme) {
     if (_authHeader == null) {
       _authHeader = new AuthHeaders.fromHeaderStr(
-          req.headers.value(HttpHeaders.AUTHORIZATION));
+          req.headers.value(HttpHeaders.authorizationHeader));
     }
     return _authHeader.items[scheme]?.credentials;
   }

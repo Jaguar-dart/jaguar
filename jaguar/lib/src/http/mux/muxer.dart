@@ -409,9 +409,7 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers: const {},
       bool stripPrefix: true}) {
-    if (directory is String) {
-      directory = new Directory(directory);
-    }
+    if (directory is String) directory = new Directory(directory);
 
     final Directory dir = directory;
     if (!dir.existsSync())

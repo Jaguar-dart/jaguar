@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.10
+
++ Dart2 fixes in `bodyAsFormData`
+
 ## 2.1.9
 
 + `Route` handling bug fix
