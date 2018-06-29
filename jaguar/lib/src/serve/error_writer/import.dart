@@ -20,13 +20,13 @@ class DefaultErrorWriter implements ErrorWriter {
   ///
   /// Respects 'accept' request header and returns corresponding [Response]
   void make404(Context ctx) {
-    final String accept = ctx.req.headers.value(HttpHeaders.ACCEPT) ?? '';
+    final String accept = ctx.req.headers.value(HttpHeaders.acceptHeader) ?? '';
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
       final resp = new Response<String>(_write404Html(ctx),
-          statusCode: HttpStatus.NOT_FOUND);
-      resp.headers.contentType = ContentType.HTML;
+          statusCode: HttpStatus.notFound);
+      resp.headers.contentType = ContentType.html;
       ctx.response = resp;
       return;
     } else if (acceptList.contains('application/json') ||
@@ -35,7 +35,7 @@ class DefaultErrorWriter implements ErrorWriter {
         'Path': ctx.path,
         'Method': ctx.method,
         'Message': 'Not found!',
-      }, statusCode: HttpStatus.NOT_FOUND);
+      }, statusCode: HttpStatus.notFound);
       return;
     } /* TODO else if (acceptList.contains('application/xml')) {
       ctx.response = Response.xml({
@@ -47,8 +47,8 @@ class DefaultErrorWriter implements ErrorWriter {
     } */
     else {
       ctx.response = new Response<String>(_write404Html(ctx),
-          statusCode: HttpStatus.NOT_FOUND)
-        ..headers.contentType = ContentType.HTML;
+          statusCode: HttpStatus.notFound)
+        ..headers.contentType = ContentType.html;
       return;
     }
   }
@@ -57,13 +57,13 @@ class DefaultErrorWriter implements ErrorWriter {
   ///
   /// Respects 'accept' request header and returns corresponding [Response]
   void make500(Context ctx, Object error, [StackTrace stack]) {
-    final String accept = ctx.req.headers.value(HttpHeaders.ACCEPT) ?? '';
+    final String accept = ctx.req.headers.value(HttpHeaders.acceptHeader) ?? '';
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
       final resp = new Response<String>(_write500Html(ctx, error, stack),
-          statusCode: HttpStatus.NOT_FOUND);
-      resp.headers.contentType = ContentType.HTML;
+          statusCode: HttpStatus.notFound);
+      resp.headers.contentType = ContentType.html;
       ctx.response = resp;
       return;
     } else if (acceptList.contains('application/json') ||
@@ -87,7 +87,7 @@ class DefaultErrorWriter implements ErrorWriter {
     else {
       final resp = new Response<String>(_write500Html(ctx, error, stack),
           statusCode: 500);
-      resp.headers.contentType = ContentType.HTML;
+      resp.headers.contentType = ContentType.html;
       ctx.response = resp;
     }
   }

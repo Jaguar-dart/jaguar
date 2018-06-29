@@ -106,7 +106,7 @@ class JaguarOauth2 {
   /// Sends authorization request to remote server by redirecting the browser to
   /// remote server's authorization request page
   Response<Uri> initiateRequest(Context ctx) =>
-      new Redirect(authorizationUrl, statusCode: HttpStatus.MOVED_TEMPORARILY);
+      new Redirect(authorizationUrl, statusCode: HttpStatus.movedTemporarily);
 
   /// Handles OAuth2 authorization response
   Future<oauth2.Client> handleResponse(Context ctx) {

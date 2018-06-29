@@ -16,3 +16,7 @@ dev_dependencies:
   jaguar_resty: ^2.5.9
   test: ^1.2.0
   http:
+
+dependency_overrides:
+  jaguar:
+    path: ../jaguar

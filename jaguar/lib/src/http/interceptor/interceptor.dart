@@ -7,7 +7,7 @@ import 'package:jaguar/jaguar.dart';
 abstract class Interceptor {
   const Interceptor();
 
-  FutureOr<dynamic> call(Context ctx);
+  FutureOr<void> call(Context ctx);
 }
 
 /*

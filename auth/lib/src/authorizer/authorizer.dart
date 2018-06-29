@@ -3,7 +3,6 @@ library jaguar_auth.authoriser;
 import 'dart:io';
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_auth/src/entity/entity.dart';
 
 /// Authorizes the request
 ///
@@ -12,14 +11,14 @@ import 'package:jaguar_auth/src/entity/entity.dart';
 ///
 /// Outputs ans Variables:
 /// The authorised user model is injected into the context as input
-class Authorizer implements Interceptor {
+class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
   /// Model manager used to fetch user model of the logged-in user
-  final UserFetcher userFetcher;
+  final UserFetcher<UserModel> userFetcher;
 
   /// The key by which authorizationId is stored in session data
   final String authorizationIdKey;
 
-  const Authorizer(this.userFetcher, {this.authorizationIdKey: 'id'});
+  const Authorizer({this.userFetcher, this.authorizationIdKey: 'id'});
 
   Future<void> call(Context ctx) async {
     final Session session = await ctx.session;
@@ -28,8 +27,8 @@ class Authorizer implements Interceptor {
       throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
-    AuthorizationUser subject =
-        await userFetcher.getByAuthorizationId(ctx, authId);
+    UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
+    UserModel subject = await fetcher.byAuthorizationId(ctx, authId);
 
     if (subject == null) {
       throw new Response(null, statusCode: HttpStatus.unauthorized);
@@ -39,16 +38,18 @@ class Authorizer implements Interceptor {
   }
 
   /// Authorizes a request with the given [UserFetcher]
-  static Future<ModelType> authorize<ModelType extends AuthorizationUser>(
-      Context ctx, UserFetcher<ModelType> userFetcher,
-      {String authorizationIdKey: 'id'}) async {
+  static Future<UserModel> authorize<UserModel extends AuthorizationUser>(
+      Context ctx,
+      {UserFetcher<UserModel> userFetcher,
+      String authorizationIdKey: 'id'}) async {
     final Session session = await ctx.session;
-    final String id = session[authorizationIdKey];
-    if (id is! String || id.isEmpty) {
+    final String authId = session[authorizationIdKey];
+    if (authId is! String || authId.isEmpty) {
       throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
-    ModelType subject = await userFetcher.getByAuthorizationId(ctx, id);
+    UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
+    UserModel subject = await fetcher.byAuthorizationId(ctx, authId);
 
     if (subject == null) {
       throw new Response(null, statusCode: HttpStatus.unauthorized);

@@ -19,5 +19,4 @@ library jaguar_auth;
 
 export 'package:jaguar_auth/src/authenticators/authenticators.dart';
 export 'package:jaguar_auth/src/authorizer/authorizer.dart';
-export 'package:jaguar_auth/src/entity/entity.dart';
 export 'package:jaguar_auth/src/hasher/hasher.dart';

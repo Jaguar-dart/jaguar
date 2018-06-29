@@ -116,7 +116,8 @@ class Jaguar extends Object with Muxable {
       });
 
   Future _handler(HttpRequest request) async {
-    final ctx = new Context(new Request(request), sessionManager, log);
+    final ctx =
+        new Context(new Request(request), sessionManager, log, userFetchers);
     ctx.prefix = basePath;
 
     try {
@@ -180,4 +181,6 @@ class Jaguar extends Object with Muxable {
 
   /// Create a new route group
   GroupBuilder group([String path = '']) => new GroupBuilder(this, path: path);
+
+  final userFetchers = <Type, UserFetcher<AuthorizationUser>>{};
 }

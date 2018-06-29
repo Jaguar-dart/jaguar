@@ -6,7 +6,7 @@ typedef FutureOr<void> ExceptionHandler<ET>(
 
 /// Prototype of route interceptor function that can run before or after the
 /// route handler. The return value will be ignored.
-typedef FutureOr<dynamic> RouteInterceptor(Context ctx);
+typedef FutureOr<void> RouteInterceptor(Context ctx);
 
 /// Prototype for Route handler
 typedef FutureOr<RespType> RouteHandler<RespType>(Context ctx);

@@ -1,6 +1,7 @@
 /// The parent HTTP library that exposes all the constituting libraries.
 library jaguar.src.http;
 
+export 'auth/fetcher.dart';
 export 'context/context.dart';
 export 'interceptor/interceptor.dart';
 export 'mux/mux.dart';

@@ -6,6 +6,7 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_auth/jaguar_auth.dart';
 
 import '../../model/model.dart';
+
 import '../../model/auth_model_manager.dart';
 
 final Map<String, Book> _books = {
@@ -17,9 +18,7 @@ final Map<String, Book> _books = {
 @Controller()
 class AuthRoutes {
   @PostJson(path: '/login')
-  @Intercept(const [
-    const BasicAuth(WhiteListUserFetcher.userFetcher)
-  ]) // Wrap basic authenticator
+  @Intercept(const [const BasicAuth<User>()]) // Wrap basic authenticator
   User login(Context ctx) => ctx.getVariable<User>();
 
   @Post(path: '/logout')
@@ -30,7 +29,7 @@ class AuthRoutes {
 }
 
 @Controller(path: '/book')
-@Intercept(const [const Authorizer(WhiteListUserFetcher.userFetcher)])
+@Intercept(const [const Authorizer<User>()])
 class StudentRoutes {
   @GetJson()
   List<Book> getAllBooks(Context ctx) => _books.values.toList();
@@ -52,7 +51,10 @@ class LibraryApi {
   final books = new StudentRoutes();
 }
 
-server() async {
-  final server = new Jaguar(port: 10000)..add(reflect(new LibraryApi()));
+main() async {
+  final server = new Jaguar(port: 10000);
+  server.add(reflect(new LibraryApi()));
+  server.userFetchers[User] = const DummyFetcher();
+  // server.log.onRecord.listen(print);
   await server.serve();
 }

@@ -17,7 +17,7 @@ final Map<String, Book> _books = {
 @Controller()
 class AuthRoutes {
   @PostJson(path: '/login')
-  @Intercept(const [const FormAuth(WhiteListUserFetcher.userFetcher)])
+  @Intercept(const [const FormAuth<User>()])
   User login(Context ctx) => ctx.getVariable<User>();
 
   @Post(path: '/logout')
@@ -28,7 +28,7 @@ class AuthRoutes {
 }
 
 @Controller(path: '/book')
-@Intercept(const [const Authorizer(WhiteListUserFetcher.userFetcher)])
+@Intercept(const [const Authorizer<User>()])
 class StudentRoutes {
   @GetJson()
   List<Book> getAllBooks(Context ctx) => _books.values.toList();
@@ -52,5 +52,6 @@ class LibraryApi {
 
 server() async {
   final server = new Jaguar(port: 10000)..add(reflect(new LibraryApi()));
+  server.userFetchers[User] = const DummyFetcher();
   await server.serve();
 }

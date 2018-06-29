@@ -12,11 +12,11 @@ class RedirectExampleApi {
   String getBookById(Context ctx) => "Hey there!";
 
   /// Simple redirect
-  @Get(path: '/redirectme', statusCode: HttpStatus.MOVED_PERMANENTLY)
+  @Get(path: '/redirectme', statusCode: HttpStatus.movedPermanently)
   Uri redirectMe(Context ctx) => new Uri(path: '/api/tome');
 
   /// Simple redirect
-  @Get(path: '/redirectme/withquery', statusCode: HttpStatus.MOVED_PERMANENTLY)
+  @Get(path: '/redirectme/withquery', statusCode: HttpStatus.movedPermanently)
   Uri redirectWithQuery(Context ctx) =>
       new Uri(path: '/api/tome', queryParameters: {'hello': 'dart'});
 }

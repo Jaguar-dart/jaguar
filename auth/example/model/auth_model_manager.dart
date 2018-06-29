@@ -1,5 +1,4 @@
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_auth/jaguar_auth.dart';
 
 import 'model.dart';
 
@@ -9,13 +8,11 @@ final Map<String, User> users = {
 };
 
 /// Model manager to authenticate against a static list of user models
-class WhiteListUserFetcher implements UserFetcher<User> {
-  const WhiteListUserFetcher();
+class DummyFetcher implements UserFetcher<User> {
+  const DummyFetcher();
 
-  User getByAuthenticationId(Context ctx, String username) => users.values
+  User byAuthenticationId(Context ctx, String username) => users.values
       .firstWhere((model) => model.username == username, orElse: () => null);
 
-  User getByAuthorizationId(Context ctx, String id) => users[id];
-
-  static const WhiteListUserFetcher userFetcher = const WhiteListUserFetcher();
+  User byAuthorizationId(Context ctx, String id) => users[id];
 }

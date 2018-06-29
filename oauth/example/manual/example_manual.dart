@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_oauth/jaguar_oauth.dart';
 import 'package:oauth2/oauth2.dart';
+import 'package:jaguar_settings/jaguar_settings.dart';
 
 String get fbOauthKey => Settings.getString('facebook_oauth_key',
     settingsFilter: SettingsFilter.Env);

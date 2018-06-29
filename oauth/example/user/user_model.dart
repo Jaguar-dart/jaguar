@@ -5,6 +5,7 @@ import 'package:jaguar_oauth/jaguar_oauth.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:logging/logging.dart';
 import 'package:jaguar_facebook_client/jaguar_facebook_client.dart' as fb;
+import 'package:jaguar_settings/jaguar_settings.dart';
 
 class User {
   /// ID for the user in the database

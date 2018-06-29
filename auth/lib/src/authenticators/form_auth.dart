@@ -11,10 +11,10 @@ part of jaguar_auth.authenticators;
 ///
 /// Outputs ans Variables:
 /// The authenticated user model is injected into the context as input
-class FormAuth implements Interceptor {
+class FormAuth<UserModel extends PasswordUser> implements Interceptor {
   /// Model manager is used to fetch user model for the authentication request
   /// and authenticate against the password
-  final UserFetcher<PasswordUser> userFetcher;
+  final UserFetcher<UserModel> userFetcher;
 
   final Hasher hasher;
 
@@ -27,8 +27,9 @@ class FormAuth implements Interceptor {
   /// If set to false, session creation and update must be done manually
   final bool manageSession;
 
-  const FormAuth(this.userFetcher,
-      {this.authorizationIdKey: 'id',
+  const FormAuth(
+      {this.userFetcher,
+      this.authorizationIdKey: 'id',
       this.manageSession: true,
       this.hasher: const NoHasher()});
 
@@ -42,24 +43,25 @@ class FormAuth implements Interceptor {
 
     if (form is! Map<String, String>)
       throw new Response("Invalid request!",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     final String username = form['username'];
     final String password = form['password'] ?? '';
 
     if (username == null)
       throw new Response("Invalid request!",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
-    final subject = await userFetcher.getByAuthenticationId(ctx, username);
+    UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
+    final subject = await fetcher.byAuthenticationId(ctx, username);
 
     if (subject == null)
       throw new Response("User not found!",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     if (!hasher.verify(password, subject.password))
       throw new Response("Invalid password",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     if (manageSession is bool && manageSession) {
       final Session session = await ctx.session;
@@ -73,16 +75,18 @@ class FormAuth implements Interceptor {
     ctx.addVariable(subject);
   }
 
-  static Future<ModelType> authenticate<ModelType extends PasswordUser>(
-      Context ctx, UserFetcher userFetcher,
-      {String authorizationIdKey: 'id',
+  static Future<UserModel> authenticate<UserModel extends PasswordUser>(
+      Context ctx,
+      {UserFetcher<UserModel> userFetcher,
+      String authorizationIdKey: 'id',
       bool manageSession: true,
       Hasher hasher: const NoHasher()}) async {
-    await new FormAuth(userFetcher,
+    await new FormAuth<UserModel>(
+            userFetcher: userFetcher,
             authorizationIdKey: authorizationIdKey,
             manageSession: manageSession,
             hasher: hasher)
         .call(ctx);
-    return ctx.getVariable<ModelType>();
+    return ctx.getVariable<UserModel>();
   }
 }

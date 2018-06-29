@@ -12,10 +12,10 @@ part of jaguar_auth.authenticators;
 ///
 /// Outputs ans Variables:
 /// The authenticated user model is injected into the context as input
-class BasicAuth implements Interceptor {
+class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
   /// Model manager is used to fetch user model for the authentication request
   /// and authenticate against the password
-  final UserFetcher<PasswordUser> userFetcher;
+  final UserFetcher<UserModel> userFetcher;
 
   final Hasher hasher;
 
@@ -28,8 +28,9 @@ class BasicAuth implements Interceptor {
   /// If set to false, session creation and update must be done manually
   final bool manageSession;
 
-  const BasicAuth(this.userFetcher,
-      {this.authorizationIdKey: 'id',
+  const BasicAuth(
+      {this.userFetcher,
+      this.authorizationIdKey: 'id',
       this.manageSession: true,
       this.hasher: const NoHasher()});
 
@@ -59,7 +60,8 @@ class BasicAuth implements Interceptor {
       password = "";
     }
 
-    final subject = await userFetcher.getByAuthenticationId(ctx, username);
+    UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
+    final subject = await fetcher.byAuthenticationId(ctx, username);
 
     if (subject == null)
       throw new Response("User not found!",
@@ -91,15 +93,18 @@ class BasicAuth implements Interceptor {
 
   static const kBasicAuthScheme = 'Basic';
 
-  static Future<ModelType> authenticate<ModelType extends PasswordUser>(
-      Context ctx, UserFetcher userFetcher,
-      {String authorizationIdKey: 'id',
+  static Future<UserModel> authenticate<UserModel extends PasswordUser>(
+      Context ctx,
+      {UserFetcher<UserModel> userFetcher,
+      String authorizationIdKey: 'id',
       bool manageSession: true,
       Hasher hasher: const NoHasher()}) async {
-    await new BasicAuth(userFetcher,
-        authorizationIdKey: authorizationIdKey,
-        manageSession: manageSession,
-        hasher: hasher).call(ctx);
-    return ctx.getVariable<ModelType>();
+    await new BasicAuth<UserModel>(
+            userFetcher: userFetcher,
+            authorizationIdKey: authorizationIdKey,
+            manageSession: manageSession,
+            hasher: hasher)
+        .call(ctx);
+    return ctx.getVariable<UserModel>();
   }
 }

@@ -77,7 +77,9 @@ class Context {
     return _query;
   }
 
-  final SessionManager _sessionManager;
+  SessionManager sessionManager;
+
+  final Map<Type, UserFetcher<AuthorizationUser>> userFetchers;
 
   Session _session;
 
@@ -96,18 +98,12 @@ class Context {
   ///       session['item'] = ctx.pathParams.item;
   ///       // ...
   ///     });
-  Future<Session> get session async {
-    if (_session == null) {
-      _session = await _sessionManager.parse(this);
-    }
-    return this._session;
-  }
+  Future<Session> get session async =>
+      _session ??= await sessionManager.parse(this);
 
   final Logger log;
 
-  final List<String> debugMsgs = <String>[];
-
-  Context(this.req, this._sessionManager, this.log,
+  Context(this.req, this.sessionManager, this.log, this.userFetchers,
       {this.beforeGlobal: const [], this.afterGlobal: const []});
 
   final _variables = <Type, Map<String, dynamic>>{};
