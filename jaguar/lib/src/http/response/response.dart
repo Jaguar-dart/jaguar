@@ -1,150 +1,91 @@
 library jaguar.src.http.response;
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert' as cnv;
-import 'package:path/path.dart' as p;
+import 'dart:io';
+
 import 'package:jaguar/src/annotations/import.dart';
+import 'package:path/path.dart' as p;
 
 part 'headers.dart';
 
-class StrResponse implements Response<String> {
-  /// Value or body of the HTTP response
-  String value;
-
-  /// Status code of the HTTP response
-  int statusCode;
-
-  /// HTTP headers
-  final JaguarHttpHeaders headers = new JaguarHttpHeaders();
-
-  /// HTTP cookies
-  final List<Cookie> cookies = [];
-
-  StrResponse(this.value,
-      {this.statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType,
-      String charset}) {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-
-    if (mimeType != null) this.headers.mimeType = mimeType;
-    if (charset != null) this.headers.charset = charset;
-  }
+class StrResponse extends Response<String> {
+  StrResponse(String value,
+      {int statusCode: 200,
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset})
+      : super(
+    value,
+    statusCode: statusCode,
+    headers: headers,
+    mimeType: mimeType,
+    charset: charset,
+  );
 
   /// Encodes the given value to JSON and returns a `Response`
   StrResponse.json(dynamic value,
-      {this.statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType: 'application/json',
-      String charset}) {
-    this.value = cnv.json.encode(value);
+      {statusCode: 200,
+        Map<String, dynamic> headers: const {},
+        String mimeType: 'application/json',
+        String charset})
+      : this(
+    cnv.json.encode(value),
+    statusCode: statusCode,
+    headers: headers,
+    mimeType: mimeType,
+    charset: charset,
+  );
+}
 
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
+class ByteResponse extends Response<List<int>> {
+  ByteResponse(List<int> value,
+      {statusCode: 200,
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset})
+      : super(value,
+      statusCode: statusCode,
+      headers: headers,
+      mimeType: mimeType,
+      charset: charset);
 
-    if (mimeType != null) this.headers.mimeType = mimeType;
-    if (charset != null) this.headers.charset = charset;
-  }
-
-  /// Writes body of the HTTP response from [value] property
-  Future<void> writeResponse(HttpResponse resp) async {
-    resp.statusCode = statusCode;
-
-    for (dynamic name in headers.keys) {
-      resp.headers.set(name, headers.headers[name]);
-    }
-
-    resp.cookies.addAll(cookies);
-    resp.write(value);
+  @override
+  Future writeValue(HttpResponse resp) async {
+    await resp.add(value);
   }
 }
 
-class ByteResponse implements Response<List<int>> {
-  /// Value or body of the HTTP response
-  List<int> value;
+class StreamResponse extends Response<Stream<List<int>>> {
+  StreamResponse(Stream<List<int>> value,
+      {statusCode: 200,
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset})
+      : super(value,
+      statusCode: statusCode,
+      headers: headers,
+      mimeType: mimeType,
+      charset: charset);
 
-  /// Status code of the HTTP response
-  int statusCode;
-
-  /// HTTP headers
-  final JaguarHttpHeaders headers = new JaguarHttpHeaders();
-
-  /// HTTP cookies
-  final List<Cookie> cookies = [];
-
-  ByteResponse(this.value,
-      {this.statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType,
-      String charset}) {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-
-    if (mimeType != null) this.headers.mimeType = mimeType;
-    if (charset != null) this.headers.charset = charset;
-  }
-
-  /// Writes body of the HTTP response from [value] property
-  Future<void> writeResponse(HttpResponse resp) async {
-    resp.statusCode = statusCode;
-
-    for (dynamic name in headers.keys) {
-      resp.headers.set(name, headers.headers[name]);
-    }
-
-    resp.cookies.addAll(cookies);
-    resp.add(value);
-  }
-}
-
-class StreamResponse implements Response<Stream<List<int>>> {
-  /// Value or body of the HTTP response
-  Stream<List<int>> value;
-
-  /// Status code of the HTTP response
-  int statusCode;
-
-  /// HTTP headers
-  final JaguarHttpHeaders headers = new JaguarHttpHeaders();
-
-  /// HTTP cookies
-  final List<Cookie> cookies = [];
-
-  StreamResponse(this.value,
-      {this.statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType,
-      String charset}) {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-
-    if (mimeType != null) this.headers.mimeType = mimeType;
-    if (charset != null) this.headers.charset = charset;
-  }
-
-  /// Writes body of the HTTP response from [value] property
-  Future<void> writeResponse(HttpResponse resp) {
-    resp.statusCode = statusCode;
-
-    for (dynamic name in headers.keys) {
-      resp.headers.set(name, headers.headers[name]);
-    }
-
-    resp.cookies.addAll(cookies);
-    return resp.addStream(value);
-  }
+  StreamResponse.fromFile(File file,
+      {statusCode: 200,
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset})
+      : this(
+    file.openRead(),
+    statusCode: statusCode,
+    headers: headers,
+    mimeType: mimeType = MimeType.ofFile(file),
+    charset: charset,
+  );
 
   static Future<StreamResponse> fromPath(String path,
       {int statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType,
-      String charset}) async {
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset}) async {
     final file = new File(path);
     if (!await file.exists()) {
       // TODO
@@ -157,86 +98,61 @@ class StreamResponse implements Response<Stream<List<int>>> {
         charset: charset);
   }
 
-  StreamResponse.fromFile(File file,
-      {this.statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType,
-      String charset}) {
-    value = file.openRead();
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-
-    if (mimeType != null) {
-      this.headers.mimeType = mimeType;
-    } else {
-      this.headers.mimeType = MimeType.ofFile(file);
-    }
-    if (charset != null) this.headers.charset = charset;
+  @override
+  Future writeValue(HttpResponse resp) async {
+    await resp.addStream(value);
   }
 }
 
-class Redirect implements Response<Uri> {
-  /// Value or body of the HTTP response
-  Uri value;
+class Redirect extends Response<Uri> {
+  Redirect(Uri value,
+      {statusCode: HttpStatus.MOVED_PERMANENTLY,
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset})
+      : super(value,
+      statusCode: statusCode,
+      headers: headers,
+      mimeType: mimeType,
+      charset: charset);
 
-  /// Status code of the HTTP response
-  int statusCode;
+  Redirect.found(value,
+      {Map<String, dynamic> headers: const {},
+        statusCode = HttpStatus.MOVED_TEMPORARILY})
+      : this(
+    value,
+    headers: headers,
+    statusCode: statusCode,
+  );
 
-  /// HTTP headers
-  final JaguarHttpHeaders headers = new JaguarHttpHeaders();
+  Redirect.seeOther(value,
+      {Map<String, dynamic> headers: const {},
+        statusCode = HttpStatus.SEE_OTHER})
+      : this(
+    value,
+    headers: headers,
+    statusCode: statusCode,
+  );
 
-  /// HTTP cookies
-  final List<Cookie> cookies = [];
+  Redirect.temporaryRedirect(value,
+      {Map<String, dynamic> headers: const {},
+        statusCode = HttpStatus.TEMPORARY_REDIRECT})
+      : this(
+    value,
+    headers: headers,
+    statusCode: statusCode,
+  );
 
-  Redirect(this.value,
-      {this.statusCode: HttpStatus.movedPermanently,
-      Map<String, dynamic> headers: const {}}) {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-  }
+  Redirect.permanentRedirect(value,
+      {Map<String, dynamic> headers: const {}, statusCode = 308})
+      : this(
+    value,
+    headers: headers,
+    statusCode: statusCode,
+  );
 
-  Redirect.found(this.value, {Map<String, dynamic> headers: const {}})
-      : statusCode = HttpStatus.movedTemporarily {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-  }
-
-  Redirect.seeOther(this.value, {Map<String, dynamic> headers: const {}})
-      : statusCode = HttpStatus.seeOther {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-  }
-
-  Redirect.temporaryRedirect(this.value,
-      {Map<String, dynamic> headers: const {}})
-      : statusCode = HttpStatus.temporaryRedirect {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-  }
-
-  Redirect.permanentRedirect(this.value,
-      {Map<String, dynamic> headers: const {}})
-      : statusCode = 308 {
-    for (final String name in headers.keys) {
-      this.headers.add(name, headers[name]);
-    }
-  }
-
-  /// Writes body of the HTTP response from [value] property
-  Future<void> writeResponse(HttpResponse resp) async {
-    resp.statusCode = statusCode;
-
-    for (dynamic name in headers.keys) {
-      resp.headers.set(name, headers.headers[name]);
-    }
-
-    resp.cookies.addAll(cookies);
-
+  @override
+  Future writeValue(HttpResponse resp) async {
     await resp.redirect(value, status: statusCode);
   }
 }
@@ -262,10 +178,10 @@ class Response<ValueType> {
   final List<Cookie> cookies = [];
 
   Response(this.value,
-      {this.statusCode: 200,
-      Map<String, dynamic> headers: const {},
-      String mimeType,
-      String charset}) {
+      {this.statusCode,
+        Map<String, dynamic> headers: const {},
+        String mimeType,
+        String charset}) {
     for (final String name in headers.keys) {
       this.headers.add(name, headers[name]);
     }
@@ -303,8 +219,11 @@ class Response<ValueType> {
     }
 
     resp.cookies.addAll(cookies);
+    await writeValue(resp);
+  }
 
-    resp.write(value?.toString());
+  Future writeValue(HttpResponse resp) async {
+    resp.write(value);
   }
 }
 

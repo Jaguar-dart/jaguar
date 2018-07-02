@@ -24,9 +24,9 @@ class DefaultErrorWriter implements ErrorWriter {
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
-      final resp = new Response<String>(_write404Html(ctx),
-          statusCode: HttpStatus.notFound);
-      resp.headers.contentType = ContentType.html;
+      final resp = new StrResponse(_write404Html(ctx),
+          statusCode: HttpStatus.NOT_FOUND);
+      resp.headers.contentType = ContentType.HTML;
       ctx.response = resp;
       return;
     } else if (acceptList.contains('application/json') ||
@@ -46,9 +46,9 @@ class DefaultErrorWriter implements ErrorWriter {
       return;
     } */
     else {
-      ctx.response = new Response<String>(_write404Html(ctx),
-          statusCode: HttpStatus.notFound)
-        ..headers.contentType = ContentType.html;
+      ctx.response = new StrResponse(_write404Html(ctx),
+          statusCode: HttpStatus.NOT_FOUND)
+        ..headers.contentType = ContentType.HTML;
       return;
     }
   }
@@ -61,9 +61,9 @@ class DefaultErrorWriter implements ErrorWriter {
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
-      final resp = new Response<String>(_write500Html(ctx, error, stack),
-          statusCode: HttpStatus.notFound);
-      resp.headers.contentType = ContentType.html;
+      final resp = new StrResponse(_write500Html(ctx, error, stack),
+          statusCode: HttpStatus.NOT_FOUND);
+      resp.headers.contentType = ContentType.HTML;
       ctx.response = resp;
       return;
     } else if (acceptList.contains('application/json') ||
@@ -85,7 +85,7 @@ class DefaultErrorWriter implements ErrorWriter {
       return Response.xml(data, statusCode: 500);
     } */
     else {
-      final resp = new Response<String>(_write500Html(ctx, error, stack),
+      final resp = new StrResponse(_write500Html(ctx, error, stack),
           statusCode: 500);
       resp.headers.contentType = ContentType.html;
       ctx.response = resp;
