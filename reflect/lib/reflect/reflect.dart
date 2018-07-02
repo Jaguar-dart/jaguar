@@ -113,7 +113,8 @@ class ReflectedController implements RequestHandler {
     final List<HttpMethod> routes = decl.metadata
         .where((InstanceMirror annot) => annot.reflectee is HttpMethod)
         .map((InstanceMirror annot) => annot.reflectee)
-        .toList().cast<HttpMethod>();
+        .toList()
+        .cast<HttpMethod>();
     if (routes.length == 0) return;
 
     final List<RouteInterceptor> before = topBefore.toList()
@@ -133,6 +134,18 @@ class ReflectedController implements RequestHandler {
     }
   }
 
+  RouteInterceptor extractInterceptor(InstanceMirror im, dynamic ic) {
+    if (ic is Symbol) {
+      return (Context ctx) => im.invoke(ic, [ctx]);
+    } else if (ic is RouteInterceptor) {
+      return ic;
+    } else if (ic is Interceptor) {
+      return ic;
+    } else {
+      throw new Exception('Not an interceptor: $ic!');
+    }
+  }
+
   /// Detects interceptor wrappers on a method or function
   List<RouteInterceptor> _detectBefore(
       InstanceMirror im, List<InstanceMirror> annots) {
@@ -141,13 +154,7 @@ class ReflectedController implements RequestHandler {
     for (InstanceMirror annot in annots) {
       dynamic ref = annot.reflectee;
       if (ref is Intercept) {
-        for (dynamic ic in ref.before) {
-          if (ic is Symbol) {
-            wrappers.add((Context ctx) => im.invoke(ic, [ctx]));
-          } else {
-            wrappers.add(ic);
-          }
-        }
+        for (dynamic ic in ref.before) wrappers.add(extractInterceptor(im, ic));
       }
     }
 
@@ -155,27 +162,16 @@ class ReflectedController implements RequestHandler {
   }
 
   /// Detects interceptor wrappers on a method or function
-  List<RouteInterceptor> _detectAfter(InstanceMirror im, List<InstanceMirror> annots) {
+  List<RouteInterceptor> _detectAfter(
+      InstanceMirror im, List<InstanceMirror> annots) {
     final wrappers = <RouteInterceptor>[];
 
     for (InstanceMirror annot in annots) {
       dynamic ref = annot.reflectee;
       if (ref is Intercept) {
-        for (dynamic ic in ref.after) {
-          if (ic is Symbol) {
-            wrappers.add((Context ctx) => im.invoke(ic, [ctx]));
-          } else {
-            wrappers.add(ic);
-          }
-        }
+        for (dynamic ic in ref.after) wrappers.add(extractInterceptor(im, ic));
       } else if (ref is After) {
-        for (dynamic ic in ref.after) {
-          if (ic is Symbol) {
-            wrappers.add((Context ctx) => im.invoke(ic, [ctx]));
-          } else {
-            wrappers.add(ic);
-          }
-        }
+        for (dynamic ic in ref.after) wrappers.add(extractInterceptor(im, ic));
       }
     }
 

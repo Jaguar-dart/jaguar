@@ -207,13 +207,6 @@ class Response<ValueType> {
     headers.charset = route.charset;
   }
 
-  /// Returns a `Response` object that performs a redirect
-  static Response<Uri> redirect(Uri uri,
-      {int statusCode: HttpStatus.MOVED_PERMANENTLY}) =>
-      new Redirect(uri);
-
-  // TODO XML
-
   /// Writes body of the HTTP response from [value] property
   ///
   /// Different [ValueTypes] are differently when they are written

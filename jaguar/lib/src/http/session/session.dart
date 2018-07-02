@@ -4,7 +4,6 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:meta/meta.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:jaguar/src/http/context/context.dart';
@@ -70,7 +69,7 @@ class Session {
   ///       final String oldItem = session['item'];
   ///       // ...
   ///     });
-  String operator [](@checked String key) => _data[key];
+  String operator [](String key) => _data[key];
 
   /// Set session [value] by [key]
   ///
@@ -115,7 +114,7 @@ class Session {
   ///       session.remove('item');
   ///       // ...
   ///     });
-  String remove(@checked String key) {
+  String remove(String key) {
     needsUpdate = true;
     return _data.remove(key);
   }

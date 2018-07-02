@@ -18,3 +18,4 @@ dev_dependencies:
   test: '>=0.12.0 <0.13.0'
   jaguar_facebook_client: '>=0.0.4 <0.1.0'
   jaguar_reflect:
+  jaguar_settings:

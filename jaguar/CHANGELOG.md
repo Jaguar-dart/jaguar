@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.10
+
++ Dart2 fixes in `bodyAsFormData`
+
+## 2.1.9
+
++ `Route` handling bug fix
++ `Route`'s `before`, `after`, `onException` constructor initialization
+bug fix
+
 ## 2.1.6
 
 + Moved `Settings` to `jaguar_settings` package

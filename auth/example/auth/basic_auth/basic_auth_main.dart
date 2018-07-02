@@ -2,10 +2,10 @@ library example.simple;
 
 import 'dart:io';
 import 'client.dart';
-import 'server.dart';
+import 'server.dart' as server;
 
 main() async {
-  await server();
+  await server.main();
 
   await runClient();
 

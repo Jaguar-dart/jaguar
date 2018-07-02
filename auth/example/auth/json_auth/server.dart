@@ -17,7 +17,7 @@ final Map<String, Book> _books = {
 @Controller()
 class AuthRoutes {
   @PostJson(path: '/login')
-  @Intercept(const [const JsonAuth(WhiteListUserFetcher.userFetcher)])
+  @Intercept(const [const JsonAuth<User>()])
   User login(Context ctx) => ctx.getVariable<User>();
 
   @Post(path: '/logout')
@@ -33,7 +33,7 @@ class StudentRoutes {
   @GetJson()
   Future<List<Book>> getAllBooks(Context ctx) async {
     // Authorize. Throws 401 http error, if authorization fails!
-    await Authorizer.authorize(ctx, WhiteListUserFetcher.userFetcher);
+    await Authorizer.authorize<User>(ctx);
 
     return _books.values.toList();
   }
@@ -41,7 +41,7 @@ class StudentRoutes {
   @GetJson(path: '/:id')
   Future<Book> getBook(Context ctx) async {
     // Authorize. Throws 401 http error, if authorization fails!
-    await Authorizer.authorize(ctx, WhiteListUserFetcher.userFetcher);
+    await Authorizer.authorize<User>(ctx);
 
     String id = ctx.pathParams.get('id');
     return _books[id];
@@ -59,5 +59,6 @@ class LibraryApi {
 
 server() async {
   final server = new Jaguar(port: 10000)..add(reflect(new LibraryApi()));
+  server.userFetchers[User] = const DummyFetcher();
   await server.serve();
 }

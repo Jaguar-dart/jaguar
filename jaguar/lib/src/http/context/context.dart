@@ -77,7 +77,9 @@ class Context {
     return _query;
   }
 
-  final SessionManager _sessionManager;
+  SessionManager sessionManager;
+
+  final Map<Type, UserFetcher<AuthorizationUser>> userFetchers;
 
   Session _session;
 
@@ -96,18 +98,12 @@ class Context {
   ///       session['item'] = ctx.pathParams.item;
   ///       // ...
   ///     });
-  Future<Session> get session async {
-    if (_session == null) {
-      _session = await _sessionManager.parse(this);
-    }
-    return this._session;
-  }
+  Future<Session> get session async =>
+      _session ??= await sessionManager.parse(this);
 
   final Logger log;
 
-  final List<String> debugMsgs = <String>[];
-
-  Context(this.req, this._sessionManager, this.log,
+  Context(this.req, this.sessionManager, this.log, this.userFetchers,
       {this.beforeGlobal: const [], this.afterGlobal: const []});
 
   final _variables = <Type, Map<String, dynamic>>{};
@@ -289,12 +285,11 @@ class Context {
         final field = new StringFormField(name, data, contentType: contentType);
         ret[field.name] = field;
       } else if (multipart.isText) {
-        final field = new TextFileFormField(name, multipart as Stream<String>,
+        final field = new TextFileFormField(name, multipart.cast<String>(),
             contentType: contentType, filename: fn);
         ret[field.name] = field;
       } else {
-        final field = new BinaryFileFormField(
-            name, multipart as Stream<List<int>>,
+        final field = new BinaryFileFormField(name, multipart.cast<List<int>>(),
             contentType: contentType, filename: fn);
         ret[field.name] = field;
       }
@@ -334,7 +329,7 @@ class Context {
   String authHeader(String scheme) {
     if (_authHeader == null) {
       _authHeader = new AuthHeaders.fromHeaderStr(
-          req.headers.value(HttpHeaders.AUTHORIZATION));
+          req.headers.value(HttpHeaders.authorizationHeader));
     }
     return _authHeader.items[scheme]?.credentials;
   }

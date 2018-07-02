@@ -11,9 +11,5 @@ main() async {
       .body
       .then(print);
 
-  await resty
-      .get('http://localhost:10000/api/path/123')
-      .go()
-      .body
-      .then(print);
+  await resty.get('http://localhost:10000/api/path/123').go().body.then(print);
 }

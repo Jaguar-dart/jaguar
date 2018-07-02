@@ -34,7 +34,7 @@ runClient() async {
   await client.get(basePath + '/api/book/0').expect([statusCodeIs(401)]);
 
   // Login with wrong username:password
-  final JsonResponse resp = await client
+  await client
       .authenticate(new AuthPayload('teja', 'wrong password'),
           url: basePath + '/api/login')
       .expect([statusCodeIs(401)]);

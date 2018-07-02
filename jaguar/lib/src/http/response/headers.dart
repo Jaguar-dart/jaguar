@@ -84,11 +84,11 @@ class JaguarHttpHeaders {
   /// Gets and sets the content type
   set contentType(ContentType contentType) {
     if (contentType == null) return;
-    set(HttpHeaders.CONTENT_TYPE, contentType.toString());
+    set(HttpHeaders.contentTypeHeader, contentType.toString());
   }
 
   ContentType get contentType {
-    String str = value(HttpHeaders.CONTENT_TYPE);
+    String str = value(HttpHeaders.contentTypeHeader);
     if (str is! String) return null;
     return ContentType.parse(str);
   }
@@ -124,7 +124,7 @@ class JaguarHttpHeaders {
     if (contentType == null) {
       if (charset != null && charset.isNotEmpty) {
         this.contentType = new ContentType(
-            ContentType.TEXT.primaryType, ContentType.TEXT.subType,
+            ContentType.text.primaryType, ContentType.text.subType,
             charset: charset);
       }
     } else {
