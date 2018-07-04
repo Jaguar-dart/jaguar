@@ -3,7 +3,6 @@ library test.jaguar.response.json;
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 class _Info {
@@ -34,10 +33,10 @@ void main() {
         ..getJson('/response_processor/nums', (Context ctx) => <int>[1, 2, 3])
         ..get(
             '/strresponse/podo',
-            (Context ctx) => new StrResponse.json(
+            (Context ctx) => Response.json(
                 new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity'])))
         ..get('/strresponse/nums',
-            (Context ctx) => new StrResponse.json(<int>[1, 2, 3]));
+            (Context ctx) => Response.json(<int>[1, 2, 3]));
       await server.serve();
     });
 

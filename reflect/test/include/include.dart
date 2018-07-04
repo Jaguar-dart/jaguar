@@ -15,7 +15,7 @@ void aft1(Context ctx) => ctx.addVariable(ctx.getVariable<int>() + 5);
 
 void aft2(Context ctx) => ctx.addVariable(ctx.getVariable<int>() + 2);
 
-void onExcept1(Context ctx, dynamic e, s) => throw StrResponse(e.toString());
+void onExcept1(Context ctx, dynamic e, s) => throw Response(e.toString());
 
 void progBef(Context ctx) {
   ctx.addVariable(5);

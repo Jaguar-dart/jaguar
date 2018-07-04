@@ -1,6 +1,7 @@
-part of jaguar.src.http.response;
+import 'dart:io';
 
 /// Class to hold HTTP headers
+// TODO change name to ResponseHeaders?
 class JaguarHttpHeaders {
   final Map<String, List<String>> headers = {};
 

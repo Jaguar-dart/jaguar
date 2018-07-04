@@ -30,7 +30,7 @@ class ExampleController {
   Map deleteJson(_) => {'method': 'delete'};
 
   @HttpMethod(path: '/setResponse', methods: const <String>['GET'])
-  void hello(Context ctx) => ctx.response = new StrResponse('Hello world!');
+  void hello(Context ctx) => ctx.response = Response('Hello world!');
 
   @Get(path: '/returnResponse')
   Response<int> returnResponse(Context ctx) => new Response(5);

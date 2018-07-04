@@ -24,7 +24,7 @@ class MathController {
       new Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']);
 
   @Get(path: '/grizzly')
-  StrResponse grizzly(Context ctx) => new StrResponse.json(
+  Response grizzly(Context ctx) => Response.json(
       new Info('Grizzly', ['Visualization', 'No for loops', 'Data learning']));
 }
 

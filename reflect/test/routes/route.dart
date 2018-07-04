@@ -9,7 +9,7 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 @Controller()
 class ExampleController {
   @HttpMethod(path: '/hello', methods: const <String>['GET'])
-  void hello(Context ctx) => ctx.response = new StrResponse('Hello world!');
+  void hello(Context ctx) => ctx.response = Response('Hello world!');
 
   @Get(path: '/returnValue')
   String returnValue(Context ctx) => 'Hello world, Champ!';

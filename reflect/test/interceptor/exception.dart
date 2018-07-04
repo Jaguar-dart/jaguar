@@ -9,7 +9,7 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 
 final Random rand = new Random.secure();
 
-void handleException(Context ctx, e, s) => throw new StrResponse('exception');
+void handleException(Context ctx, e, s) => throw Response('exception');
 
 @Controller()
 class ExampleController {

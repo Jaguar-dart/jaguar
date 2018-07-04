@@ -142,12 +142,16 @@ class Jaguar extends Object with Muxable {
 
     try {
       // Update session, if required.
-      if (ctx.sessionNeedsUpdate) await sessionManager.write(ctx);
+      if (ctx.sessionNeedsUpdate) {
+        dynamic mightBeFuture = sessionManager.write(ctx);
+        if (mightBeFuture is Future) await mightBeFuture;
+      }
     } catch (_) {}
 
     // Write response
     try {
-      await ctx.response.writeResponse(request.response);
+      dynamic mightBeFuture = ctx.response.writeResponse(request.response);
+      if (mightBeFuture is Future) await mightBeFuture;
     } catch (_) {}
 
     return request.response.close();

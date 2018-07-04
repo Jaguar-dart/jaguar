@@ -13,7 +13,7 @@ void aft(Context ctx) {
 }
 
 void onExcept(Context ctx, e, s) {
-  throw new StrResponse('excepted');
+  throw Response('excepted');
 }
 
 @Controller(path: '/api')

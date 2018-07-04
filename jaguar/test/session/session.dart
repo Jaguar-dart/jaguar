@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'package:jaguar/jaguar.dart';
-import 'package:client_cookie/client_cookie.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:collection/collection.dart';

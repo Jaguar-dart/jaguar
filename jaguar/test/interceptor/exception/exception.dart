@@ -9,7 +9,7 @@ import 'package:jaguar/jaguar.dart';
 final Random rand = new Random.secure();
 
 void handleException(Context ctx, e, s) {
-  throw new StrResponse('exception');
+  throw Response('exception');
 }
 
 void main() {
