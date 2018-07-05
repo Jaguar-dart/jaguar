@@ -1,5 +1,5 @@
 name: jaguar_auth_mongo
-description: Jaguar AuthModelManager for MongoDb backend
+description: Jaguar authentication UserFetcher for MongoDb.
 version: 2.1.1
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
@@ -15,8 +15,8 @@ dependencies:
   jaguar: ^2.1.10
   jaguar_auth: ^2.1.1
   jaguar_common: ^0.2.2
-  mongo_dart: ^0.3.0
-  jaguar_serializer: ^0.5.1
+  mongo_dart: ^0.3.2
+  jaguar_serializer: ^2.1.8
   auth_header: ^0.0.3
   jaguar_mongo: ^2.1.1
 
