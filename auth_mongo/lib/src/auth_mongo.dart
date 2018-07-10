@@ -7,35 +7,28 @@ import 'dart:async';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mgo;
-import 'package:jaguar_auth/jaguar_auth.dart';
 import 'package:jaguar_serializer/jaguar_serializer.dart';
-import 'package:jaguar_mongo/jaguar_mongo.dart';
 
 class MgoUserManager<ModelType extends PasswordUser>
-    implements AuthModelManager<ModelType> {
+    implements UserFetcher<ModelType> {
   final String collection;
 
   final List<String> fieldNames;
 
   final Serializer<ModelType> serializer;
 
-  final Hasher hasher;
-
   MgoUserManager(this.serializer,
-      {Hasher hasher,
-      this.collection: 'user',
-      this.fieldNames: const ['username']})
-      : hasher = hasher ?? const NoHasher();
+      {this.collection: 'user', this.fieldNames: const ['username']});
 
-  Future<ModelType> fetchByAuthorizationId(Context ctx, String userId) async {
-    final Db db = ctx.getInterceptorResult<Db>(MongoDb);
+  Future<ModelType> byAuthorizationId(Context ctx, String userId) async {
+    final Db db = ctx.getVariable<Db>();
     final DbCollection col = db.collection(collection);
     Map map = await col.findOne(mgo.where.id(mgo.ObjectId.parse(userId)));
     return serializer.fromMap(map);
   }
 
-  Future<ModelType> fetchByAuthenticationId(Context ctx, String authId) async {
-    final Db db = ctx.getInterceptorResult<Db>(MongoDb);
+  Future<ModelType> byAuthenticationId(Context ctx, String authId) async {
+    final Db db = ctx.getVariable<Db>();
     final DbCollection col = db.collection(collection);
 
     for (String fieldName in fieldNames) {
@@ -45,20 +38,5 @@ class MgoUserManager<ModelType extends PasswordUser>
     }
 
     return null;
-  }
-
-  Future<ModelType> authenticate(
-      Context ctx, String userId, String password) async {
-    ModelType model = await fetchByAuthenticationId(ctx, userId);
-
-    if (model == null) {
-      return null;
-    }
-
-    if (!hasher.verify(password, model.password)) {
-      return null;
-    }
-
-    return model;
   }
 }

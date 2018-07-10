@@ -1,13 +1,13 @@
 name: jaguar_reflect
 description: Reflection based alternative for Jaguar
-version: 2.1.4
+version: 2.1.5
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
 homepage: http://jaguar-dart.github.io
 
 environment:
-  sdk: ">=2.0.0-dev.65.0 <3.0.0"
+  sdk: ">=2.0.0-dev.60.0 <3.0.0"
 
 dependencies:
   jaguar: ^2.1.12

@@ -1,10 +1,11 @@
 library model;
 
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:jaguar_common/jaguar_common.dart';
 import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:jaguar_serializer_mongo/jaguar_serializer_mongo.dart';
 
-part 'model.g.dart';
+part 'model.jser.dart';
 
 /// Model for Book
 class Book {
@@ -42,16 +43,12 @@ class User implements PasswordUser {
 }
 
 @GenSerializer(ignore: const ['loginId', 'loginPassword', 'authorizationId'])
-class UserSerializer extends Serializer<User> with _$UserSerializer {
-  User createModel() => new User();
-}
+class UserSerializer extends Serializer<User> with _$UserSerializer {}
 
 @GenSerializer(fields: const {
   'id': const EnDecode(alias: '_id', processor: const MongoId()),
 })
-class UserMgoSerializer extends Serializer<User> with _$UserMgoSerializer {
-  User createModel() => new User();
-}
+class UserMgoSerializer extends Serializer<User> with _$UserMgoSerializer {}
 
 final BookSerializer bookSerializer = new BookSerializer();
 
