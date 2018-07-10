@@ -3,5 +3,4 @@
 
 import 'package:jaguar_oauth_facebook/jaguar_oauth_facebook.dart';
 
-main() {
-}
+main() {}

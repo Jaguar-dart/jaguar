@@ -87,14 +87,14 @@ class JaguarOauth2 {
 
   JaguarOauth2(
       {this.key,
-        this.secret,
-        this.authorizationEndpoint,
-        this.tokenEndpoint,
-        this.scopes,
-        this.callback})
+      this.secret,
+      this.authorizationEndpoint,
+      this.tokenEndpoint,
+      this.scopes,
+      this.callback})
       : granter = new oauth2.AuthorizationCodeGrant(
-      key, Uri.parse(authorizationEndpoint), Uri.parse(tokenEndpoint),
-      secret: secret, basicAuth: false);
+            key, Uri.parse(authorizationEndpoint), Uri.parse(tokenEndpoint),
+            secret: secret, basicAuth: false);
 
   Uri _authorizationUrl;
 

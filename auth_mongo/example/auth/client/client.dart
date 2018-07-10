@@ -15,7 +15,7 @@ const int kPort = 10000;
 
 Future<Null> printHttpClientResponse(HttpClientResponse resp) async {
   StringBuffer contents = new StringBuffer();
-  await for (String data in resp.transform(UTF8.decoder)) {
+  await for (String data in resp.transform(utf8.decoder)) {
     contents.write(data);
   }
 
@@ -53,7 +53,7 @@ login() async {
       const Base64Codec.urlSafe().encode('teja:word'.codeUnits);
   auth.addItem(new AuthHeaderItem('Basic', credentials));
 
-  req.headers.add(HttpHeaders.AUTHORIZATION, auth.toString());
+  req.headers.add(HttpHeaders.authorizationHeader, auth.toString());
   HttpClientResponse resp = await req.close();
 
   for (Cookie cook in resp.cookies) {

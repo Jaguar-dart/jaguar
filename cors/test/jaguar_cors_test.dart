@@ -56,7 +56,10 @@ void main() {
     });
 
     test('OriginsMatch', () async {
-      await resty.get(baseUrl, '/origins').go().expect([resty.bodyIs('origins')]);
+      await resty
+          .get(baseUrl, '/origins')
+          .go()
+          .expect([resty.bodyIs('origins')]);
       await resty
           .get(baseUrl, '/origins')
           .header('Origin', 'http://example1.com')

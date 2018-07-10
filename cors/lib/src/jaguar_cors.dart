@@ -39,7 +39,7 @@ class Cors implements Interceptor {
     if (params.origin is! String) {
       if (!options.allowNonCorsRequests) {
         throw new Response('Only Cross origin requests are allowed!',
-            statusCode: HttpStatus.FORBIDDEN);
+            statusCode: HttpStatus.forbidden);
       }
       return;
     }
@@ -64,7 +64,7 @@ class Cors implements Interceptor {
 
     if (errorMsg != null) {
       throw new Response('Invalid CORS request: ' + errorMsg,
-          statusCode: HttpStatus.FORBIDDEN);
+          statusCode: HttpStatus.forbidden);
     }
   }
 

@@ -29,7 +29,7 @@ class AuthRoutes {
 }
 
 @Controller(path: '/book')
-@Intercept(const [const Authorizer<User>()])  // Wrap the authorizer
+@Intercept(const [const Authorizer<User>()]) // Wrap the authorizer
 class StudentRoutes {
   @GetJson()
   List<Book> getAllBooks(Context ctx) => _books.values.toList();

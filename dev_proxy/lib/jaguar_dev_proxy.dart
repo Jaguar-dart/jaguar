@@ -104,7 +104,7 @@ class PrefixedProxyServer implements RequestHandler {
 
     final requestUrl = _getTargetUrl(ctx.req.uri);
     final HttpClientRequest clientReq =
-    await _client.openUrl(ctx.req.method, requestUrl);
+        await _client.openUrl(ctx.req.method, requestUrl);
     clientReq.followRedirects = false;
 
     ctx.req.headers.forEach((String key, dynamic val) {
@@ -120,12 +120,12 @@ class PrefixedProxyServer implements RequestHandler {
     clientReq.add(await ctx.req.body);
     final HttpClientResponse clientResp = await clientReq.close();
 
-    if (clientResp.statusCode == HttpStatus.NOT_FOUND) {
+    if (clientResp.statusCode == HttpStatus.notFound) {
       return null;
     }
 
     final servResp =
-    new StreamResponse(clientResp, statusCode: clientResp.statusCode);
+        new StreamResponse(clientResp, statusCode: clientResp.statusCode);
 
     clientResp.headers.forEach((String key, dynamic val) {
       servResp.headers.add(key, val);
@@ -154,7 +154,7 @@ class PrefixedProxyServer implements RequestHandler {
     // than the destination server, if possible.
     if (clientResp.isRedirect && clientResp.headers.value('location') != null) {
       var location =
-      requestUrl.resolve(clientResp.headers.value('location')).toString();
+          requestUrl.resolve(clientResp.headers.value('location')).toString();
       if (p.url.isWithin(proxyBaseUrl.toString(), location)) {
         servResp.headers.set('location',
             '/' + p.url.relative(location, from: proxyBaseUrl.toString()));

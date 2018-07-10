@@ -11,6 +11,14 @@ abstract class FormField<T> {
   /// content-type of the field
   ContentType get contentType;
 
+  bool operator ==(other) {
+    if (other is FormField<T>)
+      return name == other.name &&
+          value == other.value &&
+          contentType == other.contentType;
+    return false;
+  }
+
   /// Hash code
   int get hashCode => name.hashCode;
 }

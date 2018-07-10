@@ -37,12 +37,15 @@ abstract class Do {
       final HttpMethod routeInfo) async {
     try {
       for (RouteInterceptor before in ctx.beforeGlobal) {
-        final res = before(ctx);
-        if (res is Future) await res;
+        final maybeFuture = before(ctx);
+        if (maybeFuture is Future) await maybeFuture;
       }
-      for (RouteInterceptor before in ctx.before) {
-        final res = before(ctx);
-        if (res is Future) await res;
+      {
+        var beforeList = ctx.before;
+        for (int i = 0; i < beforeList.length; i++) {
+          final maybeFuture = ctx.before[i](ctx);
+          if (maybeFuture is Future) await maybeFuture;
+        }
       }
 
       {
@@ -58,19 +61,20 @@ abstract class Do {
 
       for (int i = ctx.after.length - 1; i >= 0; i--) {
         RouteInterceptor after = ctx.after[i];
-        final res = after(ctx);
-        if (res is Future) await res;
+        final maybeFuture = after(ctx);
+        if (maybeFuture is Future) await maybeFuture;
       }
       for (int i = ctx.afterGlobal.length - 1; i >= 0; i--) {
         RouteInterceptor after = ctx.afterGlobal[i];
-        final res = after(ctx);
-        if (res is Future) await res;
+        final maybeFuture = after(ctx);
+        if (maybeFuture is Future) await maybeFuture;
       }
     } catch (e, s) {
       Response resp;
       for (int i = ctx.onException.length - 1; i >= 0; i--) {
         try {
-          await ctx.onException[i](ctx, e, s);
+          dynamic maybeFuture = ctx.onException[i](ctx, e, s);
+          if (maybeFuture != null) await maybeFuture;
         } catch (e) {
           if (e is Response) resp = e;
         }

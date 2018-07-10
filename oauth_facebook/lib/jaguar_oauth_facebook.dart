@@ -26,8 +26,8 @@ abstract class FbUserFetcher<UserModel extends FbUserModel>
     implements UserFetcher<UserModel> {
   Future<UserModel> getByFbId(String fbId);
 
-  Future<UserModel> setFbCredentials(String authorizationId, String fbId, String fbToken,
-      String fbRefreshToken);
+  Future<UserModel> setFbCredentials(String authorizationId, String fbId,
+      String fbToken, String fbRefreshToken);
 }
 
 class FbOauthConfig {
@@ -81,7 +81,7 @@ class FbAuthenticator extends Interceptor {
 
     if (subject == null)
       throw new Response("Account for facebook user '${resp.name}' not found!",
-          statusCode: HttpStatus.UNAUTHORIZED);
+          statusCode: HttpStatus.unauthorized);
 
     if (manageSession) {
       final Session session = await ctx.session;
@@ -108,7 +108,7 @@ class LinkFacebook implements Interceptor {
     AuthorizationUser subject = ctx.getVariable<AuthorizationUser>();
 
     if (subject == null)
-      throw new Response("Unauthorized!", statusCode: HttpStatus.UNAUTHORIZED);
+      throw new Response("Unauthorized!", statusCode: HttpStatus.unauthorized);
 
     oauth2.Client client =
         await oauthConfig.config.handleResponse(ctx); // TODO validate this
