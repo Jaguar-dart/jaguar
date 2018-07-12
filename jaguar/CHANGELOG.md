@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.20
+
++ Separated out `MapCoder` from `CookieSessionManager`
+
+## 2.1.18
+
++ Added `getString` to `Session`
+
+## 2.1.16
+
++ Added `getList` and `getSet` methods to `Session`
+
 ## 2.1.10
 
 + Dart2 fixes in `bodyAsFormData`

@@ -128,6 +128,9 @@ class Session {
   /// Returns keys in session store
   Iterable<String> get keys => _data.keys;
 
+  String getString(String key, [String defaultVal = '']) =>
+      _data[key] ?? defaultVal;
+
   /// Returns a session value as int by [key]. Returns [defaultVal] if the
   /// conversion fails.
   int getInt(String key, [int defaultVal]) {
@@ -146,6 +149,24 @@ class Session {
     if (val == null) return defaultVal;
 
     return double.tryParse(val) ?? defaultVal;
+  }
+
+  List<String> getList(String key, {String split: ','}) {
+    final String val = _data[key];
+
+    if (val == null) return null;
+    if (val.isEmpty) return [];
+
+    return val.split(split);
+  }
+
+  Set<String> getSet(String key, {String split: ','}) {
+    final String val = _data[key];
+
+    if (val == null) return null;
+    if (val.isEmpty) return Set();
+
+    return Set.from(val.split(split));
   }
 
   /// Returns the session data as [Map]

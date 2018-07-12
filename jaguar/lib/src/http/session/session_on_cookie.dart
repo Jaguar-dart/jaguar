@@ -13,19 +13,25 @@ class CookieSessionManager implements SessionManager {
   /// Duration after which the session is expired
   final Duration expiry;
 
+  final MapCoder coder;
+
   /// Constructs a new [CookieSessionManager] with given [cookieName], [expiry]
-  /// and [hmacKey].
+  /// and [signerKey].
   CookieSessionManager(
-      {this.cookieName = 'session', this.expiry, String hmacKey})
-      : _encrypter =
-            hmacKey != null ? new Hmac(sha256, hmacKey.codeUnits) : null;
+      {this.cookieName = 'session', this.expiry, String signerKey})
+      : coder = MapCoder(
+            signer:
+                signerKey != null ? Hmac(sha256, signerKey.codeUnits) : null);
+
+  CookieSessionManager.withCoder(this.coder,
+      {this.cookieName = 'session', this.expiry, String hmacKey});
 
   /// Parses session from the given [request]
   Session parse(Context ctx) {
     Map<String, String> values;
     for (Cookie cook in ctx.req.cookies) {
       if (cook.name == cookieName) {
-        dynamic valueMap = _decode(cook.value);
+        dynamic valueMap = coder.decode(cook.value);
         if (valueMap is Map<String, String>) {
           values = valueMap;
         }
@@ -33,25 +39,17 @@ class CookieSessionManager implements SessionManager {
       }
     }
 
-    if (values == null) {
-      return new Session.newSession({});
-    }
+    if (values == null) return Session.newSession({});
 
-    if (values['sid'] is! String) {
-      return new Session.newSession({});
-    }
+    if (values['sid'] is! String) return Session.newSession({});
 
     final String timeStr = values['sct'];
-    if (timeStr is! String) {
-      return new Session.newSession({});
-    }
+    if (timeStr is! String) return Session.newSession({});
 
     final int timeMilli = int.tryParse(timeStr);
-    if (timeMilli == null) {
-      return new Session.newSession({});
-    }
+    if (timeMilli == null) return Session.newSession({});
 
-    final time = new DateTime.fromMillisecondsSinceEpoch(timeMilli);
+    final time = DateTime.fromMillisecondsSinceEpoch(timeMilli);
 
     if (expiry != null) {
       final Duration diff = new DateTime.now().difference(time);
@@ -60,7 +58,7 @@ class CookieSessionManager implements SessionManager {
       }
     }
 
-    return new Session(values['sid'], values, time);
+    return Session(values['sid'], values, time);
   }
 
   /// Writes session data ([session]) to the Response ([resp]) and returns new
@@ -72,44 +70,56 @@ class CookieSessionManager implements SessionManager {
     final Map<String, String> values = session.asMap;
     values['sid'] = session.id;
     values['sct'] = session.createdTime.millisecondsSinceEpoch.toString();
-    final cook = new Cookie(cookieName, _encode(values));
+    final cook = Cookie(cookieName, coder.encode(values));
     cook.path = '/';
     ctx.response.cookies.add(cook);
   }
+}
 
-  String _encode(Map<String, String> values) {
+/// Encodes and decodes a session data
+class MapCoder {
+  final Codec<String, String> encrypter;
+
+  /// The signer
+  final Converter<List<int>, Digest> signer;
+
+  MapCoder({this.signer, this.encrypter});
+
+  /// Encodes the session values
+  String encode(Map<String, String> values) {
+    // Map data to String
+    String value = json.encode(values);
+    // Encrypt the data
+    if (encrypter != null) value = encrypter.encode(value);
     // Base64 URL safe encoding
-    String ret = base64Url.encode(json.encode(values).codeUnits);
-    // If there is no encrypter, skip signature
-    if (_encrypter == null) return ret;
-    return ret +
-        '.' +
-        base64Url.encode(_encrypter.convert(ret.codeUnits).bytes);
+    String ret = base64UrlEncode(value.codeUnits);
+    if (signer == null) return ret;
+    // Sign it!
+    return ret + '.' + base64UrlEncode(signer.convert(ret.codeUnits).bytes);
   }
 
-  Map<String, String> _decode(String data) {
-    if (_encrypter == null) {
-      try {
-        String dec = new String.fromCharCodes(base64Url.decode(data));
-        return (json.decode(dec) as Map).cast<String, String>();
-      } catch (e) {
-        return null;
-      }
-    } else {
+  Map<String, String> decode(String data) {
+    if (signer != null) {
       List<String> parts = data.split('.');
       if (parts.length != 2) return null;
-      try {
-        if (base64Url.encode(_encrypter.convert(parts.first.codeUnits).bytes) !=
-            parts[1]) return null;
 
-        return (json.decode(
-                new String.fromCharCodes(base64Url.decode(parts.first))) as Map)
-            .cast<String, String>();
+      try {
+        if (base64Url.encode(signer.convert(parts[0].codeUnits).bytes) !=
+            parts[1]) return null;
       } catch (e) {
         return null;
       }
+
+      data = parts[0];
+    }
+
+    try {
+      String value = String.fromCharCodes(base64Url.decode(data));
+      if (encrypter != null) value = encrypter.decode(value);
+      Map values = json.decode(value);
+      return values.cast<String, String>();
+    } catch (e) {
+      return null;
     }
   }
-
-  final Hmac _encrypter;
 }
