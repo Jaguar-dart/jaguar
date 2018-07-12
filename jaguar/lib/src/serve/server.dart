@@ -48,7 +48,7 @@ class Jaguar extends Object with Muxable {
 
   /// Session manager to parse and update session data for requests.
   ///
-  /// Defaults to [CookieSessionManager].
+  /// Defaults to [JaguarSessionManager].
   SessionManager sessionManager;
 
   /// Logger used to log concise useful information about the request. This is
@@ -87,7 +87,7 @@ class Jaguar extends Object with Muxable {
       ErrorWriter errorWriter,
       SessionManager sessionManager})
       : errorWriter = errorWriter ?? new DefaultErrorWriter(),
-        sessionManager = sessionManager ?? new CookieSessionManager();
+        sessionManager = sessionManager ?? new JaguarSessionManager();
 
   /// Starts serving the HTTP requests.
   Future<Null> serve({bool logRequests: false}) async {

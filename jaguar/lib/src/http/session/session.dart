@@ -1,12 +1,17 @@
 library jaguar.http.session;
 
 import 'dart:math';
-import 'dart:io';
+
 import 'dart:async';
-import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 import 'package:jaguar/src/http/context/context.dart';
+
+import 'coder.dart';
+import 'io.dart';
+
+export 'coder.dart';
+export 'io.dart';
 
 part 'session_on_cookie.dart';
 

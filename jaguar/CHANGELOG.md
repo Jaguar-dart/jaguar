@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.21
+
++ Made `MapCoder` an interface
++ `SessionIo` interface
+
 ## 2.1.20
 
 + Separated out `MapCoder` from `CookieSessionManager`

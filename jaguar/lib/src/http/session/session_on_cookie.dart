@@ -6,38 +6,31 @@ part of jaguar.http.session;
 ///
 /// If [hmacKey] is provided, the sessions data is signed with a signature and
 /// verified after parsing.
-class CookieSessionManager implements SessionManager {
-  /// Name of the cookie on which session data is stored
-  final String cookieName;
-
+class JaguarSessionManager implements SessionManager {
   /// Duration after which the session is expired
   final Duration expiry;
 
+  /// Codes, encrypts and signs the session data
   final MapCoder coder;
 
-  /// Constructs a new [CookieSessionManager] with given [cookieName], [expiry]
+  final SessionIo io;
+
+  /// Constructs a new [JaguarSessionManager] with given [cookieName], [expiry]
   /// and [signerKey].
-  CookieSessionManager(
-      {this.cookieName = 'session', this.expiry, String signerKey})
-      : coder = MapCoder(
+  JaguarSessionManager(
+      {this.expiry, String signerKey, this.io: const SessionIoCookie()})
+      : coder = JaguarMapCoder(
             signer:
                 signerKey != null ? Hmac(sha256, signerKey.codeUnits) : null);
 
-  CookieSessionManager.withCoder(this.coder,
-      {this.cookieName = 'session', this.expiry, String hmacKey});
+  JaguarSessionManager.withCoder(this.coder,
+      {this.expiry, this.io: const SessionIoCookie()});
 
   /// Parses session from the given [request]
   Session parse(Context ctx) {
-    Map<String, String> values;
-    for (Cookie cook in ctx.req.cookies) {
-      if (cook.name == cookieName) {
-        dynamic valueMap = coder.decode(cook.value);
-        if (valueMap is Map<String, String>) {
-          values = valueMap;
-        }
-        break;
-      }
-    }
+    String raw = io.read(ctx);
+    if (raw == null) return Session.newSession({});
+    Map<String, String> values = coder.decode(raw);
 
     if (values == null) return Session.newSession({});
 
@@ -70,56 +63,6 @@ class CookieSessionManager implements SessionManager {
     final Map<String, String> values = session.asMap;
     values['sid'] = session.id;
     values['sct'] = session.createdTime.millisecondsSinceEpoch.toString();
-    final cook = Cookie(cookieName, coder.encode(values));
-    cook.path = '/';
-    ctx.response.cookies.add(cook);
-  }
-}
-
-/// Encodes and decodes a session data
-class MapCoder {
-  final Codec<String, String> encrypter;
-
-  /// The signer
-  final Converter<List<int>, Digest> signer;
-
-  MapCoder({this.signer, this.encrypter});
-
-  /// Encodes the session values
-  String encode(Map<String, String> values) {
-    // Map data to String
-    String value = json.encode(values);
-    // Encrypt the data
-    if (encrypter != null) value = encrypter.encode(value);
-    // Base64 URL safe encoding
-    String ret = base64UrlEncode(value.codeUnits);
-    if (signer == null) return ret;
-    // Sign it!
-    return ret + '.' + base64UrlEncode(signer.convert(ret.codeUnits).bytes);
-  }
-
-  Map<String, String> decode(String data) {
-    if (signer != null) {
-      List<String> parts = data.split('.');
-      if (parts.length != 2) return null;
-
-      try {
-        if (base64Url.encode(signer.convert(parts[0].codeUnits).bytes) !=
-            parts[1]) return null;
-      } catch (e) {
-        return null;
-      }
-
-      data = parts[0];
-    }
-
-    try {
-      String value = String.fromCharCodes(base64Url.decode(data));
-      if (encrypter != null) value = encrypter.decode(value);
-      Map values = json.decode(value);
-      return values.cast<String, String>();
-    } catch (e) {
-      return null;
-    }
+    io.write(ctx, coder.encode(values));
   }
 }
