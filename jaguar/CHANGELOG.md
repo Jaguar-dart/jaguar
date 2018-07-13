@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.26
+
++ `Response.json`'s default charset is 'utf-8'
+
 ## 2.1.25
 
 + `staticFile` fix

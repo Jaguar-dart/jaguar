@@ -55,8 +55,8 @@ class Response<ValueType> {
   static Response<String> json<ST>(ST value,
           {int statusCode: HttpStatus.ok,
           Map<String, dynamic> headers,
-          String mimeType: 'application/json',
-          String charset}) =>
+          String mimeType: MimeType.json,
+          String charset: kDefaultCharset}) =>
       Response<String>(
         cnv.json.encode(value),
         statusCode: statusCode,
@@ -106,8 +106,8 @@ class StrResponse extends Response<String> {
   StrResponse.json(dynamic value,
       {statusCode: 200,
       Map<String, dynamic> headers: const {},
-      String mimeType: 'application/json',
-      String charset})
+      String mimeType: MimeType.json,
+      String charset: kDefaultCharset})
       : this(
           cnv.json.encode(value),
           statusCode: statusCode,
