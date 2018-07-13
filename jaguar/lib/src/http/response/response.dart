@@ -35,7 +35,7 @@ class Response<ValueType> {
       {this.statusCode: HttpStatus.ok,
       Map<String, dynamic> headers,
       String mimeType,
-      String charset}) {
+      String charset: kDefaultCharset}) {
     if (headers != null)
       for (final String name in headers.keys) {
         this.headers.add(name, headers[name]);
