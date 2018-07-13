@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.25
+
++ `staticFile` fix
+
 ## 2.1.24
 
 + Fixed `bodyAsUrlEncodedForm`

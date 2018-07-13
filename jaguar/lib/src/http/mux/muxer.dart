@@ -409,7 +409,7 @@ abstract class Muxable {
       String charset: kDefaultCharset,
       Map<String, String> headers: const {},
       bool stripPrefix: true}) {
-    if (directory is String) directory = new Directory(directory);
+    if (directory is String) directory = Directory(directory);
 
     final Directory dir = directory;
     if (!dir.existsSync())
@@ -425,26 +425,29 @@ abstract class Muxable {
           ? ctx.uri.pathSegments.sublist(len)
           : ctx.uri.pathSegments;
       String path = p.join(dir.path, p.joinAll(paths));
-      File file = new File(path);
+      var file = File(path);
 
       if (!await file.exists()) {
-        final Directory fileDir = new Directory(path);
-        if (!await fileDir.exists()) return null;
+        final fileDir = Directory(path);
+
+        if (!await fileDir.exists())
+          return Response('', statusCode: HttpStatus.notFound);
 
         path = p.join(path, 'index.html');
-        file = new File(path);
+        file = File(path);
 
         if (!await file.exists()) {
           // TODO render directory listing
-          return null;
+          return Response('', statusCode: HttpStatus.notFound);
         }
       }
-      return new StreamResponse(await file.openRead(),
+
+      return StreamResponse(await file.openRead(),
           statusCode: statusCode,
           mimeType: MimeType.ofFile(file) ?? mimeType,
           headers: headers,
-          charset: charset ?? kDefaultCharset);
-    }, pathRegEx: pathRegEx, headers: headers);
+          charset: charset);
+    }, pathRegEx: pathRegEx);
   }
 
   /// Serves requests at [path] with content of [file]
@@ -459,16 +462,18 @@ abstract class Muxable {
       String mimeType: kDefaultMimeType,
       String charset: kDefaultCharset,
       Map<String, String> headers}) {
-    if (file is String) {
-      file = new File(file);
-    }
+    if (file is String) file = File(file);
 
     final File f = file;
-    this.get(path, (_) => f.openRead(),
-        pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: MimeType.ofFile(f) ?? mimeType,
-        charset: kDefaultCharset,
-        headers: headers);
+    mimeType = MimeType.ofFile(f) ?? mimeType;
+
+    this.get(
+        path,
+        (_) async => StreamResponse(await f.openRead(),
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
+            headers: headers),
+        pathRegEx: pathRegEx);
   }
 }
