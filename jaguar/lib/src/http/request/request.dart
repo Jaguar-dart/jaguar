@@ -12,6 +12,7 @@
 library jaguar.http.request;
 
 import 'dart:io';
+import 'dart:convert';
 import 'dart:async';
 
 part 'form_field.dart';

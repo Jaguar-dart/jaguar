@@ -89,6 +89,13 @@ class TextFileFormField implements FormField {
   String toString() {
     return "FileFormField('$name', '$contentType', '$filename')";
   }
+
+  Future<void> writeTo(String path, {Encoding encoding: utf8}) async {
+    IOSink sink = File(path).openWrite(encoding: encoding);
+    sink.addStream(value.transform(encoding.encoder));
+    await sink.flush();
+    return sink.close();
+  }
 }
 
 class BinaryFileFormField implements FormField {
@@ -117,5 +124,12 @@ class BinaryFileFormField implements FormField {
 
   String toString() {
     return "FileFormField('$name', '$contentType', '$filename')";
+  }
+
+  Future<void> writeTo(String path) async {
+    IOSink sink = File(path).openWrite();
+    sink.addStream(value);
+    await sink.flush();
+    return sink.close();
   }
 }

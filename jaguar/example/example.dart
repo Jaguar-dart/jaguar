@@ -1,9 +1,7 @@
 import 'package:jaguar/jaguar.dart';
 
-final server = new Jaguar()
+main() => Jaguar()
   ..get('/', (ctx) => 'Get')
-  ..postJson('/json', (ctx) => {'method': 'post'});
-
-main() async {
-  await server.serve();
-}
+  ..postJson('/json', (ctx) => {'method': 'post'})
+  ..log.onRecord.listen(print)
+  ..serve(logRequests: true);

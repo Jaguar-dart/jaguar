@@ -83,10 +83,12 @@ class SessionIoHeader implements SessionIo {
   const SessionIoHeader({this.name: 'jagses'});
 
   @override
+
   /// Reads the session data from header named by [name]
   String read(Context ctx) => ctx.req.headers.value(name);
 
   @override
+
   /// Writes session data to header named by [name]
   void write(Context ctx, String session) {
     ctx.response.headers.set(name, session);

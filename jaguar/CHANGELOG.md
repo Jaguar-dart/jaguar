@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.22
+
++ Added `writeTo` method to `TextFileFormField` and `BinaryFileFormField`
+
 ## 2.1.21
 
 + Made `MapCoder` an interface

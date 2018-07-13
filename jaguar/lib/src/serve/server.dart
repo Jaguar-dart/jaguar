@@ -90,7 +90,7 @@ class Jaguar extends Object with Muxable {
         sessionManager = sessionManager ?? new JaguarSessionManager();
 
   /// Starts serving the HTTP requests.
-  Future<Null> serve({bool logRequests: false}) async {
+  Future<void> serve({bool logRequests: false}) async {
     if (_server != null) throw new Exception('Already serving!');
     log.info("Running on $resourceName");
     if (securityContext != null) {
@@ -109,13 +109,13 @@ class Jaguar extends Object with Muxable {
     }
   }
 
-  Future<Null> restart({bool logRequests: false}) =>
+  Future<void> restart({bool logRequests: false}) =>
       _server.close(force: true).then((_) {
         _server = null;
         return serve(logRequests: logRequests);
       });
 
-  Future _handler(HttpRequest request) async {
+  Future<void> _handler(HttpRequest request) async {
     final ctx =
         new Context(new Request(request), sessionManager, log, userFetchers);
     ctx.prefix = basePath;
@@ -158,7 +158,7 @@ class Jaguar extends Object with Muxable {
   }
 
   /// Closes the server
-  Future<Null> close() async {
+  Future<void> close() async {
     await _server.close(force: true);
     _server = null;
   }

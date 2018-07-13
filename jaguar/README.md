@@ -16,7 +16,7 @@ desired path to the server.
 
 ```dart
 main() async {
-  final server = new Jaguar();  // Serves the API at localhost:8080 by default
+  final server = Jaguar();  // Serves the API at localhost:8080 by default
   // Add a route handler for 'GET' method at path '/hello'
   server.get('/hello', (Context ctx) => 'Hello world!');
   await server.serve();
@@ -38,7 +38,7 @@ main(List<String> args) async {
     'Learning never exhausts the mind.',
   ];
 
-  final server = new Jaguar();
+  final server = Jaguar();
   server.get('/api/quote/:index', (ctx) { // The magic!
     final int index = ctx.pathParams.getInt('index', 1);  // The magic!
     return quotes[index + 1];
@@ -65,7 +65,7 @@ main(List<String> args) async {
     'Learning never exhausts the mind.',
   ];
 
-  final server = new Jaguar();
+  final server = Jaguar();
   server.get('/api/quote', (ctx) {
     final int index = ctx.queryParams.getInt('index', 1); // The magic!
     return quotes[index + 1];
@@ -83,7 +83,7 @@ on [`Request`][Doc::Request] object.
 
 ```dart
 main(List<String> arguments) async {
-  final server = new Jaguar(port: 8005);
+  final server = Jaguar(port: 8005);
 
   server.postJson('/api/add', (ctx) async {
       final Map<String, String> map = await ctx.req.bodyAsUrlEncodedForm(); // The magic!
@@ -103,7 +103,7 @@ the request Uri that much be matched and the second argument determines the dire
 
 ```dart
 main() async {
-  final server = new Jaguar();
+  final server = Jaguar();
   server.staticFiles('/static/*', 'static'); // The magic!
   await server.serve();
 }
@@ -116,8 +116,8 @@ Decoding JSON requests can't be simpler than using one of the built-in [`bodyAsJ
 [`Request`][Doc::Request] object.
 
 ```dart
-Future<Null> main(List<String> args) async {
-  final server = new Jaguar();
+Future<void> main(List<String> args) async {
+  final server = Jaguar();
   server.postJson('/api/book', (Context ctx) async {
     // Decode request body as JSON Map
     final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
@@ -134,7 +134,7 @@ Future<Null> main(List<String> args) async {
 
 ```dart
 main() async {
-  final server = new Jaguar();
+  final server = Jaguar();
   server.get('/api/add/:item', (ctx) async {
     final Session session = await ctx.req.session;
     final String newItem = ctx.pathParams.item;
