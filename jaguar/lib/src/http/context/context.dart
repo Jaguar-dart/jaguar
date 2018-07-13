@@ -233,12 +233,21 @@ class Context {
   Future<Map<String, String>> bodyAsUrlEncodedForm(
       {conv.Encoding encoding: conv.utf8}) async {
     final String text = await bodyAsText(encoding);
-    return text
-        .split("&")
-        .map((String part) => part.split("="))
-        .map((List<String> part) => <String, String>{part.first: part.last})
-        .reduce((Map<String, String> value, Map<String, String> element) =>
-            value..putIfAbsent(element.keys.first, () => element.values.first));
+
+    List<String> fields = text.split("&");
+
+    final ret = <String, String>{};
+
+    for (String field in fields) {
+      List<String> parts = field.split("=");
+      if (parts.length == 2)
+        ret[Uri.decodeQueryComponent(parts.first)] =
+            Uri.decodeQueryComponent(parts.last);
+      else
+        ret[Uri.decodeQueryComponent(parts.first)] = "";
+    }
+
+    return ret;
   }
 
   /// Decodes `multipart/form-data` body
@@ -261,12 +270,12 @@ class Context {
 
     final String boundary = req.headers.contentType.parameters['boundary'];
 
-    final Map<String, FormField> ret = {};
+    final ret = <String, FormField>{};
 
     final Stream<List<int>> bodyStream = await bodyAsStream;
 
     // Transform body to [MimeMultipart]
-    final transformer = new MimeMultipartTransformer(boundary);
+    final transformer = MimeMultipartTransformer(boundary);
     final Stream<MimeMultipart> stream = bodyStream.transform(transformer);
 
     await for (MimeMultipart part in stream) {
@@ -282,14 +291,14 @@ class Context {
       // Create field
       if (fn is! String && multipart.isText) {
         final String data = await multipart.join();
-        final field = new StringFormField(name, data, contentType: contentType);
+        final field = StringFormField(name, data, contentType: contentType);
         ret[field.name] = field;
       } else if (multipart.isText) {
-        final field = new TextFileFormField(name, multipart.cast<String>(),
+        final field = TextFileFormField(name, multipart.cast<String>(),
             contentType: contentType, filename: fn);
         ret[field.name] = field;
       } else {
-        final field = new BinaryFileFormField(name, multipart.cast<List<int>>(),
+        final field = BinaryFileFormField(name, multipart.cast<List<int>>(),
             contentType: contentType, filename: fn);
         ret[field.name] = field;
       }
@@ -333,4 +342,9 @@ class Context {
     }
     return _authHeader.items[scheme]?.credentials;
   }
+}
+
+String _decodeUrlEncodedFormField(String value) {
+  value = value.replaceAll('+', ' ');
+  return Uri.decodeComponent(value);
 }

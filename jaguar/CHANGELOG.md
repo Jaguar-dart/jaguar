@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.24
+
++ Fixed `bodyAsUrlEncodedForm`
+
+## 2.1.23
+
++ Fixed bugs in `writeTo`
+
 ## 2.1.22
 
 + Added `writeTo` method to `TextFileFormField` and `BinaryFileFormField`
