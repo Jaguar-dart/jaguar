@@ -29,5 +29,11 @@ void main() {
             .post('http://localhost:10000/form')
             .urlEncodedForm({'a': 'Hello ', 'b': 'world!'}).exact(
                 statusCode: 200, mimeType: 'text/plain', body: 'Hello world!'));
+    test(
+        'correctly decode URI components',
+        () => resty
+            .post('http://localhost:10000/form')
+            .urlEncodedForm({'a': 'It\'s ', 'b': 'Dart and Jaguar(美洲豹)'}).exact(
+                statusCode: 200, mimeType: 'text/plain', body: 'It\'s Dart and Jaguar(美洲豹)'));         
   });
 }
