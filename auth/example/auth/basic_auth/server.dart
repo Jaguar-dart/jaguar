@@ -5,11 +5,6 @@ import 'package:jaguar_auth/jaguar_auth.dart';
 
 import 'package:jaguar_example_session_models/jaguar_example_session_models.dart';
 
-final List<Book> books = [
-  Book(id: '0', name: 'Book0'),
-  Book(id: '1', name: 'Book1'),
-];
-
 main() async {
   final server = Jaguar(port: 10000);
   // Register user fetcher
@@ -21,7 +16,7 @@ main() async {
   );
   server.getJson(
     '/books',
-    (Context ctx) => books,
+    (Context ctx) => books.values.toList(),
     before: [Authorizer<User>()], // Authorization
   );
   await server.serve();

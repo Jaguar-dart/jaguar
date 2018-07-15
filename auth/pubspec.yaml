@@ -22,4 +22,4 @@ dev_dependencies:
   jaguar_reflect: ^2.1.4
   jaguar_client: ^2.1.4
   jaguar_resty: ^2.5.10
-  jaguar_example_session_models: ^2.1.1
+  jaguar_example_session_models: ^2.1.4
