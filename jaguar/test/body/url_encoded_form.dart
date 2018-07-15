@@ -34,6 +34,8 @@ void main() {
         () => resty
             .post('http://localhost:10000/form')
             .urlEncodedForm({'a': 'It\'s ', 'b': 'Dart and Jaguar(美洲豹)'}).exact(
-                statusCode: 200, mimeType: 'text/plain', body: 'It\'s Dart and Jaguar(美洲豹)'));         
+                statusCode: 200,
+                mimeType: 'text/plain',
+                body: 'It\'s Dart and Jaguar(美洲豹)'));
   });
 }

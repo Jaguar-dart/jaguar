@@ -1,15 +1,25 @@
 part of jaguar.mux;
 
-/// Prototype of route exception handler
+/// A function that shall be called when an exception occurs when processing a
+/// route.
+///
+/// [exception] is the exception that occurred. [trace] is the stack trace is the
+/// of the exception.
 typedef FutureOr<void> ExceptionHandler<ET>(
     Context ctx, ET exception, StackTrace trace);
 
-/// Prototype of route interceptor function that can run before or after the
-/// route handler. The return value will be ignored.
+/// Prototype of route interceptor. A router interceptor is a function that runs
+/// before or after the route handler.
 typedef FutureOr<void> RouteInterceptor(Context ctx);
 
-/// Prototype for Route handler
-typedef FutureOr<RespType> RouteHandler<RespType>(Context ctx);
+/// Prototype for Route handler. A route handler is a function that shall be
+/// invoked when a HTTP request with matching path is received.
+///
+/// The [context] parameter contains information about the request. The route
+/// handler is expected to process the request and return the response or result
+/// of type [RespType]. Alternatively, one can set the response using response
+/// member of [context].
+typedef FutureOr<RespType> RouteHandler<RespType>(Context context);
 
 /// Constructs a [Route] for GET method requests
 Route get(RouteHandler handler,

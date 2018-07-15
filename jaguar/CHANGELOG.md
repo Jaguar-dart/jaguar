@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.28
+
++ Added `strings` constructor to `StreamResponse`
+
 ## 2.1.27
 
 + `Response`'s default charset is 'utf-8'

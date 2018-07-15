@@ -60,6 +60,7 @@ class StringFormField implements FormField {
   }
 }
 
+/// Text file field in the `multipart/form-data`
 class TextFileFormField implements FormField {
   /// Name of the field
   final String name;
@@ -90,6 +91,7 @@ class TextFileFormField implements FormField {
     return "FileFormField('$name', '$contentType', '$filename')";
   }
 
+  /// Writes the contents of the file to file at [path]
   Future<void> writeTo(String path, {Encoding encoding: utf8}) async {
     IOSink sink = File(path).openWrite(encoding: encoding);
     await for (String item in value) {
@@ -100,6 +102,7 @@ class TextFileFormField implements FormField {
   }
 }
 
+/// Binary file field in the `multipart/form-data`
 class BinaryFileFormField implements FormField {
   /// Name of the field
   final String name;
@@ -128,6 +131,7 @@ class BinaryFileFormField implements FormField {
     return "FileFormField('$name', '$contentType', '$filename')";
   }
 
+  /// Writes the contents of the file to file at [path]
   Future<void> writeTo(String path) async {
     IOSink sink = File(path).openWrite();
     await for (List<int> item in value) {
