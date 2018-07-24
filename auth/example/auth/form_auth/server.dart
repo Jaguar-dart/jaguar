@@ -6,7 +6,7 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_auth/jaguar_auth.dart';
 
 import '../../model/model.dart';
-import '../../model/auth_model_manager.dart';
+import '../../model/dummy_user_fetcher.dart';
 
 final Map<String, Book> _books = {
   '0': new Book(id: '0', name: 'Book0'),

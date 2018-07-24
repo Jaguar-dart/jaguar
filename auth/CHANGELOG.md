@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.5
+
++ Updated README
+
+## 2.1.4
+
++ Updated README
+
 ## 2.1.1
 
 + Simplified authenticator

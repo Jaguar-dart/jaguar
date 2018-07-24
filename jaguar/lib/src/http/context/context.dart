@@ -103,8 +103,12 @@ class Context {
 
   final Logger log;
 
-  Context(this.req, this.sessionManager, this.log, this.userFetchers,
-      {this.beforeGlobal: const [], this.afterGlobal: const []});
+  Context(this.req,
+      {this.sessionManager,
+      this.log,
+      this.userFetchers,
+      this.beforeGlobal: const [],
+      this.afterGlobal: const []});
 
   final _variables = <Type, Map<String, dynamic>>{};
 

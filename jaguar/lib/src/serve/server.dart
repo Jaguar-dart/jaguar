@@ -116,8 +116,8 @@ class Jaguar extends Object with Muxable {
       });
 
   Future<void> _handler(HttpRequest request) async {
-    final ctx =
-        new Context(new Request(request), sessionManager, log, userFetchers);
+    final ctx = new Context(new Request(request),
+        sessionManager: sessionManager, log: log, userFetchers: userFetchers);
     ctx.prefix = basePath;
 
     try {
