@@ -1,6 +1,6 @@
 name: jaguar_common
 description: Jaguar stuff common to both server and client. Uses neither dart:io nor dart:html
-version: 2.1.1
+version: 2.1.2
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
@@ -9,7 +9,7 @@ homepage: https://github.com/Jaguar-dart/jaguar_common
 documentation:
 
 environment:
-  sdk: '>=2.0.0-dev.55.0 <2.0.0'
+  sdk: ">=2.0.0-dev.60.0 <3.0.0"
 
 #dependencies:
 #  path: ^1.4.1

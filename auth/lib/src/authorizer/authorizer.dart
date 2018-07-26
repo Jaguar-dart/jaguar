@@ -18,7 +18,13 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
   /// The key by which authorizationId is stored in session data
   final String authorizationIdKey;
 
-  const Authorizer({this.userFetcher, this.authorizationIdKey: 'id'});
+  /// Should it throw 401 unauthorized error on authorization failure.
+  final bool throwOnFail;
+
+  const Authorizer(
+      {this.userFetcher,
+      this.authorizationIdKey: 'id',
+      this.throwOnFail: true});
 
   Future<void> call(Context ctx) async {
     final Session session = await ctx.session;
@@ -30,7 +36,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
     UserModel subject = await fetcher.byAuthorizationId(ctx, authId);
 
-    if (subject == null) {
+    if (throwOnFail && subject == null) {
       throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 
@@ -41,7 +47,8 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
   static Future<UserModel> authorize<UserModel extends AuthorizationUser>(
       Context ctx,
       {UserFetcher<UserModel> userFetcher,
-      String authorizationIdKey: 'id'}) async {
+      String authorizationIdKey: 'id',
+      bool throwOnFail: true}) async {
     final Session session = await ctx.session;
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
@@ -51,7 +58,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
     UserModel subject = await fetcher.byAuthorizationId(ctx, authId);
 
-    if (subject == null) {
+    if (throwOnFail && subject == null) {
       throw new Response(null, statusCode: HttpStatus.unauthorized);
     }
 

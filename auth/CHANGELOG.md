@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.8
+
++ `Authorizer` has `throwOnFail` to control response when authorization fails.
+
 ## 2.1.5
 
 + Updated README
