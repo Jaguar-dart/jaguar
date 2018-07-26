@@ -1,6 +1,6 @@
 name: jaguar_auth
 description: Authentication interceptors and helper functions for Jaguar
-version: 2.1.8
+version: 2.1.9
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>

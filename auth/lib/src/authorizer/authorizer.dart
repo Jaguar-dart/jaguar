@@ -30,14 +30,22 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     final Session session = await ctx.session;
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
-      throw new Response(null, statusCode: HttpStatus.unauthorized);
+      if (throwOnFail) {
+        throw new Response(null, statusCode: HttpStatus.unauthorized);
+      } else {
+        return null;
+      }
     }
 
     UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
     UserModel subject = await fetcher.byAuthorizationId(ctx, authId);
 
-    if (throwOnFail && subject == null) {
-      throw new Response(null, statusCode: HttpStatus.unauthorized);
+    if (subject == null) {
+      if (throwOnFail) {
+        throw new Response(null, statusCode: HttpStatus.unauthorized);
+      } else {
+        return null;
+      }
     }
 
     ctx.addVariable(subject);
@@ -52,14 +60,22 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     final Session session = await ctx.session;
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
-      throw new Response(null, statusCode: HttpStatus.unauthorized);
+      if (throwOnFail) {
+        throw new Response(null, statusCode: HttpStatus.unauthorized);
+      } else {
+        return null;
+      }
     }
 
     UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
     UserModel subject = await fetcher.byAuthorizationId(ctx, authId);
 
-    if (throwOnFail && subject == null) {
-      throw new Response(null, statusCode: HttpStatus.unauthorized);
+    if (subject == null) {
+      if (throwOnFail) {
+        throw new Response(null, statusCode: HttpStatus.unauthorized);
+      } else {
+        return null;
+      }
     }
 
     return subject;
