@@ -444,7 +444,7 @@ abstract class Muxable {
 
       return StreamResponse(await file.openRead(),
           statusCode: statusCode,
-          mimeType: MimeType.ofFile(file) ?? mimeType,
+          mimeType: MimeTypes.ofFile(file) ?? mimeType,
           headers: headers,
           charset: charset);
     }, pathRegEx: pathRegEx);
@@ -465,7 +465,7 @@ abstract class Muxable {
     if (file is String) file = File(file);
 
     final File f = file;
-    mimeType = MimeType.ofFile(f) ?? mimeType;
+    mimeType = MimeTypes.ofFile(f) ?? mimeType;
 
     this.get(
         path,

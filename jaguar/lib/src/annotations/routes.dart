@@ -130,7 +130,7 @@ class GetJson extends Get {
   const GetJson(
       {String path: '',
       int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       final Map<String, String> pathRegEx,
@@ -151,7 +151,7 @@ class PutJson extends Put {
   const PutJson(
       {String path: '',
       int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       final Map<String, String> pathRegEx,
@@ -172,7 +172,7 @@ class PostJson extends Post {
   const PostJson(
       {String path: '',
       int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       final Map<String, String> pathRegEx,
@@ -193,7 +193,7 @@ class DeleteJson extends Delete {
   const DeleteJson(
       {String path: '',
       int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       final Map<String, String> pathRegEx,
@@ -214,7 +214,7 @@ class GetHtml extends Get {
   const GetHtml(
       {String path: '',
       int statusCode: 200,
-      String mimeType: MimeType.html,
+      String mimeType: MimeTypes.html,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       final Map<String, String> pathRegEx,

@@ -148,6 +148,27 @@ class Context {
     }
   }
 
+  HttpHeaders get headers => req.headers;
+
+  MimeType _contentType;
+
+  void _parseContentType() {
+    if (req.headers['content-type'] != null) {
+      String contentTypeStr = req.headers.value('content-type');
+      _contentType = MimeType.parse(contentTypeStr);
+    } else {
+      _contentType = MimeType.binary;
+    }
+  }
+
+  MimeType get mimeType {
+    if (_contentType != null) return _contentType;
+    _parseContentType();
+    return _contentType;
+  }
+
+  // TODO charset
+
   /// Private cache for request body
   List<int> _body;
 
@@ -266,8 +287,7 @@ class Context {
   ///       await sink.close();
   ///       return Response.redirect(Uri.parse("/"));
   ///     });
-  Future<Map<String, FormField>> bodyAsFormData(
-      {conv.Encoding encoding: conv.utf8}) async {
+  Future<Map<String, FormField>> bodyAsFormData() async {
     if (!req.headers.contentType.parameters.containsKey('boundary')) {
       return null;
     }
@@ -311,6 +331,36 @@ class Context {
     return ret;
   }
 
+  Future<Map> bodyAsMap({conv.Encoding encoding: conv.utf8}) async {
+    MimeType mt = mimeType;
+
+    if (mt.isJson) {
+      return bodyAsJsonMap(encoding: encoding);
+    } else if (mt.isUrlEncodedForm) {
+      return bodyAsUrlEncodedForm();
+    } else if (mt.isFormData) {
+      return bodyAsFormData();
+    }
+
+    return null;
+  }
+
+  Future<T> bodyTo<T>(T convert(Map d),
+      {conv.Encoding encoding: conv.utf8}) async {
+    MimeType mt = mimeType;
+
+    Map b;
+    if (mt.isJson) {
+      b = await bodyAsJsonMap(encoding: encoding);
+    } else if (mt.isUrlEncodedForm) {
+      b = await bodyAsUrlEncodedForm();
+    } else if (mt.isFormData) {
+      b = await bodyAsFormData();
+    }
+
+    return convert(b);
+  }
+
   Response response;
 
   final List<ExceptionHandler> onException = <ExceptionHandler>[];
@@ -346,9 +396,4 @@ class Context {
     }
     return _authHeader.items[scheme]?.credentials;
   }
-}
-
-String _decodeUrlEncodedFormField(String value) {
-  value = value.replaceAll('+', ' ');
-  return Uri.decodeComponent(value);
 }

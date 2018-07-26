@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.33
+
++ Added `mimeType` to `Context`
++ Added `bodyAsMap` to `Context`
++ Added `bodyTo` to `Context`
+
+Breaking changes:
++ `MimeType` is now `MimeTypes`
+
+## 2.1.32
+
++ `contentType` accessor in `Context`
++ `headers` accessor in `Context`
+
 ## 2.1.28
 
 + Added `strings` constructor to `StreamResponse`

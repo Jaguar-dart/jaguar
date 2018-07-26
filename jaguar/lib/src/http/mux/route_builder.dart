@@ -460,7 +460,7 @@ class Route implements RequestHandler {
   /// Constructs a [Route] for HTML requests
   Route.html(String path, this.handler,
       {int statusCode: 200,
-      String mimeType: MimeType.html,
+      String mimeType: MimeTypes.html,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       Map<String, String> pathRegEx,
@@ -485,7 +485,7 @@ class Route implements RequestHandler {
   Route.json(String path, this.handler,
       {List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
       int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       Map<String, String> pathRegEx,
@@ -510,7 +510,7 @@ class Route implements RequestHandler {
   /// Constructs a [Route] for JSON requests with GET method
   Route.getJson(String path, this.handler,
       {int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       Map<String, String> pathRegEx,
@@ -534,7 +534,7 @@ class Route implements RequestHandler {
   /// Constructs a [Route] for JSON requests with POST method
   Route.postJson(String path, this.handler,
       {int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       Map<String, String> pathRegEx,
@@ -558,7 +558,7 @@ class Route implements RequestHandler {
   /// Constructs a [Route] for JSON requests with PUT method
   Route.putJson(String path, this.handler,
       {int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       Map<String, String> pathRegEx,
@@ -582,7 +582,7 @@ class Route implements RequestHandler {
   /// Constructs a [Route] for JSON requests with DELETE method
   Route.deleteJson(String path, this.handler,
       {int statusCode: 200,
-      String mimeType: MimeType.json,
+      String mimeType: MimeTypes.json,
       String charset: kDefaultCharset,
       Map<String, String> headers,
       Map<String, String> pathRegEx,

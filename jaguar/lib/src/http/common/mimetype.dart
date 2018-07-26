@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 /// A namespace class to expose mime type specific features
-abstract class MimeType {
+abstract class MimeTypes {
   /// Mime type for HTML
   static const String html = "text/html";
 
@@ -26,6 +26,15 @@ abstract class MimeType {
 
   /// Mime type for JSON
   static const String json = "application/json";
+
+  /// Mime type form-urlencoded
+  static const String urlEncodedForm = 'application/x-www-form-urlencoded';
+
+  /// Mime type for multipart form data
+  static const String multipartForm = 'multipart/form-data';
+
+  /// mime type for binary
+  static const String binary = 'application/octet-stream';
 
   /// Mime type for SVG
   static const String svg = "image/svg+xml";
@@ -58,4 +67,34 @@ abstract class MimeType {
 
     return null;
   }
+}
+
+/// identifies the type of content of a message
+class MimeType {
+  ///Gets the mime-type, without any parameters.
+  final String mimeType;
+
+  /// Gets the primary type.
+  final String primaryType;
+
+  /// Gets the sub type.
+  final String subType;
+
+  const MimeType(this.primaryType, this.subType)
+      : mimeType = '$primaryType/$subType';
+
+  static MimeType parse(String contentTypeHeader) {
+    ContentType ct = ContentType.parse(contentTypeHeader);
+    return MimeType(ct.primaryType, ct.subType);
+  }
+
+  bool get isJson => mimeType == MimeTypes.json;
+
+  bool get isUrlEncodedForm => mimeType == MimeTypes.urlEncodedForm;
+
+  bool get isFormData => mimeType == MimeTypes.multipartForm;
+
+  bool get isBinary => mimeType == MimeTypes.binary;
+
+  static const MimeType binary = MimeType('application', 'octet-stream');
 }

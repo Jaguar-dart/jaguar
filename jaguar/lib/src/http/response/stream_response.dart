@@ -28,7 +28,7 @@ class StreamResponse extends Response<Stream<List<int>>> {
         file.openRead(),
         statusCode: statusCode,
         headers: headers,
-        mimeType: mimeType ?? MimeType.ofFile(file),
+        mimeType: mimeType ?? MimeTypes.ofFile(file),
         charset: charset,
       );
 
@@ -43,7 +43,7 @@ class StreamResponse extends Response<Stream<List<int>>> {
     return StreamResponse.fromFile(file,
         statusCode: statusCode,
         headers: headers,
-        mimeType: mimeType ?? MimeType.ofFile(file),
+        mimeType: mimeType ?? MimeTypes.ofFile(file),
         charset: charset);
   }
 
