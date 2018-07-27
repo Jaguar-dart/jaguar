@@ -150,24 +150,49 @@ class Context {
 
   HttpHeaders get headers => req.headers;
 
-  MimeType _contentType;
+  MimeType _mimeType;
 
   void _parseContentType() {
     if (req.headers['content-type'] != null) {
       String contentTypeStr = req.headers.value('content-type');
-      _contentType = MimeType.parse(contentTypeStr);
+      _mimeType = MimeType.parse(contentTypeStr);
     } else {
-      _contentType = MimeType.binary;
+      _mimeType = MimeType.binary;
     }
+    // TODO charset
   }
 
   MimeType get mimeType {
-    if (_contentType != null) return _contentType;
-    _parseContentType();
-    return _contentType;
+    if (_mimeType == null) _parseContentType();
+    return _mimeType;
   }
 
-  // TODO charset
+  bool get isJson => mimeType.isJson;
+
+  bool get isUrlEncodedForm => mimeType.isUrlEncodedForm;
+
+  bool get isFormData => mimeType.isFormData;
+
+  Map<String, MimeType> _accepts;
+
+  void _parseAccepts() {
+    _accepts = {};
+    if (headers['Accept'] == null) return;
+    List<String> accepts = headers.value('Accept').split(',');
+    for (String accept in accepts) {
+      MimeType ct = MimeType.parse(accept);
+      _accepts[ct.mimeType] = ct;
+    }
+  }
+
+  Map<String, MimeType> get accepts {
+    if (_accepts == null) _parseAccepts();
+    return _accepts;
+  }
+
+  bool get acceptsHtml => accepts.containsKey(MimeTypes.html);
+
+  bool get acceptsJson => accepts.containsKey(MimeTypes.json);
 
   /// Private cache for request body
   List<int> _body;

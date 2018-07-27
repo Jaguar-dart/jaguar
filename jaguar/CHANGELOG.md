@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.34
+
++ Added `accepts` to `Context`
++ Added `acceptsHtml` to `Context`
++ Added `acceptsJson` to `Context`
+
 ## 2.1.33
 
 + Added `mimeType` to `Context`
