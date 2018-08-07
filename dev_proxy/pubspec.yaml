@@ -1,10 +1,10 @@
 name: jaguar_dev_proxy
 description: Jaguar reverse proxy implementation for dev
-version: 2.1.4
+version: 2.1.8
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
-homepage: https://github.com/Jaguar-dart/jaguar_dev_proxy
+homepage: https://jaguar-dart.github.io/
 
 documentation:
 
