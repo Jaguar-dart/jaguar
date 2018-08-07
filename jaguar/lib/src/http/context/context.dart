@@ -56,7 +56,7 @@ class Context {
   ///       final int index = ctx.pathParams.getInt('index', 1);  // The magic!
   ///       return quotes[index + 1];
   ///     });
-  final PathParams pathParams = new PathParams();
+  final pathParams = PathParams();
 
   QueryParams _query;
 
@@ -106,9 +106,7 @@ class Context {
   Context(this.req,
       {this.sessionManager,
       this.log,
-      this.userFetchers,
-      this.beforeGlobal: const [],
-      this.afterGlobal: const []});
+      this.userFetchers});
 
   final _variables = <Type, Map<String, dynamic>>{};
 
@@ -389,10 +387,6 @@ class Context {
   Response response;
 
   final List<ExceptionHandler> onException = <ExceptionHandler>[];
-
-  final List<RouteInterceptor> beforeGlobal;
-
-  final List<RouteInterceptor> afterGlobal;
 
   final before = <RouteInterceptor>[];
 

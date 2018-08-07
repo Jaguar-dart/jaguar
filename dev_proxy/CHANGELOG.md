@@ -1,10 +1,9 @@
 # Changelog
 
-## 0.0.6
+33 2.1.4
 
-+ Added docs
-+ Updated README
++ Dart 2 stable
 
-## 0.0.1
+## 2.1.2
 
-- Initial version, created by Stagehand
++ `before` and `after` interceptors

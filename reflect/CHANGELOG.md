@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.6
+
++ Dart 2 stable
+
 ## 2.1.3
 
 + Dart2 fixes

@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
-final HttpClient _client = new HttpClient();
+final _client = new HttpClient();
 final Map<String, Cookie> _cookies = {};
 
 const String kHostname = 'localhost';

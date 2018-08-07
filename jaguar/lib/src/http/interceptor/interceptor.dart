@@ -36,10 +36,6 @@ abstract class Do {
       final RouteHandler<RouteRespType> routeHandler,
       final HttpMethod routeInfo) async {
     try {
-      for (RouteInterceptor before in ctx.beforeGlobal) {
-        final maybeFuture = before(ctx);
-        if (maybeFuture is Future) await maybeFuture;
-      }
       {
         var beforeList = ctx.before;
         for (int i = 0; i < beforeList.length; i++) {
@@ -64,8 +60,38 @@ abstract class Do {
         final maybeFuture = after(ctx);
         if (maybeFuture is Future) await maybeFuture;
       }
-      for (int i = ctx.afterGlobal.length - 1; i >= 0; i--) {
-        RouteInterceptor after = ctx.afterGlobal[i];
+    } catch (e, s) {
+      Response resp;
+      for (int i = ctx.onException.length - 1; i >= 0; i--) {
+        try {
+          dynamic maybeFuture = ctx.onException[i](ctx, e, s);
+          if (maybeFuture != null) await maybeFuture;
+        } catch (e) {
+          if (e is Response) resp = e;
+        }
+      }
+      if (resp != null) {
+        ctx.response = resp;
+        return;
+      }
+      rethrow;
+    }
+  }
+
+  static Future<void> exec(Context ctx, RouteHandler routeHandler) async {
+    try {
+      {
+        var beforeList = ctx.before;
+        for (int i = 0; i < beforeList.length; i++) {
+          final maybeFuture = ctx.before[i](ctx);
+          if (maybeFuture is Future) await maybeFuture;
+        }
+      }
+
+      await routeHandler(ctx);
+
+      for (int i = ctx.after.length - 1; i >= 0; i--) {
+        RouteInterceptor after = ctx.after[i];
         final maybeFuture = after(ctx);
         if (maybeFuture is Future) await maybeFuture;
       }

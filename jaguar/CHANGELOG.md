@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.37
+
++ Dart 2 stable
+
+## 2.1.36
+
++ Global middleware
++ `Do` has `exec` method for `RequestHandler`s
+
 ## 2.1.34
 
 + Added `accepts` to `Context`

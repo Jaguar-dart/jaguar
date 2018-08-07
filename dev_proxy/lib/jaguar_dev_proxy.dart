@@ -15,9 +15,9 @@ import 'package:path/path.dart' as p;
 /// Request handler to reverse proxy certain selected requests to another server
 ///
 /// Example usage:
-///     final proxy = new PrefixedProxyServer('/client', 'http://localhost:8000/');
-///     final server = new Jaguar(address: 'localhost', port: 8085);
-///     server.addApi(proxy);
+///     final proxy = PrefixedProxyServer('/client', 'http://localhost:8000/');
+///     final server = Jaguar(address: 'localhost', port: 8085);
+///     server.add(proxy);
 class PrefixedProxyServer implements RequestHandler {
   /// Used to match incoming URLs
   final String path;
@@ -31,9 +31,13 @@ class PrefixedProxyServer implements RequestHandler {
   /// Name of this proxy server
   final String proxyName;
 
+  final List<RouteInterceptor> before;
+
+  final List<RouteInterceptor> after;
+
   //TODO add timeout
 
-  final HttpClient _client = new HttpClient();
+  final _client = HttpClient();
 
   /// Creates a new instance of [PrefixedProxyServer]
   ///
@@ -58,8 +62,10 @@ class PrefixedProxyServer implements RequestHandler {
   /// + `/html/index.html` is mapped into `http://localhost:8000/client/index.html`
   /// + `/html/static/index.html` is mapped into `http://localhost:8000/client/static/index.html`
   PrefixedProxyServer(this.path, String proxyBaseUrl,
-      {this.proxyName: 'jaguar_proxy'})
-      : pathSegments = new UnmodifiableListView(splitPathToSegments(path)),
+      {this.proxyName: 'jaguar_proxy',
+      this.before: const [],
+      this.after: const []})
+      : pathSegments = UnmodifiableListView(splitPathToSegments(path)),
         proxyBaseUrl = Uri.parse(proxyBaseUrl) {}
 
   /// Checks if the provided [reqUri] matches
@@ -76,41 +82,46 @@ class PrefixedProxyServer implements RequestHandler {
     return true;
   }
 
-  Uri _getTargetUrl(final Uri reqUri) {
-    StringBuffer sb = new StringBuffer();
+  /// Converts request Uri to proxy Uri
+  Uri transformUri(final Uri reqUri) {
+    var sb = StringBuffer();
 
     sb.write(proxyBaseUrl);
-    final List<String> segments = reqUri.pathSegments
-        .getRange(pathSegments.length, reqUri.pathSegments.length)
-        .toList();
-    if (segments.length != 0) {
-      if (!proxyBaseUrl.path.endsWith('/')) {
-        sb.write('/');
-      }
+    final Iterable<String> segments = reqUri.pathSegments
+        .getRange(pathSegments.length, reqUri.pathSegments.length);
+
+    if (segments.isNotEmpty) {
+      if (!proxyBaseUrl.path.endsWith('/')) sb.write('/');
       sb.write(segments.join('/'));
     }
-    if (reqUri.path.endsWith('/')) {
-      sb.write('/');
-    }
+
+    if (reqUri.path.endsWith('/')) sb.write('/');
 
     return Uri.parse(sb.toString());
   }
 
-  Future<void> handleRequest(Context ctx, {String prefix}) async {
+  Future<void> handleRequest(Context ctx) async {
     if (!matches(ctx.req.uri)) return null;
 
+    ctx.before.addAll(before);
+    ctx.after.addAll(after);
+
+    await Do.exec(ctx, _handler);
+  }
+
+  Future<void> _handler(Context ctx) async {
     // TODO: Handle TRACE requests correctly. See
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8
 
-    final requestUrl = _getTargetUrl(ctx.req.uri);
-    final HttpClientRequest clientReq =
-        await _client.openUrl(ctx.req.method, requestUrl);
+    Uri requestUri = transformUri(ctx.req.uri);
+    HttpClientRequest clientReq =
+        await _client.openUrl(ctx.req.method, requestUri);
     clientReq.followRedirects = false;
 
     ctx.req.headers.forEach((String key, dynamic val) {
       clientReq.headers.add(key, val);
     });
-    //TODO add forward headers
+    // TODO add forward headers
     clientReq.headers.set('Host', proxyBaseUrl.authority);
 
     // Add a Via header. See
@@ -120,12 +131,15 @@ class PrefixedProxyServer implements RequestHandler {
     clientReq.add(await ctx.req.body);
     final HttpClientResponse clientResp = await clientReq.close();
 
-    if (clientResp.statusCode == HttpStatus.notFound) {
-      return null;
-    }
+    if (clientResp.statusCode == HttpStatus.notFound) return null;
 
+    _returnResponse(ctx, clientResp, requestUri);
+  }
+
+  void _returnResponse(
+      Context ctx, HttpClientResponse clientResp, Uri requestUri) {
     final servResp =
-        new StreamResponse(clientResp, statusCode: clientResp.statusCode);
+        StreamResponse(clientResp, statusCode: clientResp.statusCode);
 
     clientResp.headers.forEach((String key, dynamic val) {
       servResp.headers.add(key, val);
@@ -154,7 +168,7 @@ class PrefixedProxyServer implements RequestHandler {
     // than the destination server, if possible.
     if (clientResp.isRedirect && clientResp.headers.value('location') != null) {
       var location =
-          requestUrl.resolve(clientResp.headers.value('location')).toString();
+          requestUri.resolve(clientResp.headers.value('location')).toString();
       if (p.url.isWithin(proxyBaseUrl.toString(), location)) {
         servResp.headers.set('location',
             '/' + p.url.relative(location, from: proxyBaseUrl.toString()));
