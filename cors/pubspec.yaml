@@ -1,19 +1,19 @@
 name: jaguar_cors
 description: CORS interceptor for Jaguar
-version: 2.1.1
+version: 2.1.2
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
-homepage: https://github.com/jaguar-dart/jaguar/cors
+homepage: http://jaguar-dart.github.io
 documentation:
 
 environment:
-  sdk: ">=1.23.0 <2.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
-  jaguar: ^2.1.1
+  jaguar: ^2.1.37
 
 dev_dependencies:
   test:
-  jaguar_resty: ^2.2.2
+  jaguar_resty: ^2.6.2
   http:

@@ -45,9 +45,9 @@ void main() {
     });
 
     test('Default', () async {
-      await resty.get(baseUrl, '/none').expect([resty.bodyIs('none')]);
+      await resty.get(baseUrl + '/none').expect([resty.bodyIs('none')]);
       await resty
-          .get(baseUrl, '/none')
+          .get(baseUrl + '/none')
           .header('Origin', 'http://example.com:8000')
           .expect([
         resty.bodyIs('Invalid CORS request: Origin not allowed!'),
@@ -57,15 +57,15 @@ void main() {
 
     test('OriginsMatch', () async {
       await resty
-          .get(baseUrl, '/origins')
+          .get(baseUrl + '/origins')
           .go()
           .expect([resty.bodyIs('origins')]);
       await resty
-          .get(baseUrl, '/origins')
+          .get(baseUrl + '/origins')
           .header('Origin', 'http://example1.com')
           .expect([resty.bodyIs('origins'), resty.statusCodeIs(200)]);
       await resty
-          .get(baseUrl, '/origins')
+          .get(baseUrl + '/origins')
           .header('Origin', 'http://example2.com')
           .expect([
         resty.bodyIs('Invalid CORS request: Origin not allowed!'),
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('Preflight', () async {
-      await resty.options(baseUrl, '/origins').headers({
+      await resty.options(baseUrl + '/origins').headers({
         'Origin': 'http://example.com',
         'Access-Control-Request-Method': 'GET',
       }).expect([

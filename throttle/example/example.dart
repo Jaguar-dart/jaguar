@@ -7,26 +7,26 @@ import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_throttle/jaguar_throttle.dart';
 import 'package:jaguar_client/jaguar_client.dart';
 
-final client = new JsonClient(new http.IOClient());
+final client = JsonClient(new http.IOClient());
 
 runServer() async {
-  final jaguar = new Jaguar()
-    ..get('/one', (_) => 'one', before: [new Throttler.perMin(10)])
-    ..get('/two', (_) => 'two', before: [new Throttler.perMin(10)]);
+  final jaguar = Jaguar(port: 10000)
+    ..get('/one', (_) => 'one', before: [Throttler.perMin(10)])
+    ..get('/two', (_) => 'two', before: [Throttler.perMin(10)]);
   await jaguar.serve();
 }
 
 runClient() async {
   for (int i = 0; i < 10; i++) {
     await client
-        .get('http://localhost:8080/one')
+        .get('http://localhost:10000/one')
         .expect([statusCodeIs(200), bodyIs('one')]);
   }
   await client
-      .get('http://localhost:8080/one')
+      .get('http://localhost:10000/one')
       .expect([statusCodeIs(429), bodyIs('Limit exceeded')]);
   await client
-      .get('http://localhost:8080/two')
+      .get('http://localhost:10000/two')
       .expect([statusCodeIs(429), bodyIs('Limit exceeded')]);
 }
 
