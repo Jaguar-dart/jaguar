@@ -103,10 +103,7 @@ class Context {
 
   final Logger log;
 
-  Context(this.req,
-      {this.sessionManager,
-      this.log,
-      this.userFetchers});
+  Context(this.req, {this.sessionManager, this.log, this.userFetchers});
 
   final _variables = <Type, Map<String, dynamic>>{};
 
