@@ -5,8 +5,7 @@ import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_auth/jaguar_auth.dart';
 
-import '../../model/model.dart';
-import '../../model/dummy_user_fetcher.dart';
+import 'package:jaguar_example_session_models/jaguar_example_session_models.dart';
 
 final Map<String, Book> _books = {
   '0': new Book(id: '0', name: 'Book0'),
@@ -51,14 +50,14 @@ class StudentRoutes {
 @Controller(path: '/api')
 class LibraryApi {
   @IncludeHandler()
-  final auth = new AuthRoutes();
+  final auth = AuthRoutes();
 
   @IncludeHandler()
-  final books = new StudentRoutes();
+  final books = StudentRoutes();
 }
 
 server() async {
-  final server = new Jaguar(port: 10000)..add(reflect(new LibraryApi()));
-  server.userFetchers[User] = const DummyFetcher();
+  final server = Jaguar(port: 10000)..add(reflect(LibraryApi()));
+  server.userFetchers[User] = DummyUserFetcher(users);
   await server.serve();
 }
