@@ -1,128 +1,65 @@
 // Copyright (c) 2017, teja. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-/// Provides [PrefixedProxyServer] to reverse proxy certain selected requests to
+/// Provides [getOnlyProxy] to reverse proxy certain selected requests to
 /// another server.
 /// This is similar to Nginx's reverse proxy.
 library jaguar_dev_proxy;
 
 import 'dart:io';
-import 'dart:async';
-import 'dart:collection';
 import 'package:jaguar/jaguar.dart';
 import 'package:path/path.dart' as p;
 
-/// Request handler to reverse proxy certain selected requests to another server
+/// Creates a route that proxies the requests matching the [path] to another
+/// server at [proxyBaseUrl].
 ///
 /// Example usage:
-///     final proxy = PrefixedProxyServer('/client', 'http://localhost:8000/');
-///     final server = Jaguar(address: 'localhost', port: 8085);
-///     server.add(proxy);
-class PrefixedProxyServer implements RequestHandler {
-  /// Used to match incoming URLs
-  final String path;
+///     final server = Jaguar();
+///     server.addRoute(getOnlyProxy('/client/*', 'http://localhost:8000/'));
+///
+/// [path] is used to match the incoming  URL/route. The matching is based on
+/// prefix. For example:
+///
+/// When `path` is `/html/*`, it will match:
+///
+/// + `/html`
+/// + `/html/`
+/// + `/html/index.html`
+/// + `/html/static/index.html`
+///
+/// The `proxyBaseUrl` is just prefixed to the remaining part after `path` is
+/// matched. For example:
+///
+/// For `getOnlyProxy('/html/*', 'http://localhost:8000/client')`,
+///
+/// + `/html` is mapped into `http://localhost:8000/client/`
+/// + `/html/` is mapped into `http://localhost:8000/client/`
+/// + `/html/index.html` is mapped into `http://localhost:8000/client/index.html`
+/// + `/html/static/index.html` is mapped into `http://localhost:8000/client/static/index.html`
+//TODO add timeout
+Route getOnlyProxy(String path, String proxyBaseUrl,
+    {Map<String, String> pathRegEx,
+    ResponseProcessor responseProcessor,
+    bool stripPrefix: true,
+    String proxyName: 'jaguar_proxy',
+    HttpClient client}) {
+  client ??= HttpClient();
 
-  /// Path segments of [path]
-  final UnmodifiableListView<String> pathSegments;
-
-  /// Used as prefix to transform incoming URL request to target URL
-  final Uri proxyBaseUrl;
-
-  /// Name of this proxy server
-  final String proxyName;
-
-  final List<RouteInterceptor> before;
-
-  final List<RouteInterceptor> after;
-
-  //TODO add timeout
-
-  final _client = HttpClient();
-
-  /// Creates a new instance of [PrefixedProxyServer]
-  ///
-  /// [path] is used to match the incoming  URL/route. The matching is based on
-  /// prefix. For example:
-  ///
-  /// When `path` is `/html`, it will match:
-  ///
-  /// + `/html`
-  /// + `/html/`
-  /// + `/html/index.html`
-  /// + `/html/static/index.html`
-  ///
-  /// used to transform the incoming
-  /// request URL to reverse proxy target URL. The `proxyBaseUrl` is just prefixed
-  /// to the remaining part after `path` is matched match. For example:
-  ///
-  /// For `new PrefixedProxyServer('/html', 'http://localhost:8000/client')`,
-  ///
-  /// + `/html` is mapped into `http://localhost:8000/client/`
-  /// + `/html/` is mapped into `http://localhost:8000/client/`
-  /// + `/html/index.html` is mapped into `http://localhost:8000/client/index.html`
-  /// + `/html/static/index.html` is mapped into `http://localhost:8000/client/static/index.html`
-  PrefixedProxyServer(this.path, String proxyBaseUrl,
-      {this.proxyName: 'jaguar_proxy',
-      this.before: const [],
-      this.after: const []})
-      : pathSegments = UnmodifiableListView(splitPathToSegments(path)),
-        proxyBaseUrl = Uri.parse(proxyBaseUrl) {}
-
-  /// Checks if the provided [reqUri] matches
-  bool matches(Uri reqUri) {
-    final List<String> reqSegs = reqUri.pathSegments;
-
-    if (reqSegs.length < pathSegments.length) return false;
-
-    for (int i = 0; i < pathSegments.length; i++) {
-      if (pathSegments[i] == '*') continue;
-      if (pathSegments[i] != reqSegs[i]) return false;
-    }
-
-    return true;
-  }
-
-  /// Converts request Uri to proxy Uri
-  Uri transformUri(final Uri reqUri) {
-    var sb = StringBuffer();
-
-    sb.write(proxyBaseUrl);
-    final Iterable<String> segments = reqUri.pathSegments
-        .getRange(pathSegments.length, reqUri.pathSegments.length);
-
-    if (segments.isNotEmpty) {
-      if (!proxyBaseUrl.path.endsWith('/')) sb.write('/');
-      sb.write(segments.join('/'));
-    }
-
-    if (reqUri.path.endsWith('/')) sb.write('/');
-
-    return Uri.parse(sb.toString());
-  }
-
-  Future<void> handleRequest(Context ctx) async {
-    if (!matches(ctx.req.uri)) return null;
-
-    ctx.before.addAll(before);
-    ctx.after.addAll(after);
-
-    await Do.exec(ctx, _handler);
-  }
-
-  Future<void> _handler(Context ctx) async {
-    // TODO: Handle TRACE requests correctly. See
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8
-
-    Uri requestUri = transformUri(ctx.req.uri);
+  Route route;
+  int skipCount;
+  route = Route.get(path, (ctx) async {
+    Iterable<String> segs = ctx.pathSegments;
+    if (stripPrefix) segs = segs.skip(skipCount);
+    Uri requestUri = Uri.parse(proxyBaseUrl + '/' + segs.join('/'));
     HttpClientRequest clientReq =
-        await _client.openUrl(ctx.req.method, requestUri);
+        await client.openUrl(ctx.req.method, requestUri);
     clientReq.followRedirects = false;
 
     ctx.req.headers.forEach((String key, dynamic val) {
       clientReq.headers.add(key, val);
     });
     // TODO add forward headers
-    clientReq.headers.set('Host', proxyBaseUrl.authority);
+    clientReq.headers.set('Host', requestUri.authority);
 
     // Add a Via header. See
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
@@ -133,50 +70,57 @@ class PrefixedProxyServer implements RequestHandler {
 
     if (clientResp.statusCode == HttpStatus.notFound) return null;
 
-    _returnResponse(ctx, clientResp, requestUri);
+    _returnResponse(ctx, clientResp, requestUri, proxyName, proxyBaseUrl);
+  }, responseProcessor: responseProcessor, pathRegEx: pathRegEx);
+
+  if (stripPrefix) {
+    if (route.pathSegments.isNotEmpty)
+      skipCount = route.pathSegments.length - 1;
+  }
+  return route;
+}
+
+void _returnResponse(Context ctx, HttpClientResponse clientResp, Uri requestUri,
+    String proxyName, String proxyBaseUrl) {
+  final servResp =
+      StreamResponse(clientResp, statusCode: clientResp.statusCode);
+
+  clientResp.headers.forEach((String key, dynamic val) {
+    servResp.headers.add(key, val);
+  });
+
+  // Add a Via header. See
+  // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
+  servResp.headers.add('via', '1.1 $proxyName');
+
+  // Remove the transfer-encoding since the body has already been decoded by
+  // [client].
+  servResp.headers.removeAll('transfer-encoding');
+
+  // If the original response was gzipped, it will be decoded by [client]
+  // and we'll have no way of knowing its actual content-length.
+  if (clientResp.headers.value('content-encoding') == 'gzip') {
+    servResp.headers.removeAll('content-encoding');
+    servResp.headers.removeAll('content-length');
+
+    // Add a Warning header. See
+    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.5.2
+    servResp.headers.add('warning', '214 $proxyName "GZIP decoded"');
   }
 
-  void _returnResponse(
-      Context ctx, HttpClientResponse clientResp, Uri requestUri) {
-    final servResp =
-        StreamResponse(clientResp, statusCode: clientResp.statusCode);
-
-    clientResp.headers.forEach((String key, dynamic val) {
-      servResp.headers.add(key, val);
-    });
-
-    // Add a Via header. See
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
-    servResp.headers.add('via', '1.1 $proxyName');
-
-    // Remove the transfer-encoding since the body has already been decoded by
-    // [client].
-    servResp.headers.removeAll('transfer-encoding');
-
-    // If the original response was gzipped, it will be decoded by [client]
-    // and we'll have no way of knowing its actual content-length.
-    if (clientResp.headers.value('content-encoding') == 'gzip') {
-      servResp.headers.removeAll('content-encoding');
-      servResp.headers.removeAll('content-length');
-
-      // Add a Warning header. See
-      // http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.5.2
-      servResp.headers.add('warning', '214 $proxyName "GZIP decoded"');
+  // Make sure the Location header is pointing to the proxy server rather
+  // than the destination server, if possible.
+  if (clientResp.isRedirect && clientResp.headers.value('location') != null) {
+    String location =
+        requestUri.resolve(clientResp.headers.value('location')).toString();
+    if (p.url.isWithin(proxyBaseUrl, location)) {
+      // TODO add prefix
+      servResp.headers
+          .set('location', '/' + p.url.relative(location, from: proxyBaseUrl));
+    } else {
+      servResp.headers.set('location', location);
     }
-
-    // Make sure the Location header is pointing to the proxy server rather
-    // than the destination server, if possible.
-    if (clientResp.isRedirect && clientResp.headers.value('location') != null) {
-      var location =
-          requestUri.resolve(clientResp.headers.value('location')).toString();
-      if (p.url.isWithin(proxyBaseUrl.toString(), location)) {
-        servResp.headers.set('location',
-            '/' + p.url.relative(location, from: proxyBaseUrl.toString()));
-      } else {
-        servResp.headers.set('location', location);
-      }
-    }
-
-    ctx.response = servResp;
   }
+
+  ctx.response = servResp;
 }
