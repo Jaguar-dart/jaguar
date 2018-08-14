@@ -21,8 +21,7 @@ dependencies:
   crypto: ^2.0.5
   auth_header: ^2.1.2
   jaguar_common: ^2.1.1
-  path_tree:
-    path: ../path_tree
+  path_tree: ^2.2.0
 
 dev_dependencies:
   analyzer: ^0.32.0

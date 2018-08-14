@@ -2,10 +2,17 @@
 
 ## 2.2.0
 
++ Faster routing
++ Powerful `ResponseProcessor`
++ Cleaner `HttpMethod` and `Route` interface
++ Powerful `staticFile` and `staticFiles`
+
 ### Breaking changes
 
 + Removed `RequestHandler`
-+ 
++ Removed `statusCode`, `mimeType`, `charset` and `headers` from `HttpMethod` and `Route`
++ Renamed `splitPathToSegements` to `pathToSegments`
++ Changed the signature of `ResponseProcessor`
 
 ## 2.1.37
 
