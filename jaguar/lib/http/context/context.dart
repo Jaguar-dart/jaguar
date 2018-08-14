@@ -381,7 +381,7 @@ class Context {
     return convert(b);
   }
 
-  Response response;
+  Response response = Response(null);
 
   final List<ExceptionHandler> onException = <ExceptionHandler>[];
 
@@ -411,5 +411,49 @@ class Context {
           req.headers.value(HttpHeaders.authorizationHeader));
     }
     return _authHeader.items[scheme]?.credentials;
+  }
+
+  Future<void> execute(final RouteHandler routeHandler,
+      ResponseProcessor responseProcessor) async {
+    try {
+      {
+        for (int i = 0; i < before.length; i++) {
+          final maybeFuture = before[i](this);
+          if (maybeFuture is Future) await maybeFuture;
+        }
+      }
+
+      {
+        dynamic res = routeHandler(this);
+        if (res is Future) res = await res;
+
+        if (res != null) {
+          if (res is Response)
+            response = res;
+          else
+            response.value = res;
+        }
+        if (responseProcessor != null) responseProcessor(response);
+      }
+
+      for (int i = after.length - 1; i >= 0; i--) {
+        final maybeFuture = after[i](this);
+        if (maybeFuture is Future) await maybeFuture;
+      }
+    } catch (e, s) {
+      bool responded = false;
+      for (int i = onException.length - 1; i >= 0; i--) {
+        try {
+          dynamic maybeFuture = onException[i](this, e, s);
+          if (maybeFuture != null) await maybeFuture;
+        } catch (e) {
+          if (e is Response) {
+            response = e;
+            responded = true;
+          }
+        }
+      }
+      if (!responded) rethrow;
+    }
   }
 }

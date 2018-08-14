@@ -5,7 +5,7 @@ import 'dart:math';
 import 'dart:async';
 import 'package:crypto/crypto.dart';
 
-import 'package:jaguar/src/http/context/context.dart';
+import 'package:jaguar/http/context/context.dart';
 
 import 'coder.dart';
 import 'io.dart';

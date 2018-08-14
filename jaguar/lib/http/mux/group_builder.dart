@@ -23,5 +23,5 @@ class GroupBuilder extends Object with Muxable {
   }
 
   GroupBuilder group({String pathPrefix: ''}) =>
-      new GroupBuilder(server, path: this.pathPrefix + (pathPrefix ?? ''));
+      GroupBuilder(server, path: this.pathPrefix + (pathPrefix ?? ''));
 }

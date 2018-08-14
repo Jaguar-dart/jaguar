@@ -8,21 +8,13 @@ abstract class Muxable {
   Route route(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
       List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route(path, handler,
+    final route = Route(path, handler,
         methods: methods,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -33,20 +25,12 @@ abstract class Muxable {
   /// Adds a route with GET method to be served
   Route get(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.get(path, handler,
+    final route = Route.get(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -57,20 +41,12 @@ abstract class Muxable {
   /// Adds a route with POST method to be served
   Route post(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.post(path, handler,
+    final route = Route.post(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -81,20 +57,12 @@ abstract class Muxable {
   /// Adds a route with PUT method to be served
   Route put(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.put(path, handler,
+    final route = Route.put(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -105,20 +73,12 @@ abstract class Muxable {
   /// Adds a route with DELETE method to be served
   Route delete(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.delete(path, handler,
+    final route = Route.delete(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -129,20 +89,12 @@ abstract class Muxable {
   /// Adds a route with PATCH method to be served
   Route patch(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.patch(path, handler,
+    final route = Route.patch(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -153,20 +105,12 @@ abstract class Muxable {
   /// Adds a route with OPTIONS method to be served
   Route options(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.options(path, handler,
+    final route = Route.options(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        mimeType: mimeType,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -184,7 +128,7 @@ abstract class Muxable {
       Route rb;
       dynamic v = handlers[path];
       if (v is RouteHandler) {
-        rb = addRoute(new Route(path, v));
+        rb = addRoute(Route(path, v));
         rb.before.addAll(before);
         rb.after.addAll(after);
         rb.onException.addAll(onException);
@@ -195,7 +139,7 @@ abstract class Muxable {
         rb.onException.addAll(onException);
       } else if (v is Iterable<RouteHandler>) {
         for (RouteHandler v1 in v) {
-          rb = addRoute(new Route(path, v1));
+          rb = addRoute(Route(path, v1));
           rb.before.addAll(before);
           rb.after.addAll(after);
           rb.onException.addAll(onException);
@@ -208,7 +152,7 @@ abstract class Muxable {
           rb.onException.addAll(onException);
         }
       } else {
-        throw new UnsupportedError('Handler not supported!');
+        throw UnsupportedError('Handler not supported!');
       }
     }
   }
@@ -216,18 +160,12 @@ abstract class Muxable {
   /// Adds a route with GET method to be served
   Route html(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.html(path, handler,
+    final route = Route.html(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -239,19 +177,13 @@ abstract class Muxable {
   Route json(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
       List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
-      int statusCode: 200,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.json(path, handler,
+    final route = Route.json(path, handler,
         pathRegEx: pathRegEx,
         methods: methods,
-        statusCode: statusCode,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -262,18 +194,12 @@ abstract class Muxable {
   /// Adds a route with GET method to be served
   Route getJson(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.getJson(path, handler,
+    final route = Route.getJson(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -284,18 +210,12 @@ abstract class Muxable {
   /// Adds a route with POST method to be served
   Route postJson(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.postJson(path, handler,
+    final route = Route.postJson(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -306,18 +226,12 @@ abstract class Muxable {
   /// Adds a route with PUT method to be served
   Route putJson(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.putJson(path, handler,
+    final route = Route.putJson(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -328,18 +242,12 @@ abstract class Muxable {
   /// Adds a route with DELETE method to be served
   Route deleteJson(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String charset: kDefaultCharset,
-      Map<String, String> headers,
       ResponseProcessor responseProcessor: jsonResponseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    final route = new Route.deleteJson(path, handler,
+    final route = Route.deleteJson(path, handler,
         pathRegEx: pathRegEx,
-        statusCode: statusCode,
-        charset: charset,
-        headers: headers,
         responseProcessor: responseProcessor,
         before: before,
         after: after,
@@ -351,29 +259,11 @@ abstract class Muxable {
   ///     server.ws('/ws', (String data) => int.parse(data) + 1);
   Route ws(String path, WsTransformer handler,
       {Map<String, String> pathRegEx,
-      ResponseProcessor responseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    return addRoute(new Route.get(path, socketHandler(handler),
+    return addRoute(Route.get(path, wsHandler(handler),
         pathRegEx: pathRegEx,
-        responseProcessor: responseProcessor,
-        before: before,
-        after: after,
-        onException: onException));
-  }
-
-  /// Example:
-  ///     server.wsJson('/ws', (Map data) => {'data': data});
-  Route wsJson(String path, WsTransformer handler,
-      {Map<String, String> pathRegEx,
-      ResponseProcessor responseProcessor: jsonResponseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
-    return addRoute(new Route.get(path, socketHandler(handler),
-        pathRegEx: pathRegEx,
-        responseProcessor: responseProcessor,
         before: before,
         after: after,
         onException: onException));
@@ -399,32 +289,27 @@ abstract class Muxable {
   /// /static/html/index.html -> static/html/index.html
   ///
   /// Example:
-  ///    final server = new Jaguar();
+  ///    final server = Jaguar();
   ///    server.staticFiles('/static/*', 'static');
   ///    await server.serve();
-  void staticFiles(String path, directory,
+  Route staticFiles(String path, directory,
       {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers: const {},
-      bool stripPrefix: true}) {
+      ResponseProcessor responseProcessor,
+      bool stripPrefix: true,
+      Future<Response> directoryLister(Directory directory)}) {
     if (directory is String) directory = Directory(directory);
 
     final Directory dir = directory;
     if (!dir.existsSync())
-      throw new Exception('Directory ${dir.path} does not exist!');
+      throw Exception('Directory ${dir.path} does not exist!');
 
-    List<String> parts = splitPathToSegments(path);
+    Route route;
+    int skipCount;
+    route = this.get(path, (ctx) async {
+      Iterable<String> segs = ctx.pathSegments;
+      if (stripPrefix) segs = segs.skip(skipCount);
 
-    int len = parts.length;
-    if (parts.last == '*') len--;
-
-    this.get(path, (Context ctx) async {
-      final List<String> paths = stripPrefix
-          ? ctx.uri.pathSegments.sublist(len)
-          : ctx.uri.pathSegments;
-      String path = p.join(dir.path, p.joinAll(paths));
+      String path = p.join(dir.path, p.joinAll(segs));
       var file = File(path);
 
       if (!await file.exists()) {
@@ -437,43 +322,38 @@ abstract class Muxable {
         file = File(path);
 
         if (!await file.exists()) {
-          // TODO render directory listing
+          if (directoryLister != null) return directoryLister(fileDir);
           return Response('', statusCode: HttpStatus.notFound);
         }
       }
 
       return StreamResponse(await file.openRead(),
-          statusCode: statusCode,
-          mimeType: MimeTypes.ofFile(file) ?? mimeType,
-          headers: headers,
-          charset: charset);
-    }, pathRegEx: pathRegEx);
+          mimeType: MimeTypes.ofFile(file));
+    }, pathRegEx: pathRegEx, responseProcessor: responseProcessor);
+
+    if (stripPrefix) {
+      if (route.pathSegments.isNotEmpty)
+        skipCount = route.pathSegments.length - 1;
+    }
+    return route;
   }
 
   /// Serves requests at [path] with content of [file]
   ///
   /// Example:
-  ///    final server = new Jaguar();
+  ///    final server = Jaguar();
   ///    server.staticFile('/hello', p.join('static', 'hello.txt'));
   ///    await server.serve();
-  void staticFile(String path, file,
-      {Map<String, String> pathRegEx,
-      int statusCode: 200,
-      String mimeType: kDefaultMimeType,
-      String charset: kDefaultCharset,
-      Map<String, String> headers}) {
+  Route staticFile(String path, file,
+      {Map<String, String> pathRegEx, ResponseProcessor responseProcessor}) {
     if (file is String) file = File(file);
 
     final File f = file;
-    mimeType = MimeTypes.ofFile(f) ?? mimeType;
-
-    this.get(
+    return this.get(
         path,
-        (_) async => StreamResponse(await f.openRead(),
-            statusCode: statusCode,
-            mimeType: mimeType,
-            charset: charset,
-            headers: headers),
-        pathRegEx: pathRegEx);
+        (_) async =>
+            StreamResponse(await f.openRead(), mimeType: MimeTypes.ofFile(f)),
+        pathRegEx: pathRegEx,
+        responseProcessor: responseProcessor);
   }
 }

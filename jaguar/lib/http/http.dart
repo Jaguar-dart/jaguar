@@ -4,7 +4,6 @@ library jaguar.src.http;
 export 'auth/fetcher.dart';
 export 'common/common.dart';
 export 'context/context.dart';
-export 'interceptor/interceptor.dart';
 export 'mux/mux.dart';
 export 'params/import.dart';
 export 'request/request.dart';

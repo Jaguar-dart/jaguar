@@ -1,40 +1,30 @@
 // Copyright (c) 2017, Ravi Teja Gudapati. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-library jaguar.http.reflect;
+library jaguar.reflect;
 
-import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 import 'dart:mirrors';
 import 'dart:collection';
 
 /// Composing routes are parsed by reflecting the provided [_api]. Alternative
 /// is to to source generate.
-class ReflectedController implements RequestHandler {
+class ReflectedController {
   /// The api instance being reflected
   final dynamic _api;
 
   /// Routes parsed from [_api]
-  final _routes = <RequestHandler>[];
+  final _routes = <Route>[];
 
   /// The composing routes.
   ///
   /// Publicly exposes an immutable version of [_routes]
-  UnmodifiableListView<RequestHandler> get routes =>
-      new UnmodifiableListView<RequestHandler>(_routes);
+  UnmodifiableListView<Route> get routes =>
+      UnmodifiableListView<Route>(_routes);
 
   /// Constructs a
   ReflectedController(this._api) {
     _parseController();
-  }
-
-  /// Handles requests
-  Future<void> handleRequest(Context ctx) async {
-    for (RequestHandler route in _routes) {
-      await route.handleRequest(ctx);
-      if (ctx.response is Response) return null;
-    }
-    return null;
   }
 
   void _parseController() {
@@ -42,8 +32,7 @@ class ReflectedController implements RequestHandler {
 
     Controller api = _getAnnotation<Controller>(im.type.metadata);
     if (api == null)
-      throw new Exception(
-          'Handler is not decorated with Controller annotation!');
+      throw Exception('Handler is not decorated with Controller annotation!');
 
     final List<RouteInterceptor> before = _detectBefore(im, im.type.metadata);
     final List<RouteInterceptor> after = _detectAfter(im, im.type.metadata);

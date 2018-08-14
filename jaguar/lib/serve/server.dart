@@ -6,14 +6,10 @@ import 'dart:io';
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
 
-import 'package:jaguar/src/serve/error_writer/import.dart';
+import 'package:jaguar/serve/error_writer/import.dart';
+import 'package:path_tree/path_tree.dart';
 
-export 'package:jaguar/src/serve/error_writer/import.dart';
-
-/// Base class for Request handlers
-abstract class RequestHandler {
-  FutureOr<void> handleRequest(Context ctx);
-}
+export 'package:jaguar/serve/error_writer/import.dart';
 
 /// The Jaguar server
 class Jaguar extends Object with Muxable {
@@ -95,13 +91,17 @@ class Jaguar extends Object with Muxable {
 
   /// Starts serving the HTTP requests.
   Future<void> serve({bool logRequests: false}) async {
-    if (_server != null) throw new Exception('Already serving!');
+    if (_server != null) throw Exception('Already serving!');
+
+    _build();
+
     log.info("Running on $resourceName");
     if (securityContext != null) {
       _server = await HttpServer.bindSecure(address, port, securityContext);
     } else {
       _server = await HttpServer.bind(address, port, shared: multiThread);
     }
+
     _server.autoCompress = autoCompress;
     if (logRequests) {
       _server.listen((HttpRequest r) {
@@ -128,13 +128,15 @@ class Jaguar extends Object with Muxable {
 
     try {
       // Try to find a matching route and invoke it.
-      for (RequestHandler requestHandler in _handlers) {
-        await requestHandler.handleRequest(ctx);
-        if (ctx.response != null) break;
+      RouteHandler handler =
+          _routeTree.match(request.uri.pathSegments, request.method);
+      if(handler != null) {
+        await handler(ctx);
+        // If no response, write 404 error.
+        if (ctx.response == null) errorWriter.make404(ctx);
+      } else {
+        errorWriter.make404(ctx);
       }
-
-      // If no response, write 404 error.
-      if (ctx.response == null) errorWriter.make404(ctx);
     } catch (e, stack) {
       if (e is Response) {
         // If [Response] object was thrown, write it!
@@ -170,27 +172,35 @@ class Jaguar extends Object with Muxable {
     _server = null;
   }
 
-  /// [RequestHandler]s
-  final List<RequestHandler> _handlers = [];
+  /// Create a new route group
+  GroupBuilder group([String path = '']) => GroupBuilder(this, path: path);
 
-  /// Adds the given [RequestHandler] to be served
-  void add(RequestHandler api) {
-    if (_server != null) {
-      throw new Exception('Cannot add routes after server has been started!');
-    }
-    _handlers.add(api);
+  /// Adds all the given [routes] to be served
+  void add(Iterable<Route> routes) {
+    if (_server != null) throw Exception('Server has started!');
+    _routes.addAll(routes);
   }
 
-  /// Adds the [Route] to be served
+  /// Adds the given [route] to be served
   Route addRoute(Route route) {
-    if (_server != null)
-      throw Exception('Cannot add routes after server has been started!');
-    _handlers.add(route);
+    if (_server != null) throw Exception('Server has started!');
+    _routes.add(route);
     return route;
   }
 
-  /// Create a new route group
-  GroupBuilder group([String path = '']) => new GroupBuilder(this, path: path);
+  /// [RouteHandler]s
+  final List<Route> _routes = [];
 
   final userFetchers = <Type, UserFetcher<AuthorizationUser>>{};
+
+  PathTree<RouteHandler> _routeTree;
+
+  void _build() {
+    _routeTree = PathTree<RouteHandler>();
+
+    for (Route route in _routes) {
+      _routeTree.addPathAsSegments(route.pathSegments, route,
+          tags: route.info.methods, pathRegEx: route.info.pathRegEx);
+    }
+  }
 }

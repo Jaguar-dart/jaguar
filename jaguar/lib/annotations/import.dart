@@ -13,9 +13,7 @@ class Controller {
   /// Path prefix of the child routes and included APIs in the API class
   final String path;
 
-  final bool isRoot;
-
-  const Controller({this.path: '', this.isRoot: false});
+  const Controller({this.path: ''});
 }
 
 /// Includes the route handlers into the parent API class

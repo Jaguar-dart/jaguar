@@ -6,9 +6,10 @@
 /// More dartdocs go here.
 library jaguar_reflect;
 
+import 'package:jaguar/jaguar.dart';
 import 'reflect/reflect.dart';
 
 export 'reflect/reflect.dart';
 
 /// Reflects the given [api] and returns an instance of [ReflectedController]
-ReflectedController reflect(Object api) => new ReflectedController(api);
+List<Route> reflect(Object api) => ReflectedController(api).routes;

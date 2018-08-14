@@ -18,17 +18,6 @@ import 'dart:async';
 part 'form_field.dart';
 part 'request_impl.dart';
 
-/// Splits given path to composing segments
-List<String> splitPathToSegments(final String paths) {
-  final List<String> segments = paths.split(new RegExp(r'/+'));
-  final res = <String>[];
-  for (String part in segments) {
-    if (part.length == 0) continue;
-    res.add(part);
-  }
-  return res;
-}
-
 /// [Request] contains information about HTTP request
 abstract class Request {
   factory Request(HttpRequest request) => new _Request(request);

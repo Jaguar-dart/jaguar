@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'response.dart';
-import 'package:jaguar/src/http/http.dart';
+import 'package:jaguar/http/http.dart';
 
 /// [Response] that writes the stream of bytes provided in [value] to the
 /// response.

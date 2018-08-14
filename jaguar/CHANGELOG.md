@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.0
+
+### Breaking changes
+
++ Removed `RequestHandler`
++ 
+
 ## 2.1.37
 
 + Dart 2 stable

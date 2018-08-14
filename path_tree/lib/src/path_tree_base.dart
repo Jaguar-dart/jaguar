@@ -33,15 +33,14 @@ class PathTree<T> {
   final _tree = SubTree<T>();
 
   void addPath(String path, T value,
-      {Iterable<String> tags: const ['*'],
-      Map<String, String> pathRegEx: const {}}) {
+      {Iterable<String> tags: const ['*'], Map<String, String> pathRegEx}) {
     final segs = pathToSegments(path);
     addPathAsSegments(segs, value, tags: tags, pathRegEx: pathRegEx);
   }
 
   void addPathAsSegments(Iterable<String> segments, T value,
-      {Iterable<String> tags: const ['*'],
-      Map<String, String> pathRegEx: const {}}) {
+      {Iterable<String> tags: const ['*'], Map<String, String> pathRegEx}) {
+    pathRegEx ??= {};
     SubTree<T> subtree = _tree;
     final int numSegs = segments.length;
     for (int i = 0; i < numSegs; i++) {
@@ -123,7 +122,10 @@ class PathTree<T> {
       subTree = next;
     }
 
-    return subTree.value[tag] ?? subTree.value['*'];
+    return subTree.value[tag] ??
+        subTree.globValue[tag] ??
+        subTree.value['*'] ??
+        subTree.globValue['*'];
   }
 
   T _matchParts(SubTree<T> root, Iterable<String> segments, String tag) {
