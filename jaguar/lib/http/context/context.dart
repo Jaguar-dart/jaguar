@@ -430,10 +430,11 @@ class Context {
         if (res != null) {
           if (res is Response)
             response = res;
-          else
+          else {
             response.value = res;
+            if (responseProcessor != null) responseProcessor(response);
+          }
         }
-        if (responseProcessor != null) responseProcessor(response);
       }
 
       for (int i = after.length - 1; i >= 0; i--) {
