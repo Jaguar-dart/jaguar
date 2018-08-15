@@ -89,6 +89,8 @@ class Jaguar extends Object with Muxable {
 
     _build();
 
+    if (logRequests) log.info("Serving on " + _connectionInfos.join(', '));
+
     _server = List<HttpServer>(_connectionInfos.length);
     try {
       for (int i = 0; i < _connectionInfos.length; i++) {
@@ -115,8 +117,6 @@ class Jaguar extends Object with Muxable {
 
     for (HttpServer server in _server) {
       if (logRequests) {
-        log.info("Serving on " + _connectionInfos.join(', '));
-
         server.listen((HttpRequest r) {
           log.info("Req => Method: ${r.method} Url: ${r.uri}");
           _handler(r);

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.5
+
++ Minor bug fix
+
 ## 2.2.4
 
 + Various `ResponseProcessor` utilities
