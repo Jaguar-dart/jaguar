@@ -5,8 +5,6 @@ import 'dart:io';
 import 'dart:convert' as cnv;
 import 'package:jaguar/http/http.dart';
 
-import 'package:jaguar/annotations/import.dart';
-
 export 'byte_response.dart';
 export 'redirect_response.dart';
 export 'stream_response.dart';

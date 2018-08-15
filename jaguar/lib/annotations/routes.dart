@@ -1,11 +1,35 @@
 part of jaguar.src.annotations;
 
-typedef void ResponseProcessor(Response resp);
+/// Function that modifies [response]
+typedef void ResponseProcessor(Response response);
 
+/// [ResponseProcessor] to encode response value to json and also set mimetype
+/// to [MimeType.json].
 void jsonResponseProcessor(Response resp) {
   resp.headers.mimeType = MimeTypes.json;
   resp.value = converters.json.encode(resp.value);
 }
+
+/// [ResponseProcessor] to set mimetype to [MimeType.html].
+void htmlResponseProcessor(Response resp) {
+  resp.headers.mimeType = MimeTypes.html;
+}
+
+/// [ResponseProcessor] to set various response fields
+ResponseProcessor setResponseFields(
+        {int statusCode,
+        String mimetype,
+        String charset,
+        Map<String, String> headers}) =>
+    (resp) {
+      if (statusCode != null) resp.statusCode = statusCode;
+      if (headers != null) headers.forEach(resp.headers.set);
+      if (mimetype != null) resp.headers.mimeType = mimetype;
+      if (charset != null) resp.headers.charset = charset;
+    };
+
+ResponseProcessor mimeSetter(String mime) =>
+    (resp) => resp.headers.mimeType = mime;
 
 /// Annotation to declare a method as request handler method that processes GET
 /// requests.

@@ -13,19 +13,7 @@ export 'package:jaguar/serve/error_writer/import.dart';
 
 /// The Jaguar server
 class Jaguar extends Object with Muxable {
-  /// Address on which the API is serviced
-  String address;
-
-  /// Port on which the API is serviced
-  int port;
-
-  /// Security context for HTTPS
-  SecurityContext securityContext;
-
-  /// Should the port be service-able from multiple isolates?
-  ///
-  /// Defaults to false.
-  bool multiThread;
+  final List<ConnectTo> _connectionInfos;
 
   /// Should the response be auto-compressed?
   ///
@@ -56,14 +44,8 @@ class Jaguar extends Object with Muxable {
   /// log.
   final log = Logger('J');
 
-  /// Returns protocol string
-  String get protocolStr => securityContext == null ? 'http' : 'https';
-
-  /// Base path
-  String get resourceName => "$protocolStr://$address:$port/";
-
   /// Internal http server
-  HttpServer _server;
+  List<HttpServer> _server;
 
   /// Constructs an instance of [Jaguar] with given configuration.
   ///
@@ -78,46 +60,77 @@ class Jaguar extends Object with Muxable {
   /// errors.
   /// [sessionManager] provides ability to use custom session managers.
   Jaguar(
-      {this.address: "0.0.0.0",
-      this.port: 8080,
-      this.multiThread: false,
-      this.securityContext: null,
+      {String address: "0.0.0.0",
+      int port: 8080,
+      bool multiThread: false,
+      SecurityContext securityContext,
       this.autoCompress: false,
       this.basePath: '',
       ErrorWriter errorWriter,
       SessionManager sessionManager})
-      : errorWriter = errorWriter ?? new DefaultErrorWriter(),
-        sessionManager = sessionManager ?? new JaguarSessionManager();
+      : errorWriter = errorWriter ?? DefaultErrorWriter(),
+        sessionManager = sessionManager ?? JaguarSessionManager(),
+        _connectionInfos = [
+          ConnectTo(
+              address: address,
+              port: port,
+              securityContext: securityContext,
+              multiThread: multiThread)
+        ];
 
-  /// Starts serving the HTTP requests.
+  void alsoTo(ConnectTo connection) {
+    if (_server != null) throw Exception('Already started!');
+    _connectionInfos.add(connection);
+  }
+
+  /// Starts serving the requests.
   Future<void> serve({bool logRequests: false}) async {
-    if (_server != null) throw Exception('Already serving!');
+    if (_server != null) throw Exception('Already started!');
 
     _build();
 
-    log.info("Running on $resourceName");
-    if (securityContext != null) {
-      _server = await HttpServer.bindSecure(address, port, securityContext);
-    } else {
-      _server = await HttpServer.bind(address, port, shared: multiThread);
+    _server = List<HttpServer>(_connectionInfos.length);
+    try {
+      for (int i = 0; i < _connectionInfos.length; i++) {
+        ConnectTo ct = _connectionInfos[i];
+        if (ct.securityContext != null) {
+          _server[i] = await HttpServer.bindSecure(
+              ct.address, ct.port, ct.securityContext,
+              shared: ct.multiThread);
+        } else {
+          _server[i] = await HttpServer.bind(ct.address, ct.port,
+              shared: ct.multiThread);
+        }
+        _server[i].autoCompress = autoCompress;
+      }
+    } catch (e) {
+      for (int i = 0; i < _connectionInfos.length; i++) {
+        HttpServer server = _server[i];
+        if (server != null) {
+          await server.close();
+        }
+      }
+      rethrow;
     }
 
-    _server.autoCompress = autoCompress;
-    if (logRequests) {
-      _server.listen((HttpRequest r) {
-        log.info("Req => Method: ${r.method} Url: ${r.uri}");
-        _handler(r);
-      });
-    } else {
-      _server.listen(_handler);
+    for (HttpServer server in _server) {
+      if (logRequests) {
+        log.info("Serving on " + _connectionInfos.join(', '));
+
+        server.listen((HttpRequest r) {
+          log.info("Req => Method: ${r.method} Url: ${r.uri}");
+          _handler(r);
+        });
+      } else {
+        server.listen(_handler);
+      }
     }
   }
 
-  Future<void> restart({bool logRequests: false}) =>
-      _server.close(force: true).then((_) {
-        _server = null;
-        return serve(logRequests: logRequests);
-      });
+  Future<void> restart({bool logRequests: false}) async {
+    await close();
+    return serve(logRequests: logRequests);
+  }
 
   Future<void> _handler(HttpRequest request) async {
     final ctx = Context(Request(request),
@@ -130,7 +143,7 @@ class Jaguar extends Object with Muxable {
       // Try to find a matching route and invoke it.
       RouteHandler handler =
           _routeTree.match(request.uri.pathSegments, request.method);
-      if(handler != null) {
+      if (handler != null) {
         await handler(ctx);
         // If no response, write 404 error.
         if (ctx.response == null) errorWriter.make404(ctx);
@@ -168,8 +181,16 @@ class Jaguar extends Object with Muxable {
 
   /// Closes the server
   Future<void> close() async {
-    await _server.close(force: true);
+    dynamic err;
+    for (HttpServer server in _server) {
+      try {
+        await server.close(force: true);
+      } catch (e) {
+        if (err == null) err = e;
+      }
+    }
     _server = null;
+    if (err != null) throw err;
   }
 
   /// Create a new route group
@@ -203,4 +224,34 @@ class Jaguar extends Object with Muxable {
           tags: route.info.methods, pathRegEx: route.info.pathRegEx);
     }
   }
+}
+
+class ConnectTo {
+  /// Address on which the API is serviced
+  final String address;
+
+  /// Port on which the API is serviced
+  final int port;
+
+  /// Security context for HTTPS
+  final SecurityContext securityContext;
+
+  /// Should the port be service-able from multiple isolates?
+  ///
+  /// Defaults to false.
+  final bool multiThread;
+
+  /// Base path
+  String get authority => "$address:$port";
+
+  ConnectTo(
+      {this.address: "0.0.0.0",
+      this.port: 8080,
+      this.securityContext,
+      this.multiThread: false});
+
+  ConnectTo.https(this.securityContext,
+      {this.address: "0.0.0.0", this.port: 443, this.multiThread: false});
+
+  String toString() => authority;
 }

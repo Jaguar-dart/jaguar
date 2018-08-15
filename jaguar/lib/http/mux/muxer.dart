@@ -160,7 +160,7 @@ abstract class Muxable {
   /// Adds a route with GET method to be served
   Route html(String path, RouteHandler handler,
       {Map<String, String> pathRegEx,
-      ResponseProcessor responseProcessor,
+      ResponseProcessor responseProcessor: htmlResponseProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {

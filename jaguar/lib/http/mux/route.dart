@@ -191,12 +191,8 @@ class Route {
 
   /// Constructs a [Route] for HTML requests
   factory Route.html(String path, RouteHandler handler,
-          {int statusCode: 200,
-          String mimeType: MimeTypes.html,
-          String charset: kDefaultCharset,
-          Map<String, String> headers,
-          Map<String, String> pathRegEx,
-          ResponseProcessor responseProcessor,
+          {Map<String, String> pathRegEx,
+          ResponseProcessor responseProcessor: htmlResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>

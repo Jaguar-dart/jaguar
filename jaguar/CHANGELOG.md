@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.4
+
++ Various `ResponseProcessor` utilities
+
+## 2.2.2
+
++ Serve same server on multiple address.port mappings using `alsoTo`
+
 ## 2.2.0
 
 + Faster routing
