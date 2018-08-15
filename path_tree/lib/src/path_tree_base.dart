@@ -27,6 +27,11 @@ class SubTree<T> {
   SubTree<T> varSubTree;
 
   final globValue = <String, T>{};
+
+  bool get hasVarPaths =>
+      regexes.isNotEmpty ||
+      varSubTree != null ||
+      globValue != null; // TODO cache this
 }
 
 class PathTree<T> {
@@ -86,20 +91,25 @@ class PathTree<T> {
       _match(_tree, segments, tag);
 
   T _match(SubTree<T> root, Iterable<String> segments, String tag) {
-    if (segments.isEmpty) return root.value[tag] ?? root.value['*'];
-
     final int numSegs = segments.length;
     SubTree<T> subTree = root;
     for (int i = 0; i < numSegs; i++) {
       String seg = segments.elementAt(i);
 
       SubTree<T> next = subTree.fixed[seg];
-      if (next == null) {
+      if (subTree.hasVarPaths) {
+        if (next != null) {
+          T ret = _match(next, segments.skip(i + 1), tag);
+          if (ret != null) return ret;
+          next = null;
+        }
+
         for (MapEntry<RegExp, SubTree<T>> regex in subTree.regexes) {
           if (regex.key.allMatches(seg).isNotEmpty) {
             if (next != null) {
               T ret = _matchParts(subTree, segments.skip(i), tag);
               if (ret != null) return ret;
+              next = null;
               break;
             }
             next = regex.value;
@@ -119,6 +129,7 @@ class PathTree<T> {
             return subTree.globValue[tag] ?? subTree.globValue['*'];
         }
       }
+      if (next == null) return null;
       subTree = next;
     }
 

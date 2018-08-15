@@ -1,6 +1,6 @@
 name: path_tree
-description: A starting point for Dart libraries or applications.
-version: 2.2.0
+description: A fast data structure to match HTTP URL routes. Also handles regular expression (regexp) and glob path segments.
+version: 2.2.2
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 homepage: http://jaguar-dart.github.io
