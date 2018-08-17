@@ -5,13 +5,17 @@ part of jaguar.mux;
 ///
 /// [exception] is the exception that occurred. [trace] is the stack trace is the
 /// of the exception.
-typedef FutureOr<void> ExceptionHandler<ET>(
-    Context ctx, ET exception, StackTrace trace);
+typedef FutureOr<void> ExceptionHandler(
+    Context ctx, exception, StackTrace trace);
 
 /// Prototype of route interceptor. A router interceptor is a function that runs
 /// before or after the route handler.
 typedef FutureOr<void> RouteInterceptor(Context ctx);
 
+/// An interceptor based on Dart class.
+///
+/// NOTE: Same instance of [Interceptor] shall not be used for
+/// multiple requests if it stores state in its members!
 abstract class Interceptor {
   const Interceptor();
 
@@ -34,11 +38,11 @@ class Route {
   /// The route handler function
   RouteHandler handler;
 
-  final List<RouteInterceptor> before;
+  final List<RouteInterceptor> _before;
 
-  final List<RouteInterceptor> after;
+  final List<RouteInterceptor> _after;
 
-  final List<ExceptionHandler> onException;
+  final List<ExceptionHandler> _onException;
 
   final _pathVarMapping = <String, int>{};
 
@@ -51,9 +55,9 @@ class Route {
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException})
       : pathSegments = pathToSegments(info.path),
-        before = before ?? [],
-        after = after ?? [],
-        onException = onException ?? [] {
+        _before = before ?? [],
+        _after = after ?? [],
+        _onException = onException ?? [] {
     for (int i = 0; i < pathSegments.length; i++) {
       String seg = pathSegments.elementAt(i);
       if (seg.startsWith(':')) {
@@ -311,17 +315,17 @@ class Route {
               pathRegEx: pathRegEx,
               responseProcessor: responseProcessor),
           handler,
-          before: before ?? this.before,
-          after: after ?? this.after,
-          onException: onException ?? this.onException);
+          before: before ?? this._before,
+          after: after ?? this._after,
+          onException: onException ?? this._onException);
 
   final Iterable<String> pathSegments;
 
   /// Handles requests
   Future<void> call(Context ctx) {
-    ctx.before.addAll(before);
-    ctx.after.addAll(after);
-    ctx.onException.addAll(onException);
+    ctx.before.addAll(_before);
+    ctx.after.addAll(_after);
+    ctx.onException.addAll(_onException);
 
     for (String pathParam in _pathVarMapping.keys) {
       ctx.pathParams[pathParam] = ctx.pathSegments[_pathVarMapping[pathParam]];
@@ -332,6 +336,30 @@ class Route {
     }
 
     return ctx.execute(handler, info.responseProcessor);
+  }
+
+  /// Add [interceptor] and optionally [interceptors] to be executed before
+  /// [handler] in the route chain.
+  void before(RouteInterceptor interceptor,
+      [List<RouteInterceptor> interceptors]) {
+    _before.add(interceptor);
+    if (interceptors != null) _before.addAll(interceptors);
+  }
+
+  /// Add [interceptor] and optionally [interceptors] to be executed after
+  /// [handler] in the route chain.
+  void after(RouteInterceptor interceptor,
+      [List<RouteInterceptor> interceptors]) {
+    _after.add(interceptor);
+    if (interceptors != null) _after.addAll(interceptors);
+  }
+
+  /// Add [exceptHandler] and optionally [exceptHandlers] to be executed after
+  /// [handler] in the route chain.
+  void onException(ExceptionHandler exceptHandler,
+      [List<ExceptionHandler> exceptHandlers]) {
+    _onException.add(exceptHandler);
+    if (exceptHandlers != null) _onException.addAll(exceptHandlers);
   }
 
   /// Helps while debugging in variables window

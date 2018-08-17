@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.2.9
+
++ Added `onException` method to intercept `Route`
+
+### Breaking changes:
+
++ Removed `onException` accessor in `Route`
++ Removed generic exception type on `ExceptionHandler`
+
+## 2.2.8
+
++ Added `before` and `after` methods to intercept `Route`
+
+### Breaking changes:
+
++ Removed `after` and `before` accessor in `Route`
+
 ## 2.2.5
 
 + Minor bug fix

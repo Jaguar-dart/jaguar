@@ -129,27 +129,27 @@ abstract class Muxable {
       dynamic v = handlers[path];
       if (v is RouteHandler) {
         rb = addRoute(Route(path, v));
-        rb.before.addAll(before);
-        rb.after.addAll(after);
-        rb.onException.addAll(onException);
+        rb._before.addAll(before);
+        rb._after.addAll(after);
+        rb._onException.addAll(onException);
       } else if (v is Route) {
         rb = addRoute(v);
-        rb.before.addAll(before);
-        rb.after.addAll(after);
-        rb.onException.addAll(onException);
+        rb._before.addAll(before);
+        rb._after.addAll(after);
+        rb._onException.addAll(onException);
       } else if (v is Iterable<RouteHandler>) {
         for (RouteHandler v1 in v) {
           rb = addRoute(Route(path, v1));
-          rb.before.addAll(before);
-          rb.after.addAll(after);
-          rb.onException.addAll(onException);
+          rb._before.addAll(before);
+          rb._after.addAll(after);
+          rb._onException.addAll(onException);
         }
       } else if (v is Iterable<Route>) {
         for (Route v1 in v) {
           rb = addRoute(v1);
-          rb.before.addAll(before);
-          rb.after.addAll(after);
-          rb.onException.addAll(onException);
+          rb._before.addAll(before);
+          rb._after.addAll(after);
+          rb._onException.addAll(onException);
         }
       } else {
         throw UnsupportedError('Handler not supported!');
