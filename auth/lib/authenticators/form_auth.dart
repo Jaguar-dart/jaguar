@@ -1,8 +1,8 @@
 part of jaguar_auth.authenticators;
 
-/// An [Authenticator] for standard username password login using ajax requests.
-/// It expects a `application/json` encoded body where the
-/// username and password fields must be called `username` and `password`
+/// An [Authenticator] for standard username password form style login.
+/// It expects a `application/x-www-form-urlencoded` encoded body where the
+/// username and password form fields must be called `username` and `password`
 /// respectively.
 ///
 /// Arguments:
@@ -11,7 +11,7 @@ part of jaguar_auth.authenticators;
 ///
 /// Outputs ans Variables:
 /// The authenticated user model is injected into the context as input
-class JsonAuth<UserModel extends PasswordUser> implements Interceptor {
+class FormAuth<UserModel extends PasswordUser> implements Interceptor {
   /// Model manager is used to fetch user model for the authentication request
   /// and authenticate against the password
   final UserFetcher<UserModel> userFetcher;
@@ -27,7 +27,7 @@ class JsonAuth<UserModel extends PasswordUser> implements Interceptor {
   /// If set to false, session creation and update must be done manually
   final bool manageSession;
 
-  const JsonAuth(
+  const FormAuth(
       {this.userFetcher,
       this.authorizationIdKey: 'id',
       this.manageSession: true,
@@ -39,29 +39,23 @@ class JsonAuth<UserModel extends PasswordUser> implements Interceptor {
   /// On successful login, injects authenticated user model as context input and
   /// session manager as context variable.
   Future<void> call(Context ctx) async {
-    Map<String, dynamic> jsonBody = await ctx.bodyAsJsonMap();
+    Map<String, String> form = await ctx.bodyAsUrlEncodedForm();
 
-    if (jsonBody == null)
-      throw new Response("Invalid request!",
-          statusCode: HttpStatus.unauthorized);
+    if (form is! Map<String, String>)
+      throw UnauthorizedException.invalidRequest;
 
-    final String username = jsonBody['username'];
-    final String password = jsonBody['password'] ?? '';
+    final String username = form['username'];
+    final String password = form['password'] ?? '';
 
-    if (username is! String)
-      throw new Response("Invalid request",
-          statusCode: HttpStatus.unauthorized);
+    if (username == null) throw UnauthorizedException.invalidRequest;
 
     UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
     final subject = await fetcher.byAuthenticationId(ctx, username);
 
-    if (subject == null)
-      throw new Response("User not found!",
-          statusCode: HttpStatus.unauthorized);
+    if (subject == null) throw UnauthorizedException.subjectNotFound;
 
     if (!hasher.verify(password, subject.password))
-      throw new Response("Invalid password",
-          statusCode: HttpStatus.unauthorized);
+      throw UnauthorizedException.invalidPassword;
 
     if (manageSession is bool && manageSession) {
       final Session session = await ctx.session;
@@ -81,7 +75,7 @@ class JsonAuth<UserModel extends PasswordUser> implements Interceptor {
       String authorizationIdKey: 'id',
       bool manageSession: true,
       Hasher hasher: const NoHasher()}) async {
-    await new JsonAuth<UserModel>(
+    await FormAuth<UserModel>(
             userFetcher: userFetcher,
             authorizationIdKey: authorizationIdKey,
             manageSession: manageSession,

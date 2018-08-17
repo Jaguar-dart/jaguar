@@ -42,10 +42,7 @@ class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
   Future<void> call(Context ctx) async {
     String basic = ctx.authHeader(kBasicAuthScheme);
 
-    if (basic == null)
-      throw new Response(
-          "Invalid request! Basic authorization header not found!",
-          statusCode: HttpStatus.unauthorized);
+    if (basic == null) throw UnauthorizedException.invalidRequest;
 
     final String credentials = _decodeCredentials(basic);
     final int splitIdx = credentials.indexOf(':');
@@ -63,13 +60,10 @@ class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
     UserFetcher<UserModel> fetcher = userFetcher ?? ctx.userFetchers[UserModel];
     final subject = await fetcher.byAuthenticationId(ctx, username);
 
-    if (subject == null)
-      throw new Response("User not found!",
-          statusCode: HttpStatus.unauthorized);
+    if (subject == null) throw UnauthorizedException.subjectNotFound;
 
     if (!hasher.verify(password, subject.password))
-      throw new Response("Invalid password",
-          statusCode: HttpStatus.unauthorized);
+      throw UnauthorizedException.invalidPassword;
 
     if (manageSession is bool && manageSession) {
       final Session session = await ctx.session;
@@ -99,7 +93,7 @@ class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
       String authorizationIdKey: 'id',
       bool manageSession: true,
       Hasher hasher: const NoHasher()}) async {
-    await new BasicAuth<UserModel>(
+    await BasicAuth<UserModel>(
             userFetcher: userFetcher,
             authorizationIdKey: authorizationIdKey,
             manageSession: manageSession,

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.10
+
++ Added `ExceptionWithResponse`
+
 ## 2.2.9
 
 + Added `onException` method to intercept `Route`

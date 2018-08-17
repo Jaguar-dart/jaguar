@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+
++ Added `UnauthorizedException`
+
 ## 2.1.9
 
 + Bug fix for `throwOnFail`

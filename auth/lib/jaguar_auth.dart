@@ -17,6 +17,6 @@
 /// jaguar_auth provides an authorizer: [Authorizer]
 library jaguar_auth;
 
-export 'package:jaguar_auth/src/authenticators/authenticators.dart';
-export 'package:jaguar_auth/src/authorizer/authorizer.dart';
-export 'package:jaguar_auth/src/hasher/hasher.dart';
+export 'authenticators/authenticators.dart';
+export 'authorizer/authorizer.dart';
+export 'hasher/hasher.dart';

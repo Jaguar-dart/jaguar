@@ -1,16 +1,19 @@
 library jaguar_auth.authoriser;
 
-import 'dart:io';
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
+import '../exception/exception.dart';
 
 /// Authorizes the request
 ///
 /// Arguments:
-/// It uses [userFetcher] to fetch user model of the logged-in user
+/// It uses [userFetcher] to fetch user model of the logged-in user.
 ///
 /// Outputs ans Variables:
-/// The authorised user model is injected into the context as input
+/// The authorised user model is injected into the context as input.
+///
+/// Exception:
+/// An [UnauthorizedException] is thrown if the authorization fails.
 class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
   /// Model manager used to fetch user model of the logged-in user
   final UserFetcher<UserModel> userFetcher;
@@ -31,7 +34,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
       if (throwOnFail) {
-        throw new Response(null, statusCode: HttpStatus.unauthorized);
+        throw UnauthorizedException.notLoggedIn;
       } else {
         return null;
       }
@@ -42,7 +45,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
 
     if (subject == null) {
       if (throwOnFail) {
-        throw new Response(null, statusCode: HttpStatus.unauthorized);
+        throw UnauthorizedException.subjectNotFound;
       } else {
         return null;
       }
@@ -51,7 +54,16 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     ctx.addVariable(subject);
   }
 
-  /// Authorizes a request with the given [UserFetcher]
+  /// Authorizes the request using the given [userFetcher].
+  ///
+  /// Arguments:
+  /// It uses [userFetcher] to fetch user model of the logged-in user.
+  ///
+  /// Outputs ans Variables:
+  /// The authorised user model is injected into the context as input.
+  ///
+  /// Exception:
+  /// An [UnauthorizedException] is thrown if the authorization fails.
   static Future<UserModel> authorize<UserModel extends AuthorizationUser>(
       Context ctx,
       {UserFetcher<UserModel> userFetcher,
@@ -61,7 +73,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
       if (throwOnFail) {
-        throw new Response(null, statusCode: HttpStatus.unauthorized);
+        throw UnauthorizedException.notLoggedIn;
       } else {
         return null;
       }
@@ -72,12 +84,13 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
 
     if (subject == null) {
       if (throwOnFail) {
-        throw new Response(null, statusCode: HttpStatus.unauthorized);
+        throw UnauthorizedException.subjectNotFound;
       } else {
         return null;
       }
     }
 
+    ctx.addVariable(subject);
     return subject;
   }
 }

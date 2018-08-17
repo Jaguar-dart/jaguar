@@ -154,6 +154,9 @@ class Jaguar extends Object with Muxable {
       if (e is Response) {
         // If [Response] object was thrown, write it!
         ctx.response = e;
+      } else if (e is ExceptionWithResponse) {
+        ctx.response = e.response;
+        if (ctx.response == null) errorWriter.make500(ctx, e, stack);
       } else
         errorWriter.make500(ctx, e, stack);
     }
@@ -254,4 +257,8 @@ class ConnectTo {
       {this.address: "0.0.0.0", this.port: 443, this.multiThread: false});
 
   String toString() => authority;
+}
+
+abstract class ExceptionWithResponse {
+  Response get response;
 }

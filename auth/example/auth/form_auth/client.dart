@@ -16,10 +16,7 @@ getOne() async {
 }
 
 getAll() async {
-  await client
-      .get(basePath + '/api/book')
-      .decodeList(Book.fromMap)
-      .then(print);
+  await client.get(basePath + '/api/book').decodeList(Book.fromMap).then(print);
 }
 
 login() async {
