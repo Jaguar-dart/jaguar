@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.12
+
++ `Response` default charset to 'utf-8'
+
 ## 2.2.10
 
 + Added `ExceptionWithResponse`
