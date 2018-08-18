@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.16
+
++ `deleteCookie` gets `path` parameter
+
 ## 2.2.15
 
 + `deleteCookie` member in `Response`

@@ -57,10 +57,13 @@ class Response<ValueType> {
         charset: charset,
       );
 
-  void deleteCookie(String name) {
+  /// deleteCookie deletes a cookie with given [name]. Use [path] to specify
+  /// the path from which the cookie has to be removed.
+  void deleteCookie(String name, {String path: '/'}) {
     cookies.add(Cookie(name, '')
       ..expires = DateTime.now().subtract(_aDay)
-      ..maxAge = -1);
+      ..maxAge = -1
+      ..path = path);
   }
 
   static const _aDay = Duration(days: 1);
