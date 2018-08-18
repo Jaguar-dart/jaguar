@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert' as cnv;
 import 'package:jaguar/http/http.dart';
+import 'package:jaguar/annotations/import.dart';
 
 export 'byte_response.dart';
 export 'redirect_response.dart';
@@ -33,7 +34,7 @@ class Response<ValueType> {
       {this.statusCode: 200,
       Map<String, dynamic> headers,
       String mimeType,
-      String charset}) {
+      String charset: kDefaultCharset }) {
     if (headers != null)
       for (final String name in headers.keys) {
         this.headers.add(name, headers[name]);
@@ -47,7 +48,7 @@ class Response<ValueType> {
           {int statusCode: HttpStatus.ok,
           Map<String, dynamic> headers,
           String mimeType: MimeTypes.json,
-          String charset}) =>
+          String charset: kDefaultCharset}) =>
       Response<String>(
         cnv.json.encode(value),
         statusCode: statusCode,
