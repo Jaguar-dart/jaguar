@@ -34,7 +34,7 @@ class Response<ValueType> {
       {this.statusCode: 200,
       Map<String, dynamic> headers,
       String mimeType,
-      String charset: kDefaultCharset }) {
+      String charset: kDefaultCharset}) {
     if (headers != null)
       for (final String name in headers.keys) {
         this.headers.add(name, headers[name]);
@@ -56,6 +56,14 @@ class Response<ValueType> {
         mimeType: mimeType,
         charset: charset,
       );
+
+  void deleteCookie(String name) {
+    cookies.add(Cookie(name, '')
+      ..expires = DateTime.now().subtract(_aDay)
+      ..maxAge = -1);
+  }
+
+  static const _aDay = Duration(days: 1);
 
   void writeAllButBody(HttpResponse resp) {
     resp.statusCode = statusCode;

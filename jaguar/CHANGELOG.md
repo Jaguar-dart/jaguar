@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.15
+
++ `deleteCookie` member in `Response`
+
 ## 2.2.12
 
 + `Response` default charset to 'utf-8'
