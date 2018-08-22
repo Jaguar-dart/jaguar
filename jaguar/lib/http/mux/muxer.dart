@@ -315,15 +315,16 @@ abstract class Muxable {
       if (!await file.exists()) {
         final fileDir = Directory(path);
 
-        if (!await fileDir.exists())
-          return null;
+        if (!await fileDir.exists()) {
+          return ctx.response = null;
+        }
 
         path = p.join(path, 'index.html');
         file = File(path);
 
         if (!await file.exists()) {
           if (directoryLister != null) return directoryLister(fileDir);
-          return null;
+          return ctx.response = null;
         }
       }
 
