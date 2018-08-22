@@ -316,14 +316,14 @@ abstract class Muxable {
         final fileDir = Directory(path);
 
         if (!await fileDir.exists())
-          return Response('', statusCode: HttpStatus.notFound);
+          return null;
 
         path = p.join(path, 'index.html');
         file = File(path);
 
         if (!await file.exists()) {
           if (directoryLister != null) return directoryLister(fileDir);
-          return Response('', statusCode: HttpStatus.notFound);
+          return null;
         }
       }
 
