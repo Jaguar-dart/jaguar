@@ -1,5 +1,7 @@
 part of jaguar.src.annotations;
 
+typedef String WsResultProcessor(dynamic response);
+
 /// Function that modifies [response]
 typedef void ResponseProcessor(Response response);
 
