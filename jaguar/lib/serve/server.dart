@@ -39,6 +39,8 @@ class Jaguar extends Object with Muxable {
 
   final after = <RouteInterceptor>[];
 
+  final onException = <ExceptionHandler>[];
+
   /// Logger used to log concise useful information about the request. This is
   /// also available in [Context] so that interceptors and route handlers can also
   /// log.
@@ -134,10 +136,13 @@ class Jaguar extends Object with Muxable {
 
   Future<void> _handler(HttpRequest request) async {
     final ctx = Context(Request(request),
-        sessionManager: sessionManager, log: log, userFetchers: userFetchers);
+        sessionManager: sessionManager,
+        log: log,
+        userFetchers: userFetchers,
+        before: before.toList(),
+        after: after.toList(),
+        onException: onException.toList());
     ctx.prefix = basePath;
-    ctx.before.addAll(before);
-    ctx.after.addAll(after);
 
     try {
       // Try to find a matching route and invoke it.

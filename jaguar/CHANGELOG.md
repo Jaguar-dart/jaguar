@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.20
+
+### Breaking changes:
+
++ Response is not automatically instantiated.
+
 ## 2.2.16
 
 + `deleteCookie` gets `path` parameter

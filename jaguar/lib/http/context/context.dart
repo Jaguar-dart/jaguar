@@ -103,7 +103,13 @@ class Context {
 
   final Logger log;
 
-  Context(this.req, {this.sessionManager, this.log, this.userFetchers});
+  Context(this.req,
+      {this.sessionManager,
+      this.log,
+      this.userFetchers,
+      this.before,
+      this.after,
+      this.onException});
 
   final _variables = <Type, Map<String, dynamic>>{};
 
@@ -381,13 +387,13 @@ class Context {
     return convert(b);
   }
 
-  Response response = Response(null);
+  Response response;
 
-  final List<ExceptionHandler> onException = <ExceptionHandler>[];
+  final List<ExceptionHandler> onException;
 
-  final before = <RouteInterceptor>[];
+  final List<RouteInterceptor> before;
 
-  final after = <RouteInterceptor>[];
+  final List<RouteInterceptor> after;
 
   Map<String, Cookie> get cookies => _cookies ??= _parseCookies();
 
@@ -431,7 +437,7 @@ class Context {
           if (res is Response)
             response = res;
           else {
-            response.value = res;
+            response = Response(res);
             if (responseProcessor != null) responseProcessor(response);
           }
         }

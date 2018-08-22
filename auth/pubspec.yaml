@@ -12,7 +12,7 @@ environment:
   sdk: ">=2.0.0-dev.65 <3.0.0"
 
 dependencies:
-  jaguar: ^2.2.10
+  jaguar: ^2.2.20
   jaguar_common: ^2.1.4
   crypto: ^2.0.3
 
