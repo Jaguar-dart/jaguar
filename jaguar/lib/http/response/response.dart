@@ -87,3 +87,9 @@ class Response<ValueType> {
     return null;
   }
 }
+
+class SkipResponse extends Response {
+  SkipResponse() : super(null);
+
+  void writeResponse(HttpResponse resp) {}
+}

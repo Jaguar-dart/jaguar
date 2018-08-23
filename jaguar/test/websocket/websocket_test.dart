@@ -11,7 +11,7 @@ void main() {
     Jaguar server;
     setUpAll(() async {
       server = new Jaguar(port: 10000);
-      server.ws('/ws', incrementerSocket);
+      server.ws('/ws', handler: incrementerSocket);
       await server.serve();
     });
 

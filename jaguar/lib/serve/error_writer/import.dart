@@ -1,5 +1,6 @@
 library jaguar.src.serve.error_writer;
 
+import 'dart:async';
 import 'dart:io';
 import 'package:stack_trace/stack_trace.dart';
 import 'package:jaguar/jaguar.dart';
@@ -9,10 +10,10 @@ import 'package:jaguar/jaguar.dart';
 /// Error writer is used by [Jaguar] server to write 404 and 500 errors
 abstract class ErrorWriter {
   /// Makes [Response] for 404 error
-  void make404(Context ctx);
+  FutureOr<void> make404(Context ctx);
 
   /// Makes [Response] for 500 error
-  void make500(Context ctx, Object error, [StackTrace stack]);
+  FutureOr<void> make500(Context ctx, Object error, [StackTrace stack]);
 }
 
 class DefaultErrorWriter implements ErrorWriter {

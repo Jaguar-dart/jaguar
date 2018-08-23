@@ -19,13 +19,16 @@ typedef FutureOr<dynamic> WsHandler(dynamic data);
 ///
 /// Example:
 ///     server.get('/ws', socketHandler((String data) => int.parse(data) + 1));
-RouteHandler wsHandler(WsHandler handler,
-    {FutureOr onConnect(Context ctx, WebSocket ws),
+RouteHandler wsHandler(
+    {WsHandler handler,
+    FutureOr onConnect(Context ctx, WebSocket ws),
     WsResultProcessor resultProcessor}) {
-  if (handler is WsHandler) {
-    return (Context ctx) async {
-      final WebSocket ws = await ctx.req.upgradeToWebSocket;
-      if (onConnect != null) await onConnect(ctx, ws);
+  return (Context ctx) async {
+    final WebSocket ws = await ctx.req.upgradeToWebSocket;
+    ctx.response = SkipResponse();
+    if (onConnect != null) await onConnect(ctx, ws);
+
+    if (handler is WsHandler) {
       ws.listen((data) async {
         final resp = await handler(data);
         if (resp != null) {
@@ -40,11 +43,7 @@ RouteHandler wsHandler(WsHandler handler,
           }
         }
       });
-    };
-  } else if (handler is WsHandlerWithWs) {
-    return (Context ctx) async {
-      final WebSocket ws = await ctx.req.upgradeToWebSocket;
-      if (onConnect != null) await onConnect(ctx, ws);
+    } else if (handler is WsHandlerWithWs) {
       ws.listen((data) async {
         final resp = await handler(data, ws);
         if (resp != null) {
@@ -59,8 +58,6 @@ RouteHandler wsHandler(WsHandler handler,
           }
         }
       });
-    };
-  }
-
-  throw new ArgumentError.value(handler, 'handler');
+    }
+  };
 }

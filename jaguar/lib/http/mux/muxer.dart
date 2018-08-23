@@ -257,8 +257,9 @@ abstract class Muxable {
 
   /// Example:
   ///     server.ws('/ws', (String data) => int.parse(data) + 1);
-  Route ws(String path, WsHandler handler,
+  Route ws(String path,
       {Map<String, String> pathRegEx,
+      WsHandler handler,
       FutureOr onConnect(Context ctx, WebSocket ws),
       WsResultProcessor resultProcessor,
       List<RouteInterceptor> after,
@@ -266,8 +267,10 @@ abstract class Muxable {
       List<ExceptionHandler> onException}) {
     return addRoute(Route.get(
         path,
-        wsHandler(handler,
-            onConnect: onConnect, resultProcessor: resultProcessor),
+        wsHandler(
+            handler: handler,
+            onConnect: onConnect,
+            resultProcessor: resultProcessor),
         pathRegEx: pathRegEx,
         before: before,
         after: after,

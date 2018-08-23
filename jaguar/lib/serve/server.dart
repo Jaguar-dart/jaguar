@@ -151,9 +151,9 @@ class Jaguar extends Object with Muxable {
       if (handler != null) {
         await handler(ctx);
         // If no response, write 404 error.
-        if (ctx.response == null) errorWriter.make404(ctx);
+        if (ctx.response == null) await errorWriter.make404(ctx);
       } else {
-        errorWriter.make404(ctx);
+        await errorWriter.make404(ctx);
       }
     } catch (e, stack) {
       if (e is Response) {
@@ -161,9 +161,9 @@ class Jaguar extends Object with Muxable {
         ctx.response = e;
       } else if (e is ExceptionWithResponse) {
         ctx.response = e.response;
-        if (ctx.response == null) errorWriter.make500(ctx, e, stack);
+        if (ctx.response == null) await errorWriter.make500(ctx, e, stack);
       } else
-        errorWriter.make500(ctx, e, stack);
+        await errorWriter.make500(ctx, e, stack);
     }
 
     try {
@@ -177,14 +177,16 @@ class Jaguar extends Object with Muxable {
     }
 
     // Write response
-    try {
-      dynamic mightBeFuture = ctx.response.writeResponse(request.response);
-      if (mightBeFuture is Future) await mightBeFuture;
-    } catch (e, stack) {
-      log.warning('${e.toString()}\n${stack.toString()}');
-    }
+    if (ctx.response is! SkipResponse) {
+      try {
+        dynamic mightBeFuture = ctx.response.writeResponse(request.response);
+        if (mightBeFuture is Future) await mightBeFuture;
+      } catch (e, stack) {
+        log.warning('${e.toString()}\n${stack.toString()}');
+      }
 
-    return request.response.close();
+      return request.response.close();
+    }
   }
 
   /// Closes the server
