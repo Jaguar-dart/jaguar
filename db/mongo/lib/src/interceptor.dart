@@ -9,7 +9,7 @@ import 'package:conn_pool/conn_pool.dart';
 import 'manager.dart';
 
 /// A MongoDB pool
-class MongoPool {
+class MongoPool implements Interceptor<mongo.Db> {
   /// The connection pool
   final Pool<mongo.Db> pool;
 
@@ -25,7 +25,7 @@ class MongoPool {
   MongoPool.fromManager({MongoDbManager manager}) : pool = SharedPool(manager);
 
   /// Injects a Postgres interceptor into current route context
-  Future<mongo.Db> injectInterceptor(Context context) async {
+  Future<mongo.Db> call(Context context) async {
     Connection<mongo.Db> conn = await pool.get();
     context.addVariable(conn.connection);
     context.after.add((_) => conn.release());
