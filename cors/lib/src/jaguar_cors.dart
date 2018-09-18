@@ -10,7 +10,7 @@ part 'options.dart';
 part 'request_params.dart';
 
 /// Interceptor to handle CORS related requests
-class Cors implements Interceptor {
+class Cors implements Interceptor<void> {
   final CorsOptions options;
 
   Cors(this.options);
@@ -33,12 +33,12 @@ class Cors implements Interceptor {
 
   void call(Context ctx) {
     final Request req = ctx.req;
-    params = new _CorsRequestParams.fromRequest(req);
+    params = _CorsRequestParams.fromRequest(req);
 
     // Check if it is CORS request
     if (params.origin is! String) {
       if (!options.allowNonCorsRequests) {
-        throw new Response('Only Cross origin requests are allowed!',
+        throw Response('Only Cross origin requests are allowed!',
             statusCode: HttpStatus.forbidden);
       }
       return;
@@ -63,7 +63,7 @@ class Cors implements Interceptor {
     }
 
     if (errorMsg != null) {
-      throw new Response('Invalid CORS request: ' + errorMsg,
+      throw Response('Invalid CORS request: ' + errorMsg,
           statusCode: HttpStatus.forbidden);
     }
   }

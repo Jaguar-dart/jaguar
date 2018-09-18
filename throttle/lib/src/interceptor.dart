@@ -1,7 +1,7 @@
 part of jaguar.throttle;
 
 /// Interceptor to rate-limit routes
-class Throttler implements Interceptor {
+class Throttler implements Interceptor<void> {
   /// Maximum number of requests allowed for the given [interval]
   final Rate quota;
 
