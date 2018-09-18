@@ -7,7 +7,7 @@ import 'package:jaguar_example_session_models/jaguar_example_session_models.dart
 
 final String basePath = 'http://localhost:10000';
 
-final client = new JsonClient(new http.IOClient(), manageCookie: true);
+final client = JsonClient(http.IOClient(), manageCookie: true);
 
 main() async {
   // Without login

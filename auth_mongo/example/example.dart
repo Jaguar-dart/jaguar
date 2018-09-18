@@ -6,28 +6,19 @@ import 'package:jaguar_reflect/jaguar_reflect.dart';
 import 'package:jaguar_auth/jaguar_auth.dart';
 import 'package:jaguar_auth_mongo/jaguar_auth_mongo.dart';
 import 'package:jaguar_mongo/jaguar_mongo.dart';
-
+import 'package:jaguar_example_session_models/jaguar_example_session_models.dart';
 import 'model/model.dart';
 
-final Map<String, Book> _books = {
-  '0': new Book.make('0', 'Book0', 'Author0'),
-  '1': new Book.make('1', 'Book1', 'Author1'),
-  '2': new Book.make('2', 'Book2', 'Author2'),
-};
-
 // Mongo pool
-final mongoPool = MongoPool('mongodb://localhost:27017/test');
-
-/// Interceptor creator to connect to MongoDb
-Future<void> mongoInterceptor(Context ctx) => mongoPool.injectInterceptor(ctx);
+final mongoPool = MongoPool('mongodb://localhost:27018/test');
 
 /// This route group contains login and logout routes
-@Controller(path: '/auth')
-@Intercept([mongoInterceptor])
-class AuthRoutes {
+@GenController(path: '/auth')
+class AuthRoutes extends Controller {
   @Post(path: '/login')
-  Future login(Context ctx) async {
+  Future<String> login(Context ctx) async {
     await BasicAuth.authenticate<User>(ctx);
+    return "Success";
   }
 
   @Post(path: '/logout')
@@ -36,31 +27,37 @@ class AuthRoutes {
     // Clear session
     (await ctx.session).clear();
   }
-}
 
-/// Collection of routes students can also access
-@Controller(path: '/book')
-@Intercept([mongoInterceptor, Authorizer<User>()])
-class StudentRoutes {
-  @Get(path: '/all')
-  Response<String> getAllBooks(Context ctx) {
-    List<Map> ret =
-        _books.values.map((Book book) => bookSerializer.toMap(book)).toList();
-    return Response.json(ret);
+  @override
+  Future<void> before(Context ctx) async {
+    await mongoPool(ctx);
   }
 }
 
-@Controller(path: '/api')
-class LibraryApi {
-  @IncludeHandler()
+/// Collection of routes students can also access
+@GenController(path: '/books')
+class StudentRoutes extends Controller {
+  @GetJson()
+  List<Book> getAllBooks(Context ctx) => books.values.toList();
+
+  @override
+  Future<void> before(Context ctx) async {
+    await mongoPool(ctx);
+    await Authorizer.authorize<User>(ctx);
+  }
+}
+
+@GenController(path: '/api')
+class LibraryApi extends Controller {
+  @IncludeController()
   final auth = AuthRoutes();
 
-  @IncludeHandler()
+  @IncludeController()
   final student = StudentRoutes();
 }
 
 main() async {
-  final server = new Jaguar(port: 10000);
+  final server = Jaguar(port: 10000);
   server.userFetchers[User] = MgoUserManager<User>(userMgoSerializer);
   server.add(reflect(LibraryApi()));
   server.log.onRecord.listen(print);
