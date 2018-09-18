@@ -12,11 +12,11 @@ import 'package:jaguar_postgres/jaguar_postgres.dart';
 final postgresPool = PostgresPool('jaguar_learn',
     password: 'dart_jaguar', minPoolSize: 5, maxPoolSize: 10);
 
-@Controller(path: '/contact')
-class ContactsApi {
+@GenController(path: '/contact')
+class ContactsApi extends Controller {
   @GetJson()
   Future<List<Map>> readAll(Context ctx) async {
-    pg.PostgreSQLConnection db = await postgresPool.injectInterceptor(ctx);
+    pg.PostgreSQLConnection db = await postgresPool(ctx);
     List<Map<String, Map<String, dynamic>>> values =
         await db.mappedResultsQuery("SELECT * FROM contacts;");
     return values.map((m) => m.values.first).toList();
@@ -25,7 +25,7 @@ class ContactsApi {
   @PostJson()
   Future<List<Map>> create(Context ctx) async {
     Map body = await ctx.bodyAsJsonMap();
-    pg.PostgreSQLConnection db = await postgresPool.injectInterceptor(ctx);
+    pg.PostgreSQLConnection db = await postgresPool(ctx);
     List<List<dynamic>> id = await db.query(
         "INSERT INTO contacts (name, age) VALUES ('${body['name']}', ${body['age']}) RETURNING id;");
     if (id.isEmpty || id.first.isEmpty) Response.json(null);
@@ -59,7 +59,7 @@ Future<void> setup() async {
 Future<void> main() async {
   await setup();
 
-  final server = new Jaguar(port: 10000);
+  final server = Jaguar(port: 10000);
   server.add(reflect(ContactsApi()));
   server.log.onRecord.listen(print);
 

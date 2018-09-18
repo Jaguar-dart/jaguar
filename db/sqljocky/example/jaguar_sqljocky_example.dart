@@ -3,5 +3,4 @@
 
 // import 'package:jaguar_sqljocky/jaguar_sqljocky.dart';
 
-main() {
-}
+main() {}

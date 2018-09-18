@@ -8,7 +8,7 @@ import 'package:conn_pool/conn_pool.dart';
 
 import 'manager.dart';
 
-class PostgresPool {
+class PostgresPool implements Interceptor<PostgreSQLConnection> {
   /// The connection pool
   final Pool<PostgreSQLConnection> pool;
 
@@ -40,7 +40,7 @@ class PostgresPool {
       : pool = SharedPool(manager);
 
   /// Injects a Postgres interceptor into current route context
-  Future<PostgreSQLConnection> injectInterceptor(Context context) async {
+  Future<PostgreSQLConnection> call(Context context) async {
     Connection<PostgreSQLConnection> conn = await pool.get();
     context.addVariable(conn.connection);
     context.after.add((_) => conn.release());
