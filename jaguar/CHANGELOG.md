@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.4
+
++ Performance improvements
+
+### Breaking changes
+
++ `onException` shall not throw. Should return response instead.
+
 ## 2.4.2
 
 + Interceptors have return types

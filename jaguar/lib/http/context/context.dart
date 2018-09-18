@@ -419,50 +419,33 @@ class Context {
 
   Future<void> execute(
       final RouteHandler routeHandler, HttpMethod methodInfo) async {
-    try {
-      {
-        for (int i = 0; i < before.length; i++) {
-          final maybeFuture = before[i](this);
-          if (maybeFuture is Future) await maybeFuture;
+    dynamic maybeFuture;
+    for (int i = 0; i < before.length; i++) {
+      maybeFuture = before[i](this);
+      if (maybeFuture is Future) await maybeFuture;
+    }
+
+    {
+      dynamic res = routeHandler(this);
+      if (res is Future) res = await res;
+
+      if (res != null) {
+        if (res is Response)
+          response = res;
+        else {
+          response = Response(res,
+              statusCode: methodInfo.statusCode,
+              mimeType: methodInfo.mimeType,
+              charset: methodInfo.charset);
+          if (methodInfo.responseProcessor != null)
+            methodInfo.responseProcessor(response);
         }
       }
+    }
 
-      {
-        dynamic res = routeHandler(this);
-        if (res is Future) res = await res;
-
-        if (res != null) {
-          if (res is Response)
-            response = res;
-          else {
-            response = Response(res,
-                statusCode: methodInfo.statusCode,
-                mimeType: methodInfo.mimeType,
-                charset: methodInfo.charset);
-            if (methodInfo.responseProcessor != null)
-              methodInfo.responseProcessor(response);
-          }
-        }
-      }
-
-      for (int i = after.length - 1; i >= 0; i--) {
-        final maybeFuture = after[i](this);
-        if (maybeFuture is Future) await maybeFuture;
-      }
-    } catch (e, s) {
-      bool responded = false;
-      for (int i = onException.length - 1; i >= 0; i--) {
-        try {
-          dynamic maybeFuture = onException[i](this, e, s);
-          if (maybeFuture != null) await maybeFuture;
-        } catch (e) {
-          if (e is Response) {
-            response = e;
-            responded = true;
-          }
-        }
-      }
-      if (!responded) rethrow;
+    for (int i = after.length - 1; i >= 0; i--) {
+      maybeFuture = after[i](this);
+      if (maybeFuture is Future) await maybeFuture;
     }
   }
 }

@@ -1,0 +1,22 @@
+name: jaguar_mongo
+version: 2.2.0
+description: Mongo interceptor for jaguar
+authors:
+- Ravi Teja Gudapati <tejainece@gmail.com>
+- Kevin Segaud <segaud.kevin@gmail.com>
+homepage: https://github.com/Jaguar-dart/db/wiki
+documentation:
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
+
+dependencies:
+  mongo_dart: ^0.3.2
+  conn_pool: ^2.1.8
+  jaguar: ^2.2.4
+
+dev_dependencies:
+  test: ^1.3.0
+  jaguar_reflect: ^2.2.0
+  jaguar_resty: ^2.6.2
+  http:

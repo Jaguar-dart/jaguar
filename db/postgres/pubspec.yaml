@@ -1,0 +1,19 @@
+name: jaguar_postgres
+version: 2.2.0
+description: A postgres interceptor for Jaguar
+
+authors:
+- Ravi Teja Gudapati <tejainece@gmail.com>
+- Kevin Segaud <segaud.kevin@gmail.com>
+homepage: https://github.com/Jaguar-dart/db/wiki
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
+
+dependencies:
+  postgres: ^1.0.0
+  jaguar: ^2.2.0
+  conn_pool: ^2.1.8
+
+dev_dependencies:
+  jaguar_reflect: ^2.2.0

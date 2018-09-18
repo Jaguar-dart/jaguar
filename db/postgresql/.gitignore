@@ -1,0 +1,9 @@
+# Files and directories created by pub
+.packages
+.pub/
+packages
+# Remove the following pattern if you wish to check in your lock file
+pubspec.lock
+.idea
+jaguar_postgresql.iml
+.dart_tool

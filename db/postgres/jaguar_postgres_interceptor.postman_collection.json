@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "74bb02fd-9226-4025-a617-a7e7fcbb29f8",
+		"name": "jaguar_postgres_interceptor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Mark\",\n\t\"age\": 32\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10000/contact",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"contact"
+					]
+				},
+				"description": "Creates a Post"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:10000/contact",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"contact"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

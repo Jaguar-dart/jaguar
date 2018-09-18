@@ -127,6 +127,7 @@ class Jaguar extends Object with Muxable {
   }
 
   Future<void> _handler(HttpRequest request) async {
+    dynamic maybeFuture;
     final ctx = Context(Request(request),
         sessionManager: sessionManager,
         log: log,
@@ -134,21 +135,31 @@ class Jaguar extends Object with Muxable {
         before: before.toList(),
         after: after.toList(),
         onException: onException.toList());
+
+    // Try to find a matching route and invoke it.
+    RouteHandler handler =
+        _routeTree.match(request.uri.pathSegments, request.method);
+    if (handler == null) {
+      await errorWriter.make404(ctx);
+      await ctx.response.writeResponse(request.response);
+      return request.response.close();
+    }
+
     try {
-      // Try to find a matching route and invoke it.
-      RouteHandler handler =
-          _routeTree.match(request.uri.pathSegments, request.method);
-      if (handler != null) {
-        await handler(ctx);
-        // If no response, write 404 error.
-        if (ctx.response == null) await errorWriter.make404(ctx);
-      } else {
-        await errorWriter.make404(ctx);
-      }
+      await handler(ctx);
+      // If no response, write 404 error.
+      if (ctx.response == null) await errorWriter.make404(ctx);
     } catch (e, stack) {
-      if (e is Response) {
+      Response newResponse;
+      if(e is Response) newResponse = e;
+      for (int i = ctx.onException.length - 1; i >= 0; i--) {
+        maybeFuture = ctx.onException[i](ctx, e, stack);
+        if (maybeFuture is Future) await maybeFuture;
+        if(maybeFuture is Response) newResponse = maybeFuture;
+      }
+      if (newResponse is Response) {
         // If [Response] object was thrown, write it!
-        ctx.response = e;
+        ctx.response = newResponse;
       } else if (e is ExceptionWithResponse) {
         ctx.response = e.response;
         if (ctx.response == null) await errorWriter.make500(ctx, e, stack);
@@ -156,21 +167,16 @@ class Jaguar extends Object with Muxable {
         await errorWriter.make500(ctx, e, stack);
     }
 
-    try {
-      // Update session, if required.
-      if (ctx.sessionNeedsUpdate) {
-        dynamic mightBeFuture = sessionManager.write(ctx);
-        if (mightBeFuture is Future) await mightBeFuture;
-      }
-    } catch (e, stack) {
-      log.warning('${e.toString()}\n${stack.toString()}');
-    }
-
     // Write response
     if (ctx.response is! SkipResponse) {
       try {
-        dynamic mightBeFuture = ctx.response.writeResponse(request.response);
-        if (mightBeFuture is Future) await mightBeFuture;
+        // Update session, if required.
+        if (ctx.sessionNeedsUpdate) {
+          maybeFuture = sessionManager.write(ctx);
+          if (maybeFuture is Future) await maybeFuture;
+        }
+
+        await ctx.response.writeResponse(request.response);
       } catch (e, stack) {
         log.warning('${e.toString()}\n${stack.toString()}');
       }

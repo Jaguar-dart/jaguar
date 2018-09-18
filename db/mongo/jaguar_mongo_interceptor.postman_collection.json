@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "ff604eee-f459-4c6d-9b18-8913d142d2c3",
+		"name": "jaguar_mongo_interceptor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all contacts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:10000/contact",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"contact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a new contact",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Name\": \"Mark\",\n\t\"Age\": 32\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10000/contact",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"contact"
+					]
+				},
+				"description": "Add a new contact"
+			},
+			"response": []
+		}
+	]
+}
