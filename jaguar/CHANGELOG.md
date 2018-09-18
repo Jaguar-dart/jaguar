@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.4.2
+
++ Interceptors have return types
+
+## 2.4.1
+
++ `statusCode`, `mimeType` and `charset` are back in `HttpMethod` and `Route`.
+
+### Breaking changes
+
++ Interceptor annotations are removed
+
 ## 2.2.20
 
 ### Breaking changes:

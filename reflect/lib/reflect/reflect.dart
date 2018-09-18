@@ -11,7 +11,7 @@ import 'dart:collection';
 /// is to to source generate.
 class ReflectedController {
   /// The api instance being reflected
-  final dynamic _api;
+  final Controller _api;
 
   /// Routes parsed from [_api]
   final _routes = <Route>[];
@@ -30,23 +30,15 @@ class ReflectedController {
   void _parseController() {
     final InstanceMirror im = reflect(_api);
 
-    Controller api = _getAnnotation<Controller>(im.type.metadata);
+    GenController api = _getAnnotation<GenController>(im.type.metadata);
     if (api == null)
-      throw Exception('Handler is not decorated with Controller annotation!');
+      throw Exception(
+          'Handler is not decorated with GenController annotation!');
 
-    final List<RouteInterceptor> before = _detectBefore(im, im.type.metadata);
-    final List<RouteInterceptor> after = _detectAfter(im, im.type.metadata);
-    final List<ExceptionHandler> onException =
-        _detectExceptionHandlers(im, im.type.metadata);
-
-    _parse(im, api.path,
-        topBefore: before, topAfter: after, topExceptionHandlers: onException);
+    _parse(im, api.path);
   }
 
-  void _parse(InstanceMirror im, String pathPrefix,
-      {List<RouteInterceptor> topBefore: const [],
-      List<RouteInterceptor> topAfter: const [],
-      List<ExceptionHandler> topExceptionHandlers: const []}) {
+  void _parse(InstanceMirror im, String pathPrefix) {
     for (DeclarationMirror decl in im.type.declarations.values) {
       if (decl.isPrivate) continue;
 
@@ -58,47 +50,31 @@ class ReflectedController {
 
       // Collect routes
       if (decl is MethodMirror) {
-        _parseRoute(
-            im, pathPrefix, decl, topBefore, topAfter, topExceptionHandlers);
+        _parseRoute(im, pathPrefix, decl);
         continue;
       }
     }
   }
 
   void _parseGroup(String pathPrefix, VariableMirror decl, InstanceMirror gim) {
-    final IncludeHandler group = _getAnnotation<IncludeHandler>(decl.metadata);
+    final IncludeController group =
+        _getAnnotation<IncludeController>(decl.metadata);
 
     if (group == null) return;
 
-    if (!decl.isFinal) throw new Exception('IncludeApi must be final!');
+    if (!decl.isFinal) throw Exception('IncludeApi must be final!');
 
-    if (gim.reflectee == null) throw new Exception('Group cannot be null!');
+    if (gim.reflectee == null) throw Exception('Group cannot be null!');
 
-    Controller rg = _getAnnotation<Controller>(gim.type.metadata);
+    GenController rg = _getAnnotation<GenController>(gim.type.metadata);
 
-    if (rg == null)
-      throw new Exception('Included API must be annotated with Api!');
+    if (rg == null) throw Exception('Included API must be annotated with Api!');
 
-    final List<RouteInterceptor> before = _detectBefore(gim, decl.metadata)
-      ..addAll(_detectBefore(gim, gim.type.metadata));
-    final List<RouteInterceptor> after = _detectAfter(gim, decl.metadata)
-      ..addAll(_detectAfter(gim, gim.type.metadata));
-    final List<ExceptionHandler> onException =
-        _detectExceptionHandlers(gim, decl.metadata)
-          ..addAll(_detectExceptionHandlers(gim, gim.type.metadata));
-
-    _parse(gim, pathPrefix + group.path + rg.path,
-        topBefore: before, topAfter: after, topExceptionHandlers: onException);
+    _parse(gim, pathPrefix + group.path + rg.path);
     return;
   }
 
-  void _parseRoute(
-      InstanceMirror im,
-      String pathPrefix,
-      MethodMirror decl,
-      List<RouteInterceptor> topBefore,
-      List<RouteInterceptor> topAfter,
-      List<ExceptionHandler> topExceptionHandlers) {
+  void _parseRoute(InstanceMirror im, String pathPrefix, MethodMirror decl) {
     final List<HttpMethod> routes = decl.metadata
         .where((InstanceMirror annot) => annot.reflectee is HttpMethod)
         .map((InstanceMirror annot) => annot.reflectee)
@@ -106,96 +82,16 @@ class ReflectedController {
         .cast<HttpMethod>();
     if (routes.length == 0) return;
 
-    final List<RouteInterceptor> before = topBefore.toList()
-      ..addAll(_detectBefore(im, decl.metadata));
-    final List<RouteInterceptor> after = topAfter.toList()
-      ..addAll(_detectAfter(im, decl.metadata));
-    final List<ExceptionHandler> onException = topExceptionHandlers.toList()
-      ..addAll(_detectExceptionHandlers(im, decl.metadata));
-
     InstanceMirror method = im.getField(decl.simpleName);
+
+    InstanceMirror before = im.getField(#before);
 
     for (HttpMethod route in routes) {
       final cloned = route.cloneWith(path: pathPrefix + route.path);
-      final r = new Route.fromInfo(cloned, method.reflectee,
-          before: before, after: after, onException: onException);
+      final r = Route.fromInfo(cloned, method.reflectee,
+          before: [before.reflectee as RouteInterceptor]);
       _routes.add(r);
     }
-  }
-
-  RouteInterceptor extractInterceptor(InstanceMirror im, dynamic ic) {
-    if (ic is Symbol) {
-      return (Context ctx) => im.invoke(ic, [ctx]);
-    } else if (ic is RouteInterceptor) {
-      return ic;
-    } else if (ic is Interceptor) {
-      return ic;
-    } else {
-      throw new Exception('Not an interceptor: $ic!');
-    }
-  }
-
-  /// Detects interceptor wrappers on a method or function
-  List<RouteInterceptor> _detectBefore(
-      InstanceMirror im, List<InstanceMirror> annots) {
-    final wrappers = <RouteInterceptor>[];
-
-    for (InstanceMirror annot in annots) {
-      dynamic ref = annot.reflectee;
-      if (ref is Intercept) {
-        for (dynamic ic in ref.before) wrappers.add(extractInterceptor(im, ic));
-      }
-    }
-
-    return wrappers;
-  }
-
-  /// Detects interceptor wrappers on a method or function
-  List<RouteInterceptor> _detectAfter(
-      InstanceMirror im, List<InstanceMirror> annots) {
-    final wrappers = <RouteInterceptor>[];
-
-    for (InstanceMirror annot in annots) {
-      dynamic ref = annot.reflectee;
-      if (ref is Intercept) {
-        for (dynamic ic in ref.after) wrappers.add(extractInterceptor(im, ic));
-      } else if (ref is After) {
-        for (dynamic ic in ref.after) wrappers.add(extractInterceptor(im, ic));
-      }
-    }
-
-    return wrappers;
-  }
-
-  /// Detects interceptor wrappers on a method or function
-  List<ExceptionHandler> _detectExceptionHandlers(
-      InstanceMirror im, List<InstanceMirror> annots) {
-    final wrappers = <ExceptionHandler>[];
-
-    for (InstanceMirror annot in annots) {
-      dynamic ref = annot.reflectee;
-      if (ref is Intercept) {
-        for (dynamic ic in ref.onException) {
-          if (ic is Symbol) {
-            wrappers.add(
-                (Context ctx, e, StackTrace s) => im.invoke(ic, [ctx, e, s]));
-          } else {
-            wrappers.add(ic);
-          }
-        }
-      } else if (ref is OnException) {
-        for (dynamic ic in ref.onException) {
-          if (ic is Symbol) {
-            wrappers.add(
-                (Context ctx, e, StackTrace s) => im.invoke(ic, [ctx, e, s]));
-          } else {
-            wrappers.add(ic);
-          }
-        }
-      }
-    }
-
-    return wrappers;
   }
 }
 

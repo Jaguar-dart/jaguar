@@ -53,7 +53,7 @@ main() {
     test('ParseNUpdate', () async {
       await resty
           .get('http://localhost:10000/api/add/Dog')
-          .interceptBefore(jar.intercept)
+          .before(jar)
           .go()
           .json<Map>()
           .expect([
@@ -61,7 +61,7 @@ main() {
       ]);
       await resty
           .get('http://localhost:10000/api/add/Cat')
-          .interceptBefore(jar.intercept)
+          .before(jar)
           .go()
           .json<Map>()
           .expect([
@@ -69,7 +69,7 @@ main() {
       ]);
       await resty
           .get('http://localhost:10000/api/add/Mink')
-          .interceptBefore(jar.intercept)
+          .before(jar)
           .go()
           .json<Map>()
           .expect([
@@ -77,7 +77,7 @@ main() {
       ]);
       await resty
           .get('http://localhost:10000/api/remove/Cat')
-          .interceptBefore(jar.intercept)
+          .before(jar)
           .go()
           .json<Map>()
           .expect([
@@ -85,7 +85,7 @@ main() {
       ]);
       await resty
           .get('http://localhost:10000/api/remove/Cat')
-          .interceptBefore(jar.intercept)
+          .before(jar)
           .go()
           .json<Map>()
           .expect([

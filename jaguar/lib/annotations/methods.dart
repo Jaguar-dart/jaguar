@@ -12,38 +12,23 @@ void jsonResponseProcessor(Response resp) {
   resp.value = converters.json.encode(resp.value);
 }
 
-/// [ResponseProcessor] to set mimetype to [MimeType.html].
-void htmlResponseProcessor(Response resp) {
-  resp.headers.mimeType = MimeTypes.html;
-}
-
-/// [ResponseProcessor] to set various response fields
-ResponseProcessor setResponseFields(
-        {int statusCode,
-        String mimetype,
-        String charset,
-        Map<String, String> headers}) =>
-    (resp) {
-      if (statusCode != null) resp.statusCode = statusCode;
-      if (headers != null) headers.forEach(resp.headers.set);
-      if (mimetype != null) resp.headers.mimeType = mimetype;
-      if (charset != null) resp.headers.charset = charset;
-    };
-
-ResponseProcessor mimeSetter(String mime) =>
-    (resp) => resp.headers.mimeType = mime;
-
 /// Annotation to declare a method as request handler method that processes GET
 /// requests.
 class Get extends HttpMethod {
   const Get(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             methods: _methods,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['GET'];
@@ -55,11 +40,17 @@ class Post extends HttpMethod {
   const Post(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             methods: _methods,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['POST'];
@@ -71,11 +62,17 @@ class Put extends HttpMethod {
   const Put(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             methods: _methods,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['PUT'];
@@ -87,11 +84,17 @@ class Delete extends HttpMethod {
   const Delete(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             methods: _methods,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['DELETE'];
@@ -103,11 +106,17 @@ class Patch extends HttpMethod {
   const Patch(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             methods: _methods,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['PATCH'];
@@ -119,11 +128,17 @@ class OptionsMethod extends HttpMethod {
   const OptionsMethod(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             methods: _methods,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 
   static const List<String> _methods = const <String>['OPTIONS'];
@@ -135,10 +150,16 @@ class GetJson extends Get {
   const GetJson(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor: jsonResponseProcessor})
       : super(
             path: path,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 }
 
@@ -148,10 +169,16 @@ class PutJson extends Put {
   const PutJson(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor: jsonResponseProcessor})
       : super(
             path: path,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 }
 
@@ -161,10 +188,16 @@ class PostJson extends Post {
   const PostJson(
       {String path: '',
       Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor: jsonResponseProcessor})
       : super(
             path: path,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 }
 
@@ -174,10 +207,16 @@ class DeleteJson extends Delete {
   const DeleteJson(
       {String path: '',
       final Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor: jsonResponseProcessor})
       : super(
             path: path,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 }
 
@@ -187,10 +226,16 @@ class GetHtml extends Get {
   const GetHtml(
       {String path: '',
       final Map<String, String> pathRegEx,
+      int statusCode: 200,
+      String mimeType,
+      String charset: kDefaultCharset,
       ResponseProcessor responseProcessor})
       : super(
             path: path,
             pathRegEx: pathRegEx,
+            statusCode: statusCode,
+            mimeType: mimeType,
+            charset: charset,
             responseProcessor: responseProcessor);
 }
 
@@ -205,23 +250,38 @@ class HttpMethod {
   /// Map of regular expression matchers for specific path segment
   final Map<String, String> pathRegEx;
 
+  final int statusCode;
+
+  final String mimeType;
+
+  final String charset;
+
   final ResponseProcessor responseProcessor;
 
   const HttpMethod(
       {this.path: '',
       this.methods: _methods,
       this.pathRegEx,
+      this.statusCode: 200,
+      this.mimeType,
+      this.charset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
           {String path,
           List<String> methods,
           Map<String, String> pathRegEx,
+          int statusCode,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
           methods: methods ?? this.methods,
           pathRegEx: pathRegEx ?? this.pathRegEx,
+          statusCode: statusCode ?? this.statusCode,
+          mimeType: mimeType ?? this.mimeType,
+          charset: charset ?? this.charset,
           responseProcessor: responseProcessor ?? this.responseProcessor);
 
   static const List<String> _methods = const <String>['*'];

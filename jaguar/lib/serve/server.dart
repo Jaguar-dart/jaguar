@@ -20,11 +20,6 @@ class Jaguar extends Object with Muxable {
   /// Defaults to false.
   bool autoCompress;
 
-  /// Base path of the served api.
-  ///
-  /// Defaults to '' (Aka. No base path).
-  String basePath;
-
   /// Used to write error pages in case of HTTP errors.
   ///
   /// Defaults to [DefaultErrorWriter].
@@ -56,8 +51,6 @@ class Jaguar extends Object with Muxable {
   /// [multiThread] determines if the port can be serviced from multiple isolates.
   /// [securityContext] is used to configure HTTPS support.
   /// [autoCompress] determines if the response should be automatically compressed.
-  /// [basePath] is the path prefix added to all constituting routes of this
-  /// server.
   /// [errorWriter] is used to write custom error page [Response] in cases of HTTP
   /// errors.
   /// [sessionManager] provides ability to use custom session managers.
@@ -67,7 +60,6 @@ class Jaguar extends Object with Muxable {
       bool multiThread: false,
       SecurityContext securityContext,
       this.autoCompress: false,
-      this.basePath: '',
       ErrorWriter errorWriter,
       SessionManager sessionManager})
       : errorWriter = errorWriter ?? DefaultErrorWriter(),
@@ -142,8 +134,6 @@ class Jaguar extends Object with Muxable {
         before: before.toList(),
         after: after.toList(),
         onException: onException.toList());
-    ctx.prefix = basePath;
-
     try {
       // Try to find a matching route and invoke it.
       RouteHandler handler =

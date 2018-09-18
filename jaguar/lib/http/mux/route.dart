@@ -10,16 +10,16 @@ typedef FutureOr<void> ExceptionHandler(
 
 /// Prototype of route interceptor. A router interceptor is a function that runs
 /// before or after the route handler.
-typedef FutureOr<void> RouteInterceptor(Context ctx);
+typedef FutureOr<Result> RouteInterceptor<Result>(Context ctx);
 
 /// An interceptor based on Dart class.
 ///
 /// NOTE: Same instance of [Interceptor] shall not be used for
 /// multiple requests if it stores state in its members!
-abstract class Interceptor {
+abstract class Interceptor<Result> {
   const Interceptor();
 
-  FutureOr<void> call(Context ctx);
+  FutureOr<Result> call(Context ctx);
 }
 
 /// Prototype for Route handler. A route handler is a function that shall be
@@ -76,6 +76,9 @@ class Route {
   factory Route(String path, RouteHandler handler,
           {List<String> methods: const <String>['*'],
           Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -85,6 +88,9 @@ class Route {
               path: path,
               methods: methods,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -94,6 +100,9 @@ class Route {
   /// Constructs a [Route] for GET method requests
   factory Route.get(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -102,6 +111,9 @@ class Route {
           Get(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -111,6 +123,9 @@ class Route {
   /// Constructs a [Route] for POST method requests
   factory Route.post(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -119,6 +134,9 @@ class Route {
           Post(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -128,6 +146,9 @@ class Route {
   /// Constructs a [Route] for PUT method requests
   factory Route.put(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -136,6 +157,9 @@ class Route {
           Put(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -145,6 +169,9 @@ class Route {
   /// Constructs a [Route] for DELETE method requests
   factory Route.delete(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -153,6 +180,9 @@ class Route {
           Delete(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -162,6 +192,9 @@ class Route {
   /// Constructs a [Route] for PATCH method requests
   factory Route.patch(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -170,6 +203,9 @@ class Route {
           Patch(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -179,6 +215,9 @@ class Route {
   /// Constructs a [Route] for OPTIONS method requests
   factory Route.options(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -187,6 +226,9 @@ class Route {
           OptionsMethod(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -196,7 +238,10 @@ class Route {
   /// Constructs a [Route] for HTML requests
   factory Route.html(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          ResponseProcessor responseProcessor: htmlResponseProcessor,
+          int statusCode: 200,
+          String mimeType: MimeTypes.html,
+          String charset: kDefaultCharset,
+          ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>
@@ -204,6 +249,9 @@ class Route {
           GetHtml(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -214,6 +262,9 @@ class Route {
   factory Route.json(String path, RouteHandler handler,
           {List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
           Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor: jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -223,6 +274,9 @@ class Route {
               path: path,
               methods: methods,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -232,6 +286,9 @@ class Route {
   /// Constructs a [Route] for JSON requests with GET method
   factory Route.getJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor: jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -240,6 +297,9 @@ class Route {
           GetJson(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -249,6 +309,9 @@ class Route {
   /// Constructs a [Route] for JSON requests with POST method
   factory Route.postJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor: jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -257,6 +320,9 @@ class Route {
           PostJson(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -266,6 +332,9 @@ class Route {
   /// Constructs a [Route] for JSON requests with PUT method
   factory Route.putJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor: jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -274,6 +343,9 @@ class Route {
           PutJson(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -283,6 +355,9 @@ class Route {
   /// Constructs a [Route] for JSON requests with DELETE method
   factory Route.deleteJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
+          int statusCode: 200,
+          String mimeType,
+          String charset: kDefaultCharset,
           ResponseProcessor responseProcessor: jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -291,6 +366,9 @@ class Route {
           DeleteJson(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before,
@@ -309,10 +387,13 @@ class Route {
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>
-      new Route.fromInfo(
+      Route.fromInfo(
           info.cloneWith(
               path: path,
               pathRegEx: pathRegEx,
+              statusCode: statusCode,
+              mimeType: mimeType,
+              charset: charset,
               responseProcessor: responseProcessor),
           handler,
           before: before ?? this._before,
@@ -335,7 +416,7 @@ class Route {
           ctx.pathSegments.skip(_pathGlobVarMapping).join('/');
     }
 
-    return ctx.execute(handler, info.responseProcessor);
+    return ctx.execute(handler, info);
   }
 
   /// Add [interceptor] and optionally [interceptors] to be executed before

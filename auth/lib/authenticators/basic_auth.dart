@@ -12,7 +12,8 @@ part of jaguar_auth.authenticators;
 ///
 /// Outputs ans Variables:
 /// The authenticated user model is injected into the context as input
-class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
+class BasicAuth<UserModel extends PasswordUser>
+    implements Interceptor<UserModel> {
   /// Model manager is used to fetch user model for the authentication request
   /// and authenticate against the password
   final UserFetcher<UserModel> userFetcher;
@@ -39,7 +40,7 @@ class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
   ///
   /// On successful login, injects authenticated user model as context input and
   /// session manager as context variable.
-  Future<void> call(Context ctx) async {
+  Future<UserModel> call(Context ctx) async {
     String basic = ctx.authHeader(kBasicAuthScheme);
 
     if (basic == null) throw UnauthorizedException.invalidRequest;
@@ -75,6 +76,7 @@ class BasicAuth<UserModel extends PasswordUser> implements Interceptor {
     }
 
     ctx.addVariable(subject);
+    return subject;
   }
 
   static String _decodeCredentials(String credentials) {

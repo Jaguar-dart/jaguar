@@ -1,5 +1,3 @@
-library example.basic_auth.server;
-
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
@@ -13,11 +11,10 @@ final Map<String, Book> _books = {
 };
 
 /// This route group contains login and logout routes
-@Controller()
-class AuthRoutes {
+@GenController()
+class AuthRoutes extends Controller {
   @PostJson(path: '/login')
-  @Intercept(const [const FormAuth<User>()])
-  User login(Context ctx) => ctx.getVariable<User>();
+  Future<User> login(Context ctx) => FormAuth.authenticate<User>(ctx);
 
   @Post(path: '/logout')
   Future logout(Context ctx) async {
@@ -26,9 +23,8 @@ class AuthRoutes {
   }
 }
 
-@Controller(path: '/book')
-@Intercept(const [const Authorizer<User>()])
-class StudentRoutes {
+@GenController(path: '/book')
+class StudentRoutes extends Controller {
   @GetJson()
   List<Book> getAllBooks(Context ctx) => _books.values.toList();
 
@@ -38,14 +34,19 @@ class StudentRoutes {
     Book book = _books[id];
     return book;
   }
+
+  @override
+  Future<void> before(Context ctx) async {
+    await Authorizer.authorize<User>(ctx);
+  }
 }
 
-@Controller(path: '/api')
-class LibraryApi {
-  @IncludeHandler()
+@GenController(path: '/api')
+class LibraryApi extends Controller {
+  @IncludeController()
   final auth = AuthRoutes();
 
-  @IncludeHandler()
+  @IncludeController()
   final books = StudentRoutes();
 }
 

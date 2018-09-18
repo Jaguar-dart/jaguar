@@ -407,8 +407,6 @@ class Context {
     return ret;
   }
 
-  String prefix = "";
-
   AuthHeaders _authHeader;
 
   String authHeader(String scheme) {
@@ -419,8 +417,8 @@ class Context {
     return _authHeader.items[scheme]?.credentials;
   }
 
-  Future<void> execute(final RouteHandler routeHandler,
-      ResponseProcessor responseProcessor) async {
+  Future<void> execute(
+      final RouteHandler routeHandler, HttpMethod methodInfo) async {
     try {
       {
         for (int i = 0; i < before.length; i++) {
@@ -437,8 +435,12 @@ class Context {
           if (res is Response)
             response = res;
           else {
-            response = Response(res);
-            if (responseProcessor != null) responseProcessor(response);
+            response = Response(res,
+                statusCode: methodInfo.statusCode,
+                mimeType: methodInfo.mimeType,
+                charset: methodInfo.charset);
+            if (methodInfo.responseProcessor != null)
+              methodInfo.responseProcessor(response);
           }
         }
       }

@@ -14,7 +14,8 @@ import '../exception/exception.dart';
 ///
 /// Exception:
 /// An [UnauthorizedException] is thrown if the authorization fails.
-class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
+class Authorizer<UserModel extends AuthorizationUser>
+    implements Interceptor<UserModel> {
   /// Model manager used to fetch user model of the logged-in user
   final UserFetcher<UserModel> userFetcher;
 
@@ -29,7 +30,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
       this.authorizationIdKey: 'id',
       this.throwOnFail: true});
 
-  Future<void> call(Context ctx) async {
+  Future<UserModel> call(Context ctx) async {
     final Session session = await ctx.session;
     final String authId = session[authorizationIdKey];
     if (authId is! String || authId.isEmpty) {
@@ -52,6 +53,7 @@ class Authorizer<UserModel extends AuthorizationUser> implements Interceptor {
     }
 
     ctx.addVariable(subject);
+    return subject;
   }
 
   /// Authorizes the request using the given [userFetcher].

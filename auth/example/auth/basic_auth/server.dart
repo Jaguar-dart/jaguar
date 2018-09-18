@@ -19,5 +19,6 @@ main() async {
     (Context ctx) => books.values.toList(),
     before: [Authorizer<User>()], // Authorization
   );
-  await server.serve();
+  server.log.onRecord.listen(print);
+  await server.serve(logRequests: true);
 }

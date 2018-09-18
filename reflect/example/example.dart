@@ -3,8 +3,8 @@ library jaguar.example.routes;
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_reflect/jaguar_reflect.dart';
 
-@Controller()
-class ExampleController {
+@GenController()
+class ExampleController extends Controller {
   @Get()
   String get(Context ctx) => 'Get';
 
@@ -16,6 +16,11 @@ class ExampleController {
 
   @Delete()
   String delete(_) => 'Delete';
+
+  @override
+  void before(Context ctx) {
+    print("here");
+  }
 }
 
 main() async {

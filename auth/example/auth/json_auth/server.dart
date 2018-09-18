@@ -13,11 +13,10 @@ final Map<String, Book> _books = {
 };
 
 /// This route group contains login and logout routes
-@Controller()
-class AuthRoutes {
+@GenController()
+class AuthRoutes extends Controller {
   @PostJson(path: '/login')
-  @Intercept(const [const JsonAuth<User>()])
-  User login(Context ctx) => ctx.getVariable<User>();
+  Future<User> login(Context ctx) => JsonAuth.authenticate<User>(ctx);
 
   @Post(path: '/logout')
   Future logout(Context ctx) async {
@@ -27,32 +26,32 @@ class AuthRoutes {
 }
 
 /// Collection of routes students can also access
-@Controller(path: '/book')
-class StudentRoutes {
+@GenController(path: '/book')
+class StudentRoutes extends Controller {
   @GetJson()
   Future<List<Book>> getAllBooks(Context ctx) async {
-    // Authorize. Throws 401 http error, if authorization fails!
-    await Authorizer.authorize<User>(ctx);
-
     return _books.values.toList();
   }
 
   @GetJson(path: '/:id')
   Future<Book> getBook(Context ctx) async {
-    // Authorize. Throws 401 http error, if authorization fails!
-    await Authorizer.authorize<User>(ctx);
-
     String id = ctx.pathParams.get('id');
     return _books[id];
   }
+
+  @override
+  Future<void> before(Context ctx) async {
+    // Authorize. Throws 401 http error, if authorization fails!
+    await Authorizer.authorize<User>(ctx);
+  }
 }
 
-@Controller(path: '/api')
-class LibraryApi {
-  @IncludeHandler()
+@GenController(path: '/api')
+class LibraryApi extends Controller {
+  @IncludeController()
   final auth = AuthRoutes();
 
-  @IncludeHandler()
+  @IncludeController()
   final books = StudentRoutes();
 }
 

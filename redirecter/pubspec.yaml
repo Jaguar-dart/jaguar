@@ -1,5 +1,5 @@
 name: jaguar_redirecter
-version: 2.2.0
+version: 2.4.1
 description: Plugin to perform HTTP to HTTPS redirection or redirection to another server.
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
@@ -9,7 +9,7 @@ environment:
   sdk: ">=2.0.0-dev.65 <3.0.0"
 
 dependencies:
-  jaguar: ^2.2.4
+  jaguar: ^2.4.2
 
 dev_dependencies:
   test: ^1.3.0
