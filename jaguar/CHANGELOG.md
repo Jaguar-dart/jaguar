@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.5
+
++ File `FormField` now supports multiple files in same field
+
 ## 2.4.4
 
 + Performance improvements

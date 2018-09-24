@@ -151,11 +151,11 @@ class Jaguar extends Object with Muxable {
       if (ctx.response == null) await errorWriter.make404(ctx);
     } catch (e, stack) {
       Response newResponse;
-      if(e is Response) newResponse = e;
+      if (e is Response) newResponse = e;
       for (int i = ctx.onException.length - 1; i >= 0; i--) {
         maybeFuture = ctx.onException[i](ctx, e, stack);
         if (maybeFuture is Future) await maybeFuture;
-        if(maybeFuture is Response) newResponse = maybeFuture;
+        if (maybeFuture is Response) newResponse = maybeFuture;
       }
       if (newResponse is Response) {
         // If [Response] object was thrown, write it!

@@ -346,11 +346,23 @@ class Context {
       } else if (multipart.isText) {
         final field = TextFileFormField(name, multipart.cast<String>(),
             contentType: contentType, filename: fn);
-        ret[field.name] = field;
+        if (ret[name] is TextFileListFormField) {
+          (ret[name] as TextFileListFormField).values.add(field);
+        } else if (ret[name] is TextFileFormField) {
+          ret[name] = TextFileListFormField.fromValues([ret[name], field]);
+        } else {
+          ret[name] = field;
+        }
       } else {
         final field = BinaryFileFormField(name, multipart.cast<List<int>>(),
             contentType: contentType, filename: fn);
-        ret[field.name] = field;
+        if (ret[name] is BinaryFileListFormField) {
+          (ret[name] as BinaryFileListFormField).values.add(field);
+        } else if (ret[name] is BinaryFileFormField) {
+          ret[name] = BinaryFileListFormField.fromValues([ret[name], field]);
+        } else {
+          ret[name] = field;
+        }
       }
     }
 
