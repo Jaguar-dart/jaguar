@@ -92,6 +92,11 @@ class CastableStringMap extends DelegatingMap<String, String> {
 
     return defaultValue;
   }
+
+  List<String> getList(String key, [Pattern separator = ","]) {
+    if (!containsKey(key)) return [];
+    return this[key].split(separator);
+  }
 }
 
 /// Class to hold path parameters
