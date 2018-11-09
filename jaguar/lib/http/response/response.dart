@@ -45,17 +45,21 @@ class Response<ValueType> {
   }
 
   static Response<String> json<ST>(ST value,
-          {int statusCode: HttpStatus.ok,
-          Map<String, dynamic> headers,
-          String mimeType: MimeTypes.json,
-          String charset: kDefaultCharset}) =>
-      Response<String>(
-        cnv.json.encode(value),
-        statusCode: statusCode,
-        headers: headers,
-        mimeType: mimeType,
-        charset: charset,
-      );
+      {dynamic serializeWith(ST value),
+      int statusCode: HttpStatus.ok,
+      Map<String, dynamic> headers,
+      String mimeType: MimeTypes.json,
+      String charset: kDefaultCharset}) {
+    String data =
+        cnv.json.encode(serializeWith == null ? value : serializeWith(value));
+    return Response<String>(
+      data,
+      statusCode: statusCode,
+      headers: headers,
+      mimeType: mimeType,
+      charset: charset,
+    );
+  }
 
   /// deleteCookie deletes a cookie with given [name]. Use [path] to specify
   /// the path from which the cookie has to be removed.
