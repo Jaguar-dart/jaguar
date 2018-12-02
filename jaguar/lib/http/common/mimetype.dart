@@ -24,6 +24,9 @@ abstract class MimeTypes {
   /// Mime type for GIF
   static const String gif = "image/gif";
 
+  static const String webp = "image/webp";
+  static const String bmp = "image/bmp";
+
   /// Mime type for JSON
   static const String json = "application/json";
 
@@ -39,6 +42,32 @@ abstract class MimeTypes {
   /// Mime type for SVG
   static const String svg = "image/svg+xml";
 
+  static const wav = "video/wav";
+
+  static const mp3 = "audio/mpeg3";
+
+  static const gp3 = "video/3gpp";
+
+  static const avi = "video/avi";
+
+  static const mov = "video/quicktime";
+
+  static const mp4 = "video/mp4";
+
+  static const flv = "video/x-flv";
+
+  static const webm = "video/webm";
+
+  static const pdf = "application/pdf";
+
+  static const rar = "application/x-rar-compressed";
+
+  static const zip = "application/zip";
+
+  static const txt = "text/plain";
+
+  static const tar = "application/x-tar";
+
   /// Map of file extension to mime type
   static const fromFileExtension = const <String, String>{
     "html": html,
@@ -49,7 +78,21 @@ abstract class MimeTypes {
     "jpg": jpeg,
     "jpeg": jpeg,
     "gif": gif,
+    "bmp": bmp,
+    "webp": webp,
     "svg": svg,
+    "wav": wav,
+    "mp3": mp3,
+    "3gp": gp3,
+    "avi": avi,
+    "mov": mov,
+    "mp4": mp4,
+    "flv": flv,
+    "webm": webm,
+    "rar": rar,
+    "txt": txt,
+    "zip": zip,
+    "tar": tar,
   };
 
   /// Returns mime type of [file] based on its extension
