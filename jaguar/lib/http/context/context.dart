@@ -271,6 +271,8 @@ class Context {
     return ret.cast<T>();
   }
 
+  Map<String, String> _parsedUrlEncodedForm;
+
   /// Decodes url-encoded form from the body and returns the form as
   /// Map<String, String>.
   ///
@@ -283,6 +285,8 @@ class Context {
   ///     await server.serve();
   Future<Map<String, String>> bodyAsUrlEncodedForm(
       {conv.Encoding encoding: conv.utf8}) async {
+    if (_parsedUrlEncodedForm != null) return _parsedUrlEncodedForm;
+
     final String text = await bodyAsText(encoding);
 
     List<String> fields = text.split("&");
@@ -298,8 +302,11 @@ class Context {
         ret[Uri.decodeQueryComponent(parts.first)] = "";
     }
 
+    _parsedUrlEncodedForm = ret;
     return ret;
   }
+
+  Map<String, FormField> _parsedFormData;
 
   /// Decodes `multipart/form-data` body
   ///
@@ -314,6 +321,8 @@ class Context {
   ///       return Response.redirect(Uri.parse("/"));
   ///     });
   Future<Map<String, FormField>> bodyAsFormData() async {
+    if (_parsedFormData != null) return _parsedFormData;
+
     if (!req.headers.contentType.parameters.containsKey('boundary')) {
       return null;
     }
@@ -366,6 +375,7 @@ class Context {
       }
     }
 
+    _parsedFormData = ret;
     return ret;
   }
 
@@ -377,7 +387,7 @@ class Context {
     } else if (mt.isUrlEncodedForm) {
       return bodyAsUrlEncodedForm();
     } else if (mt.isFormData) {
-      return bodyAsFormData();
+      return _formDataMapToStringMap(await bodyAsFormData());
     }
 
     return null;
@@ -393,10 +403,20 @@ class Context {
     } else if (mt.isUrlEncodedForm) {
       b = await bodyAsUrlEncodedForm();
     } else if (mt.isFormData) {
-      b = await bodyAsFormData();
+      b = await _formDataMapToStringMap(await bodyAsFormData());
     }
 
     return convert(b);
+  }
+
+  Future<FormField<T>> getFile<T>(String field) async {
+    final data = await bodyAsFormData();
+    if (data == null) return null;
+    final fieldData = data[field];
+    if (fieldData is! FormField<T>) {
+      return null;
+    }
+    return fieldData;
   }
 
   Response response;
@@ -460,4 +480,16 @@ class Context {
       if (maybeFuture is Future) await maybeFuture;
     }
   }
+}
+
+Map<String, String> _formDataMapToStringMap(Map<String, FormField> form) {
+  final ret = <String, String>{};
+
+  for (String key in form.keys) {
+    if (form[key] is StringFormField) {
+      ret[key] = form[key].value;
+    }
+  }
+
+  return ret;
 }
