@@ -77,6 +77,8 @@ class Context {
     return _query;
   }
 
+  Route route;
+
   SessionManager sessionManager;
 
   final Map<Type, UserFetcher<AuthorizationUser>> userFetchers;
@@ -449,8 +451,7 @@ class Context {
     return _authHeader.items[scheme]?.credentials;
   }
 
-  Future<void> execute(
-      final RouteHandler routeHandler, HttpMethod methodInfo) async {
+  Future<void> execute() async {
     dynamic maybeFuture;
     for (int i = 0; i < before.length; i++) {
       maybeFuture = before[i](this);
@@ -458,19 +459,20 @@ class Context {
     }
 
     {
-      dynamic res = routeHandler(this);
+      final info = route.info;
+      dynamic res = route.handler(this);
       if (res is Future) res = await res;
 
-      if (res != null) {
+      if (info.responseProcessor != null) {
+        maybeFuture = info.responseProcessor(this, res);
+      } else if (res != null) {
         if (res is Response)
           response = res;
         else {
           response = Response(res,
-              statusCode: methodInfo.statusCode,
-              mimeType: methodInfo.mimeType,
-              charset: methodInfo.charset);
-          if (methodInfo.responseProcessor != null)
-            methodInfo.responseProcessor(response);
+              statusCode: info.statusCode,
+              mimeType: info.mimeType,
+              charset: info.charset);
         }
       }
     }

@@ -404,6 +404,8 @@ class Route {
 
   /// Handles requests
   Future<void> call(Context ctx) {
+    ctx.route = this;
+
     ctx.before.addAll(_before);
     ctx.after.addAll(_after);
     ctx.onException.addAll(_onException);
@@ -416,7 +418,7 @@ class Route {
           ctx.pathSegments.skip(_pathGlobVarMapping).join('/');
     }
 
-    return ctx.execute(handler, info);
+    return ctx.execute();
   }
 
   /// Add [interceptor] and optionally [interceptors] to be executed before

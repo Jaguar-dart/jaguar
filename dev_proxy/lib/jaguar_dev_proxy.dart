@@ -68,7 +68,8 @@ Route getOnlyProxy(String path, String proxyBaseUrl,
     clientReq.add(await ctx.req.body);
     final HttpClientResponse clientResp = await clientReq.close();
 
-    if (clientResp.statusCode == HttpStatus.notFound) return null;
+    if (clientResp.statusCode == HttpStatus.notFound)
+      return Builtin404ErrorResponse();
 
     _returnResponse(ctx, clientResp, requestUri, proxyName, proxyBaseUrl);
   }, responseProcessor: responseProcessor, pathRegEx: pathRegEx);

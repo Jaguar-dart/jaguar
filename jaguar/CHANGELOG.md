@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.4.14
+
+### Breaking changes
+
++ ErrorWriter interface has changed
++ Route handlers must now set response to `Builtin404ErrorResponse` to generate builtin 404 error response.
+
 ## 2.4.5
 
 + File `FormField` now supports multiple files in same field

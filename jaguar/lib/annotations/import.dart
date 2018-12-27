@@ -1,7 +1,7 @@
 /// Annotations
 library jaguar.src.annotations;
 
-import 'dart:convert' as converters;
+import 'dart:async';
 
 import 'package:jaguar/jaguar.dart';
 

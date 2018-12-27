@@ -23,7 +23,7 @@ void main() {
   group('Custom interceptor:Generated', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 10000);
+      server = Jaguar(port: 10000);
       server
         ..getJson(
             '/two',

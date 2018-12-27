@@ -2,14 +2,17 @@ part of jaguar.src.annotations;
 
 typedef String WsResultProcessor(dynamic response);
 
-/// Function that modifies [response]
-typedef void ResponseProcessor(Response response);
+/// Function that modifies [context]
+typedef FutureOr<void> ResponseProcessor(Context context, dynamic result);
 
 /// [ResponseProcessor] to encode response value to json and also set mimetype
 /// to [MimeType.json].
-void jsonResponseProcessor(Response resp) {
-  resp.headers.mimeType = MimeTypes.json;
-  resp.value = converters.json.encode(resp.value);
+void jsonResponseProcessor(Context context, dynamic result) {
+  final info = context.route.info;
+  context.response = Response.json(result,
+      statusCode: info.statusCode,
+      mimeType: info.mimeType ?? MimeTypes.json,
+      charset: info.charset ?? kDefaultCharset);
 }
 
 /// Annotation to declare a method as request handler method that processes GET

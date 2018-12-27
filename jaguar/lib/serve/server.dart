@@ -6,10 +6,10 @@ import 'dart:io';
 import 'package:jaguar/jaguar.dart';
 import 'package:logging/logging.dart';
 
-import 'package:jaguar/serve/error_writer/import.dart';
+import 'package:jaguar/serve/error_writer/error_writer.dart';
 import 'package:path_tree/path_tree.dart';
 
-export 'package:jaguar/serve/error_writer/import.dart';
+export 'package:jaguar/serve/error_writer/error_writer.dart';
 
 /// The Jaguar server
 class Jaguar extends Object with Muxable {
@@ -147,8 +147,9 @@ class Jaguar extends Object with Muxable {
 
     try {
       await handler(ctx);
-      // If no response, write 404 error.
-      if (ctx.response == null) await errorWriter.make404(ctx);
+      if (ctx.response is BuiltinErrorResponse)
+        await (ctx.response as BuiltinErrorResponse)
+            .convertToError(ctx, errorWriter);
     } catch (e, stack) {
       Response newResponse;
       if (e is Response) newResponse = e;
@@ -176,7 +177,8 @@ class Jaguar extends Object with Muxable {
           if (maybeFuture is Future) await maybeFuture;
         }
 
-        await ctx.response.writeResponse(request.response);
+        if (ctx.response != null)
+          await ctx.response.writeResponse(request.response);
       } catch (e, stack) {
         log.warning('${e.toString()}\n${stack.toString()}');
       }
