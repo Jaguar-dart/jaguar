@@ -148,7 +148,7 @@ class Jaguar extends Object with Muxable {
     try {
       await handler(ctx);
       if (ctx.response is BuiltinErrorResponse)
-        await (ctx.response as BuiltinErrorResponse)
+        ctx.response = await (ctx.response as BuiltinErrorResponse)
             .convertToError(ctx, errorWriter);
     } catch (e, stack) {
       Response newResponse;
