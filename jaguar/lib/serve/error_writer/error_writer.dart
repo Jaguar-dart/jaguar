@@ -8,11 +8,12 @@ import 'package:jaguar/jaguar.dart';
 part 'template_404.dart';
 part 'template_500.dart';
 
-abstract class BuiltinErrorResponse implements Response {
+abstract class BuiltinErrorResponse {
   FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter);
 }
 
-class Builtin404ErrorResponse extends Response<String> {
+class Builtin404ErrorResponse extends Response<String>
+    implements BuiltinErrorResponse {
   Builtin404ErrorResponse() : super(null, statusCode: 404);
 
   FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter) {
@@ -22,7 +23,8 @@ class Builtin404ErrorResponse extends Response<String> {
   }
 }
 
-class Builtin500ErrorResponse extends Response<String> {
+class Builtin500ErrorResponse extends Response<String>
+    implements BuiltinErrorResponse {
   Object error;
 
   StackTrace trace;

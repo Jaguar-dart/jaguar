@@ -101,7 +101,7 @@ class Response<ValueType> {
   /// to the response.
   FutureOr<void> writeResponse(HttpResponse resp) {
     writeAllButBody(resp);
-    resp.write(value?.toString());
+    if (value != null) resp.write(value.toString());
     return null;
   }
 }
