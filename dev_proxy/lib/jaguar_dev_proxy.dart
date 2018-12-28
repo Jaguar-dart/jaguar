@@ -51,8 +51,12 @@ Route getOnlyProxy(String path, String proxyBaseUrl,
     Iterable<String> segs = ctx.pathSegments;
     if (stripPrefix) segs = segs.skip(skipCount);
     Uri requestUri = Uri.parse(proxyBaseUrl + '/' + segs.join('/'));
-    HttpClientRequest clientReq =
-        await client.openUrl(ctx.req.method, requestUri);
+    HttpClientRequest clientReq;
+    try {
+      clientReq = await client.openUrl(ctx.req.method, requestUri);
+    } catch (e) {
+      return Builtin404ErrorResponse();
+    }
     clientReq.followRedirects = false;
 
     ctx.req.headers.forEach((String key, dynamic val) {
