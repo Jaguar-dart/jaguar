@@ -61,6 +61,20 @@ class Response<ValueType> {
     );
   }
 
+  static Response<String> html(String html,
+      {int statusCode: HttpStatus.ok,
+      Map<String, dynamic> headers,
+      String mimeType: MimeTypes.html,
+      String charset: kDefaultCharset}) {
+    return Response<String>(
+      html,
+      statusCode: statusCode,
+      headers: headers,
+      mimeType: mimeType,
+      charset: charset,
+    );
+  }
+
   /// deleteCookie deletes a cookie with given [name]. Use [path] to specify
   /// the path from which the cookie has to be removed.
   void deleteCookie(String name, {String path: '/'}) {
