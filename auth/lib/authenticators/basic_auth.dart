@@ -81,7 +81,7 @@ class BasicAuth<UserModel extends PasswordUser>
 
   static String _decodeCredentials(String credentials) {
     try {
-      return new String.fromCharCodes(base64Url.decode(credentials));
+      return String.fromCharCodes(base64Url.decode(credentials));
     } on FormatException catch (_) {
       return '';
     }

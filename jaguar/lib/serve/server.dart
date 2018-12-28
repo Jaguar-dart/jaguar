@@ -140,7 +140,7 @@ class Jaguar extends Object with Muxable {
     RouteHandler handler =
         _routeTree.match(request.uri.pathSegments, request.method);
     if (handler == null) {
-      await errorWriter.make404(ctx);
+      ctx.response = await errorWriter.make404(ctx);
       await ctx.response.writeResponse(request.response);
       return request.response.close();
     }
