@@ -1,6 +1,6 @@
 name: jaguar_generator
-description: Generator for Jaguar
-version: 2.4.4
+description: Source generator for Jaguar Controllers. This will generate route installers for Jaguar Controllers.
+version: 2.4.5
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
