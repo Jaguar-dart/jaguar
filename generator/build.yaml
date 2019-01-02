@@ -1,18 +1,7 @@
-targets:
-  jaguar_generator:
-    sources: ["lib/**"]
-  example:
-    sources: ["example/**"]
-    builders:
-      jaguar_generator:
-        generate_for:
-          - example/simple.dart
-
 builders:
   jaguar_generator:
-    target: ":jaguar_generator"
     import: "package:jaguar_generator/builder.dart"
-    builder_factories: ["jaguar"]
-    build_extensions: {".dart": [".g.dart"]}
-    auto_apply: dependents
+    builder_factories: ["jaguarBuilder"]
+    build_extensions: {".dart": [".jroutes.dart"]}
+    auto_apply: root_package
     build_to: source

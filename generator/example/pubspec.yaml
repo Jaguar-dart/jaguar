@@ -1,0 +1,17 @@
+name: example
+description: A sample command-line application.
+# version: 1.0.0
+# homepage: https://www.example.com
+# author: teja <email@example.com>
+
+environment:
+  sdk: '>=2.1.0 <3.0.0'
+
+dependencies:
+  jaguar: ^2.4.19
+
+dev_dependencies:
+  test: ^1.0.0
+  build_runner:
+  jaguar_generator:
+    path: ../

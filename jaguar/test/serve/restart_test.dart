@@ -1,12 +1,13 @@
 library test.jaguar.serve.restart;
 
+import 'package:http/io_client.dart' as http;
 import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('mux', () {
     Jaguar server;

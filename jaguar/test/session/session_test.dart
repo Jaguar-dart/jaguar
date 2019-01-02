@@ -1,3 +1,4 @@
+import 'package:http/io_client.dart' as http;
 import 'package:http/http.dart' as http;
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
@@ -5,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:collection/collection.dart';
 
 main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group("Session", () {
     final jar = new resty.CookieJar();

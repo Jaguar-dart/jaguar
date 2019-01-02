@@ -1,5 +1,6 @@
 library test.jaguar.intercept.exception;
 
+import 'package:http/io_client.dart' as http;
 import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;

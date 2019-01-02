@@ -1,20 +1,18 @@
 import 'package:source_gen/source_gen.dart';
 import 'package:jaguar/jaguar.dart';
 
-final isResponse = new TypeChecker.fromRuntime(Response);
+// final isResponse = TypeChecker.fromRuntime(Response);
 
-final isContext = new TypeChecker.fromRuntime(Context);
+// final isContext = TypeChecker.fromRuntime(Context);
 
-final isRequest = new TypeChecker.fromRuntime(Request);
+// final isRequest = TypeChecker.fromRuntime(Request);
 
-final isInterceptor = new TypeChecker.fromRuntime(Interceptor);
+// final isInterceptor = TypeChecker.fromRuntime(Interceptor);
 
-final isExceptionHandler = new TypeChecker.fromRuntime(ExceptionHandler);
+// final isExceptionHandler = TypeChecker.fromRuntime(ExceptionHandler);
 
-final isIncludeApi = new TypeChecker.fromRuntime(IncludeApi);
+final isGenController = TypeChecker.fromRuntime(GenController);
 
-final isWrap = new TypeChecker.fromRuntime(Wrap);
+final isIncludeController = TypeChecker.fromRuntime(IncludeController);
 
-final isWrapOne = new TypeChecker.fromRuntime(WrapOne);
-
-final isRouteBase = new TypeChecker.fromRuntime(RouteBase);
+final isHttpMethod = TypeChecker.fromRuntime(HttpMethod);

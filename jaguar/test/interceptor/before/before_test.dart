@@ -1,5 +1,6 @@
 library test.jaguar.intercept.before;
 
+import 'package:http/io_client.dart' as http;
 import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
@@ -44,7 +45,7 @@ void main() {
         () => resty
                 .get('http://localhost:10000/two')
                 .exact(statusCode: 200, mimeType: 'application/json')
-                .decode<Map>()
+                .decodeJson<Map>()
                 .then((Map body) {
               expect(body['Random'] * 2, body['Doubled']);
             }));

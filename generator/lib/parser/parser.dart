@@ -1,130 +1,72 @@
 library jaguar.generator.parser.route;
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/src/dart/constant/value.dart';
-
-import 'package:jaguar/src/annotations/import.dart' as ant;
-
-import 'package:jaguar_generator/common/exceptions/exceptions.dart';
 
 import '../common/constants.dart';
 
 import '../models/models.dart';
 
-part 'exception.dart';
-part 'group.dart';
-part 'route.dart';
-part 'interceptor/wrapper_creator.dart';
+class _Parser {
+  final ClassElement controller;
 
-class ParsedUpper {
-  final ClassElement upper;
+  String prefix;
 
-  final String path;
+  final routes = <RouteModel>[];
 
-  String get name => upper.name;
+  _Parser(this.controller);
 
-  final List<ParsedRoute> routes = <ParsedRoute>[];
-
-  final List<InterceptorCreatorFunc> interceptors = <InterceptorCreatorFunc>[];
-
-  final List<ParsedGroup> groups = <ParsedGroup>[];
-
-  final List<ParsedExceptionHandler> exceptions = <ParsedExceptionHandler>[];
-
-  ParsedUpper(this.upper, this.path);
-
-  void parse() {
-    _collectInterceptor();
+  _Parser parse() {
+    DartObject annot = isGenController.firstAnnotationOf(controller);
+    prefix = annot.getField("path")?.toStringValue();
 
     _collectRoutes();
 
-    _collectGroups();
+    // TODO collect includes
 
-    ParsedExceptionHandler.detectAllExceptions(upper).forEach(exceptions.add);
-  }
-
-  void _collectInterceptor() {
-    interceptors.addAll(detectWrappers(upper, upper));
+    return this;
   }
 
   void _collectRoutes() {
-    for (MethodElement method in upper.methods) {
-      ParsedRoute route;
+    for (MethodElement method in controller.methods) {
+      List<DartObject> annots = isHttpMethod.annotationsOf(method).toList();
 
-      try {
-        route = new _ParsedRouteBuilder(this, method).route;
-      } on ExceptionOnRoute catch (e) {
-        e.route = method.name;
-        e.upper = upper.name;
-        rethrow;
-      }
+      if (annots.isEmpty) continue;
 
-      if (route == null) {
-        continue;
-      }
-
-      routes.add(route);
+      annots.map((DartObject annot) {
+        DartObject respProc = annot.getField("responseProcessor");
+        print(respProc.runtimeType);
+        return RouteModel(
+          method.displayName,
+          method.returnType.toString(),
+          path: annot.getField("path")?.toStringValue(),
+          methods: annot
+              .getField("methods")
+              ?.toListValue()
+              ?.map((v) => v.toStringValue())
+              ?.toList()
+              ?.cast<String>(),
+          pathRegEx: annot.getField("pathRegEx")?.toMapValue()?.map((k, v) =>
+              MapEntry<String, String>(k.toStringValue(), v.toStringValue())),
+          statusCode: annot.getField("statusCode")?.toIntValue(),
+          mimeType: annot.getField("mimeType")?.toStringValue(),
+          charset: annot.getField("charset")?.toStringValue(),
+          // TODO responseProcessor
+        );
+      }).forEach(routes.add);
     }
   }
 
-  void _collectGroups() {
-    for (FieldElement field in upper.fields) {
-      ParsedGroup group = ParsedGroup.detectGroup(field);
-
-      if (group == null) {
-        continue;
-      }
-
-      groups.add(group);
+  void _collectIncludes() {
+    for (FieldElement field in controller.fields) {
+      // TODO
     }
+  }
+
+  ControllerModel make() {
+    return ControllerModel(controller.displayName)..routes.addAll(routes);
   }
 }
 
-class GeneratorException {
-  final String filename;
-
-  final int line;
-
-  final String message;
-
-  GeneratorException(this.filename, this.line, this.message);
-
-  String toString() => message;
-}
-
-class InputInterceptorException {
-  final String message;
-
-  String upper;
-
-  String route;
-
-  String interceptor;
-
-  String input;
-
-  String param;
-
-  InputInterceptorException(this.message);
-
-  String toString() {
-    StringBuffer sb = new StringBuffer();
-
-    sb.writeln('Message: $message');
-    sb.writeln('RequestHandler: $upper');
-    sb.writeln('Route: $route');
-    if (interceptor is String) {
-      sb.writeln('Interceptor: $interceptor');
-    }
-    if (input is String) {
-      sb.writeln('Input: $input');
-    }
-    if (param is String) {
-      sb.writeln('Param: $param');
-    }
-
-    return sb.toString();
-  }
-}
+ControllerModel parse(ClassElement controller) =>
+    _Parser(controller).parse().make();

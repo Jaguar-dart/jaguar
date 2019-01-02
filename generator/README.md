@@ -1,29 +1,40 @@
 # jaguar-generator
 
-Generates `RequestHandler` for a given Api class.
+Generates `Controller` installers.
 
 # Usage
 
-## Api class
+## Add build_runner dependencies:
 
-**lib/api.dart**:
+**pubspec.yaml:**
+```yaml
+dependencies:
+  jaguar:
 
+dev_dependencies:
+  build_runner:
+  jaguar_generator:
+```
+
+## Declare Controller class
+
+**lib/example.dart**:
 ```dart
 import 'package:jaguar/jaguar.dart';
 
-part 'api.g.dart';
+part 'example.jroutes.dart';
 
-/// Example of basic API class
-@Api(path: '/api')
-class MotherGroup extends _$JaguarMotherGroup {
-  /// Example of basic route
-  @Route(path: '/ping')
-  String ping(Context ctx) => "You pinged me!";
+@GenController(path: "/simple")
+class SimpleApi extends Controller with _$SimpleApi {
+  @Get()
+  String get(_) => "simple";
 }
 ```
 
-## build.yaml settings
+## Generate Controller installer
 
-```yaml
-
+```bash
+pub run build_runner build
 ```
+
+A file named `lib/example.jroutes.dart` will be generated with Controller installer class `_$SimpleApi`.

@@ -1,5 +1,6 @@
 library test.jaguar.data.body.json;
 
+import 'package:http/io_client.dart' as http;
 import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
@@ -26,12 +27,12 @@ class InputModel {
 }
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('data.body.json', () {
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 10000);
+      server = Jaguar(port: 10000);
       server
         ..post('/one/map', (ctx) async {
           final Map body = await ctx.bodyAsJsonMap();
