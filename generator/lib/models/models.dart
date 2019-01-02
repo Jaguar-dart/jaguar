@@ -19,6 +19,8 @@ class RouteModel {
 
   final String returnType;
 
+  final String infoSource;
+
   final String path;
 
   final List<String> methods;
@@ -31,16 +33,13 @@ class RouteModel {
 
   final String charset;
 
-  final String responseProcessor;
-
-  RouteModel(this.name, this.returnType,
+  RouteModel(this.name, this.returnType, this.infoSource,
       {this.path,
       this.methods,
       this.pathRegEx,
       this.statusCode,
       this.mimeType,
-      this.charset,
-      this.responseProcessor});
+      this.charset});
 }
 
 class GroupModel {
@@ -50,5 +49,9 @@ class GroupModel {
 
   final String name;
 
-  GroupModel({this.path, this.type, this.name});
+  GroupModel(
+    this.name,
+    this.type, {
+    this.path,
+  });
 }

@@ -17,6 +17,7 @@ class Writer {
     sb.writeln("abstract class _\$${_u.name} implements Controller {");
 
     _r.forEach(_writeRouteSig);
+    _g.forEach(_writeIncludeSig);
 
     sb.writeln("void install(GroupBuilder parent) {");
     sb.writeln("final grp = parent.group(");
@@ -25,6 +26,7 @@ class Writer {
     }
     sb.write(");");
     _r.forEach(_writeRoute);
+    _g.forEach(_writeInclude);
     sb.writeln("}");
     sb.writeln('}');
 
@@ -37,10 +39,11 @@ class Writer {
 
   void _writeRoute(RouteModel r) {
     sb.write("grp.addRoute(Route.fromInfo(");
-    _writeRouteInfo(r);
+    sb.write(r.infoSource);
     sb.writeln(", ${r.name}))..before(before);");
   }
 
+  /*
   void _writeRouteInfo(RouteModel r) {
     sb.write("HttpMethod(");
 
@@ -48,7 +51,7 @@ class Writer {
     for (String method in r.methods) sb.write("'$method',");
     sb.write("],");
 
-    if (r.path != null) sb.write("path: '${r.path}',");
+    if (r.path != null && r.path.isNotEmpty) sb.write("path: '${r.path}',");
     if (r.pathRegEx != null && r.pathRegEx.isNotEmpty) {
       sb.write("pathRegEx: {");
       for (String path in r.pathRegEx.keys)
@@ -61,5 +64,18 @@ class Writer {
     if (r.charset != null) sb.write("charset: '${r.charset}',");
 
     sb.write(")");
+  }
+  */
+
+  void _writeIncludeSig(GroupModel g) {
+    sb.writeln("${g.type} get ${g.name};");
+  }
+
+  void _writeInclude(GroupModel g) {
+    sb.write("${g.name}.install(grp.group(");
+    if (g.path != null && g.path.isNotEmpty) {
+      sb.write("path: '${g.path}'");
+    }
+    sb.writeln("));");
   }
 }

@@ -2,6 +2,7 @@ library jaguar.generator.parser.route;
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/constant/value.dart';
+import 'package:source_gen/source_gen.dart';
 
 import '../common/constants.dart';
 
@@ -14,6 +15,8 @@ class _Parser {
 
   final routes = <RouteModel>[];
 
+  final groups = <GroupModel>[];
+
   _Parser(this.controller);
 
   _Parser parse() {
@@ -22,49 +25,55 @@ class _Parser {
 
     _collectRoutes();
 
-    // TODO collect includes
+    _collectIncludes();
 
     return this;
   }
 
   void _collectRoutes() {
     for (MethodElement method in controller.methods) {
-      List<DartObject> annots = isHttpMethod.annotationsOf(method).toList();
+      method.metadata.forEach((annot) {
+        final annotObj = annot.computeConstantValue();
 
-      if (annots.isEmpty) continue;
+        if (!isHttpMethod.isAssignableFromType(annotObj.type)) return;
 
-      annots.map((DartObject annot) {
-        DartObject respProc = annot.getField("responseProcessor");
-        print(respProc.runtimeType);
-        return RouteModel(
+        final route = RouteModel(
           method.displayName,
           method.returnType.toString(),
-          path: annot.getField("path")?.toStringValue(),
-          methods: annot
+          annot.toSource().substring(1),
+          path: annotObj.getField("path")?.toStringValue(),
+          methods: annotObj
               .getField("methods")
               ?.toListValue()
               ?.map((v) => v.toStringValue())
               ?.toList()
               ?.cast<String>(),
-          pathRegEx: annot.getField("pathRegEx")?.toMapValue()?.map((k, v) =>
+          pathRegEx: annotObj.getField("pathRegEx")?.toMapValue()?.map((k, v) =>
               MapEntry<String, String>(k.toStringValue(), v.toStringValue())),
-          statusCode: annot.getField("statusCode")?.toIntValue(),
-          mimeType: annot.getField("mimeType")?.toStringValue(),
-          charset: annot.getField("charset")?.toStringValue(),
+          statusCode: annotObj.getField("statusCode")?.toIntValue(),
+          mimeType: annotObj.getField("mimeType")?.toStringValue(),
+          charset: annotObj.getField("charset")?.toStringValue(),
           // TODO responseProcessor
         );
-      }).forEach(routes.add);
+        routes.add(route);
+      });
     }
   }
 
   void _collectIncludes() {
     for (FieldElement field in controller.fields) {
+      isIncludeController.annotationsOf(field).map((annot) {
+        return GroupModel(field.displayName, field.type.toString(),
+            path: annot.getField("path")?.toStringValue());
+      }).forEach(groups.add);
       // TODO
     }
   }
 
   ControllerModel make() {
-    return ControllerModel(controller.displayName)..routes.addAll(routes);
+    return ControllerModel(controller.displayName)
+      ..routes.addAll(routes)
+      ..groups.addAll(groups);
   }
 }
 

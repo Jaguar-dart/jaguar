@@ -1,14 +1,13 @@
 # Changelog
 
-## 1.3.1
+## 2.4.4
 
-+ Jaguar 1.3.x
-+ Faster handling of simple route
++ Support for `responseProcessor`
 
-## 0.6.0
+## 2.4.2
 
-- jaguar 0.6.x
++ Support for `IncludeController`
 
-## 0.1.0
+## 2.4.1
 
-- Generators for RouteGroup and Api
++ Basic support for `GenController`
