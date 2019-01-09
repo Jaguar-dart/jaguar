@@ -164,3 +164,16 @@ main() async {
   await server.serve();
 }
 ```
+
+[Doc::Jaguar]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Jaguar-class.html
+[Doc::Jaguar::get]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/get.html
+[Doc::Jaguar::delete]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/delete.html
+[Doc::Jaguar::post]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/post.html
+[Doc::Jaguar::put]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/put.html
+[Doc::Jaguar::options]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/options.html
+[Doc::Jaguar::staticFiles]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/staticFiles.html
+[Doc::Request]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request-class.html
+[Doc::Request::bodyAsJson]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJson.html
+[Doc::Request::bodyAsJsonMap]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonMap.html
+[Doc::Request::bodyAsJsonList]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonList.html
+[Doc::Request::bodyAsUrlEncodedForm]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsUrlEncodedForm.html
