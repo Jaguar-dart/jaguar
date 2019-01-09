@@ -9,6 +9,8 @@ import 'package:jaguar/jaguar.dart';
 part 'options.dart';
 part 'request_params.dart';
 
+void cors(Context ctx, CorsOptions options) => Cors(options)(ctx);
+
 /// Interceptor to handle CORS related requests
 class Cors implements Interceptor<void> {
   final CorsOptions options;

@@ -48,7 +48,7 @@ Future<void> preflight() async {
 }
 
 main() async {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.Client();
 
   await onlySameOrigin();
   await originMatch();

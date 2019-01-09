@@ -1,8 +1,6 @@
 // Copyright (c) 2017, teja. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-//TODO import 'package:jaguar_cors/jaguar_cors.dart';
-
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_cors/jaguar_cors.dart';
 import 'package:test/test.dart';
@@ -12,29 +10,29 @@ import 'package:http/http.dart' as http;
 const String baseUrl = 'http://localhost:10000';
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.Client();
 
   group('A group of tests', () {
-    Jaguar server = new Jaguar(port: 10000);
+    final server = Jaguar(port: 10000);
 
     setUp(() async {
-      server.get('/none', (_) => 'none', before: [new Cors(new CorsOptions())]);
+      server.get('/none', (_) => 'none', before: [Cors(CorsOptions())]);
 
       {
-        final options = new CorsOptions(
+        final options = CorsOptions(
             allowedOrigins: ['http://example.com', 'http://example1.com'],
             allowAllMethods: true,
             allowAllHeaders: true);
-        server.get('/origins', (_) => 'origins', before: [new Cors(options)]);
+        server.get('/origins', (_) => 'origins', before: [Cors(options)]);
       }
 
       {
-        final options = new CorsOptions(
+        final options = CorsOptions(
             allowedOrigins: ['http://example.com', 'http://example1.com'],
             allowAllMethods: true,
             allowAllHeaders: true);
         server.route('/origins', (_) => 'preflight',
-            methods: ['OPTIONS'], before: [new Cors(options)]);
+            methods: ['OPTIONS'], before: [Cors(options)]);
       }
 
       await server.serve();
