@@ -1,6 +1,6 @@
 name: jaguar_cors
-description: CORS interceptor for Jaguar
-version: 2.4.2
+description: CORS interceptor for Jaguar. Use Cors interceptor and CorsOptions configuration class to add CORS support to Jaguar server applications.
+version: 2.4.4
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>

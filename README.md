@@ -4,15 +4,14 @@
 
 # Jaguar
 
-Jaguar is a production ready HTTP server framework built for **speed, simplicity and extensiblity**
+Jaguar is a full-stack production ready HTTP server framework built to be fast, simple and intuitive.
 
 # Getting started
 
 ## Familiar way to write routes
 
 [`Jaguar`][Doc::Jaguar] class provides methods [`get`][Doc::Jaguar::get], [`put`][Doc::Jaguar::put], [`post`][Doc::Jaguar::post], 
-[`delete`][Doc::Jaguar::delete] and [`options`][Doc::Jaguar::options] to quickly add route handlers for specific HTTP methods at 
-desired path to the server.
+[`delete`][Doc::Jaguar::delete] and [`options`][Doc::Jaguar::options] to quickly add route handlers for specific HTTP methods.
 
 ```dart
 main() async {
@@ -121,9 +120,8 @@ Future<void> main(List<String> args) async {
   server.postJson('/api/book', (Context ctx) async {
     // Decode request body as JSON Map
     final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
-    Book book = new Book.fromMap(json);
-    // Encode Map to JSON
-    return book.toMap();
+    Book book = Book.fromMap(json);
+    return book; // Automatically encodes Book to JSON
   });
 
   await server.serve();
@@ -166,47 +164,3 @@ main() async {
   await server.serve();
 }
 ```
-
-# Advantages of Jaguar
-
-1. Batteries included
-    1. Database
-        1. [Fluent query builder](https://github.com/Jaguar-dart/jaguar_query)
-        2. [ORM](https://github.com/Jaguar-dart/jaguar_orm)
-        3. Migration support
-        3. Various databases support
-            1. [Mongo](https://github.com/Jaguar-dart/jaguar_mongo)
-            2. [PostgreSQL](https://github.com/Jaguar-dart/jaguar_postgresql) ([Query](https://github.com/Jaguar-dart/jaguar_query_postgresql))
-            3. [MySQL](https://github.com/Jaguar-dart/jaguar_sqljocky) ([Query](https://github.com/Jaguar-dart/jaguar_query_sqljocky))
-            4. OracleDB
-            5. MS SQL
-    3. [Authentication and Authorization](https://github.com/Jaguar-dart/jaguar_auth)
-    4. [OAuth](https://github.com/Jaguar-dart/jaguar_oauth)
-    5. [Session management](https://github.com/Jaguar-dart/jaguar_session)
-2. Build your routes the way you prefer
-    1. Controller based
-        1. Reflect
-        2. Generate
-    2. Mux based
-3. [Extensible interceptor infrastructure](https://github.com/Jaguar-dart/jaguar/wiki/Interceptor)
-4. [Extensive respository of examples](https://github.com/Jaguar-examples)
-    1. [Annotation based](https://github.com/jaguar-examples/boilerplate)
-    2. [Reflection based](https://github.com/jaguar-examples/boilerplate_reflect)
-    3. [Mux based](https://github.com/jaguar-examples/boilerplate_mux)
-    4. [MongoDB](https://github.com/jaguar-examples/boilerplate_mongo)
-    5. [PostgreSQL](https://github.com/jaguar-examples/boilerplate_postgresql)
-    6. [MySQL](https://github.com/jaguar-examples/boilerplate_sqljocky)
-    7. [Upload files using Jaguar](https://github.com/jaguar-examples/upload_file)
-
-[Doc::Jaguar]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Jaguar-class.html
-[Doc::Jaguar::get]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/get.html
-[Doc::Jaguar::delete]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/delete.html
-[Doc::Jaguar::post]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/post.html
-[Doc::Jaguar::put]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/put.html
-[Doc::Jaguar::options]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/options.html
-[Doc::Jaguar::staticFiles]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/staticFiles.html
-[Doc::Request]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request-class.html
-[Doc::Request::bodyAsJson]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJson.html
-[Doc::Request::bodyAsJsonMap]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonMap.html
-[Doc::Request::bodyAsJsonList]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonList.html
-[Doc::Request::bodyAsUrlEncodedForm]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsUrlEncodedForm.html

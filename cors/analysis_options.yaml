@@ -3,11 +3,11 @@
 # The commented part below is just for inspiration. Read the guide here:
 #   https://www.dartlang.org/guides/language/analysis-options
 
-# analyzer:
+analyzer:
 #   strong-mode: true
 #   exclude:
 #     - path/to/excluded/files/**
-# linter:
+linter:
 #   rules:
 #     # see catalog here: http://dart-lang.github.io/linter/lints/
 #     - hash_and_equals
