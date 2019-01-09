@@ -77,7 +77,7 @@ main(List<String> args) async {
 
 ## One liner to access Forms
 
-A single line is all it takes to obtain a form as a `Map<String, String>` using method [`bodyAsUrlEncodedForm`][Doc::Request::bodyAsUrlEncodedForm]
+A single line is all it takes to obtain a form as a `Map<String, String>` using method [`bodyAsUrlEncodedForm`][Doc::Context::bodyAsUrlEncodedForm]
 on [`Request`][Doc::Request] object.
 
 ```dart
@@ -110,16 +110,17 @@ main() async {
 
 ## JSON serialization with little effort
 
-Decoding JSON requests can't be simpler than using one of the built-in [`bodyAsJson`][Doc::Request::bodyAsJson],
-[`bodyAsJsonMap`][Doc::Request::bodyAsJsonMap] or [`bodyAsJsonList`][Doc::Request::bodyAsJsonList] methods on
-[`Request`][Doc::Request] object.
+Decoding JSON requests can't be simpler than using one of the built-in
+[`bodyAsJson`][Doc::Context::bodyAsJson], [`bodyAsJsonMap`][Doc::Context::bodyAsJsonMap]
+or [`bodyAsJsonList`][Doc::Context::bodyAsJsonList] methods on [`Context`][Doc::Context]
+object.
 
 ```dart
 Future<void> main(List<String> args) async {
   final server = Jaguar();
   server.postJson('/api/book', (Context ctx) async {
     // Decode request body as JSON Map
-    final Map<String, dynamic> json = await ctx.req.bodyAsJsonMap();
+    final Map<String, dynamic> json = await ctx.bodyAsJsonMap();
     Book book = Book.fromMap(json);
     return book; // Automatically encodes Book to JSON
   });
@@ -165,15 +166,15 @@ main() async {
 }
 ```
 
-[Doc::Jaguar]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Jaguar-class.html
-[Doc::Jaguar::get]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/get.html
-[Doc::Jaguar::delete]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/delete.html
-[Doc::Jaguar::post]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/post.html
-[Doc::Jaguar::put]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/put.html
-[Doc::Jaguar::options]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/options.html
-[Doc::Jaguar::staticFiles]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Muxable/staticFiles.html
-[Doc::Request]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request-class.html
-[Doc::Request::bodyAsJson]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJson.html
-[Doc::Request::bodyAsJsonMap]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonMap.html
-[Doc::Request::bodyAsJsonList]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJsonList.html
-[Doc::Request::bodyAsUrlEncodedForm]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsUrlEncodedForm.html
+[Doc::Jaguar]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.src.serve/Jaguar-class.html
+[Doc::Jaguar::get]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.mux/Muxable/get.html
+[Doc::Jaguar::delete]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.mux/Muxable/delete.html
+[Doc::Jaguar::post]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.mux/Muxable/post.html
+[Doc::Jaguar::put]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.mux/Muxable/put.html
+[Doc::Jaguar::options]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.mux/Muxable/options.html
+[Doc::Jaguar::staticFiles]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.mux/Muxable/staticFiles.html
+[Doc::Request]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.http.request/Request-class.html
+[Doc::Context::bodyAsJson]: https://www.dartdocs.org/documentation/jaguar/latest/jaguar/Request/bodyAsJson.html
+[Doc::Context::bodyAsJsonMap]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.src.http.context/Context/bodyAsJsonMap.html
+[Doc::Context::bodyAsJsonList]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.src.http.context/Context/bodyAsJsonList.html
+[Doc::Context::bodyAsUrlEncodedForm]: https://pub.dartlang.org/documentation/jaguar/latest/jaguar.src.http.context/Context/bodyAsUrlEncodedForm.html
