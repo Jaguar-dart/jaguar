@@ -28,24 +28,28 @@ RouteHandler bind(Function function) {
       continue;
     }
 
+    Function mk;
+
     if (pm.metadata.isNotEmpty) {
       InstanceMirror paim = pm.metadata
           .firstWhere((p) => p.reflectee is Binder, orElse: () => null);
       if (paim != null) {
         Binder ref = paim.reflectee;
-        argMaker.add((Context ctx) => ref.inject(argName, argType, ctx));
-      } else {
-        if (pm.type.isAssignableTo(_ctxType)) {
-          argMaker.add((Context ctx) => ctx);
-        } else if (pm.type.isAssignableTo(_reqType)) {
-          argMaker.add((Context ctx) => ctx.req);
-        } else {
-          argMaker.add(blindBind(argName, argType));
-        }
+        mk = (Context ctx) => ref.inject(argName, argType, ctx);
       }
-    } else {
-      argMaker.add(blindBind(argName, argType));
     }
+
+    if (mk == null) {
+      if (pm.type.isAssignableTo(_ctxType)) {
+        mk = (Context ctx) => ctx;
+      } else if (pm.type.isAssignableTo(_reqType)) {
+        mk = (Context ctx) => ctx.req;
+      } else {
+        mk = blindBind(argName, argType);
+      }
+    }
+
+    argMaker.add(mk);
   }
 
   return (Context ctx) async {
@@ -56,7 +60,7 @@ RouteHandler bind(Function function) {
         args[i] = await argMaker[i](ctx);
       }
     }
-    final ret = await im.apply(args);
-    return ret.reflectee;
+    final ret = im.apply(args);
+    return await ret.reflectee;
   };
 }

@@ -132,6 +132,10 @@ class Context {
       }
     }
 
+    if (T == dynamic) {
+      return null;
+    }
+
     if (id == null) {
       for (map in _variables.values) {
         for (dynamic v in map.values) {
@@ -214,7 +218,7 @@ class Context {
   }
 
   Serializer<T> serializerFor<T>(Type type, {String mimeType}) {
-    final codec = _serializers[mimeType ?? this.mimeType];
+    final codec = _serializers[mimeType ?? this.mimeType.mimeType];
     if (codec == null) return null;
     final ser = codec.getByType<T>(type ?? T);
     return ser;
@@ -236,13 +240,13 @@ class Context {
 
   /// Deserializes body by mimetype using [_serializers]
   Future<T> bodyDecode<T>() async {
-    final codec = _serializers[mimeType];
+    final codec = _serializers[mimeType.mimeType];
     if (codec is CodecRepo<String>) {
       return codec.decode<T>(await bodyAsText());
     } else if (codec is CodecRepo<List<int>>) {
       return codec.decode<T>(await body);
     }
-    throw Exception("Do not have codec for mimetype: $mimeType");
+    throw Exception("Do not have codec for mimetype: ${mimeType.mimeType}");
   }
 
   /// Decodes JSON body of the request
