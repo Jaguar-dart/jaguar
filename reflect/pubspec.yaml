@@ -1,6 +1,6 @@
 name: jaguar_reflect
 description: Logic to reflect Jaguar Controllers into Jaguar routes. Also provides reflection support for Jaguar Bingings
-version: 2.4.2
+version: 2.4.4
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
@@ -10,7 +10,7 @@ environment:
   sdk: ">=2.0.0-dev.65 <3.0.0"
 
 dependencies:
-  jaguar: ^2.4.21
+  jaguar: ^2.4.22
   meta: '>1.1.0 <2.0.0'
 
 dev_dependencies:

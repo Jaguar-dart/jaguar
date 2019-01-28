@@ -213,6 +213,13 @@ class Context {
     return new Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
   }
 
+  Serializer<T> serializerFor<T>(Type type, {String mimeType}) {
+    final codec = _serializers[mimeType ?? this.mimeType];
+    if (codec == null) return null;
+    final ser = codec.getByType<T>(type ?? T);
+    return ser;
+  }
+
   /// Returns body as text
   ///
   /// Example:

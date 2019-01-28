@@ -93,6 +93,13 @@ class CastableStringMap extends DelegatingMap<String, String> {
     return defaultValue;
   }
 
+  DateTime getDateTime(String key, {DateTime defaultValue}) {
+    final micros = getInt(key);
+    if (micros == null) return defaultValue;
+
+    return DateTime.fromMicrosecondsSinceEpoch(micros, isUtc: true);
+  }
+
   List<String> getList(String key, [Pattern separator = ","]) {
     if (!containsKey(key)) return [];
     return this[key].split(separator);

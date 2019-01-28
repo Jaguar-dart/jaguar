@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.4
+
++ Support for `dontBind`
+
 ## 2.4.2
 
 + Bindings

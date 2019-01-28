@@ -41,6 +41,9 @@ class PathParam implements Binder {
     if (argType == bool) {
       return ctx.pathParams.getBool(alias);
     }
+    if (argType == DateTime) {
+      return ctx.pathParams.getDateTime(alias);
+    }
     if (argType == List) {
       return ctx.pathParams.getList(alias);
     }
@@ -70,6 +73,9 @@ class QueryParam implements Binder {
     }
     if (argType == bool) {
       return ctx.query.getBool(alias);
+    }
+    if (argType == DateTime) {
+      return ctx.query.getDateTime(alias);
     }
     if (argType == List) {
       return ctx.query.getList(alias);
@@ -115,3 +121,58 @@ class Json<T> implements Binder {
     return ctx.bodyAsJson(encoding: enc);
   }
 }
+
+bool _isBuiltIn(Type argType) {
+  switch (argType) {
+    case String:
+      return true;
+    case int:
+      return true;
+    case num:
+      return true;
+    case double:
+      return true;
+    case bool:
+      return true;
+    case DateTime:
+      return true;
+    default:
+      return false;
+  }
+}
+
+RouteHandler blindBind(String argName, Type argType) {
+  return (Context ctx) async {
+    if (_isBuiltIn(argType)) {
+      // Try "path parameter"
+      if (ctx.pathParams.containsKey(argName)) {
+        return PathParam(argName).inject(argName, argType, ctx);
+      }
+      // Try "query"
+      if (ctx.query.containsKey(argName)) {
+        return QueryParam(argName).inject(argName, argType, ctx);
+      }
+    }
+    // Try variable
+    {
+      final ret = ctx.getVariable(type: argType);
+      if (ret != null) return ret;
+    }
+    // Try JSON deserializer
+    if (ctx.isJson) {
+      if (argType == Map) return ctx.bodyAsJsonMap();
+      if (argType != List) {
+        // Try JSON PODO deserialization
+        final ser = ctx.serializerFor(argType);
+        if (ser != null) return ser.fromMap(await ctx.bodyAsJsonMap());
+      }
+    }
+    return null;
+  };
+}
+
+class _DontBind {
+  const _DontBind();
+}
+
+const dontBind = _DontBind();

@@ -7,17 +7,6 @@ import 'package:jaguar/bind.dart';
 final _ctxType = reflectType(Context);
 final _reqType = reflectType(Request);
 
-RouteHandler _onlineInjection(String argName, Type argType) {
-  return (Context ctx) {
-    if (ctx.pathParams.containsKey(argName)) {
-      return PathParam(argName).inject(argName, argType, ctx);
-    } else if (ctx.query.containsKey(argName)) {
-      return QueryParam(argName).inject(argName, argType, ctx);
-    }
-    return null;
-  };
-}
-
 @experimental
 
 /// Dependency injection for route handlers
@@ -34,6 +23,11 @@ RouteHandler bind(Function function) {
     String argName = MirrorSystem.getName(pm.simpleName);
     Type argType = pm.type.reflectedType;
 
+    if (pm.metadata.any((im) => im.reflectee == dontBind)) {
+      argMaker.add(null);
+      continue;
+    }
+
     if (pm.metadata.isNotEmpty) {
       InstanceMirror paim = pm.metadata
           .firstWhere((p) => p.reflectee is Binder, orElse: () => null);
@@ -46,11 +40,11 @@ RouteHandler bind(Function function) {
         } else if (pm.type.isAssignableTo(_reqType)) {
           argMaker.add((Context ctx) => ctx.req);
         } else {
-          argMaker.add(_onlineInjection(argName, argType));
+          argMaker.add(blindBind(argName, argType));
         }
       }
     } else {
-      argMaker.add(_onlineInjection(argName, argType));
+      argMaker.add(blindBind(argName, argType));
     }
   }
 
