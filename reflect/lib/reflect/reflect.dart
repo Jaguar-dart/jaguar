@@ -7,6 +7,8 @@ import 'package:jaguar/jaguar.dart';
 import 'dart:mirrors';
 import 'dart:collection';
 
+import 'package:jaguar_reflect/bind/bind.dart';
+
 /// Composing routes are parsed by reflecting the provided [_api]. Alternative
 /// is to to source generate.
 class ReflectedController {
@@ -86,9 +88,15 @@ class ReflectedController {
 
     InstanceMirror before = im.getField(#before);
 
+    RouteHandler handler;
+    if (method.reflectee is RouteHandler)
+      handler = method.reflectee;
+    else
+      handler = bind(method.reflectee);
+
     for (HttpMethod route in routes) {
       final cloned = route.cloneWith(path: pathPrefix + route.path);
-      final r = Route.fromInfo(cloned, method.reflectee,
+      final r = Route.fromInfo(cloned, handler,
           before: [before.reflectee as RouteInterceptor]);
       _routes.add(r);
     }

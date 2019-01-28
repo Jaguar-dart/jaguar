@@ -9,7 +9,9 @@ library jaguar_reflect;
 import 'package:jaguar/jaguar.dart';
 import 'reflect/reflect.dart';
 
+export 'package:jaguar/jaguar.dart';
 export 'reflect/reflect.dart';
+export 'bind/bind.dart';
 
 /// Reflects the given [api] and returns an instance of [ReflectedController]
 List<Route> reflect(Object api) => ReflectedController(api).routes;

@@ -1,18 +1,24 @@
 import 'dart:async';
+import 'package:meta/meta.dart';
+
 import 'package:jaguar/jaguar.dart';
 
+@experimental
 abstract class Binder {
   FutureOr inject(String argName, Type argType, Context ctx);
 }
 
-final pathParam = PathParam();
+@experimental
+const pathParam = PathParam();
 
-final queryParam = QueryParam();
+@experimental
+const queryParam = QueryParam();
 
+@experimental
 class PathParam implements Binder {
   final String name;
 
-  PathParam([this.name]);
+  const PathParam([this.name]);
 
   dynamic inject(String argName, Type argType, Context ctx) {
     String alias = name ?? argName;
@@ -38,10 +44,11 @@ class PathParam implements Binder {
   }
 }
 
+@experimental
 class QueryParam implements Binder {
   final String name;
 
-  QueryParam([this.name]);
+  const QueryParam([this.name]);
 
   dynamic inject(String argName, Type argType, Context ctx) {
     String alias = name ?? argName;
@@ -68,6 +75,7 @@ class QueryParam implements Binder {
 }
 
 /* TODO
+@experimental
 class Body implements Binder {
   const Body();
 }
