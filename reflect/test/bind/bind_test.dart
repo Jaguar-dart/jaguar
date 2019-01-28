@@ -13,10 +13,10 @@ class ExampleController extends Controller {
   String get() => 'Get';
 
   @Get(path: '/path/:id')
-  String pathParameter(@pathParam String id) => id;
+  String pathParameter(@bindPath String id) => id;
 
   @Get(path: '/path/int/:id')
-  int pathParameterInt(@pathParam int id) => id;
+  int pathParameterInt(@bindPath int id) => id;
 
   @Get(path: '/path/onsite/:id')
   String pathParameterOnsite(String id) => id;

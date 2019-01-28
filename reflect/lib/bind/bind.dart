@@ -2,7 +2,7 @@ import 'dart:mirrors';
 import 'package:meta/meta.dart';
 
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/annotations/bind.dart';
+import 'package:jaguar/bind.dart';
 
 final _ctxType = reflectType(Context);
 final _reqType = reflectType(Request);

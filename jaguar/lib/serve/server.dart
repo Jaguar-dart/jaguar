@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_serializer/jaguar_serializer.dart';
+
 import 'package:logging/logging.dart';
 
 import 'package:jaguar/serve/error_writer/error_writer.dart';
@@ -44,6 +46,9 @@ class Jaguar extends Object with Muxable {
   /// Internal http server
   List<HttpServer> _server;
 
+  /// Serializers for mimetypes
+  final serializers = Map<String, CodecRepo>();
+
   /// Constructs an instance of [Jaguar] with given configuration.
   ///
   /// [address]:[port] is the address and port at which the HTTP requests are
@@ -72,6 +77,7 @@ class Jaguar extends Object with Muxable {
               multiThread: multiThread)
         ];
 
+  /// Start listening for requests also on [connection]
   void alsoTo(ConnectTo connection) {
     if (_server != null) throw Exception('Already started!');
     _connectionInfos.add(connection);
@@ -134,7 +140,8 @@ class Jaguar extends Object with Muxable {
         userFetchers: userFetchers,
         before: before.toList(),
         after: after.toList(),
-        onException: onException.toList());
+        onException: onException.toList(),
+        serializers: serializers);
 
     // Try to find a matching route and invoke it.
     RouteHandler handler =

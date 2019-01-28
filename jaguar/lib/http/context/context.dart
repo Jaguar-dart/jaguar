@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'dart:io';
 import 'package:jaguar/jaguar.dart';
+import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:logging/logging.dart';
 import 'dart:convert' as conv;
 import 'package:auth_header/auth_header.dart';
@@ -39,7 +40,7 @@ class Context {
   ///
   /// Example:
   ///
-  ///     final server = new Jaguar();
+  ///     final server = Jaguar();
   ///     server.post('/api/book', (Context ctx) async {
   ///       // Decode request body as JSON Map
   ///       final List json = await ctx.req.bodyAsJsonList();
@@ -105,19 +106,23 @@ class Context {
 
   final Logger log;
 
+  final Map<String, CodecRepo> _serializers;
+
   Context(this.req,
       {this.sessionManager,
       this.log,
       this.userFetchers,
       this.before,
       this.after,
-      this.onException});
+      this.onException,
+      Map<String, CodecRepo> serializers})
+      : _serializers = serializers ?? <String, CodecRepo>{};
 
   final _variables = <Type, Map<String, dynamic>>{};
 
   /// Gets variable by type and id
-  T getVariable<T>({String id}) {
-    Type type = T;
+  T getVariable<T>({String id, Type type}) {
+    type ??= T;
     Map<String, dynamic> map = _variables[type];
     if (map != null) {
       if (id == null)
@@ -222,6 +227,17 @@ class Context {
     return encoding.decode(await body);
   }
 
+  /// Deserializes body by mimetype using [_serializers]
+  Future<T> bodyDecode<T>() async {
+    final codec = _serializers[mimeType];
+    if (codec is CodecRepo<String>) {
+      return codec.decode<T>(await bodyAsText());
+    } else if (codec is CodecRepo<List<int>>) {
+      return codec.decode<T>(await body);
+    }
+    throw Exception("Do not have codec for mimetype: $mimeType");
+  }
+
   /// Decodes JSON body of the request
   ///
   /// Example:
@@ -233,10 +249,20 @@ class Context {
   ///     });
   ///     await server.serve();
   Future<T> bodyAsJson<T, F>(
-      {conv.Encoding encoding: conv.utf8, T convert(F d)}) async {
+      {conv.Encoding encoding: conv.utf8,
+      Converter<T, F> convert,
+      Type type}) async {
     final String text = await bodyAsText(encoding);
-    if (convert == null) return conv.json.decode(text);
-    return convert(conv.json.decode(text));
+    final dec = conv.json.decode(text);
+    if (convert != null) return convert(dec);
+    {
+      final repo = _serializers[MimeTypes.json];
+      if (repo != null) {
+        final ser = _serializers[MimeTypes.json].getByType<T>(type ?? T);
+        if (ser != null && dec is Map) return ser.fromMap(dec);
+      }
+    }
+    return dec;
   }
 
   /// Decodes JSON body of the request as [Map]
@@ -266,10 +292,19 @@ class Context {
   ///     });
   ///     await server.serve();
   Future<List<T>> bodyAsJsonList<T, F>(
-      {conv.Encoding encoding: conv.utf8, T convert(F d)}) async {
+      {conv.Encoding encoding: conv.utf8,
+      Converter<T, F> convert,
+      Type type}) async {
     final String text = await bodyAsText(encoding);
     final List ret = conv.json.decode(text);
     if (convert != null) return ret.cast<F>().map(convert).toList();
+    {
+      final repo = _serializers[MimeTypes.json];
+      if (repo != null) {
+        final ser = _serializers[MimeTypes.json].getByType<T>(type ?? T);
+        if (ser != null) return ser.fromList(ret);
+      }
+    }
     return ret.cast<T>();
   }
 
@@ -395,7 +430,7 @@ class Context {
     return null;
   }
 
-  Future<T> bodyTo<T>(T convert(Map d),
+  Future<T> bodyTo<T>(Converter<T, dynamic> convert,
       {conv.Encoding encoding: conv.utf8}) async {
     MimeType mt = mimeType;
 
@@ -495,3 +530,5 @@ Map<String, String> _formDataMapToStringMap(Map<String, FormField> form) {
 
   return ret;
 }
+
+typedef Converter<T, F> = T Function(F d);

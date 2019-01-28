@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:meta/meta.dart';
 
 import 'package:jaguar/jaguar.dart';
@@ -9,10 +10,13 @@ abstract class Binder {
 }
 
 @experimental
-const pathParam = PathParam();
+const bindPath = PathParam();
 
 @experimental
-const queryParam = QueryParam();
+const bindQuery = QueryParam();
+
+@experimental
+const bindVar = Var();
 
 @experimental
 class PathParam implements Binder {
@@ -74,9 +78,40 @@ class QueryParam implements Binder {
   }
 }
 
-/* TODO
 @experimental
-class Body implements Binder {
-  const Body();
+class Var implements Binder {
+  final String id;
+
+  const Var({this.id});
+
+  dynamic inject(String argName, Type argType, Context ctx) {
+    return ctx.getVariable(id: id, type: argType);
+  }
 }
-*/
+
+@experimental
+class JsonBody implements Binder {
+  final Encoding enc;
+  const JsonBody({this.enc});
+
+  Future<dynamic> inject(String argName, Type argType, Context ctx) async {
+    final ret = await ctx.bodyAsJson(encoding: enc);
+    if (argType == Object || argType == dynamic) return ret;
+    if (ret == null) return ret;
+    if (ret.runtimeType != argType) return null;
+    return ret;
+  }
+}
+
+@experimental
+class Json<T> implements Binder {
+  final Encoding enc;
+
+  const Json({this.enc});
+
+  Future<dynamic> inject(String argName, Type argType, Context ctx) {
+    if (argType == List) return ctx.bodyAsJsonList(encoding: enc);
+
+    return ctx.bodyAsJson(encoding: enc);
+  }
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.20
+
++ Bindings
++ Serializers
+
 ## 2.4.14
 
 ### Breaking changes

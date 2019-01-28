@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.2
+
++ Bindings
+
 ## 2.1.6
 
 + Dart 2 stable
