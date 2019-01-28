@@ -9,6 +9,10 @@ typedef FutureOr<void> ResponseProcessor(Context context, dynamic result);
 /// to [MimeType.json].
 void jsonResponseProcessor(Context context, dynamic result) {
   final info = context.route.info;
+
+  final codec = context.codecFor(mimeType: MimeTypes.json);
+  if (codec != null) result = codec.to(result);
+
   context.response = Response.json(result,
       statusCode: info.statusCode,
       mimeType: info.mimeType ?? MimeTypes.json,

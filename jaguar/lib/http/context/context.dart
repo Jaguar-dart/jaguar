@@ -213,6 +213,9 @@ class Context {
     return new Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
   }
 
+  CodecRepo codecFor({String mimeType}) =>
+      _serializers[mimeType ?? this.mimeType];
+
   Serializer<T> serializerFor<T>(Type type, {String mimeType}) {
     final codec = _serializers[mimeType ?? this.mimeType];
     if (codec == null) return null;
