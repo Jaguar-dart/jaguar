@@ -76,7 +76,7 @@ class JsonAuth<UserModel extends PasswordUser>
       String authorizationIdKey: 'id',
       bool manageSession: true,
       Hasher hasher: const NoHasher()}) async {
-    await new JsonAuth<UserModel>(
+    await JsonAuth<UserModel>(
             userFetcher: userFetcher,
             authorizationIdKey: authorizationIdKey,
             manageSession: manageSession,
