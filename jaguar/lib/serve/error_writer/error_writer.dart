@@ -98,7 +98,7 @@ class DefaultErrorWriter implements ErrorWriter {
       };
       if (stack != null)
         data['stack'] =
-            new Trace.from(stack).frames.map((f) => f.toString()).toList();
+            Trace.from(stack).frames.map((f) => f.toString()).toList();
 
       return Response.json(data, statusCode: 500);
     } /* TODO else if (acceptList.contains('application/xml')) {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.4
+
++ Bug fix in password checking
+
 ## 2.2.1
 
 + Added `UnauthorizedException`

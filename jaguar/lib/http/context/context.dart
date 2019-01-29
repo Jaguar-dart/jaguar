@@ -512,12 +512,13 @@ class Context {
       dynamic res = route.handler(this);
       if (res is Future) res = await res;
 
-      if (info.responseProcessor != null) {
-        maybeFuture = info.responseProcessor(this, res);
-      } else if (res != null) {
+      if (response == null) {
         if (res is Response)
           response = res;
-        else {
+        else if (info.responseProcessor != null) {
+          maybeFuture = info.responseProcessor(this, res);
+          if (maybeFuture is Future) await maybeFuture;
+        } else {
           response = Response(res,
               statusCode: info.statusCode,
               mimeType: info.mimeType,

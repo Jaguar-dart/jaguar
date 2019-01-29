@@ -9,6 +9,8 @@ class UnauthorizedException implements ExceptionWithResponse {
   Response get response =>
       Response(message, statusCode: HttpStatus.unauthorized);
 
+  String toString() => 'UnauthorizedException($message)';
+
   static const invalidRequest = UnauthorizedException("Invalid request!");
   static const notLoggedIn = UnauthorizedException("Please login!");
   static const subjectNotFound = UnauthorizedException("Subject not found!");

@@ -55,7 +55,7 @@ class FormAuth<UserModel extends PasswordUser>
 
     if (subject == null) throw UnauthorizedException.subjectNotFound;
 
-    if (!hasher.verify(password, subject.password))
+    if (!hasher.verify(subject.password, password))
       throw UnauthorizedException.invalidPassword;
 
     if (manageSession is bool && manageSession) {

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.26
+
++ Bug fixes
++ Improvements to `Context.execute` response handling
+
 ## 2.4.20
 
 + Bindings
