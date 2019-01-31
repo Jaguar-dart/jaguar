@@ -18,20 +18,25 @@ Iterable<String> cleanupSegments(Iterable<String> segments) {
 }
 
 class SubTree<T> {
+  /// Values for exact match
   final value = <String, T>{};
 
-  final regexes = <MapEntry<RegExp, SubTree<T>>>[];
+  /// Values for glob match
+  final globValue = <String, T>{};
 
+  /// Subtree for fixed path segments
   final fixed = <String, SubTree<T>>{};
 
+  /// Subtree for variable path segments
   SubTree<T> varSubTree;
 
-  final globValue = <String, T>{};
+  /// Subtree for regexp
+  final regexes = <MapEntry<RegExp, SubTree<T>>>[];
 
   bool get hasVarPaths =>
       regexes.isNotEmpty ||
       varSubTree != null ||
-      globValue != null; // TODO cache this
+      globValue.isNotEmpty; // TODO cache this
 }
 
 class PathTree<T> {
@@ -98,6 +103,7 @@ class PathTree<T> {
 
       SubTree<T> next = subTree.fixed[seg];
       if (subTree.hasVarPaths) {
+        // If has variable path, only consider fixed path if it is a match
         if (next != null) {
           T ret = _match(next, segments.skip(i + 1), tag);
           if (ret != null) return ret;
@@ -107,7 +113,8 @@ class PathTree<T> {
         for (MapEntry<RegExp, SubTree<T>> regex in subTree.regexes) {
           if (regex.key.allMatches(seg).isNotEmpty) {
             if (next != null) {
-              T ret = _matchParts(subTree, segments.skip(i), tag);
+              // Multiple regex matches
+              T ret = _matchRegex(subTree, segments.skip(i), tag);
               if (ret != null) return ret;
               next = null;
               break;
@@ -139,7 +146,7 @@ class PathTree<T> {
         subTree.globValue['*'];
   }
 
-  T _matchParts(SubTree<T> root, Iterable<String> segments, String tag) {
+  T _matchRegex(SubTree<T> root, Iterable<String> segments, String tag) {
     for (MapEntry<RegExp, SubTree<T>> regex in root.regexes) {
       if (regex.key.allMatches(segments.first).isNotEmpty) {
         T ret = _match(regex.value, segments.skip(1), tag);
