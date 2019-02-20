@@ -13,7 +13,13 @@ import 'package:path_tree/path_tree.dart';
 
 export 'package:jaguar/serve/error_writer/error_writer.dart';
 
-/// The Jaguar server
+/// Creates a Jaguar HTTP server.
+///
+///     Future<void> main() async {
+///       final server = Jaguar();
+///       server.get('/', (ctx) => 'Hello world!')
+///       await server.serve();
+///     }
 class Jaguar extends Object with Muxable {
   final List<ConnectTo> _connectionInfos;
 
