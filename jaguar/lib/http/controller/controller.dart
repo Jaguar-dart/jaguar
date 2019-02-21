@@ -12,6 +12,10 @@ import '../context/context.dart';
 /// Implement route handlers as methods in your controller class and annotate them
 /// with one of the [HttpMethod] annotations.
 ///
+///
+///     import 'dart:async';
+///     import 'package:jaguar/jaguar.dart';
+///     import 'package:jaguar_reflect/jaguar_reflect.dart';
 ///     @GenController(path: '/library')
 ///     class LibraryApi extends Controller {
 ///       @Get(path: '/all')
@@ -21,6 +25,12 @@ import '../context/context.dart';
 ///       Future<void> add(Context ctx) {
 ///         // TODO
 ///       }
+///     }
+///
+///     main(List<String> args) async {
+///       final server = Jaguar(port: 10000);
+///       server.add(reflect(LibraryApi()));
+///       await server.serve();
 ///     }
 abstract class Controller {
   const Controller();
