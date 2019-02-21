@@ -13,16 +13,21 @@ import 'package:auth_header/auth_header.dart';
 import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
 
-/// Per-request context object
+/// Per-request context object that encapsulates all the data corresponding to
+/// a HTTP request and provides a way to write [response]. It provides various
+/// convenience methods and getters to access HTTP request data:
 ///
-/// Contains:
-/// 1. Request object
-/// 2. Path parameters
-/// 3. Query parameters
-/// 4. Body parsers
-/// 5. Route variables
-/// 6. Interceptors
-/// 7. Session object
+/// 1. [Request] object ([req])
+/// 2. [Response] object ([response])
+/// 3. Path parameters ([pathParams])
+/// 4. Query parameters ([query])
+/// 5. Body parsers ([body], [bodyAsText], [bodyAsStream], [bodyAsJson], [bodyAsFormData], [bodyAsUrlEncodedForm])
+/// 6. Route variables ([getVariable])
+/// 7. Interceptors ([after], [before])
+/// 8. Session object ([session])
+///
+/// Example showing how to access query parameters using [Context] object.
+///     int add(Context ctx) => ctx.query.getInt('a') + ctx.query.getInt('b');
 class Context {
   /// Uri of the HTTP request
   Uri get uri => req.uri;
@@ -78,10 +83,13 @@ class Context {
     return _query;
   }
 
+  /// The registered route that matched the HTTP request.
   Route route;
 
+  /// Session manager to parse and write session data.
   SessionManager sessionManager;
 
+  /// User fetchers for authentication and authorization.
   final Map<Type, UserFetcher<AuthorizationUser>> userFetchers;
 
   Session _session;
@@ -104,6 +112,7 @@ class Context {
   Future<Session> get session async =>
       _session ??= await sessionManager.parse(this);
 
+  /// Logger that can be used to log from middlerware and route handlers.
   final Logger log;
 
   final Map<String, CodecRepo> _serializers;
@@ -120,7 +129,10 @@ class Context {
 
   final _variables = <Type, Map<String, dynamic>>{};
 
-  /// Gets variable by type and id
+  /// Gets variable by type and id.
+  ///
+  /// Lets query for context variables by [id] and [type]. The variables are
+  /// added using [addVariable] method in middleware or route handler.
   T getVariable<T>({String id, Type type}) {
     type ??= T;
     Map<String, dynamic> map = _variables[type];
@@ -160,6 +172,7 @@ class Context {
     }
   }
 
+  /// Headers in the HTTP request.
   HttpHeaders get headers => req.headers;
 
   MimeType _mimeType;
@@ -174,15 +187,19 @@ class Context {
     // TODO charset
   }
 
+  /// Returns mime type of the HTTP request
   MimeType get mimeType {
     if (_mimeType == null) _parseContentType();
     return _mimeType;
   }
 
+  /// Returns true if the mime type of HTTP request is JSON.
   bool get isJson => mimeType.isJson;
 
+  /// Returns true if the mime type of HTTP request is url-encoded-form.
   bool get isUrlEncodedForm => mimeType.isUrlEncodedForm;
 
+  /// Returns true if the mime type of HTTP request is form-data.
   bool get isFormData => mimeType.isFormData;
 
   Map<String, MimeType> _accepts;
@@ -197,29 +214,39 @@ class Context {
     }
   }
 
+  /// Returns mime types of the response accepted by the client of the HTTP
+  /// request.
   Map<String, MimeType> get accepts {
     if (_accepts == null) _parseAccepts();
     return _accepts;
   }
 
+  /// Returns true if the client accepts the response body in HTML format.
   bool get acceptsHtml => accepts.containsKey(MimeTypes.html);
 
+  /// Returns true if the client accepts the response body in JSON format.
   bool get acceptsJson => accepts.containsKey(MimeTypes.json);
 
   /// Private cache for request body
   List<int> _body;
 
+  /// Returns body of HTTP request as bytes.
   Future<List<int>> get body async => _body ??= await req.body;
 
-  /// Returns the body of HTTP request
+  /// Returns the body of HTTP request as stream of bytes.
   Future<Stream<List<int>>> get bodyAsStream async {
     final List<int> bodyRaw = await body;
-    return new Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
+    return Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
   }
 
+  /// Returns [CodecRepo] for the requested [mimeType]. If [mimeType] is null,
+  /// the mime type of request is used.
   CodecRepo codecFor({String mimeType}) =>
       _serializers[mimeType ?? this.mimeType];
 
+  /// Returns serializer for given object [type] and [mimeType].
+  ///
+  /// If [mimeType] is null, the mime type of request is used.
   Serializer<T> serializerFor<T>(Type type, {String mimeType}) {
     final codec = _serializers[mimeType ?? this.mimeType.mimeType];
     if (codec == null) return null;
@@ -444,6 +471,7 @@ class Context {
     return null;
   }
 
+  /// Converts the body to typ [T].
   Future<T> bodyTo<T>(Converter<T, dynamic> convert,
       {conv.Encoding encoding: conv.utf8}) async {
     MimeType mt = mimeType;
@@ -456,10 +484,13 @@ class Context {
     } else if (mt.isFormData) {
       b = await _formDataMapToStringMap(await bodyAsFormData());
     }
+    // TODO use serializer for other mimetypes
 
     return convert(b);
   }
 
+  /// Returns file for given [field] in form-data body. Returns null, if the field
+  /// is not found, not a file field or body is not form-data.
   Future<FormField<T>> getFile<T>(String field) async {
     final data = await bodyAsFormData();
     if (data == null) return null;
@@ -472,12 +503,19 @@ class Context {
 
   Response response;
 
+  /// Exception handlers executed if there is an exception during the execution of
+  /// the route.
   final List<ExceptionHandler> onException;
 
+  /// Interceptors that shall be executed before route handler is executed.
   final List<RouteInterceptor> before;
 
+  /// Interceptors that shall be executed after route handler is executed.
+  ///
+  /// These interceptors are executed in the reverse order of registration.
   final List<RouteInterceptor> after;
 
+  /// Returns cookies set in HTTP request.
   Map<String, Cookie> get cookies => _cookies ??= _parseCookies();
 
   Map<String, Cookie> _cookies;
@@ -492,14 +530,20 @@ class Context {
 
   AuthHeaders _authHeader;
 
+  /// Returns auth header for the requested [scheme].
   String authHeader(String scheme) {
     if (_authHeader == null) {
-      _authHeader = new AuthHeaders.fromHeaderStr(
+      _authHeader = AuthHeaders.fromHeaderStr(
           req.headers.value(HttpHeaders.authorizationHeader));
     }
     return _authHeader.items[scheme]?.credentials;
   }
 
+  /// Executes the [route] with this [Context].
+  ///
+  /// Takes responsibility of executing [after] and [before] interceptors.
+  /// Tries to automatically construct response from returned result if the
+  /// response is not explicitly set in route handler.
   Future<void> execute() async {
     dynamic maybeFuture;
     for (int i = 0; i < before.length; i++) {
