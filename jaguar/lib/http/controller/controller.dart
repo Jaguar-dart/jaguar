@@ -11,6 +11,17 @@ import '../context/context.dart';
 ///
 /// Implement route handlers as methods in your controller class and annotate them
 /// with one of the [HttpMethod] annotations.
+///
+///     @GenController(path: '/library')
+///     class LibraryApi extends Controller {
+///       @Get(path: '/all')
+///       Future<List<Book>> getAll(Context ctx) => books;
+///
+///       @Post(path: '/add')
+///       Future<void> add(Context ctx) {
+///         // TODO
+///       }
+///     }
 abstract class Controller {
   const Controller();
 
