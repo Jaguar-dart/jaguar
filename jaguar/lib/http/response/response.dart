@@ -31,10 +31,10 @@ class Response<ValueType> {
   final List<Cookie> cookies = [];
 
   Response(this.value,
-      {this.statusCode: 200,
+      {this.statusCode = 200,
       Map<String, dynamic> headers,
       String mimeType,
-      String charset: kDefaultCharset}) {
+      String charset = kDefaultCharset}) {
     if (headers != null)
       for (final String name in headers.keys) {
         this.headers.add(name, headers[name]);
@@ -46,10 +46,10 @@ class Response<ValueType> {
 
   static Response<String> json<ST>(ST value,
       {dynamic serializeWith(ST value),
-      int statusCode: HttpStatus.ok,
+      int statusCode = HttpStatus.ok,
       Map<String, dynamic> headers,
-      String mimeType: MimeTypes.json,
-      String charset: kDefaultCharset}) {
+      String mimeType = MimeTypes.json,
+      String charset = kDefaultCharset}) {
     String data =
         cnv.json.encode(serializeWith == null ? value : serializeWith(value));
     return Response<String>(
@@ -62,10 +62,10 @@ class Response<ValueType> {
   }
 
   static Response<String> html(String html,
-      {int statusCode: HttpStatus.ok,
+      {int statusCode = HttpStatus.ok,
       Map<String, dynamic> headers,
-      String mimeType: MimeTypes.html,
-      String charset: kDefaultCharset}) {
+      String mimeType = MimeTypes.html,
+      String charset = kDefaultCharset}) {
     return Response<String>(
       html,
       statusCode: statusCode,
@@ -77,7 +77,7 @@ class Response<ValueType> {
 
   /// deleteCookie deletes a cookie with given [name]. Use [path] to specify
   /// the path from which the cookie has to be removed.
-  void deleteCookie(String name, {String path: '/'}) {
+  void deleteCookie(String name, {String path = '/'}) {
     cookies.add(Cookie(name, '')
       ..expires = DateTime.now().subtract(_aDay)
       ..maxAge = -1

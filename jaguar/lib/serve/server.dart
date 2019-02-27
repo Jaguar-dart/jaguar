@@ -66,11 +66,11 @@ class Jaguar extends Object with Muxable {
   /// errors.
   /// [sessionManager] provides ability to use custom session managers.
   Jaguar(
-      {String address: "0.0.0.0",
-      int port: 8080,
-      bool multiThread: false,
+      {String address = "0.0.0.0",
+      int port = 8080,
+      bool multiThread = false,
       SecurityContext securityContext,
-      this.autoCompress: false,
+      this.autoCompress = false,
       ErrorWriter errorWriter,
       SessionManager sessionManager})
       : errorWriter = errorWriter ?? DefaultErrorWriter(),
@@ -90,7 +90,7 @@ class Jaguar extends Object with Muxable {
   }
 
   /// Starts serving the requests.
-  Future<void> serve({bool logRequests: false}) async {
+  Future<void> serve({bool logRequests = false}) async {
     if (_server != null) throw Exception('Already started!');
 
     _build();
@@ -133,7 +133,7 @@ class Jaguar extends Object with Muxable {
     }
   }
 
-  Future<void> restart({bool logRequests: false}) async {
+  Future<void> restart({bool logRequests = false}) async {
     await close();
     return serve(logRequests: logRequests);
   }
@@ -269,13 +269,13 @@ class ConnectTo {
   String get authority => "$address:$port";
 
   ConnectTo(
-      {this.address: "0.0.0.0",
-      this.port: 8080,
+      {this.address = "0.0.0.0",
+      this.port = 8080,
       this.securityContext,
-      this.multiThread: false});
+      this.multiThread = false});
 
   ConnectTo.https(this.securityContext,
-      {this.address: "0.0.0.0", this.port: 443, this.multiThread: false});
+      {this.address = "0.0.0.0", this.port = 443, this.multiThread = false});
 
   String toString() => authority;
 }

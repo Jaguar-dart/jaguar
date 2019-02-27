@@ -92,7 +92,7 @@ class TextFileFormField implements FormField<Stream<String>> {
   }
 
   /// Writes the contents of the file to file at [path]
-  Future<void> writeTo(String path, {Encoding encoding: utf8}) async {
+  Future<void> writeTo(String path, {Encoding encoding = utf8}) async {
     IOSink sink = File(path).openWrite(encoding: encoding);
     await for (String item in value) {
       sink.write(item);
@@ -124,7 +124,7 @@ class TextFileListFormField implements TextFileFormField {
       : values = values;
 
   /// Writes the contents of the file to file at [path]
-  Future<void> writeTo(String path, {Encoding encoding: utf8}) =>
+  Future<void> writeTo(String path, {Encoding encoding = utf8}) =>
       values.first.writeTo(path, encoding: encoding);
 }
 

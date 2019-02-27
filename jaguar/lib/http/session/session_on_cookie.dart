@@ -18,13 +18,13 @@ class JaguarSessionManager implements SessionManager {
   /// Constructs a new [JaguarSessionManager] with given [cookieName], [expiry]
   /// and [signerKey].
   JaguarSessionManager(
-      {this.expiry, String signerKey, this.io: const SessionIoCookie()})
+      {this.expiry, String signerKey, this.io = const SessionIoCookie()})
       : coder = JaguarMapCoder(
             signer:
                 signerKey != null ? Hmac(sha256, signerKey.codeUnits) : null);
 
   JaguarSessionManager.withCoder(this.coder,
-      {this.expiry, this.io: const SessionIoCookie()});
+      {this.expiry, this.io = const SessionIoCookie()});
 
   /// Parses session from the given [request]
   Session parse(Context ctx) {

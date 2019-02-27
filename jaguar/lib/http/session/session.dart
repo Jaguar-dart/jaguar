@@ -49,7 +49,7 @@ class Session {
   /// Creates a session object for existing session with given [data], [id] and
   /// [createdTime]
   Session(this.id, Map<String, String> data, this.createdTime,
-      {this.needsUpdate: false}) {
+      {this.needsUpdate = false}) {
     if (data is Map) _data.addAll(data);
   }
 
@@ -156,7 +156,7 @@ class Session {
     return double.tryParse(val) ?? defaultVal;
   }
 
-  List<String> getList(String key, {String split: ','}) {
+  List<String> getList(String key, {String split = ','}) {
     final String val = _data[key];
 
     if (val == null) return null;
@@ -165,7 +165,7 @@ class Session {
     return val.split(split);
   }
 
-  Set<String> getSet(String key, {String split: ','}) {
+  Set<String> getSet(String key, {String split = ','}) {
     final String val = _data[key];
 
     if (val == null) return null;

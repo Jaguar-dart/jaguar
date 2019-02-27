@@ -290,7 +290,7 @@ class Context {
   ///     });
   ///     await server.serve();
   Future<T> bodyAsJson<T, F>(
-      {conv.Encoding encoding: conv.utf8,
+      {conv.Encoding encoding = conv.utf8,
       Converter<T, F> convert,
       Type type}) async {
     final String text = await bodyAsText(encoding);
@@ -316,7 +316,7 @@ class Context {
   ///       // ...
   ///     });
   ///     await server.serve();
-  Future<Map> bodyAsJsonMap({conv.Encoding encoding: conv.utf8}) async {
+  Future<Map> bodyAsJsonMap({conv.Encoding encoding = conv.utf8}) async {
     final String text = await bodyAsText(encoding);
     final ret = conv.json.decode(text);
     return ret;
@@ -333,7 +333,7 @@ class Context {
   ///     });
   ///     await server.serve();
   Future<List<T>> bodyAsJsonList<T, F>(
-      {conv.Encoding encoding: conv.utf8,
+      {conv.Encoding encoding = conv.utf8,
       Converter<T, F> convert,
       Type type}) async {
     final String text = await bodyAsText(encoding);
@@ -362,7 +362,7 @@ class Context {
   ///     });
   ///     await server.serve();
   Future<Map<String, String>> bodyAsUrlEncodedForm(
-      {conv.Encoding encoding: conv.utf8}) async {
+      {conv.Encoding encoding = conv.utf8}) async {
     if (_parsedUrlEncodedForm != null) return _parsedUrlEncodedForm;
 
     final String text = await bodyAsText(encoding);
@@ -457,7 +457,7 @@ class Context {
     return ret;
   }
 
-  Future<Map> bodyAsMap({conv.Encoding encoding: conv.utf8}) async {
+  Future<Map> bodyAsMap({conv.Encoding encoding = conv.utf8}) async {
     MimeType mt = mimeType;
 
     if (mt.isJson) {
@@ -473,7 +473,7 @@ class Context {
 
   /// Converts the body to typ [T].
   Future<T> bodyTo<T>(Converter<T, dynamic> convert,
-      {conv.Encoding encoding: conv.utf8}) async {
+      {conv.Encoding encoding = conv.utf8}) async {
     MimeType mt = mimeType;
 
     Map b;

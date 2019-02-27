@@ -20,7 +20,7 @@ part 'request_impl.dart';
 
 /// [Request] contains information about HTTP request
 abstract class Request {
-  factory Request(HttpRequest request) => new _Request(request);
+  factory Request(HttpRequest request) => _Request(request);
 
   /// The URI for the request
   ///
@@ -75,4 +75,6 @@ abstract class Request {
 
   /// Returns raw body of HTTP request
   Future<List<int>> get body;
+
+  HttpRequest get ioRequest;
 }

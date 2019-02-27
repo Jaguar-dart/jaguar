@@ -74,11 +74,11 @@ class Route {
 
   /// Constructs a [Route]
   factory Route(String path, RouteHandler handler,
-          {List<String> methods: const <String>['*'],
+          {List<String> methods = const <String>['*'],
           Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -100,9 +100,9 @@ class Route {
   /// Constructs a [Route] for GET method requests
   factory Route.get(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -123,9 +123,9 @@ class Route {
   /// Constructs a [Route] for POST method requests
   factory Route.post(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -146,9 +146,9 @@ class Route {
   /// Constructs a [Route] for PUT method requests
   factory Route.put(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -169,9 +169,9 @@ class Route {
   /// Constructs a [Route] for DELETE method requests
   factory Route.delete(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -192,9 +192,9 @@ class Route {
   /// Constructs a [Route] for PATCH method requests
   factory Route.patch(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -215,9 +215,9 @@ class Route {
   /// Constructs a [Route] for OPTIONS method requests
   factory Route.options(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -238,9 +238,9 @@ class Route {
   /// Constructs a [Route] for HTML requests
   factory Route.html(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
-          String mimeType: MimeTypes.html,
-          String charset: kDefaultCharset,
+          int statusCode = 200,
+          String mimeType = MimeTypes.html,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
@@ -260,12 +260,17 @@ class Route {
 
   /// Constructs a [Route] for JSON requests
   factory Route.json(String path, RouteHandler handler,
-          {List<String> methods: const <String>['GET', 'PUT', 'POST', 'DELETE'],
+          {List<String> methods = const <String>[
+            'GET',
+            'PUT',
+            'POST',
+            'DELETE'
+          ],
           Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
-          ResponseProcessor responseProcessor: jsonResponseProcessor,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor = jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>
@@ -286,10 +291,10 @@ class Route {
   /// Constructs a [Route] for JSON requests with GET method
   factory Route.getJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
-          ResponseProcessor responseProcessor: jsonResponseProcessor,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor = jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>
@@ -309,10 +314,10 @@ class Route {
   /// Constructs a [Route] for JSON requests with POST method
   factory Route.postJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
-          ResponseProcessor responseProcessor: jsonResponseProcessor,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor = jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>
@@ -332,10 +337,10 @@ class Route {
   /// Constructs a [Route] for JSON requests with PUT method
   factory Route.putJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
-          ResponseProcessor responseProcessor: jsonResponseProcessor,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor = jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>
@@ -355,10 +360,10 @@ class Route {
   /// Constructs a [Route] for JSON requests with DELETE method
   factory Route.deleteJson(String path, RouteHandler handler,
           {Map<String, String> pathRegEx,
-          int statusCode: 200,
+          int statusCode = 200,
           String mimeType,
-          String charset: kDefaultCharset,
-          ResponseProcessor responseProcessor: jsonResponseProcessor,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor = jsonResponseProcessor,
           List<RouteInterceptor> after,
           List<RouteInterceptor> before,
           List<ExceptionHandler> onException}) =>

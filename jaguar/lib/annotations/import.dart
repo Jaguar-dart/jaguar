@@ -12,7 +12,7 @@ class GenController {
   /// Path prefix of the child routes and included APIs in the API class
   final String path;
 
-  const GenController({this.path: ''});
+  const GenController({this.path = ''});
 }
 
 /// Includes the route handlers into the parent API class
@@ -20,5 +20,5 @@ class IncludeController {
   ///Path prefix for the route handlers of the Included API
   final String path;
 
-  const IncludeController({this.path: ''});
+  const IncludeController({this.path = ''});
 }

@@ -48,4 +48,7 @@ class _Request implements Request {
     List<int> body = builder.takeBytes();
     return body;
   }
+
+  @override
+  HttpRequest get ioRequest => _request;
 }

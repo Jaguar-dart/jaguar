@@ -11,7 +11,7 @@ class GroupBuilder extends Object with Muxable {
 
   final List<ExceptionHandler> onException = [];
 
-  GroupBuilder(this.parent, {this.path: ''});
+  GroupBuilder(this.parent, {this.path = ''});
 
   /// Adds all the given [routes] to be served
   void add(Iterable<Route> routes) {
@@ -27,6 +27,6 @@ class GroupBuilder extends Object with Muxable {
     return route1;
   }
 
-  GroupBuilder group({String path: ''}) =>
+  GroupBuilder group({String path = ''}) =>
       GroupBuilder(parent, path: this.path + path);
 }

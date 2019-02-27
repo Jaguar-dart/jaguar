@@ -6,7 +6,7 @@ import 'dart:io';
 class Redirect extends Response<Uri> {
   Redirect(
     Uri value, {
-    statusCode: HttpStatus.movedPermanently,
+    statusCode = HttpStatus.movedPermanently,
     Map<String, dynamic> headers,
   }) : super(value, statusCode: statusCode, headers: headers);
 

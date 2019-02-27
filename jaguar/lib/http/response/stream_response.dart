@@ -8,7 +8,7 @@ import 'package:jaguar/http/http.dart';
 /// response.
 class StreamResponse extends Response<Stream<List<int>>> {
   StreamResponse(Stream<List<int>> value,
-      {statusCode: 200,
+      {statusCode = 200,
       Map<String, dynamic> headers,
       String mimeType,
       String charset})
@@ -20,7 +20,7 @@ class StreamResponse extends Response<Stream<List<int>>> {
 
   /// [Response] that writes the contents of [file] to the response.
   factory StreamResponse.fromFile(File file,
-          {statusCode: 200,
+          {statusCode = 200,
           Map<String, dynamic> headers,
           String mimeType,
           String charset}) =>
@@ -34,7 +34,7 @@ class StreamResponse extends Response<Stream<List<int>>> {
 
   /// [Response] that writes the contents of file at [path] to the response.
   static Future<StreamResponse> fromPath(String path,
-      {int statusCode: 200,
+      {int statusCode = 200,
       Map<String, dynamic> headers,
       String mimeType,
       String charset}) async {
@@ -49,11 +49,11 @@ class StreamResponse extends Response<Stream<List<int>>> {
 
   /// [Response] that writes the [strings] to the response.
   factory StreamResponse.fromStrings(Stream<String> strings,
-      {statusCode: 200,
+      {statusCode = 200,
       Map<String, dynamic> headers,
       String mimeType,
       String charset,
-      Encoding encoding: utf8}) {
+      Encoding encoding = utf8}) {
     return StreamResponse(
       strings.transform(encoding.encoder),
       statusCode: statusCode,

@@ -20,7 +20,7 @@ class SessionIoCookie implements SessionIo {
   final String cookiePath;
 
   /// Constructs a new [SessionIoCookie]
-  const SessionIoCookie({this.cookieName: 'jagses', this.cookiePath: '/'});
+  const SessionIoCookie({this.cookieName = 'jagses', this.cookiePath = '/'});
 
   @override
 
@@ -49,7 +49,7 @@ class SessionIoAuthHeader implements SessionIo {
   final String scheme;
 
   /// Constructs a new [SessionIoAuthHeader]
-  const SessionIoAuthHeader({this.scheme: 'Bearer'});
+  const SessionIoAuthHeader({this.scheme = 'Bearer'});
 
   @override
 
@@ -84,7 +84,7 @@ class SessionIoHeader implements SessionIo {
   final String name;
 
   /// Constructs a new [SessionIoHeader]
-  const SessionIoHeader({this.name: 'jagses'});
+  const SessionIoHeader({this.name = 'jagses'});
 
   @override
 

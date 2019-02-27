@@ -40,11 +40,11 @@ class Get implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const Get(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -53,7 +53,7 @@ class Get implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -88,11 +88,11 @@ class Post implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const Post(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -101,7 +101,7 @@ class Post implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -136,11 +136,11 @@ class Put implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const Put(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -149,7 +149,7 @@ class Put implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -184,11 +184,11 @@ class Delete implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const Delete(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -197,7 +197,7 @@ class Delete implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -232,11 +232,11 @@ class Patch implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const Patch(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -245,7 +245,7 @@ class Patch implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -280,11 +280,11 @@ class OptionsMethod implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const OptionsMethod(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -293,7 +293,7 @@ class OptionsMethod implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -328,12 +328,12 @@ class GetJson implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const GetJson(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
-      this.responseProcessor: jsonResponseProcessor});
+      this.charset = kDefaultCharset,
+      this.responseProcessor = jsonResponseProcessor});
 
   HttpMethod cloneWith(
           {String path,
@@ -341,7 +341,7 @@ class GetJson implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -374,12 +374,12 @@ class PutJson implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const PutJson(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
-      this.responseProcessor: jsonResponseProcessor});
+      this.charset = kDefaultCharset,
+      this.responseProcessor = jsonResponseProcessor});
 
   HttpMethod cloneWith(
           {String path,
@@ -387,7 +387,7 @@ class PutJson implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -420,12 +420,12 @@ class PostJson implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const PostJson(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
-      this.responseProcessor: jsonResponseProcessor});
+      this.charset = kDefaultCharset,
+      this.responseProcessor = jsonResponseProcessor});
 
   HttpMethod cloneWith(
           {String path,
@@ -433,7 +433,7 @@ class PostJson implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -466,12 +466,12 @@ class DeleteJson implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const DeleteJson(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
-      this.charset: kDefaultCharset,
-      this.responseProcessor: jsonResponseProcessor});
+      this.charset = kDefaultCharset,
+      this.responseProcessor = jsonResponseProcessor});
 
   HttpMethod cloneWith(
           {String path,
@@ -479,7 +479,7 @@ class DeleteJson implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -512,11 +512,11 @@ class GetHtml implements HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const GetHtml(
-      {this.path: '',
+      {this.path = '',
       this.pathRegEx,
-      this.statusCode: 200,
-      this.mimeType: MimeTypes.html,
-      this.charset: kDefaultCharset,
+      this.statusCode = 200,
+      this.mimeType = MimeTypes.html,
+      this.charset = kDefaultCharset,
       this.responseProcessor});
 
   HttpMethod cloneWith(
@@ -525,7 +525,7 @@ class GetHtml implements HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
@@ -557,10 +557,10 @@ class HttpMethod {
   final ResponseProcessor responseProcessor;
 
   const HttpMethod(
-      {this.path: '',
-      this.methods: _methods,
+      {this.path = '',
+      this.methods = _methods,
       this.pathRegEx,
-      this.statusCode: 200,
+      this.statusCode = 200,
       this.mimeType,
       this.charset,
       this.responseProcessor});
@@ -575,7 +575,7 @@ class HttpMethod {
           Map<String, String> pathRegEx,
           int statusCode,
           String mimeType,
-          String charset: kDefaultCharset,
+          String charset = kDefaultCharset,
           ResponseProcessor responseProcessor}) =>
       HttpMethod(
           path: path ?? this.path,
