@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:pedantic/pedantic.dart';
 
@@ -19,8 +20,14 @@ void _prepareResponse(HttpResponse response, {bool gzip = false}) {
   // Keep the connection alive
   response.headers.set("Connection", "keep-alive");
 
+  // Chunked response
+  response.headers.set("Transfer-Encoding", "chunked");
+
   // Will the response be encoded with gzip?
   if (gzip) response.headers.set("Content-Encoding", "gzip");
+
+  // Disable buffering
+  response.bufferOutput = false;
 }
 
 /// Upgrades HTTP request to event source.
@@ -36,6 +43,11 @@ Future<bool> toEventsource(Context ctx, {bool compress = false}) async {
 
   // Prepare response
   _prepareResponse(response, gzip: useGzip);
+
+  if (!useGzip)
+    response.add(utf8.encode("\n"));
+  else
+    response.add(gzip.encode(utf8.encode("\n")));
 
   await response.flush();
 
