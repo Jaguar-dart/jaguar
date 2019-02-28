@@ -1,4 +1,3 @@
-import 'package:jaguar_eventsource/jaguar_eventsource.dart';
 import 'package:test/test.dart';
 
 void main() {

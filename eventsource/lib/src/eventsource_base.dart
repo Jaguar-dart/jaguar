@@ -24,9 +24,9 @@ void _prepareResponse(HttpResponse response, {bool gzip = false}) {
 }
 
 /// Upgrades HTTP request to event source.
-Future<bool> toEventsource(Context ctx, {bool gzip: false}) async {
+Future<bool> toEventsource(Context ctx, {bool compress = false}) async {
   // Use gzip if both server and client can handle it
-  bool useGzip = gzip &&
+  bool useGzip = compress &&
       (ctx.headers.value(HttpHeaders.acceptEncodingHeader) ?? "")
           .contains("gzip");
 
@@ -44,17 +44,18 @@ Future<bool> toEventsource(Context ctx, {bool gzip: false}) async {
 
 /// Upgrades HTTP request to event source and streams [data] to it.
 Future<void> eventsourceStreamer(Context ctx, Stream<String> data,
-    {bool compress: false}) async {
-  final useGzip = await toEventsource(ctx, gzip: compress);
+    {bool compress = false, void onDone()}) async {
+  final useGzip = await toEventsource(ctx, compress: compress);
 
   HttpResponse response = ctx.req.ioRequest.response;
 
   StreamSubscription sub;
   sub = data.listen(
-      (d) {
+      (d) async {
         List<int> wire = Event.data(d).toUtf8;
         if (useGzip) wire = gzip.encode(wire);
         response.add(wire);
+        await response.flush();
       },
       cancelOnError: true,
       onDone: () async {
@@ -70,22 +71,24 @@ Future<void> eventsourceStreamer(Context ctx, Stream<String> data,
 
   unawaited(response.done.then((_) async {
     await sub.cancel();
+    if (onDone != null) onDone();
   }));
 }
 
 /// Upgrades HTTP request to event source and streams [events] to it.
 Future<void> eventsourceEventStreamer(Context ctx, Stream<Event> events,
-    {bool compress: false}) async {
-  final useGzip = await toEventsource(ctx, gzip: compress);
+    {bool compress = false, void onDone()}) async {
+  final useGzip = await toEventsource(ctx, compress: compress);
 
   HttpResponse response = ctx.req.ioRequest.response;
 
   StreamSubscription sub;
   sub = events.listen(
-      (d) {
+      (d) async {
         List<int> wire = d.toUtf8;
         if (useGzip) wire = gzip.encode(wire);
         response.add(wire);
+        await response.flush();
       },
       cancelOnError: true,
       onDone: () async {
@@ -93,7 +96,7 @@ Future<void> eventsourceEventStreamer(Context ctx, Stream<Event> events,
         await response.flush();
         await response.close();
       },
-      onError: () async {
+      onError: (_) async {
         await sub.cancel();
         await response.flush();
         await response.close();
@@ -101,5 +104,6 @@ Future<void> eventsourceEventStreamer(Context ctx, Stream<Event> events,
 
   unawaited(response.done.then((_) async {
     await sub.cancel();
+    if (onDone != null) onDone();
   }));
 }

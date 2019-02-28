@@ -17,13 +17,14 @@ class Event {
 
   String encode() {
     final sb = StringBuffer();
-    if (id != null) sb.writeln("id :${id.replaceAll("\n", "\nid :")}");
+    if (id != null) sb.writeln("id:${id.replaceAll("\n", "\nid:")}");
     if (event != null)
-      sb.writeln("event :${event.replaceAll("\n", "\nevent :")}");
-    if (data != null) sb.writeln("data :${data.replaceAll("\n", "\ndata :")}");
+      sb.writeln("event:${event.replaceAll("\n", "\nevent:")}");
+    if (data != null) sb.writeln("data:${data.replaceAll("\n", "\ndata:")}");
 
-    sb.write("\n\n");
-    return sb.toString();
+    sb.write("\n");
+    final ret = sb.toString();
+    return ret;
   }
 
   List<int> get toUtf8 => utf8.encode(encode());

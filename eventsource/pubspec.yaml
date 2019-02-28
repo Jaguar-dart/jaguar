@@ -1,6 +1,6 @@
 name: jaguar_eventsource
-description: Server side events plugin for Jaguar dart.
-version: 1.0.0
+description: Server side events plugin for Jaguar dart. Push events or updates from server to browser, flutter or desktop client without using long polling or websockets.
+version: 1.0.4
 homepage: https://jaguar-dart.github.io
 author: Ravi Teja Gudapati <tejainece@gmail.com>
 
