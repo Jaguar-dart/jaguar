@@ -1,4 +1,3 @@
-// TODO add docs
 library settings;
 
 import 'dart:async';
@@ -6,38 +5,13 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
-/// Settings source filter
-///
-/// Determines where a corresponding setting must be retrieved from
-class SettingsFilter {
-  final int index;
-
-  final String name;
-
-  String get fullname => "SettingsFilter.$name";
-
-  const SettingsFilter._(this.index, this.name);
-
-  /// Setting shall be retrieved from YAML config file
-  static const SettingsFilter Yaml = const SettingsFilter._(0, 'Yaml');
-
-  /// Setting shall be retrieved from environment variables
-  static const SettingsFilter Env = const SettingsFilter._(0, 'Env');
-
-  /// Setting shall be retrieved from settings Map provided from dart code
-  static const SettingsFilter Map = const SettingsFilter._(0, 'Map');
-
-  /// Setting shall be retrieved from either Map or YAML config file
-  static const SettingsFilter MapOrYaml =
-  const SettingsFilter._(0, 'MapOrYaml');
-}
-
 /// {Key: Value} Settings repository. Allows to query settings values based on
 /// keys
 class Settings {
-  static Settings _singletonInstance;
+  static Settings _singleton;
 
   final Map<String, dynamic> _settingsFromYaml;
+
   final Map<String, String> _settingsFromMap;
 
   Settings._(Map<String, dynamic> settingsFromYaml,
@@ -53,27 +27,43 @@ class Settings {
   /// @param args Command line arguments. Used to parse the location of YAML
   ///   config file passed through '-s' command line flag
   /// @param settingsMap Settings provided through Dart Map
-  static Future<Null> parse(List<String> args,
+  static Future<void> parse(List<String> args,
       {Map<String, String> settingsMap: const {}}) async {
-    if (_singletonInstance != null) {
-      throw new Exception("Settings must be parsed only once!");
-    }
+    if (_singleton != null) return;
 
     Map<String, dynamic> yamlSettings = {};
     if (args.isNotEmpty) {
-      ArgParser parser = new ArgParser();
+      final parser = ArgParser();
       parser.addOption('settings', abbr: 's', defaultsTo: '');
       ArgResults results = parser.parse(args);
       String settings = results['settings'];
       if (settings.isNotEmpty && settings.endsWith(".yaml")) {
-        File yaml = new File(settings);
+        final yaml = File(settings);
         if (await yaml.exists()) {
           yamlSettings = (loadYaml(await yaml.readAsString()) as Map)
               .cast<String, dynamic>();
         }
       }
     }
-    _singletonInstance = new Settings._(yamlSettings, settingsMap);
+    _singleton = Settings._(yamlSettings, settingsMap);
+  }
+
+  static dynamic get(String key, {defaultValue}) {
+    if (_singleton == null) throw Exception("Settings are not parsed yet!");
+
+    dynamic ret;
+
+    if (Platform.environment.containsKey(key)) {
+      ret = Platform.environment[key];
+    } else if (_singleton._settingsFromYaml.containsKey(key)) {
+      ret = _singleton._settingsFromYaml[key];
+    } else if (_singleton._settingsFromMap.containsKey(key)) {
+      ret = _singleton._settingsFromMap[key];
+    } else {
+      ret = defaultValue;
+    }
+
+    return ret;
   }
 
   /// Returns a setting value based on the provided key
@@ -85,29 +75,44 @@ class Settings {
   ///   given key is not found
   /// @param settingsFilter Filters the source from which the setting values are
   ///   retrieved
-  static String getString(String key,
-      {String defaultValue,
-        SettingsFilter settingsFilter: SettingsFilter.MapOrYaml}) {
-    if (_singletonInstance == null) {
-      throw new Exception("Settings are not parsed yet!");
-    }
+  static String getString(String key, {String defaultValue}) {
+    if (_singleton == null) throw Exception("Settings are not parsed yet!");
 
-    if (settingsFilter == SettingsFilter.MapOrYaml) {
-      String value = _singletonInstance._settingsFromMap[key] ??
-          _singletonInstance._settingsFromYaml[key];
-      return value ?? defaultValue;
-    } else if (settingsFilter == SettingsFilter.Map) {
-      return _singletonInstance._settingsFromMap[key] ?? defaultValue;
-    } else if (settingsFilter == SettingsFilter.Yaml) {
-      var value = _singletonInstance._settingsFromYaml[key] ?? defaultValue;
-      if (value is! String) {
-        return null;
-      }
-      return value;
-    } else if (settingsFilter == SettingsFilter.Env) {
-      return Platform.environment[key] ?? defaultValue;
-    }
+    dynamic ret = get(key);
 
-    return null;
+    if (ret == null) return defaultValue;
+    if (ret is! String) throw Exception('Value is not string');
+    return ret;
+  }
+
+  static int getInt(String key, {int defaultValue, int radix}) {
+    dynamic v = get(key);
+    if (v == null) return defaultValue;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) return int.tryParse(v, radix: radix) ?? defaultValue;
+    throw Exception('Value is not int');
+  }
+
+  static double getDouble(String key, {double defaultValue}) {
+    dynamic v = get(key);
+    if (v == null) return defaultValue;
+    if (v is double) return v;
+    if (v is num) return v.toDouble();
+    if (v is String) return double.tryParse(v) ?? defaultValue;
+    throw Exception('Value is not double');
+  }
+
+  static bool getBool(String key, {bool defaultValue}) {
+    dynamic v = get(key);
+    if (v == null) return defaultValue;
+    if (v is bool) return v;
+    if (v is String) {
+      v = (v as String).toLowerCase();
+      if (v == 'true' || v == 'yes' || v == 'y' || v == 'ok' || v == 'yep')
+        return true;
+      if (v == 'false' || v == 'no' || v == 'n' || v == 'nope') return false;
+    }
+    throw Exception('Value is not bool');
   }
 }

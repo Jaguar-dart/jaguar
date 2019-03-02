@@ -114,8 +114,9 @@ Future<void> eventsourceEventStreamer(Context ctx, Stream<Event> events,
         await response.close();
       });
 
-  unawaited(response.done.then((_) async {
+  response.done.then((_) async {
+    print("Done");
     await sub.cancel();
     if (onDone != null) onDone();
-  }));
+  });
 }
