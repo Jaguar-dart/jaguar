@@ -56,7 +56,7 @@ Future<bool> toEventsource(Context ctx, {bool compress = false}) async {
 
 /// Upgrades HTTP request to event source and streams [data] to it.
 Future<void> eventsourceStreamer(Context ctx, Stream<String> data,
-    {bool compress = false, void onDone()}) async {
+    {bool compress = false, void onDone(), debug}) async {
   final useGzip = await toEventsource(ctx, compress: compress);
 
   HttpResponse response = ctx.req.ioRequest.response;
@@ -89,7 +89,7 @@ Future<void> eventsourceStreamer(Context ctx, Stream<String> data,
 
 /// Upgrades HTTP request to event source and streams [events] to it.
 Future<void> eventsourceEventStreamer(Context ctx, Stream<Event> events,
-    {bool compress = false, void onDone()}) async {
+    {bool compress = false, void onDone(), debug}) async {
   final useGzip = await toEventsource(ctx, compress: compress);
 
   HttpResponse response = ctx.req.ioRequest.response;
