@@ -30,47 +30,34 @@ void main() {
     });
 
     test('from yaml {filter: yaml}', () async {
-      expect(
-          Settings.getString('host', settingsFilter: SettingsFilter.Map), null);
-      expect(
-          Settings.getString('host', settingsFilter: SettingsFilter.Env), null);
-      expect(Settings.getString('host', settingsFilter: SettingsFilter.Yaml),
-          'localhost');
+      expect(Settings.getString('host'), null);
+      expect(Settings.getString('host'), null);
+      expect(Settings.getString('host'), 'localhost');
     });
 
     test('from not found yaml', () async {
-      expect(
-          Settings.getString('notfound', settingsFilter: SettingsFilter.Yaml),
-          null);
+      expect(Settings.getString('notfound'), null);
     });
 
     test('from yaml default', () async {
       expect(
-          Settings.getString('notfound',
-              defaultValue: 'novalue', settingsFilter: SettingsFilter.Yaml),
-          'novalue');
+          Settings.getString('notfound', defaultValue: 'novalue'), 'novalue');
     });
 
     test('from env', () async {
       expect(Settings.getString('secret'), null);
-      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Map),
-          null);
-      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Yaml),
-          null);
-      expect(Settings.getString('secret', settingsFilter: SettingsFilter.Env),
-          '123456');
+      expect(Settings.getString('secret'), null);
+      expect(Settings.getString('secret'), null);
+      expect(Settings.getString('secret'), '123456');
     });
 
     test('from not found env', () async {
-      expect(Settings.getString('notfound', settingsFilter: SettingsFilter.Env),
-          null);
+      expect(Settings.getString('notfound'), null);
     });
 
     test('from env default', () async {
       expect(
-          Settings.getString('notfound',
-              defaultValue: 'novalue', settingsFilter: SettingsFilter.Env),
-          'novalue');
+          Settings.getString('notfound', defaultValue: 'novalue'), 'novalue');
     });
   });
 }
