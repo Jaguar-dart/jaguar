@@ -20,39 +20,32 @@ RouteHandler wsStream<T>(WsOnConnect /* < Stream<T> | Response > */ onConnect) {
       }
     }
 
-    StreamSubscription sub;
+    // TODO ws.asBroadcastStream().listen((_) => null);
 
     if (T == String) {
-      sub = stream.listen((T t) {
+      stream.listen((T t) {
         ws.add(t);
       }, onDone: () async {
-        await sub.cancel();
+        await ws.close();
       }, onError: (_) async {
-        await sub.cancel();
+        await ws.close();
       }, cancelOnError: true);
     } else if (T == Iterable) {
-      sub = stream.listen((T t) {
+      stream.listen((T t) {
         ws.add(t);
       }, onDone: () async {
-        await sub.cancel();
+        await ws.close();
       }, onError: (_) async {
-        await sub.cancel();
+        await ws.close();
       }, cancelOnError: true);
     } else {
-      sub = stream.listen((T t) {
+      stream.listen((T t) {
         if (t != null) ws.add(t.toString());
       }, onDone: () async {
-        await sub.cancel();
+        await ws.close();
       }, onError: (_) async {
-        await sub.cancel();
+        await ws.close();
       }, cancelOnError: true);
     }
-
-    sub.onDone(() async {
-      await ws.close();
-    });
-    sub.onError((_) async {
-      await ws.close();
-    });
   };
 }

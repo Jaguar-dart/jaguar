@@ -38,6 +38,6 @@ RouteHandler wsRespond<T>(
           'content': resp,
         }));
       } catch (_) {}
-    });
+    }, cancelOnError: true);
   };
 }
