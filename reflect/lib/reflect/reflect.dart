@@ -53,6 +53,7 @@ class ReflectedController {
       // Collect routes
       if (decl is MethodMirror) {
         _parseRoute(im, pathPrefix, decl);
+        _parseWsStream(im, pathPrefix, decl);
         continue;
       }
     }
@@ -100,6 +101,35 @@ class ReflectedController {
           before: [before.reflectee as RouteInterceptor]);
       _routes.add(r);
     }
+  }
+
+  bool _parseWsStream(InstanceMirror im, String pathPrefix, MethodMirror decl) {
+    final List<WsAnnot> routes = decl.metadata
+        .where((InstanceMirror annot) => annot.reflectee is WsAnnot)
+        .map((InstanceMirror annot) => annot.reflectee)
+        .toList()
+        .cast<WsAnnot>();
+    if (routes.length == 0) {
+      return false;
+    }
+
+    InstanceMirror method = im.getField(decl.simpleName);
+
+    InstanceMirror before = im.getField(#before);
+
+    if (method.reflectee is! WsOnConnect)
+      throw UnsupportedError("Method is not of type WsOnConnect!");
+
+    WsOnConnect handler = method.reflectee;
+
+    for (WsAnnot route in routes) {
+      final cloned = route.cloneWith(path: pathPrefix + route.path);
+      final r = Route.fromInfo(cloned, route.makeHandler(handler),
+          before: [before.reflectee as RouteInterceptor]);
+      _routes.add(r);
+    }
+
+    return true;
   }
 }
 

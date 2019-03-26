@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.6
+
++ Websocket support
+
 ## 2.4.4
 
 + Support for `dontBind`

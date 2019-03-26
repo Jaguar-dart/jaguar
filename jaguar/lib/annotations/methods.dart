@@ -589,3 +589,103 @@ class HttpMethod {
 
 const String kDefaultMimeType = 'text/plain';
 const String kDefaultCharset = 'utf-8';
+
+abstract class WsAnnot implements HttpMethod {
+  RouteHandler makeHandler(WsOnConnect onConnect);
+}
+
+class WsStream implements WsAnnot {
+  /// Path of the route
+  final String path;
+
+  /// Methods handled by the route
+  final List<String> methods = _methods;
+
+  /// Map of regular expression matchers for specific path segment
+  final Map<String, String> pathRegEx;
+
+  final int statusCode;
+
+  final String mimeType;
+
+  final String charset;
+
+  final ResponseProcessor responseProcessor;
+
+  const WsStream(
+      {this.path = '',
+      this.pathRegEx,
+      this.statusCode = 200,
+      this.mimeType,
+      this.charset = kDefaultCharset,
+      this.responseProcessor});
+
+  HttpMethod cloneWith(
+          {String path,
+          List<String> methods,
+          Map<String, String> pathRegEx,
+          int statusCode,
+          String mimeType,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor}) =>
+      HttpMethod(
+          path: path ?? this.path,
+          methods: methods ?? this.methods,
+          pathRegEx: pathRegEx ?? this.pathRegEx,
+          statusCode: statusCode ?? this.statusCode,
+          mimeType: mimeType ?? this.mimeType,
+          charset: charset ?? this.charset,
+          responseProcessor: responseProcessor ?? this.responseProcessor);
+
+  RouteHandler makeHandler(WsOnConnect onConnect) => wsStream(onConnect);
+
+  static const List<String> _methods = const <String>['GET'];
+}
+
+class WsRespond implements WsAnnot {
+  /// Path of the route
+  final String path;
+
+  /// Methods handled by the route
+  final List<String> methods = _methods;
+
+  /// Map of regular expression matchers for specific path segment
+  final Map<String, String> pathRegEx;
+
+  final int statusCode;
+
+  final String mimeType;
+
+  final String charset;
+
+  final ResponseProcessor responseProcessor;
+
+  const WsRespond(
+      {this.path = '',
+      this.pathRegEx,
+      this.statusCode = 200,
+      this.mimeType,
+      this.charset = kDefaultCharset,
+      this.responseProcessor});
+
+  HttpMethod cloneWith(
+          {String path,
+          List<String> methods,
+          Map<String, String> pathRegEx,
+          int statusCode,
+          String mimeType,
+          String charset = kDefaultCharset,
+          ResponseProcessor responseProcessor}) =>
+      HttpMethod(
+          path: path ?? this.path,
+          methods: methods ?? this.methods,
+          pathRegEx: pathRegEx ?? this.pathRegEx,
+          statusCode: statusCode ?? this.statusCode,
+          mimeType: mimeType ?? this.mimeType,
+          charset: charset ?? this.charset,
+          responseProcessor: responseProcessor ?? this.responseProcessor);
+
+  RouteHandler makeHandler(WsOnConnect onConnect) => wsRespond(onConnect);
+
+  static const List<String> _methods = const <String>['GET'];
+}

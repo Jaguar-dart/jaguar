@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.32
+
++ `WsStream` and `WsResponder` websocket handlers in controllers
+
+## 2.4.31
+
++ `wsStream`, `wsResponder`, and `wsEcho` websocket handlers
+
 ## 2.4.26
 
 + Bug fixes
