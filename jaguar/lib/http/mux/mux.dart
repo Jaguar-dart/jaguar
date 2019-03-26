@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:jaguar/jaguar.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_tree/path_tree.dart';
+import 'package:jaguar/http/websocket/websocket.dart' as ws;
 
 part 'group_builder.dart';
 part 'muxable.dart';

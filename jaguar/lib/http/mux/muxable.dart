@@ -336,21 +336,43 @@ abstract class Muxable {
   }
 
   /// Example:
-  ///     server.ws('/ws', (String data) => int.parse(data) + 1);
-  Route ws(String path,
+  ///     server.wsStream('/ws', (ctx, ws) => Stream.periodic);
+  Route wsStream(
+      String path, WsOnConnect /* < Stream<T> | Response > */ onConnect,
       {Map<String, String> pathRegEx,
-      WsHandler handler,
-      FutureOr onConnect(Context ctx, WebSocket ws),
-      WsResultProcessor resultProcessor,
       List<RouteInterceptor> after,
       List<RouteInterceptor> before,
       List<ExceptionHandler> onException}) {
-    return addRoute(Route.get(
-        path,
-        wsHandler(
-            handler: handler,
-            onConnect: onConnect,
-            resultProcessor: resultProcessor),
+    return addRoute(Route.get(path, ws.wsStream(onConnect),
+        pathRegEx: pathRegEx,
+        before: before,
+        after: after,
+        onException: onException));
+  }
+
+  /// Example:
+  ///     server.wsEcho('/ws');
+  Route wsEcho(String path,
+      {Map<String, String> pathRegEx,
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException}) {
+    return addRoute(Route.get(path, ws.wsEcho(),
+        pathRegEx: pathRegEx,
+        before: before,
+        after: after,
+        onException: onException));
+  }
+
+  /// Example:
+  ///     server.wsEcho('/ws');
+  Route wsResponder(
+      String path, WsOnConnect /* < WsResponder | Response > */ onConnect,
+      {Map<String, String> pathRegEx,
+      List<RouteInterceptor> after,
+      List<RouteInterceptor> before,
+      List<ExceptionHandler> onException}) {
+    return addRoute(Route.get(path, ws.wsRespond(onConnect),
         pathRegEx: pathRegEx,
         before: before,
         after: after,
