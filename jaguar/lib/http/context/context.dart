@@ -401,9 +401,8 @@ class Context {
   Future<Map<String, FormField>> bodyAsFormData() async {
     if (_parsedFormData != null) return _parsedFormData;
 
-    if (!req.headers.contentType.parameters.containsKey('boundary')) {
+    if (!req.headers.contentType.parameters.containsKey('boundary'))
       return null;
-    }
 
     final String boundary = req.headers.contentType.parameters['boundary'];
 
@@ -491,13 +490,31 @@ class Context {
 
   /// Returns file for given [field] in form-data body. Returns null, if the field
   /// is not found, not a file field or body is not form-data.
-  Future<FormField<T>> getFile<T>(String field) async {
+  Future<FileFormField<T>> getFile<T>(String field) async {
     final data = await bodyAsFormData();
     if (data == null) return null;
     final fieldData = data[field];
-    if (fieldData is! FormField<T>) {
-      return null;
-    }
+    if (fieldData is! FileFormField<T>) return null;
+    return fieldData;
+  }
+
+  /// Returns file for given [field] in form-data body. Returns null, if the field
+  /// is not found, not a file field or body is not form-data.
+  Future<BinaryFileFormField> getBinaryFile(String field) async {
+    final data = await bodyAsFormData();
+    if (data == null) return null;
+    final fieldData = data[field];
+    if (fieldData is! BinaryFileFormField) return null;
+    return fieldData;
+  }
+
+  /// Returns file for given [field] in form-data body. Returns null, if the field
+  /// is not found, not a file field or body is not form-data.
+  Future<TextFileFormField> getTextFile(String field) async {
+    final data = await bodyAsFormData();
+    if (data == null) return null;
+    final fieldData = data[field];
+    if (fieldData is! TextFileFormField) return null;
     return fieldData;
   }
 

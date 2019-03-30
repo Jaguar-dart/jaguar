@@ -60,8 +60,12 @@ class StringFormField implements FormField<String> {
   }
 }
 
+abstract class FileFormField<T> implements FormField<T> {
+  Future<void> writeTo(String path);
+}
+
 /// Text file field in the `multipart/form-data`
-class TextFileFormField implements FormField<Stream<String>> {
+class TextFileFormField implements FileFormField<Stream<String>> {
   /// Name of the field
   final String name;
 
@@ -129,7 +133,7 @@ class TextFileListFormField implements TextFileFormField {
 }
 
 /// Binary file field in the `multipart/form-data`
-class BinaryFileFormField implements FormField<Stream<List<int>>> {
+class BinaryFileFormField implements FileFormField<Stream<List<int>>> {
   /// Name of the field
   final String name;
 

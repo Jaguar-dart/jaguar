@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.35
+
++ `getBinaryFile` and `getTextFile` in `Context`
+
 ## 2.4.32
 
 + `WsStream` and `WsResponder` websocket handlers in controllers
