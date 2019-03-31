@@ -61,7 +61,7 @@ class StringFormField implements FormField<String> {
 }
 
 abstract class FileFormField<T> implements FormField<T> {
-  Future<void> writeTo(String path);
+  Future<File> writeTo(String path);
 }
 
 /// Text file field in the `multipart/form-data`
@@ -96,13 +96,15 @@ class TextFileFormField implements FileFormField<Stream<String>> {
   }
 
   /// Writes the contents of the file to file at [path]
-  Future<void> writeTo(String path, {Encoding encoding = utf8}) async {
-    IOSink sink = File(path).openWrite(encoding: encoding);
+  Future<File> writeTo(String path, {Encoding encoding = utf8}) async {
+    final file = File(path);
+    IOSink sink = file.openWrite(encoding: encoding);
     await for (String item in value) {
       sink.write(item);
     }
     await sink.flush();
-    return sink.close();
+    await sink.close();
+    return file;
   }
 }
 
@@ -128,7 +130,7 @@ class TextFileListFormField implements TextFileFormField {
       : values = values;
 
   /// Writes the contents of the file to file at [path]
-  Future<void> writeTo(String path, {Encoding encoding = utf8}) =>
+  Future<File> writeTo(String path, {Encoding encoding = utf8}) =>
       values.first.writeTo(path, encoding: encoding);
 }
 
@@ -162,13 +164,15 @@ class BinaryFileFormField implements FileFormField<Stream<List<int>>> {
   }
 
   /// Writes the contents of the file to file at [path]
-  Future<void> writeTo(String path) async {
-    IOSink sink = File(path).openWrite();
+  Future<File> writeTo(String path) async {
+    final file = File(path);
+    IOSink sink = file.openWrite();
     await for (List<int> item in value) {
       sink.add(item);
     }
     await sink.flush();
-    return sink.close();
+    await sink.close();
+    return file;
   }
 }
 
@@ -194,5 +198,5 @@ class BinaryFileListFormField implements BinaryFileFormField {
       : values = values;
 
   /// Writes the contents of the file to file at [path]
-  Future<void> writeTo(String path) => values.first.writeTo(path);
+  Future<File> writeTo(String path) => values.first.writeTo(path);
 }
