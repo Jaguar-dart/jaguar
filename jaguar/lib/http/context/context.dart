@@ -412,7 +412,7 @@ class Context {
 
     // Transform body to [MimeMultipart]
     final transformer = MimeMultipartTransformer(boundary);
-    final Stream<MimeMultipart> stream = bodyStream.transform(transformer);
+    final Stream<MimeMultipart> stream = transformer.bind(bodyStream);
 
     await for (MimeMultipart part in stream) {
       HttpMultipartFormData multipart = HttpMultipartFormData.parse(part);
