@@ -13,7 +13,7 @@ const int kPort = 8085;
 
 Future<Null> printHttpClientResponse(HttpClientResponse resp) async {
   StringBuffer contents = new StringBuffer();
-  await for (String data in resp.transform(utf8.decoder)) {
+  await for (String data in utf8.decoder.bind(resp)) {
     contents.write(data);
   }
 
