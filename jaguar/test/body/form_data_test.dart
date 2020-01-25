@@ -6,14 +6,17 @@ import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:http_parser/http_parser.dart';
+import '../ports.dart' as ports;
 
 void main() {
   resty.globalClient = new http.IOClient();
 
   group('body.form_data', () {
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = Jaguar(port: 10000);
+      print('Using port $port');
+      server = Jaguar(port: port);
       server.post('/form', (ctx) async {
         Map<String, FormField> form = await ctx.bodyAsFormData();
 
@@ -38,7 +41,7 @@ void main() {
     test(
         'read',
         () => resty
-            .post('http://localhost:10000/form')
+            .post('http://localhost:$port/form')
             .multipart({'string': 'Hello '})
             .multipartFile('binary', [1, 2])
             .multipartStringFile('text', "Hello world!",

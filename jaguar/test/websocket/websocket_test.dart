@@ -4,12 +4,15 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../ports.dart' as ports;
 
 void main() {
   group('Websocket', () {
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = Jaguar(port: 10000);
+      print('Using port $port');
+      server = Jaguar(port: port);
       server.wsEcho('/echo');
       server.wsStream('/stream',
           (ctx, ws) => Stream.fromIterable(["1", "2", "3", "4", "5"]));
@@ -23,7 +26,7 @@ void main() {
 
     test('Echo', () async {
       final WebSocket socket =
-          await WebSocket.connect('ws://localhost:10000/echo');
+          await WebSocket.connect('ws://localhost:$port/echo');
       socket.add('5');
       expect(await socket.first, '5');
       await socket.close();
@@ -31,7 +34,7 @@ void main() {
 
     test('Stream', () async {
       final WebSocket socket =
-          await WebSocket.connect('ws://localhost:10000/stream');
+          await WebSocket.connect('ws://localhost:$port/stream');
       final data = await socket.toList();
       expect(data, ["1", "2", "3", "4", "5"]);
       await socket.close();
@@ -39,7 +42,7 @@ void main() {
 
     test('Responder', () async {
       final WebSocket socket =
-          await WebSocket.connect('ws://localhost:10000/responder');
+          await WebSocket.connect('ws://localhost:$port/responder');
       socket.add(json.encode({'id': 1, 'content': 5}));
       expect(json.decode(await socket.first), {'id': 1, 'content': 6});
       await socket.close();

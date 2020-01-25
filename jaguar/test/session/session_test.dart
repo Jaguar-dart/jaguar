@@ -1,19 +1,23 @@
+library test.jaguar.session;
+
 import 'package:http/io_client.dart' as http;
 import 'package:http/http.dart' as http;
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:collection/collection.dart';
+import '../ports.dart' as ports;
 
 main() {
   resty.globalClient = http.IOClient();
 
   group("Session", () {
     final jar = new resty.CookieJar();
-
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 10000)
+      print('Using port $port');
+      server = new Jaguar(port: port)
         ..getJson('/api/add/:item', (ctx) async {
           final Session session = await ctx.session;
           final String newItem = ctx.pathParams['item'];
@@ -53,7 +57,7 @@ main() {
 
     test('ParseNUpdate', () async {
       await resty
-          .get('http://localhost:10000/api/add/Dog')
+          .get('http://localhost:$port/api/add/Dog')
           .before(jar)
           .go()
           .json<Map>()
@@ -61,7 +65,7 @@ main() {
         resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
       ]);
       await resty
-          .get('http://localhost:10000/api/add/Cat')
+          .get('http://localhost:$port/api/add/Cat')
           .before(jar)
           .go()
           .json<Map>()
@@ -69,7 +73,7 @@ main() {
         resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
       ]);
       await resty
-          .get('http://localhost:10000/api/add/Mink')
+          .get('http://localhost:$port/api/add/Mink')
           .before(jar)
           .go()
           .json<Map>()
@@ -77,7 +81,7 @@ main() {
         resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
       ]);
       await resty
-          .get('http://localhost:10000/api/remove/Cat')
+          .get('http://localhost:$port/api/remove/Cat')
           .before(jar)
           .go()
           .json<Map>()
@@ -85,7 +89,7 @@ main() {
         resty.bodyIs({"Action": "Removed"}, const MapEquality().equals)
       ]);
       await resty
-          .get('http://localhost:10000/api/remove/Cat')
+          .get('http://localhost:$port/api/remove/Cat')
           .before(jar)
           .go()
           .json<Map>()

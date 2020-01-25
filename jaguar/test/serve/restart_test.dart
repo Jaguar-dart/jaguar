@@ -5,14 +5,17 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../ports.dart' as ports;
 
 void main() {
   resty.globalClient = http.IOClient();
 
-  group('mux', () {
+  group('Restart', () {
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 10000);
+      print('Using port $port');
+      server = new Jaguar(port: port);
       server..get('/hello', (ctx) => 'Hello world!');
       await server.serve();
     });
@@ -23,11 +26,11 @@ void main() {
 
     test('Server.Restart', () async {
       await resty
-          .get('http://localhost:10000/hello')
+          .get('http://localhost:$port/hello')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'Hello world!');
       await server.restart();
       await resty
-          .get('http://localhost:10000/hello')
+          .get('http://localhost:$port/hello')
           .exact(statusCode: 200, mimeType: 'text/plain', body: 'Hello world!');
     });
   });
