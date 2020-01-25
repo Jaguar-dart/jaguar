@@ -15,6 +15,7 @@ import 'mux/mux_test.dart' as mux;
 
 import 'response/json/json_test.dart' as responseJson;
 import 'response/stream/stream_test.dart' as responseStream;
+import 'response/empty.dart' as responseEmpty;
 
 import 'serve/restart_test.dart' as serverRestart;
 
@@ -38,6 +39,7 @@ void main() {
 
   responseJson.main();
   responseStream.main();
+  responseEmpty.main();
 
   serverRestart.main();
 
