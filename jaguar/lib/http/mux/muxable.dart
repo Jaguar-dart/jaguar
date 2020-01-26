@@ -409,7 +409,8 @@ abstract class Muxable {
       String charset = kDefaultCharset,
       ResponseProcessor responseProcessor,
       bool stripPrefix = true,
-      Future<Response> directoryLister(Directory directory)}) {
+      Future<Response> directoryLister(Directory directory),
+      Iterable<String Function(File)> mimeTypes,}) {
     if (directory is String) directory = Directory(directory);
 
     final Directory dir = directory;
@@ -418,6 +419,18 @@ abstract class Muxable {
 
     Route route;
     int skipCount;
+
+    final mimeFunctions = []..addAll(mimeTypes ?? [])..add(MimeTypes.ofFile);
+    String determineMimeType(File f) {
+      for (var type in mimeFunctions) {
+        var result = type(f);
+        if (result != null) {
+          return result;
+        }
+      }
+      return null;
+    }
+
     route = this.get(path, (ctx) async {
       Iterable<String> segs = ctx.pathSegments;
       if (stripPrefix) segs = segs.skip(skipCount);
@@ -440,7 +453,7 @@ abstract class Muxable {
       }
 
       return StreamResponse(await file.openRead(),
-          mimeType: MimeTypes.ofFile(file));
+          mimeType: determineMimeType(file));
     },
         pathRegEx: pathRegEx,
         statusCode: statusCode,
