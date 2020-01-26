@@ -44,6 +44,10 @@ class Jaguar extends Object with Muxable {
 
   final onException = <ExceptionHandler>[];
 
+  static final void Function(HttpHeaders h) _noDefaults = (HttpHeaders h) {};
+
+  final void Function(HttpHeaders h) _defaultResponseHeaders;
+
   /// Logger used to log concise useful information about the request. This is
   /// also available in [Context] so that interceptors and route handlers can also
   /// log.
@@ -65,6 +69,7 @@ class Jaguar extends Object with Muxable {
   /// [errorWriter] is used to write custom error page [Response] in cases of HTTP
   /// errors.
   /// [sessionManager] provides ability to use custom session managers.
+  /// [defaultResponseHeaders] allows modifying the default response headers.
   Jaguar(
       {String address = "0.0.0.0",
       int port = 8080,
@@ -72,7 +77,8 @@ class Jaguar extends Object with Muxable {
       SecurityContext securityContext,
       this.autoCompress = false,
       ErrorWriter errorWriter,
-      SessionManager sessionManager})
+      SessionManager sessionManager,
+      void Function(HttpHeaders headers) defaultResponseHeaders,})
       : errorWriter = errorWriter ?? DefaultErrorWriter(),
         sessionManager = sessionManager ?? JaguarSessionManager(),
         _connectionInfos = [
@@ -81,7 +87,9 @@ class Jaguar extends Object with Muxable {
               port: port,
               securityContext: securityContext,
               multiThread: multiThread)
-        ];
+        ],
+        _defaultResponseHeaders = defaultResponseHeaders ?? _noDefaults
+      ;
 
   /// Start listening for requests also on [connection]
   void alsoTo(ConnectTo connection) {
@@ -110,6 +118,7 @@ class Jaguar extends Object with Muxable {
               shared: ct.multiThread);
         }
         _server[i].autoCompress = autoCompress;
+        _defaultResponseHeaders(_server[i].defaultResponseHeaders);
       }
     } catch (e) {
       for (int i = 0; i < _connectionInfos.length; i++) {

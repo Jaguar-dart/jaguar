@@ -7,6 +7,9 @@ import 'body/path_params_test.dart' as bodyPathParams;
 import 'body/query_params_test.dart' as bodyQueryParams;
 import 'body/url_encoded_form_test.dart' as bodyUrlEncodedForm;
 
+import 'headers/modified.dart' as headersModified;
+import 'headers/unmodified.dart' as headersUnmodified;
+
 import 'interceptor/after/after_test.dart' as interceptAfter;
 import 'interceptor/before/before_test.dart' as interceptBefore;
 import 'interceptor/exception/exception_test.dart' as interceptException;
@@ -29,6 +32,9 @@ void main() {
   bodyPathParams.main();
   bodyQueryParams.main();
   bodyUrlEncodedForm.main();
+
+  headersModified.main();
+  headersUnmodified.main();
 
   interceptAfter.main();
   interceptBefore.main();
