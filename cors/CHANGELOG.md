@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0
+
++ `cors` replaces `CORS`
+
 ## 2.4.2
 
 + Added `cors` method.

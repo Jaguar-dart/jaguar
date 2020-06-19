@@ -12,18 +12,18 @@ const String baseUrl = 'http://localhost:10000';
 void main() {
   resty.globalClient = http.Client();
 
-  group('A group of tests', () {
+  group('cors tests', () {
     final server = Jaguar(port: 10000);
 
     setUp(() async {
-      server.get('/none', (_) => 'none', before: [Cors(CorsOptions())]);
+      server.get('/none', (_) => 'none', before: [cors(CorsOptions())]);
 
       {
         final options = CorsOptions(
             allowedOrigins: ['http://example.com', 'http://example1.com'],
             allowAllMethods: true,
             allowAllHeaders: true);
-        server.get('/origins', (_) => 'origins', before: [Cors(options)]);
+        server.get('/origins', (_) => 'origins', before: [cors(options)]);
       }
 
       {
@@ -32,7 +32,7 @@ void main() {
             allowAllMethods: true,
             allowAllHeaders: true);
         server.route('/origins', (_) => 'preflight',
-            methods: ['OPTIONS'], before: [Cors(options)]);
+            methods: ['OPTIONS'], before: [cors(options)]);
       }
 
       await server.serve();

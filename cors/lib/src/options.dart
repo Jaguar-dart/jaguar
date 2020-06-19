@@ -1,6 +1,6 @@
 part of jaguar_cors;
 
-/// CORS options to configure [Cors] Interceptor
+/// CORS options to configure [_Cors] Interceptor
 class CorsOptions {
   /// Allow all origins
   ///
