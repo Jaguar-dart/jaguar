@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.38
+
++ Use the response exception, before onException is called
+
 ## 2.4.37
 
 + `group` method inherits interceptors and exception handlers
