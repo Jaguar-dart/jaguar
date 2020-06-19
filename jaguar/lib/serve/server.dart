@@ -218,7 +218,10 @@ class Jaguar extends Object with Muxable {
   }
 
   /// Create a new route group
-  GroupBuilder group([String path = '']) => GroupBuilder(this, path: path);
+  GroupBuilder group([String path = '']) => GroupBuilder(this, path: path)
+    ..before.addAll(before)
+    ..after.addAll(after)
+    ..onException.addAll(onException);
 
   /// Adds all the given [routes] to be served
   void add(Iterable<Route> routes) {

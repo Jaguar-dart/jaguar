@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.37
+
++ `group` method inherits interceptors and exception handlers
+
 ## 2.4.35
 
 + `getBinaryFile` and `getTextFile` in `Context`

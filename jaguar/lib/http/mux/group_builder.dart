@@ -28,5 +28,8 @@ class GroupBuilder extends Object with Muxable {
   }
 
   GroupBuilder group({String path = ''}) =>
-      GroupBuilder(parent, path: this.path + path);
+      GroupBuilder(parent, path: this.path + path)
+        ..before.addAll(before)
+        ..after.addAll(after)
+        ..onException.addAll(onException);
 }
