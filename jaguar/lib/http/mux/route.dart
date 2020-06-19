@@ -5,12 +5,12 @@ part of jaguar.mux;
 ///
 /// [exception] is the exception that occurred. [trace] is the stack trace is the
 /// of the exception.
-typedef FutureOr<dynamic> ExceptionHandler(
+typedef FutureOr<void> ExceptionHandler(
     Context ctx, exception, StackTrace trace);
 
 /// Prototype of route interceptor. A router interceptor is a function that runs
 /// before or after the route handler.
-typedef FutureOr<Result> RouteInterceptor<Result>(Context ctx);
+typedef FutureOr<void> RouteInterceptor<Result>(Context ctx);
 
 /// An interceptor based on Dart class.
 ///

@@ -9,7 +9,8 @@ import 'package:jaguar/jaguar.dart';
 
 final Random rand = new Random.secure();
 
-Response handleException(Context ctx, e, s) => Response('exception');
+Response handleException(Context ctx, e, s) =>
+    ctx.response = Response('exception');
 
 void main() {
   resty.globalClient = new http.IOClient();

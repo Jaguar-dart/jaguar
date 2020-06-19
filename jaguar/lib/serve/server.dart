@@ -174,13 +174,10 @@ class Jaguar extends Object with Muxable {
         }
 
         for (int i = ctx.onException.length - 1; i >= 0; i--) {
-          maybeFuture = ctx.onException[i](ctx, e, stack);
-          if (maybeFuture is Future) maybeFuture = await maybeFuture;
-          if (maybeFuture is Response) {
-            ctx.response = maybeFuture;
-          } else if (maybeFuture is ExceptionWithResponse) {
-            ctx.response = maybeFuture.response;
-          }
+          try {
+            var maybeFuture = ctx.onException[i](ctx, e, stack);
+            if (maybeFuture is Future) await maybeFuture;
+          } finally {}
         }
       } catch (e) {
         ctx.response = Response('General technical error', statusCode: 500);

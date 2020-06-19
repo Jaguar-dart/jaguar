@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.40
+
++ Exception handling of routes
+
 ## 2.4.39
 
 + Exception handling of routes
