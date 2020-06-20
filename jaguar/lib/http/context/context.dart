@@ -29,6 +29,9 @@ import 'package:http_server/http_server.dart';
 /// Example showing how to access query parameters using [Context] object.
 ///     int add(Context ctx) => ctx.query.getInt('a') + ctx.query.getInt('b');
 class Context {
+  /// When the request arrived
+  final DateTime at;
+
   /// Uri of the HTTP request
   Uri get uri => req.uri;
 
@@ -124,8 +127,10 @@ class Context {
       this.before,
       this.after,
       this.onException,
-      Map<String, CodecRepo> serializers})
-      : _serializers = serializers ?? <String, CodecRepo>{};
+      Map<String, CodecRepo> serializers,
+      DateTime at})
+      : _serializers = serializers ?? <String, CodecRepo>{},
+        at = at ?? DateTime.now().toUtc();
 
   final _variables = <Type, Map<String, dynamic>>{};
 

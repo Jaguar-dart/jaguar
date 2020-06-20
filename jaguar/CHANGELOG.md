@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.42
+
++ `Context.at` shows when the request arrived
+
 ## 2.4.41
 
 + `Jaguar.onRouteServed` callback
