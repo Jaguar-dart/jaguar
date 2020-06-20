@@ -428,14 +428,14 @@ abstract class Muxable {
       if (!await file.exists()) {
         final fileDir = Directory(path);
 
-        if (!await fileDir.exists()) return Builtin404ErrorResponse();
+        if (!await fileDir.exists()) return Response(null, statusCode: 404);
 
         path = p.join(path, 'index.html');
         file = File(path);
 
         if (!await file.exists()) {
           if (directoryLister != null) return directoryLister(fileDir);
-          return Builtin404ErrorResponse();
+          return Response(null, statusCode: 404);
         }
       }
 

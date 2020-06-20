@@ -8,36 +8,6 @@ import 'package:jaguar/jaguar.dart';
 part 'template_404.dart';
 part 'template_500.dart';
 
-abstract class BuiltinErrorResponse {
-  FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter);
-}
-
-class Builtin404ErrorResponse extends Response<String>
-    implements BuiltinErrorResponse {
-  Builtin404ErrorResponse() : super(null, statusCode: 404);
-
-  FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter) {
-    final resp = errorWriter.make404(ctx);
-    // TODO
-    return resp;
-  }
-}
-
-class Builtin500ErrorResponse extends Response<String>
-    implements BuiltinErrorResponse {
-  Object error;
-
-  StackTrace trace;
-
-  Builtin500ErrorResponse() : super(null, statusCode: 500);
-
-  FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter) {
-    final resp = errorWriter.make500(ctx, error, trace);
-    // TODO
-    return resp;
-  }
-}
-
 /// Error writer interface
 ///
 /// Error writer is used by [Jaguar] server to write 404 and 500 errors

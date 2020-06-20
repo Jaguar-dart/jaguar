@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.41
+
++ `Jaguar.onRouteServed` callback
+
 ## 2.4.40
 
 + Exception handling of routes

@@ -49,6 +49,8 @@ class Jaguar extends Object with Muxable {
   /// log.
   final log = Logger('J');
 
+  final FutureOr<void> Function(Context ctx) onRouteServed;
+
   /// Internal http server
   List<HttpServer> _server;
 
@@ -65,15 +67,16 @@ class Jaguar extends Object with Muxable {
   /// [errorWriter] is used to write custom error page [Response] in cases of HTTP
   /// errors.
   /// [sessionManager] provides ability to use custom session managers.
-  Jaguar(
-      {String address = "0.0.0.0",
-      int port = 8080,
-      bool multiThread = false,
-      SecurityContext securityContext,
-      this.autoCompress = false,
-      ErrorWriter errorWriter,
-      SessionManager sessionManager})
-      : errorWriter = errorWriter ?? DefaultErrorWriter(),
+  Jaguar({
+    String address = "0.0.0.0",
+    int port = 8080,
+    bool multiThread = false,
+    SecurityContext securityContext,
+    this.autoCompress = false,
+    ErrorWriter errorWriter,
+    SessionManager sessionManager,
+    this.onRouteServed,
+  })  : errorWriter = errorWriter ?? DefaultErrorWriter(),
         sessionManager = sessionManager ?? JaguarSessionManager(),
         _connectionInfos = [
           ConnectTo(
@@ -154,33 +157,28 @@ class Jaguar extends Object with Muxable {
         _routeTree.match(request.uri.pathSegments, request.method);
     if (handler == null) {
       ctx.response = await errorWriter.make404(ctx);
-      await ctx.response.writeResponse(request.response);
-      return request.response.close();
-    }
-
-    try {
-      await handler(ctx);
-      if (ctx.response is BuiltinErrorResponse)
-        ctx.response = await (ctx.response as BuiltinErrorResponse)
-            .convertToError(ctx, errorWriter);
-    } catch (e, stack) {
+    } else {
       try {
-        if (e is Response) {
-          ctx.response = e;
-        } else if (e is ExceptionWithResponse) {
-          ctx.response = e.response;
-        } else {
-          ctx.response = await errorWriter.make500(ctx, e, stack);
-        }
+        await handler(ctx);
+      } catch (e, stack) {
+        try {
+          if (e is Response) {
+            ctx.response = e;
+          } else if (e is ExceptionWithResponse) {
+            ctx.response = e.response;
+          } else {
+            ctx.response = await errorWriter.make500(ctx, e, stack);
+          }
 
-        for (int i = ctx.onException.length - 1; i >= 0; i--) {
-          try {
-            var maybeFuture = ctx.onException[i](ctx, e, stack);
-            if (maybeFuture is Future) await maybeFuture;
-          } finally {}
+          for (int i = ctx.onException.length - 1; i >= 0; i--) {
+            try {
+              var maybeFuture = ctx.onException[i](ctx, e, stack);
+              if (maybeFuture is Future) await maybeFuture;
+            } finally {}
+          }
+        } catch (e) {
+          ctx.response = Response('General technical error', statusCode: 500);
         }
-      } catch (e) {
-        ctx.response = Response('General technical error', statusCode: 500);
       }
     }
 
@@ -193,8 +191,12 @@ class Jaguar extends Object with Muxable {
           if (maybeFuture is Future) await maybeFuture;
         }
 
-        if (ctx.response != null)
+        if (ctx.response != null) {
           await ctx.response.writeResponse(request.response);
+          if (onRouteServed != null) {
+            Future.microtask(() => onRouteServed(ctx));
+          }
+        }
       } catch (e, stack) {
         log.warning('${e.toString()}\n${stack.toString()}');
       }
