@@ -122,4 +122,10 @@ class QueryParams extends CastableStringMap {
   QueryParams(Map<String, dynamic> map) : super(map);
 
   QueryParams.FromQueryParam(QueryParams param) : super(param);
+
+  String toString() => this
+      .entries
+      .map((e) =>
+          '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}')
+      .join('&');
 }
