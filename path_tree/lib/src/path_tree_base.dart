@@ -124,7 +124,7 @@ class PathTree<T> {
         }
         if (next == null) {
           if (subTree.varSubTree != null) {
-            if (subTree.globValue != null) {
+            if (subTree.globValue.isNotEmpty) {
               T ret = _match(subTree.varSubTree, segments.skip(i + 1), tag);
               if (ret != null) return ret;
               ret = subTree.globValue[tag] ?? subTree.globValue['*'];

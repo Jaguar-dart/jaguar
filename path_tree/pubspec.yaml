@@ -1,12 +1,12 @@
 name: path_tree
 description: A fast data structure to match HTTP URL routes. Also handles regular expression (regexp) and glob path segments.
-version: 2.2.2
+version: 2.2.4
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 homepage: http://jaguar-dart.github.io
 
 environment:
-  sdk: '>=2.0.0-dev.68.0 <3.0.0'
+  sdk: '>=2.1.0 <3.0.0'
 
 #dependencies:
 #  path: ^1.4.1
