@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.44
+
++ Upgraded `path_tree` dependency to version `2.4.44`
+
 ## 2.4.43
 
 + `QueryParams.toString()`
