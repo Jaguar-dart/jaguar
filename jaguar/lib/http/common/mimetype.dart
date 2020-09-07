@@ -6,6 +6,9 @@ abstract class MimeTypes {
   /// Mime type for HTML
   static const String html = "text/html";
 
+  /// Mime type for XHTML
+  static const String xhtml = "application/xhtml+xml";
+
   /// Mime type for Javascript
   static const String javascript = "application/javascript";
 
@@ -71,6 +74,7 @@ abstract class MimeTypes {
   /// Map of file extension to mime type
   static const fromFileExtension = const <String, String>{
     "html": html,
+    "xhtml": xhtml,
     "js": javascript,
     "css": css,
     "dart": dart,
