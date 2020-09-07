@@ -439,7 +439,7 @@ abstract class Muxable {
         }
       }
 
-      return StreamResponse(await file.openRead(),
+      return StreamResponse(file.openRead(),
           mimeType: MimeTypes.ofFile(file));
     },
         pathRegEx: pathRegEx,
@@ -473,7 +473,7 @@ abstract class Muxable {
     return this.get(
         path,
         (_) async =>
-            StreamResponse(await f.openRead(), mimeType: MimeTypes.ofFile(f)),
+            StreamResponse(f.openRead(), mimeType: MimeTypes.ofFile(f)),
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,
