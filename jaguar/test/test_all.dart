@@ -21,6 +21,8 @@ import 'serve/restart_test.dart' as serverRestart;
 
 import 'session/session_test.dart' as session;
 
+import 'static_file/static_files_tests.dart' as staticFiles;
+
 import 'websocket/websocket_test.dart' as websocket;
 
 void main() {
@@ -44,6 +46,8 @@ void main() {
   serverRestart.main();
 
   session.main();
+
+  staticFiles.main();
 
   websocket.main();
 }
