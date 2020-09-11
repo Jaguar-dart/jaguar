@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../../ports.dart' as ports;
 
 void bef(Context ctx) => ctx.addVariable(5);
 
@@ -24,9 +25,11 @@ main() {
   resty.globalClient = new http.IOClient();
 
   group('After', () {
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = new Jaguar(port: 10000);
+      print('Using port $port');
+      server = new Jaguar(port: port);
       server
         ..get('/aft', (_) => null, after: [aft1])
         ..get('/befaft', (_) => null, before: [bef], after: [aft])
@@ -41,19 +44,19 @@ main() {
     test(
         'After',
         () => resty
-            .get('http://localhost:10000/aft')
+            .get('http://localhost:$port/aft')
             .exact(statusCode: 200, mimeType: 'text/plain', body: 'aft1'));
 
     test(
         'Before&After',
         () => resty
-            .get('http://localhost:10000/befaft')
+            .get('http://localhost:$port/befaft')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '25'));
 
     test(
         'ProgramaticAfter',
         () => resty
-            .get('http://localhost:10000/progaft')
+            .get('http://localhost:$port/progaft')
             .exact(statusCode: 200, mimeType: 'text/plain', body: '50'));
   });
 }

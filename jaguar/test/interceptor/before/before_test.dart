@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../../ports.dart' as ports;
 
 final Random rand = new Random.secure();
 
@@ -22,9 +23,11 @@ void main() {
   resty.globalClient = new http.IOClient();
 
   group('Custom interceptor:Generated', () {
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = Jaguar(port: 10000);
+      print('Using port $port');
+      server = Jaguar(port: port);
       server
         ..getJson(
             '/two',
@@ -43,7 +46,7 @@ void main() {
     test(
         'one interceptor',
         () => resty
-                .get('http://localhost:10000/two')
+                .get('http://localhost:$port/two')
                 .exact(statusCode: 200, mimeType: 'application/json')
                 .decodeJson<Map>()
                 .then((Map body) {

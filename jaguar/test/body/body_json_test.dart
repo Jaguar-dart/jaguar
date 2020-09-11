@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../ports.dart' as ports;
 
 class InputModel {
   InputModel(this.input1, this.input2);
@@ -30,9 +31,11 @@ void main() {
   resty.globalClient = http.IOClient();
 
   group('data.body.json', () {
+    final port = ports.random;
     Jaguar server;
     setUpAll(() async {
-      server = Jaguar(port: 10000);
+      print('Using port $port');
+      server = Jaguar(port: port);
       server
         ..post('/one/map', (ctx) async {
           final Map body = await ctx.bodyAsJsonMap();
@@ -67,35 +70,35 @@ void main() {
     test(
         'One.Map',
         () => resty
-            .post('http://localhost:10000/one/map')
+            .post('http://localhost:$port/one/map')
             .json(new InputModel(5, 15))
             .exact(statusCode: 200, body: '20', mimeType: 'text/plain'));
 
     test(
         'One.Convert',
         () => resty
-            .post('http://localhost:10000/one/convert')
+            .post('http://localhost:$port/one/convert')
             .json(new InputModel(30, 5))
             .exact(statusCode: 200, body: '25', mimeType: 'text/plain'));
 
     test(
         'Many.List',
         () => resty
-            .post('http://localhost:10000/many/list')
+            .post('http://localhost:$port/many/list')
             .json([new InputModel(5, 15), new InputModel(50, 55)]).exact(
                 statusCode: 200, body: '(20, 105)', mimeType: 'text/plain'));
 
     test(
         'Many.Convert',
         () => resty
-            .post('http://localhost:10000/many/convert')
+            .post('http://localhost:$port/many/convert')
             .json([new InputModel(30, 5), new InputModel(75, 20)]).exact(
                 statusCode: 200, body: '(25, 55)', mimeType: 'text/plain'));
 
     test(
         'primitive',
         () => resty
-            .put('http://localhost:10000/primitive')
+            .put('http://localhost:$port/primitive')
             .body('4')
             .exact(statusCode: 200, body: '8', mimeType: 'text/plain'));
   });
