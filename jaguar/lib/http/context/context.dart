@@ -149,11 +149,11 @@ class Context {
       }
     }
 
-    if (T == dynamic) {
-      return null;
-    }
-
     if (id == null) {
+      if (T == dynamic) {
+        return null;
+      }
+
       for (map in _variables.values) {
         for (dynamic v in map.values) {
           if (v is T) return v;
