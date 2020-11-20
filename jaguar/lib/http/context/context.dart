@@ -161,6 +161,7 @@ class Context {
       }
     } else {
       for (map in _variables.values) {
+        if (!map.containsKey(id)) continue;
         if (map[id] is T) return map[id];
       }
     }

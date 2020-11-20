@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.46
+
++ `Context.getVariable` returns by id if T is dynamic
+
 ## 2.4.45
 
 + `Context.getVariable` returns by id if T is dynamic
