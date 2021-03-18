@@ -1,8 +1,4 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// Library to build and match HTTP routes based on path
 library path_tree;
 
 export 'src/path_tree_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.

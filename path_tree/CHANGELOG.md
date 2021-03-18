@@ -1,3 +1,7 @@
+## 3.0.0
+
++ Migrated to null safety
+
 ## 2.2.4
 
 + Bug fixes
