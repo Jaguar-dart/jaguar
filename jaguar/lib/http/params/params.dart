@@ -3,7 +3,7 @@ library jaguar.src.http.params;
 
 import 'package:collection/collection.dart' show DelegatingMap;
 
-import 'package:jaguar/utils/string/import.dart';
+import 'package:jaguar/utils/string/string.dart';
 
 class CastableStringMap extends DelegatingMap<String, String> {
   CastableStringMap(Map<String, String> map) : super(map);

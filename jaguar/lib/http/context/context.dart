@@ -13,6 +13,9 @@ import 'package:auth_header/auth_header.dart';
 import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
 
+import '../http.dart';
+import '../params/params.dart';
+
 /// Per-request context object that encapsulates all the data corresponding to
 /// a HTTP request and provides a way to write [response]. It provides various
 /// convenience methods and getters to access HTTP request data:

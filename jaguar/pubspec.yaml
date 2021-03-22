@@ -10,13 +10,13 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  http_server: ^0.9.7
-  mime: ^0.9.6
-  logging: ^0.11.3
+  http_server: ^1.0.0
+  mime: ^1.0.0
+  logging: ^1.0.0
   stack_trace: ^1.9.2
   path: ^1.6.1
   collection: ^1.14.6
-  crypto: ^2.0.5
+  crypto: ^3.0.0
   auth_header: ^2.1.2
   jaguar_common: ^2.1.1
   path_tree: ^2.2.4
@@ -24,7 +24,7 @@ dependencies:
   meta: ">1.1.0 <2.0.0"
 
 dev_dependencies:
-  analyzer: ^0.32.0
+  analyzer: ^1.2.0
   test: ^1.5.1
   jaguar_resty: ^2.10.1
   http: ^0.12.0
