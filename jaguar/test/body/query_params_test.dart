@@ -8,18 +8,18 @@ import 'package:jaguar/jaguar.dart';
 import '../ports.dart' as ports;
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('params.query', () {
     final port = ports.random;
     Jaguar server;
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
+      server = Jaguar(port: port);
       server
         ..get('/str', (ctx) => ctx.query['param'])
-        ..get('/int', (ctx) => ctx.query.getInt('param', 5) * 10)
-        ..get('/double', (ctx) => ctx.query.getDouble('param', 5.5) * 10);
+        ..get('/int', (ctx) => ctx.query.getInt('param', 5)! * 10)
+        ..get('/double', (ctx) => ctx.query.getDouble('param', 5.5)! * 10);
       await server.serve();
     });
 

@@ -13,19 +13,19 @@ void main() {
 
   group('params.cookies', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
       server = Jaguar(port: port);
-      server
+      server!
         ..get('/cookie/read', (ctx) {
           return ctx.cookies['user']?.value;
         });
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test(

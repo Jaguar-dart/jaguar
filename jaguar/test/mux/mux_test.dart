@@ -8,15 +8,15 @@ import 'package:jaguar/jaguar.dart';
 import '../ports.dart' as ports;
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('mux', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
-      server
+      server = Jaguar(port: port);
+      server!
         ..get('/hello', (ctx) {
           ctx.response = Response('Hello world!');
         })
@@ -29,11 +29,11 @@ void main() {
         ..postJson('/json', (ctx) => {'method': 'post'})
         ..putJson('/json', (ctx) => {'method': 'put'})
         ..deleteJson('/json', (ctx) => {'method': 'delete'});
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test('GET.SetResponse', () async {

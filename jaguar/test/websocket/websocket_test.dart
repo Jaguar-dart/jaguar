@@ -9,7 +9,7 @@ import '../ports.dart' as ports;
 void main() {
   group('Websocket', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar server = Jaguar();
     setUpAll(() async {
       print('Using port $port');
       server = Jaguar(port: port);

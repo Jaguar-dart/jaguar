@@ -9,33 +9,33 @@ import 'package:http_parser/http_parser.dart';
 import '../ports.dart' as ports;
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('body.form_data', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
       server = Jaguar(port: port);
-      server.post('/form', (ctx) async {
+      server!.post('/form', (ctx) async {
         Map<String, FormField> form = await ctx.bodyAsFormData();
 
-        StringFormField string = form['string'];
-        BinaryFileFormField binary = form['binary'];
-        TextFileFormField text = form['text'];
+        final string = form['string'] as StringFormField;
+        final binary = form['binary'] as BinaryFileFormField;
+        final text = form['text']! as TextFileFormField;
 
         List<int> binaryData = (await binary.value.toList())
-            .fold([], (List a, List b) => a..addAll(b));
+            .fold(<int>[], (List<int> a, List<int> b) => a..addAll(b));
 
         String textData = await text.value.first;
 
         return "${string.value}${binaryData[0]}${binaryData[1]}${textData}";
       });
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test(

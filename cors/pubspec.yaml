@@ -10,7 +10,7 @@ environment:
   sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
-  jaguar: ^2.4.38
+  jaguar: ^2.4.39
 
 dev_dependencies:
   test:

@@ -7,12 +7,12 @@ class Redirect extends Response<Uri> {
   Redirect(
     Uri value, {
     statusCode = HttpStatus.movedPermanently,
-    Map<String, dynamic> headers,
+    Map<String, dynamic>? headers,
   }) : super(value, statusCode: statusCode, headers: headers);
 
   /// Performs 'moved temporarily' (status code: 302) redirect
   factory Redirect.found(value,
-          {Map<String, dynamic> headers,
+          {Map<String, dynamic>? headers,
           statusCode = HttpStatus.movedTemporarily}) =>
       Redirect(
         value,
@@ -21,8 +21,11 @@ class Redirect extends Response<Uri> {
       );
 
   /// Performs 'see other' (status code: 303) redirect
-  factory Redirect.seeOther(value,
-          {Map<String, dynamic> headers, statusCode = HttpStatus.seeOther}) =>
+  factory Redirect.seeOther(
+    value, {
+    Map<String, dynamic>? headers,
+    statusCode = HttpStatus.seeOther,
+  }) =>
       Redirect(
         value,
         headers: headers,
@@ -31,7 +34,7 @@ class Redirect extends Response<Uri> {
 
   /// Performs 'temporary redirect' (status code: 307) redirect
   factory Redirect.temporaryRedirect(value,
-          {Map<String, dynamic> headers,
+          {Map<String, dynamic>? headers,
           statusCode = HttpStatus.temporaryRedirect}) =>
       Redirect(
         value,
@@ -40,8 +43,11 @@ class Redirect extends Response<Uri> {
       );
 
   /// Performs 'permanent redirect' (status code: 308) redirect
-  factory Redirect.permanentRedirect(value,
-          {Map<String, dynamic> headers, statusCode = 308}) =>
+  factory Redirect.permanentRedirect(
+    value, {
+    Map<String, dynamic>? headers,
+    statusCode = 308,
+  }) =>
       Redirect(
         value,
         headers: headers,

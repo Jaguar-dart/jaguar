@@ -8,23 +8,23 @@ import 'package:jaguar/jaguar.dart';
 import '../ports.dart' as ports;
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('params.path', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
-      server
+      server = Jaguar(port: port);
+      server!
         ..get('/str/:id', (ctx) => ctx.pathParams['id'])
-        ..get('/int/:id', (ctx) => ctx.pathParams.getInt('id', 5) * 10)
-        ..get('/double/:id', (ctx) => ctx.pathParams.getDouble('id', 5.5) * 10);
-      await server.serve();
+        ..get('/int/:id', (ctx) => ctx.pathParams.getInt('id', 5)! * 10)
+        ..get('/double/:id', (ctx) => ctx.pathParams.getDouble('id', 5.5)! * 10);
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test('string', () async {

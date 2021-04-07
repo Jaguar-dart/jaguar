@@ -32,9 +32,9 @@ class Response<ValueType> {
 
   Response(this.value,
       {this.statusCode = 200,
-      Map<String, dynamic> headers,
-      String mimeType,
-      String charset = kDefaultCharset}) {
+      Map<String, dynamic>? headers,
+      String? mimeType,
+      String? charset = kDefaultCharset}) {
     if (headers != null)
       for (final String name in headers.keys) {
         this.headers.add(name, headers[name]);
@@ -45,9 +45,9 @@ class Response<ValueType> {
   }
 
   static Response<String> json<ST>(ST value,
-      {dynamic serializeWith(ST value),
+      {dynamic serializeWith(ST value)?,
       int statusCode = HttpStatus.ok,
-      Map<String, dynamic> headers,
+      Map<String, dynamic>? headers,
       String mimeType = MimeTypes.json,
       String charset = kDefaultCharset}) {
     String data =
@@ -63,7 +63,7 @@ class Response<ValueType> {
 
   static Response<String> html(String html,
       {int statusCode = HttpStatus.ok,
-      Map<String, dynamic> headers,
+      Map<String, dynamic>? headers,
       String mimeType = MimeTypes.html,
       String charset = kDefaultCharset}) {
     return Response<String>(
@@ -89,8 +89,9 @@ class Response<ValueType> {
   void writeAllButBody(HttpResponse resp) {
     resp.statusCode = statusCode;
 
-    for (dynamic name in headers.headers.keys)
-      resp.headers.set(name, headers.headers[name]);
+    for (dynamic name in headers.headers.keys) {
+      resp.headers.set(name, headers.headers[name]!);
+    }
 
     resp.cookies.addAll(cookies);
   }

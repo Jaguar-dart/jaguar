@@ -12,16 +12,16 @@ void main() {
 
   group('response', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
       server = Jaguar(port: port);
-      server..get('/empty', (ctx) {});
-      await server.serve();
+      server!..get('/empty', (ctx) {});
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test('empty', () async {

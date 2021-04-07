@@ -12,10 +12,10 @@ void main() {
 
   group('Restart', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar server = Jaguar();
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
+      server = Jaguar(port: port);
       server..get('/hello', (ctx) => 'Hello world!');
       await server.serve();
     });

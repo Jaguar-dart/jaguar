@@ -21,24 +21,24 @@ class _Info {
 }
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('Response.Json', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar server = Jaguar();
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
+      server = Jaguar(port: port);
       server
         ..getJson(
             '/response_processor/podo',
             (Context ctx) =>
-                new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']))
+                _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']))
         ..getJson('/response_processor/nums', (Context ctx) => <int>[1, 2, 3])
         ..get(
             '/strresponse/podo',
             (Context ctx) => Response.json(
-                new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity'])))
+                _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity'])))
         ..get('/strresponse/nums',
             (Context ctx) => Response.json(<int>[1, 2, 3]));
       await server.serve();

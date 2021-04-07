@@ -67,7 +67,7 @@ class Context {
   ///     });
   final pathParams = PathParams();
 
-  QueryParams _query;
+  QueryParams? _query;
 
   /// Returns query parameters of the request
   ///
@@ -79,29 +79,24 @@ class Context {
   ///       final int index = ctx.query.getInt('index', 1); // The magic!
   ///       return quotes[index + 1];
   ///     });
-  QueryParams get query {
-    if (_query != null) return _query;
-
-    _query = new QueryParams(req.uri.queryParameters);
-    return _query;
-  }
+  QueryParams get query => _query ??= QueryParams(req.uri.queryParameters);
 
   /// The registered route that matched the HTTP request.
-  Route route;
+  Route? route;
 
   /// Session manager to parse and write session data.
-  SessionManager sessionManager;
+  SessionManager? sessionManager;
 
   /// User fetchers for authentication and authorization.
   final Map<Type, UserFetcher<AuthorizationUser>> userFetchers;
 
-  Session _session;
+  Session? _session;
 
   /// Does the session need update?
-  bool get sessionNeedsUpdate => _session != null && _session.needsUpdate;
+  bool get sessionNeedsUpdate => _session != null && _session!.needsUpdate;
 
   /// Parsed session. Returns null, if the session is not parsed yet.
-  Session get parsedSession => _session;
+  Session? get parsedSession => _session;
 
   /// The session for the given request.
   ///
@@ -112,8 +107,8 @@ class Context {
   ///       session['item'] = ctx.pathParams.item;
   ///       // ...
   ///     });
-  Future<Session> get session async =>
-      _session ??= await sessionManager.parse(this);
+  Future<Session?> get session async =>
+      _session ??= await sessionManager?.parse(this);
 
   /// Logger that can be used to log from middlerware and route handlers.
   final Logger log;
@@ -122,13 +117,13 @@ class Context {
 
   Context(this.req,
       {this.sessionManager,
-      this.log,
-      this.userFetchers,
-      this.before,
-      this.after,
-      this.onException,
-      Map<String, CodecRepo> serializers,
-      DateTime at})
+      required this.log,
+      required this.userFetchers,
+      required this.before,
+      required this.after,
+      required this.onException,
+      Map<String, CodecRepo>? serializers,
+      DateTime? at})
       : _serializers = serializers ?? <String, CodecRepo>{},
         at = at ?? DateTime.now().toUtc();
 
@@ -138,9 +133,9 @@ class Context {
   ///
   /// Lets query for context variables by [id] and [type]. The variables are
   /// added using [addVariable] method in middleware or route handler.
-  T getVariable<T>({String id, Type type}) {
+  T? getVariable<T>({String? id, Type? type}) {
     type ??= T;
-    Map<String, dynamic> map = _variables[type];
+    Map<String, dynamic>? map = _variables[type];
     if (map != null) {
       if (id == null)
         return map.values.first;
@@ -170,34 +165,32 @@ class Context {
   }
 
   /// Adds variable by type and id
-  void addVariable<T>(T value, {String id}) {
+  void addVariable<T>(T value, {String id = ''}) {
     if (!_variables.containsKey(value.runtimeType)) {
       _variables[value.runtimeType] = {id: value};
     } else {
-      _variables[value.runtimeType][id] = value;
+      _variables[value.runtimeType]![id] = value;
     }
   }
 
   /// Headers in the HTTP request.
   HttpHeaders get headers => req.headers;
 
-  MimeType _mimeType;
+  ContentType? get contentType => req.headers.contentType;
 
-  void _parseContentType() {
-    if (req.headers['content-type'] != null) {
-      String contentTypeStr = req.headers.value('content-type');
-      _mimeType = MimeType.parse(contentTypeStr);
-    } else {
-      _mimeType = MimeType.binary;
+  MimeType? _mimeType;
+
+  MimeType _parseMimeType() {
+    final contentType = this.contentType;
+    if (contentType == null) {
+      return MimeType.octetStream;
     }
-    // TODO charset
+
+    return MimeType(contentType.primaryType, contentType.subType);
   }
 
   /// Returns mime type of the HTTP request
-  MimeType get mimeType {
-    if (_mimeType == null) _parseContentType();
-    return _mimeType;
-  }
+  MimeType get mimeType => _mimeType ??= _parseMimeType();
 
   /// Returns true if the mime type of HTTP request is JSON.
   bool get isJson => mimeType.isJson;
@@ -208,24 +201,27 @@ class Context {
   /// Returns true if the mime type of HTTP request is form-data.
   bool get isFormData => mimeType.isFormData;
 
-  Map<String, MimeType> _accepts;
+  Map<String, MimeType>? _accepts;
 
-  void _parseAccepts() {
-    _accepts = {};
-    if (headers['Accept'] == null) return;
-    List<String> accepts = headers.value('Accept').split(',');
+  // Parses accepts header
+  Map<String, MimeType> _parseAccepts() {
+    final ret = <String, MimeType>{};
+    if (headers['Accept'] == null) {
+      return ret;
+    }
+
+    List<String> accepts = headers.value('Accept')?.split(',') ?? [];
     for (String accept in accepts) {
       MimeType ct = MimeType.parse(accept);
-      _accepts[ct.mimeType] = ct;
+      ret[ct.mimeType] = ct;
     }
+
+    return ret;
   }
 
   /// Returns mime types of the response accepted by the client of the HTTP
   /// request.
-  Map<String, MimeType> get accepts {
-    if (_accepts == null) _parseAccepts();
-    return _accepts;
-  }
+  Map<String, MimeType> get accepts => _accepts ??= _parseAccepts();
 
   /// Returns true if the client accepts the response body in HTML format.
   bool get acceptsHtml => accepts.containsKey(MimeTypes.html);
@@ -234,7 +230,7 @@ class Context {
   bool get acceptsJson => accepts.containsKey(MimeTypes.json);
 
   /// Private cache for request body
-  List<int> _body;
+  List<int>? _body;
 
   /// Returns body of HTTP request as bytes.
   Future<List<int>> get body async => _body ??= await req.body;
@@ -247,15 +243,17 @@ class Context {
 
   /// Returns [CodecRepo] for the requested [mimeType]. If [mimeType] is null,
   /// the mime type of request is used.
-  CodecRepo codecFor({String mimeType}) =>
+  CodecRepo? codecFor({String? mimeType}) =>
       _serializers[mimeType ?? this.mimeType];
 
   /// Returns serializer for given object [type] and [mimeType].
   ///
   /// If [mimeType] is null, the mime type of request is used.
-  Serializer<T> serializerFor<T>(Type type, {String mimeType}) {
+  Serializer<T>? serializerFor<T>(Type? type, {String? mimeType}) {
     final codec = _serializers[mimeType ?? this.mimeType.mimeType];
-    if (codec == null) return null;
+    if (codec == null) {
+      return null;
+    }
     final ser = codec.getByType<T>(type ?? T);
     return ser;
   }
@@ -297,16 +295,18 @@ class Context {
   ///     await server.serve();
   Future<T> bodyAsJson<T, F>(
       {conv.Encoding encoding = conv.utf8,
-      Converter<T, F> convert,
-      Type type}) async {
+      Converter<T, F>? convert,
+      Type? type}) async {
     final String text = await bodyAsText(encoding);
     final dec = conv.json.decode(text);
     if (convert != null) return convert(dec);
     {
       final repo = _serializers[MimeTypes.json];
       if (repo != null) {
-        final ser = _serializers[MimeTypes.json].getByType<T>(type ?? T);
-        if (ser != null && dec is Map) return ser.fromMap(dec);
+        final ser = repo.getByType<T>(type ?? T);
+        if (ser != null && dec is Map) {
+          return ser.fromMap(dec);
+        }
       }
     }
     return dec;
@@ -338,24 +338,31 @@ class Context {
   ///       // ...
   ///     });
   ///     await server.serve();
-  Future<List<T>> bodyAsJsonList<T, F>(
+  Future<List<T>?> bodyAsJsonList<T, F>(
       {conv.Encoding encoding = conv.utf8,
-      Converter<T, F> convert,
-      Type type}) async {
+      Converter<T, F>? convert,
+      Type? type}) async {
     final String text = await bodyAsText(encoding);
-    final List ret = conv.json.decode(text);
-    if (convert != null) return ret.cast<F>().map(convert).toList();
+    final List? ret = conv.json.decode(text);
+    if (ret == null) {
+      return null;
+    }
+    if (convert != null) {
+      return ret.cast<F>().map(convert).toList();
+    }
     {
       final repo = _serializers[MimeTypes.json];
       if (repo != null) {
-        final ser = _serializers[MimeTypes.json].getByType<T>(type ?? T);
-        if (ser != null) return ser.fromList(ret);
+        final ser = repo.getByType<T>(type ?? T);
+        if (ser != null) {
+          return ser.fromList(ret.cast<Map>());
+        }
       }
     }
     return ret.cast<T>();
   }
 
-  Map<String, String> _parsedUrlEncodedForm;
+  Map<String, String>? _parsedUrlEncodedForm;
 
   /// Decodes url-encoded form from the body and returns the form as
   /// Map<String, String>.
@@ -369,7 +376,9 @@ class Context {
   ///     await server.serve();
   Future<Map<String, String>> bodyAsUrlEncodedForm(
       {conv.Encoding encoding = conv.utf8}) async {
-    if (_parsedUrlEncodedForm != null) return _parsedUrlEncodedForm;
+    if (_parsedUrlEncodedForm != null) {
+      return _parsedUrlEncodedForm!;
+    }
 
     final String text = await bodyAsText(encoding);
 
@@ -390,7 +399,7 @@ class Context {
     return ret;
   }
 
-  Map<String, FormField> _parsedFormData;
+  Map<String, FormField>? _parsedFormData;
 
   /// Decodes `multipart/form-data` body
   ///
@@ -405,12 +414,17 @@ class Context {
   ///       return Response.redirect(Uri.parse("/"));
   ///     });
   Future<Map<String, FormField>> bodyAsFormData() async {
-    if (_parsedFormData != null) return _parsedFormData;
+    if (_parsedFormData != null) {
+      return _parsedFormData!;
+    }
 
-    if (!req.headers.contentType.parameters.containsKey('boundary'))
-      return null;
+    if (req.headers.contentType == null ||
+        !req.headers.contentType!.parameters.containsKey('boundary')) {
+      throw Exception(
+          'request does not contain boundary specification for form-data');
+    }
 
-    final String boundary = req.headers.contentType.parameters['boundary'];
+    final String boundary = req.headers.contentType!.parameters['boundary']!;
 
     final ret = <String, FormField>{};
 
@@ -424,11 +438,11 @@ class Context {
       HttpMultipartFormData multipart = HttpMultipartFormData.parse(part);
 
       // Parse field content type
-      final ContentType contentType = multipart.contentType;
+      final ContentType? contentType = multipart.contentType;
 
-      final String name = multipart.contentDisposition.parameters['name'];
+      final String name = multipart.contentDisposition.parameters['name']!;
 
-      final String fn = multipart.contentDisposition.parameters['filename'];
+      final String? fn = multipart.contentDisposition.parameters['filename'];
 
       // Create field
       if (fn is! String && multipart.isText) {
@@ -441,7 +455,8 @@ class Context {
         if (ret[name] is TextFileListFormField) {
           (ret[name] as TextFileListFormField).values.add(field);
         } else if (ret[name] is TextFileFormField) {
-          ret[name] = TextFileListFormField.fromValues([ret[name], field]);
+          ret[name] = TextFileListFormField.fromValues(
+              [ret[name]! as TextFileFormField, field]);
         } else {
           ret[name] = field;
         }
@@ -451,7 +466,8 @@ class Context {
         if (ret[name] is BinaryFileListFormField) {
           (ret[name] as BinaryFileListFormField).values.add(field);
         } else if (ret[name] is BinaryFileFormField) {
-          ret[name] = BinaryFileListFormField.fromValues([ret[name], field]);
+          ret[name] = BinaryFileListFormField.fromValues(
+              [ret[name]! as BinaryFileFormField, field]);
         } else {
           ret[name] = field;
         }
@@ -462,7 +478,7 @@ class Context {
     return ret;
   }
 
-  Future<Map> bodyAsMap({conv.Encoding encoding = conv.utf8}) async {
+  Future<Map?> bodyAsMap({conv.Encoding encoding = conv.utf8}) async {
     MimeType mt = mimeType;
 
     if (mt.isJson) {
@@ -477,11 +493,11 @@ class Context {
   }
 
   /// Converts the body to typ [T].
-  Future<T> bodyTo<T>(Converter<T, dynamic> convert,
+  Future<T> bodyTo<T>(Converter<T, dynamic?> converter,
       {conv.Encoding encoding = conv.utf8}) async {
     MimeType mt = mimeType;
 
-    Map b;
+    Map? b;
     if (mt.isJson) {
       b = await bodyAsJsonMap(encoding: encoding);
     } else if (mt.isUrlEncodedForm) {
@@ -491,40 +507,43 @@ class Context {
     }
     // TODO use serializer for other mimetypes
 
-    return convert(b);
+    return converter(b);
   }
 
   /// Returns file for given [field] in form-data body. Returns null, if the field
   /// is not found, not a file field or body is not form-data.
-  Future<FileFormField<T>> getFile<T>(String field) async {
+  Future<FileFormField<T>?> getFile<T>(String field) async {
     final data = await bodyAsFormData();
-    if (data == null) return null;
     final fieldData = data[field];
-    if (fieldData is! FileFormField<T>) return null;
+    if (fieldData is! FileFormField<T>) {
+      return null;
+    }
     return fieldData;
   }
 
   /// Returns file for given [field] in form-data body. Returns null, if the field
   /// is not found, not a file field or body is not form-data.
-  Future<BinaryFileFormField> getBinaryFile(String field) async {
+  Future<BinaryFileFormField?> getBinaryFile(String field) async {
     final data = await bodyAsFormData();
-    if (data == null) return null;
     final fieldData = data[field];
-    if (fieldData is! BinaryFileFormField) return null;
+    if (fieldData is! BinaryFileFormField) {
+      return null;
+    }
     return fieldData;
   }
 
   /// Returns file for given [field] in form-data body. Returns null, if the field
   /// is not found, not a file field or body is not form-data.
-  Future<TextFileFormField> getTextFile(String field) async {
+  Future<TextFileFormField?> getTextFile(String field) async {
     final data = await bodyAsFormData();
-    if (data == null) return null;
     final fieldData = data[field];
-    if (fieldData is! TextFileFormField) return null;
+    if (fieldData is! TextFileFormField) {
+      return null;
+    }
     return fieldData;
   }
 
-  Response response;
+  Response? response;
 
   /// Exception handlers executed if there is an exception during the execution of
   /// the route.
@@ -541,7 +560,7 @@ class Context {
   /// Returns cookies set in HTTP request.
   Map<String, Cookie> get cookies => _cookies ??= _parseCookies();
 
-  Map<String, Cookie> _cookies;
+  Map<String, Cookie>? _cookies;
 
   Map<String, Cookie> _parseCookies() {
     final ret = <String, Cookie>{};
@@ -551,15 +570,15 @@ class Context {
     return ret;
   }
 
-  AuthHeaders _authHeader;
+  AuthHeaders? _authHeader;
 
   /// Returns auth header for the requested [scheme].
-  String authHeader(String scheme) {
+  String? authHeader(String scheme) {
     if (_authHeader == null) {
       _authHeader = AuthHeaders.fromHeaderStr(
           req.headers.value(HttpHeaders.authorizationHeader));
     }
-    return _authHeader.items[scheme]?.credentials;
+    return _authHeader!.items[scheme]?.credentials;
   }
 
   /// Executes the [route] with this [Context].
@@ -575,15 +594,15 @@ class Context {
     }
 
     {
-      final info = route.info;
-      dynamic res = route.handler(this);
+      final info = route!.info;
+      dynamic res = route!.handler(this);
       if (res is Future) res = await res;
 
       if (response == null) {
         if (res is Response)
           response = res;
         else if (info.responseProcessor != null) {
-          maybeFuture = info.responseProcessor(this, res);
+          maybeFuture = info.responseProcessor!(this, res);
           if (maybeFuture is Future) await maybeFuture;
         } else {
           response = Response(res,
@@ -606,7 +625,7 @@ Map<String, String> _formDataMapToStringMap(Map<String, FormField> form) {
 
   for (String key in form.keys) {
     if (form[key] is StringFormField) {
-      ret[key] = form[key].value;
+      ret[key] = form[key]!.value;
     }
   }
 

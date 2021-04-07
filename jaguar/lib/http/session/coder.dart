@@ -9,7 +9,7 @@ abstract class MapCoder {
   String encode(Map<String, String> values);
 
   /// Decodes [value] into Map
-  Map<String, String> decode(String value);
+  Map<String, String>? decode(String value);
 }
 
 /// Encrypts the [Map] using [encrypter]. Signs the [Map] using [signer]. The
@@ -18,10 +18,10 @@ abstract class MapCoder {
 /// Both [encrypter] and [signer] are optional.
 class JaguarMapCoder extends MapCoder {
   /// The optional encrypter
-  final Codec<String, String> encrypter;
+  final Codec<String, String>? encrypter;
 
   /// The optional signer
-  final Converter<List<int>, Digest> signer;
+  final Converter<List<int>, Digest>? signer;
 
   JaguarMapCoder({this.signer, this.encrypter});
 
@@ -30,22 +30,26 @@ class JaguarMapCoder extends MapCoder {
     // Map data to String
     String value = json.encode(values);
     // Encrypt the data
-    if (encrypter != null) value = encrypter.encode(value);
+    if (encrypter != null) {
+      value = encrypter!.encode(value);
+    }
     // Base64 URL safe encoding
     String ret = base64UrlEncode(value.codeUnits);
-    if (signer == null) return ret;
+    if (signer == null) {
+      return ret;
+    }
     // Sign it!
-    return ret + '.' + base64UrlEncode(signer.convert(ret.codeUnits).bytes);
+    return ret + '.' + base64UrlEncode(signer!.convert(ret.codeUnits).bytes);
   }
 
   /// Decodes [data] into [Map]
-  Map<String, String> decode(String data) {
+  Map<String, String>? decode(String data) {
     if (signer != null) {
       List<String> parts = data.split('.');
       if (parts.length != 2) return null;
 
       try {
-        if (base64Url.encode(signer.convert(parts[0].codeUnits).bytes) !=
+        if (base64Url.encode(signer!.convert(parts[0].codeUnits).bytes) !=
             parts[1]) return null;
       } catch (e) {
         return null;
@@ -56,7 +60,7 @@ class JaguarMapCoder extends MapCoder {
 
     try {
       String value = String.fromCharCodes(base64Url.decode(data));
-      if (encrypter != null) value = encrypter.decode(value);
+      if (encrypter != null) value = encrypter!.decode(value);
       Map values = json.decode(value);
       return values.cast<String, String>();
     } catch (e) {

@@ -7,10 +7,10 @@ class _Request implements Request {
   _Request(this._request);
 
   /// The client certificate of the client making the request.
-  X509Certificate get certificate => _request.certificate;
+  X509Certificate? get certificate => _request.certificate;
 
   /// Information about the client connection.
-  HttpConnectionInfo get connectionInfo => _request.connectionInfo;
+  HttpConnectionInfo? get connectionInfo => _request.connectionInfo;
 
   /// The content length of the request body.
   int get contentLength => _request.contentLength;

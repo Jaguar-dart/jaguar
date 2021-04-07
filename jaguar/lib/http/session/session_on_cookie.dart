@@ -8,7 +8,7 @@ part of jaguar.http.session;
 /// verified after parsing.
 class JaguarSessionManager implements SessionManager {
   /// Duration after which the session is expired
-  final Duration expiry;
+  final Duration? expiry;
 
   /// Codes, encrypts and signs the session data
   final MapCoder coder;
@@ -18,7 +18,7 @@ class JaguarSessionManager implements SessionManager {
   /// Constructs a new [JaguarSessionManager] with given [cookieName], [expiry]
   /// and [signerKey].
   JaguarSessionManager(
-      {this.expiry, String signerKey, this.io = const SessionIoCookie()})
+      {this.expiry, String? signerKey, this.io = const SessionIoCookie()})
       : coder = JaguarMapCoder(
             signer:
                 signerKey != null ? Hmac(sha256, signerKey.codeUnits) : null);
@@ -28,38 +28,50 @@ class JaguarSessionManager implements SessionManager {
 
   /// Parses session from the given [request]
   Session parse(Context ctx) {
-    String raw = io.read(ctx);
-    if (raw == null) return Session.newSession({});
-    Map<String, String> values = coder.decode(raw);
+    String? raw = io.read(ctx);
+    if (raw == null) {
+      return Session.newSession({});
+    }
+    Map<String, String>? values = coder.decode(raw);
 
-    if (values == null) return Session.newSession({});
+    if (values == null) {
+      return Session.newSession({});
+    }
 
-    if (values['sid'] is! String) return Session.newSession({});
+    if (!values.containsKey('sid')) {
+      // TODO throw exception?
+      return Session.newSession({});
+    }
+    final String sid = values['sid']!;
 
-    final String timeStr = values['sct'];
-    if (timeStr is! String) return Session.newSession({});
-
-    final int timeMilli = int.tryParse(timeStr);
-    if (timeMilli == null) return Session.newSession({});
+    if (!values.containsKey('sct')) {
+      // TODO throw exception?
+      return Session.newSession({});
+    }
+    final String timeStr = values['sct']!;
+    final int? timeMilli = int.tryParse(timeStr);
+    if (timeMilli == null) {
+      // TODO throw exception?
+      return Session.newSession({});
+    }
 
     final time = DateTime.fromMillisecondsSinceEpoch(timeMilli);
 
     if (expiry != null) {
-      final Duration diff = new DateTime.now().difference(time);
-      if (diff > expiry) {
-        return new Session.newSession({});
+      final Duration diff = DateTime.now().difference(time);
+      if (diff > expiry!) {
+        // TODO throw exception?
+        return Session.newSession({});
       }
     }
 
-    return Session(values['sid'], values, time);
+    return Session(sid, values, time);
   }
 
   /// Writes session data ([session]) to the Response ([resp]) and returns new
   /// response
   void write(Context ctx) {
-    if (!ctx.sessionNeedsUpdate) return;
-
-    final Session session = ctx.parsedSession;
+    final Session session = ctx.parsedSession!;
     final Map<String, String> values = session.asMap;
     values['sid'] = session.id;
     values['sct'] = session.createdTime.millisecondsSinceEpoch.toString();

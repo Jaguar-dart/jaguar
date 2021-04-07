@@ -15,9 +15,9 @@ class JaguarHttpHeaders {
   ///
   /// If there is no header with the provided name, null will be returned. If the
   /// header has more than one value, first value will be returned.
-  String value(String name) {
+  String? value(String name) {
     name = name.toLowerCase();
-    List<String> values = headers[name];
+    List<String>? values = headers[name];
     if (values == null) return null;
     return values[0];
   }
@@ -43,7 +43,7 @@ class JaguarHttpHeaders {
   /// the value value is added as its value.
   void set(String name, String value) {
     name = name.toLowerCase();
-    List<String> values = new List<String>();
+    List<String> values = <String>[];
     headers[name] = values;
     values.add(value);
   }
@@ -69,12 +69,8 @@ class JaguarHttpHeaders {
     headers.clear();
   }
 
-  void _addValue(String name, Object value) {
-    List<String> values = headers[name];
-    if (values == null) {
-      values = new List<String>();
-      headers[name] = values;
-    }
+  void _addValue(String name, dynamic value) {
+    List<String> values = headers[name] ?? (headers[name] = <String>[]);
     if (value is DateTime) {
       values.add(HttpDate.format(value));
     } else {
@@ -83,22 +79,27 @@ class JaguarHttpHeaders {
   }
 
   /// Gets and sets the content type
-  set contentType(ContentType contentType) {
-    if (contentType == null) return;
+  set contentType(ContentType? contentType) {
+    if (contentType == null) {
+      // TODO remove context type
+      return;
+    }
     set(HttpHeaders.contentTypeHeader, contentType.toString());
   }
 
-  ContentType get contentType {
-    String str = value(HttpHeaders.contentTypeHeader);
-    if (str is! String) return null;
+  ContentType? get contentType {
+    String? str = value(HttpHeaders.contentTypeHeader);
+    if (str is! String) {
+      return null;
+    }
     return ContentType.parse(str);
   }
 
   /// Sets and gets mime-type
-  String get mimeType => contentType?.mimeType;
+  String? get mimeType => contentType?.mimeType;
 
-  set mimeType(String mimeType) {
-    ContentType contentType = this.contentType;
+  set mimeType(String? mimeType) {
+    ContentType? contentType = this.contentType;
     if (contentType == null) {
       if (mimeType != null && mimeType.isNotEmpty) {
         ContentType newContentType = ContentType.parse(mimeType);
@@ -118,10 +119,10 @@ class JaguarHttpHeaders {
   }
 
   /// Sets and gets charset
-  String get charset => contentType?.charset;
+  String? get charset => contentType?.charset;
 
-  set charset(String charset) {
-    ContentType contentType = this.contentType;
+  set charset(String? charset) {
+    ContentType? contentType = this.contentType;
     if (contentType == null) {
       if (charset != null && charset.isNotEmpty) {
         this.contentType = new ContentType(

@@ -10,7 +10,7 @@ import '../../ports.dart' as ports;
 void bef(Context ctx) => ctx.addVariable(5);
 
 void aft(Context ctx) =>
-    ctx.response = new Response(ctx.getVariable<int>() * 5);
+    ctx.response = Response(ctx.getVariable<int>()! * 5);
 
 void aft1(Context ctx) => ctx.response = Response('aft1');
 
@@ -19,26 +19,26 @@ void bef2(Context ctx) {
   ctx.after.add(aft2);
 }
 
-void aft2(Context ctx) => ctx.addVariable(ctx.getVariable<int>() * 2);
+void aft2(Context ctx) => ctx.addVariable(ctx.getVariable<int>()! * 2);
 
 main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('After', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
-      server
+      server = Jaguar(port: port);
+      server!
         ..get('/aft', (_) => null, after: [aft1])
         ..get('/befaft', (_) => null, before: [bef], after: [aft])
         ..get('/progaft', (_) => null, before: [bef2], after: [aft]);
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test(

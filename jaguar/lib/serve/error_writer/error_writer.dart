@@ -54,7 +54,7 @@ class DefaultErrorWriter implements ErrorWriter {
   /// Makes [Response] for 500 error
   ///
   /// Respects 'accept' request header and returns corresponding [Response]
-  Response make500(Context ctx, Object error, [StackTrace stack]) {
+  Response make500(Context ctx, Object error, [StackTrace? stack]) {
     final String accept = ctx.req.headers.value(HttpHeaders.acceptHeader) ?? '';
     final List<String> acceptList = accept.split(',');
 

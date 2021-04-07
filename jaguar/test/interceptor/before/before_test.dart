@@ -8,27 +8,27 @@ import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import '../../ports.dart' as ports;
 
-final Random rand = new Random.secure();
+final Random rand = Random.secure();
 
 void genRandom(Context ctx) {
   ctx.addVariable(rand.nextInt(1000), id: 'randomInt');
 }
 
 void doublesRandom(Context ctx) {
-  int randomInt = ctx.getVariable<int>(id: 'randomInt');
+  int randomInt = ctx.getVariable<int>(id: 'randomInt')!;
   ctx.addVariable(randomInt * 2, id: 'doubledRandomInt');
 }
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('Custom interceptor:Generated', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
       server = Jaguar(port: port);
-      server
+      server!
         ..getJson(
             '/two',
             (Context ctx) => {
@@ -36,11 +36,11 @@ void main() {
                   'Doubled': ctx.getVariable<int>(id: 'doubledRandomInt'),
                 },
             before: [genRandom, doublesRandom]);
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test(

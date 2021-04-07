@@ -46,14 +46,14 @@ class Route {
 
   final _pathVarMapping = <String, int>{};
 
-  int _pathGlobVarMapping;
+  int? _pathGlobVarMapping;
 
-  String _pathGlobVarName;
+  String? _pathGlobVarName;
 
   Route.fromInfo(this.info, this.handler,
-      {List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException})
+      {List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException})
       : pathSegments = pathToSegments(info.path),
         _before = before ?? [],
         _after = after ?? [],
@@ -75,14 +75,14 @@ class Route {
   /// Constructs a [Route]
   factory Route(String path, RouteHandler handler,
           {List<String> methods = const <String>['*'],
-          Map<String, String> pathRegEx,
+          Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
           HttpMethod(
               path: path,
@@ -99,16 +99,17 @@ class Route {
 
   /// Constructs a [Route] for GET method requests
   factory Route.get(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          Get(
+          HttpMethod(
+              methods: ['GET'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -122,16 +123,17 @@ class Route {
 
   /// Constructs a [Route] for POST method requests
   factory Route.post(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          Post(
+          HttpMethod(
+              methods: ['POST'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -145,16 +147,17 @@ class Route {
 
   /// Constructs a [Route] for PUT method requests
   factory Route.put(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          Put(
+          HttpMethod(
+              methods: ['PUT'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -168,16 +171,17 @@ class Route {
 
   /// Constructs a [Route] for DELETE method requests
   factory Route.delete(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          Delete(
+          HttpMethod(
+              methods: ['DELETE'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -191,16 +195,17 @@ class Route {
 
   /// Constructs a [Route] for PATCH method requests
   factory Route.patch(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          Patch(
+          HttpMethod(
+              methods: ['PATCH'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -214,16 +219,17 @@ class Route {
 
   /// Constructs a [Route] for OPTIONS method requests
   factory Route.options(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          OptionsMethod(
+          HttpMethod(
+              methods: ['OPTIONS'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -237,16 +243,17 @@ class Route {
 
   /// Constructs a [Route] for HTML requests
   factory Route.html(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType = MimeTypes.html,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType = MimeTypes.html,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          GetHtml(
+          HttpMethod(
+              methods: ['GET'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -266,18 +273,18 @@ class Route {
             'POST',
             'DELETE'
           ],
-          Map<String, String> pathRegEx,
+          Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor = jsonResponseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor = jsonResponseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
           HttpMethod(
-              path: path,
               methods: methods,
+              path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
               mimeType: mimeType,
@@ -290,16 +297,17 @@ class Route {
 
   /// Constructs a [Route] for JSON requests with GET method
   factory Route.getJson(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor = jsonResponseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor = jsonResponseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          GetJson(
+          HttpMethod(
+              methods: ['GET'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -313,16 +321,17 @@ class Route {
 
   /// Constructs a [Route] for JSON requests with POST method
   factory Route.postJson(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor = jsonResponseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor = jsonResponseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          PostJson(
+          HttpMethod(
+              methods: ['POST'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -336,16 +345,17 @@ class Route {
 
   /// Constructs a [Route] for JSON requests with PUT method
   factory Route.putJson(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor = jsonResponseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor = jsonResponseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          PutJson(
+          HttpMethod(
+              methods: ['PUT'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -359,16 +369,17 @@ class Route {
 
   /// Constructs a [Route] for JSON requests with DELETE method
   factory Route.deleteJson(String path, RouteHandler handler,
-          {Map<String, String> pathRegEx,
+          {Map<String, String>? pathRegEx,
           int statusCode = 200,
-          String mimeType,
-          String charset = kDefaultCharset,
-          ResponseProcessor responseProcessor = jsonResponseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          String? mimeType,
+          String? charset = kDefaultCharset,
+          ResponseProcessor? responseProcessor = jsonResponseProcessor,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException}) =>
       Route.fromInfo(
-          DeleteJson(
+          HttpMethod(
+              methods: ['DELETE'],
               path: path,
               pathRegEx: pathRegEx,
               statusCode: statusCode,
@@ -382,28 +393,18 @@ class Route {
 
   /// Clones this [Route] with the new values if provided
   Route cloneWith(
-          {String path,
-          int statusCode,
-          String mimeType,
-          String charset,
-          Map<String, String> headers,
-          Map<String, String> pathRegEx,
-          ResponseProcessor responseProcessor,
-          List<RouteInterceptor> after,
-          List<RouteInterceptor> before,
-          List<ExceptionHandler> onException}) =>
+          {HttpMethod? info,
+          List<RouteInterceptor>? after,
+          List<RouteInterceptor>? before,
+          List<ExceptionHandler>? onException,
+          RouteHandler? handler}) =>
       Route.fromInfo(
-          info.cloneWith(
-              path: path,
-              pathRegEx: pathRegEx,
-              statusCode: statusCode,
-              mimeType: mimeType,
-              charset: charset,
-              responseProcessor: responseProcessor),
-          handler,
-          before: before ?? this._before,
-          after: after ?? this._after,
-          onException: onException ?? this._onException);
+        info ?? this.info,
+        handler ?? this.handler,
+        before: before ?? this._before.toList(),
+        after: after ?? this._after.toList(),
+        onException: onException ?? this._onException.toList(),
+      );
 
   final Iterable<String> pathSegments;
 
@@ -416,38 +417,50 @@ class Route {
     ctx.onException.addAll(_onException);
 
     for (String pathParam in _pathVarMapping.keys) {
-      ctx.pathParams[pathParam] = ctx.pathSegments[_pathVarMapping[pathParam]];
+      ctx.pathParams[pathParam] = ctx.pathSegments[_pathVarMapping[pathParam]!];
     }
     if (_pathGlobVarMapping != null) {
-      ctx.pathParams[_pathGlobVarName] =
-          ctx.pathSegments.skip(_pathGlobVarMapping).join('/');
+      ctx.pathParams[_pathGlobVarName!] =
+          ctx.pathSegments.skip(_pathGlobVarMapping!).join('/');
     }
 
     return ctx.execute();
   }
 
+  List<RouteInterceptor> getBefore() => _before.toList();
+
+  List<RouteInterceptor> getAfter() => _after.toList();
+
+  List<ExceptionHandler> getOnException() => _onException.toList();
+
   /// Add [interceptor] and optionally [interceptors] to be executed before
   /// [handler] in the route chain.
   void before(RouteInterceptor interceptor,
-      [List<RouteInterceptor> interceptors]) {
+      [List<RouteInterceptor>? interceptors]) {
     _before.add(interceptor);
-    if (interceptors != null) _before.addAll(interceptors);
+    if (interceptors != null) {
+      _before.addAll(interceptors);
+    }
   }
 
   /// Add [interceptor] and optionally [interceptors] to be executed after
   /// [handler] in the route chain.
   void after(RouteInterceptor interceptor,
-      [List<RouteInterceptor> interceptors]) {
+      [List<RouteInterceptor>? interceptors]) {
     _after.add(interceptor);
-    if (interceptors != null) _after.addAll(interceptors);
+    if (interceptors != null) {
+      _after.addAll(interceptors);
+    }
   }
 
   /// Add [exceptHandler] and optionally [exceptHandlers] to be executed after
   /// [handler] in the route chain.
   void onException(ExceptionHandler exceptHandler,
-      [List<ExceptionHandler> exceptHandlers]) {
+      [List<ExceptionHandler>? exceptHandlers]) {
     _onException.add(exceptHandler);
-    if (exceptHandlers != null) _onException.addAll(exceptHandlers);
+    if (exceptHandlers != null) {
+      _onException.addAll(exceptHandlers);
+    }
   }
 
   /// Helps while debugging in variables window

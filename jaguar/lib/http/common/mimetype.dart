@@ -100,13 +100,15 @@ abstract class MimeTypes {
   };
 
   /// Returns mime type of [file] based on its extension
-  static String ofFile(File file) {
+  static String? ofFile(File file) {
     String fileExtension = p.extension(file.path);
 
     if (fileExtension.startsWith('.'))
       fileExtension = fileExtension.substring(1);
 
-    if (fileExtension.length == 0) return null;
+    if (fileExtension.length == 0) {
+      return null;
+    }
 
     if (fromFileExtension.containsKey(fileExtension)) {
       return fromFileExtension[fileExtension];
@@ -118,7 +120,7 @@ abstract class MimeTypes {
 
 /// identifies the type of content of a message
 class MimeType {
-  ///Gets the mime-type, without any parameters.
+  /// Gets the mime-type, without any parameters.
   final String mimeType;
 
   /// Gets the primary type.
@@ -129,6 +131,9 @@ class MimeType {
 
   const MimeType(this.primaryType, this.subType)
       : mimeType = '$primaryType/$subType';
+
+  bool operator ==(Object other) =>
+      other is MimeType && other.mimeType == mimeType;
 
   static MimeType parse(String contentTypeHeader) {
     ContentType ct = ContentType.parse(contentTypeHeader);
@@ -141,7 +146,7 @@ class MimeType {
 
   bool get isFormData => mimeType == MimeTypes.multipartForm;
 
-  bool get isBinary => mimeType == MimeTypes.binary;
+  bool get isOctetStream => mimeType == MimeTypes.binary;
 
-  static const MimeType binary = MimeType('application', 'octet-stream');
+  static const MimeType octetStream = MimeType('application', 'octet-stream');
 }

@@ -8,15 +8,15 @@ abstract class Muxable {
 
   /// Adds a route to be served
   Route route(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       List<String> methods = const <String>['GET', 'PUT', 'POST', 'DELETE'],
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route(path, handler,
         methods: methods,
         pathRegEx: pathRegEx,
@@ -32,14 +32,14 @@ abstract class Muxable {
 
   /// Adds a route with GET method to be served
   Route get(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.get(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -54,14 +54,14 @@ abstract class Muxable {
 
   /// Adds a route with POST method to be served
   Route post(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.post(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -76,14 +76,14 @@ abstract class Muxable {
 
   /// Adds a route with PUT method to be served
   Route put(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.put(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -98,14 +98,14 @@ abstract class Muxable {
 
   /// Adds a route with DELETE method to be served
   Route delete(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.delete(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -120,14 +120,14 @@ abstract class Muxable {
 
   /// Adds a route with PATCH method to be served
   Route patch(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.patch(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -142,14 +142,14 @@ abstract class Muxable {
 
   /// Adds a route with OPTIONS method to be served
   Route options(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.options(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -203,14 +203,14 @@ abstract class Muxable {
 
   /// Adds a route with GET method to be served
   Route html(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType = MimeTypes.html,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType = MimeTypes.html,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.html(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -225,15 +225,15 @@ abstract class Muxable {
 
   /// Adds a route to be served
   Route json(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       List<String> methods = const <String>['GET', 'PUT', 'POST', 'DELETE'],
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor = jsonResponseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor = jsonResponseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.json(path, handler,
         pathRegEx: pathRegEx,
         methods: methods,
@@ -249,14 +249,14 @@ abstract class Muxable {
 
   /// Adds a route with GET method to be served
   Route getJson(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor = jsonResponseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor = jsonResponseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.getJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -271,14 +271,14 @@ abstract class Muxable {
 
   /// Adds a route with POST method to be served
   Route postJson(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor = jsonResponseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor = jsonResponseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.postJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -293,14 +293,14 @@ abstract class Muxable {
 
   /// Adds a route with PUT method to be served
   Route putJson(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor = jsonResponseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor = jsonResponseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.putJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -315,14 +315,14 @@ abstract class Muxable {
 
   /// Adds a route with DELETE method to be served
   Route deleteJson(String path, RouteHandler handler,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor = jsonResponseProcessor,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor = jsonResponseProcessor,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     final route = Route.deleteJson(path, handler,
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -339,10 +339,10 @@ abstract class Muxable {
   ///     server.wsStream('/ws', (ctx, ws) => Stream.periodic);
   Route wsStream(
       String path, WsOnConnect /* < Stream<T> | Response > */ onConnect,
-      {Map<String, String> pathRegEx,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      {Map<String, String>? pathRegEx,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     return addRoute(Route.get(path, ws.wsStream(onConnect),
         pathRegEx: pathRegEx,
         before: before,
@@ -353,10 +353,10 @@ abstract class Muxable {
   /// Example:
   ///     server.wsEcho('/ws');
   Route wsEcho(String path,
-      {Map<String, String> pathRegEx,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      {Map<String, String>? pathRegEx,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     return addRoute(Route.get(path, ws.wsEcho(),
         pathRegEx: pathRegEx,
         before: before,
@@ -368,10 +368,10 @@ abstract class Muxable {
   ///     server.wsEcho('/ws');
   Route wsResponder(
       String path, WsOnConnect /* < WsResponder | Response > */ onConnect,
-      {Map<String, String> pathRegEx,
-      List<RouteInterceptor> after,
-      List<RouteInterceptor> before,
-      List<ExceptionHandler> onException}) {
+      {Map<String, String>? pathRegEx,
+      List<RouteInterceptor>? after,
+      List<RouteInterceptor>? before,
+      List<ExceptionHandler>? onException}) {
     return addRoute(Route.get(path, ws.wsRespond(onConnect),
         pathRegEx: pathRegEx,
         before: before,
@@ -403,13 +403,13 @@ abstract class Muxable {
   ///    server.staticFiles('/static/*', 'static');
   ///    await server.serve();
   Route staticFiles(String path, directory,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor,
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor,
       bool stripPrefix = true,
-      Future<Response> directoryLister(Directory directory)}) {
+      Future<Response> directoryLister(Directory directory)?}) {
     if (directory is String) directory = Directory(directory);
 
     final Directory dir = directory;
@@ -417,7 +417,7 @@ abstract class Muxable {
       throw Exception('Directory ${dir.path} does not exist!');
 
     Route route;
-    int skipCount;
+    int skipCount = 0;
     route = this.get(path, (ctx) async {
       Iterable<String> segs = ctx.pathSegments;
       if (stripPrefix) segs = segs.skip(skipCount);
@@ -439,8 +439,7 @@ abstract class Muxable {
         }
       }
 
-      return StreamResponse(file.openRead(),
-          mimeType: MimeTypes.ofFile(file));
+      return StreamResponse(file.openRead(), mimeType: MimeTypes.ofFile(file));
     },
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -462,11 +461,11 @@ abstract class Muxable {
   ///    server.staticFile('/hello', p.join('static', 'hello.txt'));
   ///    await server.serve();
   Route staticFile(String path, file,
-      {Map<String, String> pathRegEx,
+      {Map<String, String>? pathRegEx,
       int statusCode = 200,
-      String mimeType,
-      String charset = kDefaultCharset,
-      ResponseProcessor responseProcessor}) {
+      String? mimeType,
+      String? charset = kDefaultCharset,
+      ResponseProcessor? responseProcessor}) {
     if (file is String) file = File(file);
 
     final File f = file;

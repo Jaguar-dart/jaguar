@@ -12,7 +12,7 @@ void main() {
 
   group('static files', () {
     final port = 10000;
-    Jaguar server;
+    Jaguar server = Jaguar();
     setUpAll(() async {
       server = Jaguar(port: port);
       server.staticFiles('files/*', 'test/static_file/files_root/files');
@@ -63,13 +63,13 @@ class _StupidUri implements Uri {
   _StupidUri(this.port, this.pathSegments);
 
   @override
-  String get authority => null;
+  String get authority => '';
 
   @override
-  UriData get data => null;
+  UriData? get data => null;
 
   @override
-  String get fragment => null;
+  String get fragment => '';
 
   @override
   bool get hasAbsolutePath => true;
@@ -102,10 +102,10 @@ class _StupidUri implements Uri {
   bool isScheme(String scheme) => scheme == this.scheme;
 
   @override
-  Uri normalizePath() => null;
+  Uri normalizePath() => Uri();
 
   @override
-  String get origin => null;
+  String get origin => '';
 
   @override
   String get path => '/' + pathSegments.join('/');
@@ -124,30 +124,30 @@ class _StupidUri implements Uri {
 
   @override
   Uri replace({
-    String scheme,
-    String userInfo,
-    String host,
-    int port,
-    String path,
-    Iterable<String> pathSegments,
-    String query,
-    Map<String, dynamic> queryParameters,
-    String fragment,
+    String? scheme,
+    String? userInfo,
+    String? host,
+    int? port,
+    String? path,
+    Iterable<String>? pathSegments,
+    String? query,
+    Map<String, dynamic /*String|Iterable<String>*/ >? queryParameters,
+    String? fragment,
   }) =>
-      null;
+      Uri();
 
   @override
-  Uri resolve(String reference) => null;
+  Uri resolve(String reference) => Uri();
 
   @override
-  Uri resolveUri(Uri reference) => null;
+  Uri resolveUri(Uri reference) => Uri();
 
   @override
   String get scheme => 'http';
 
   @override
-  String toFilePath({bool windows}) => null;
+  String toFilePath({bool? windows}) => '';
 
   @override
-  String get userInfo => null;
+  String get userInfo => '';
 }

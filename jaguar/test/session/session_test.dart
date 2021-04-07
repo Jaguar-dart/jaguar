@@ -12,21 +12,21 @@ main() {
   resty.globalClient = http.IOClient();
 
   group("Session", () {
-    final jar = new resty.CookieJar();
+    final jar = resty.CookieJar();
     final port = ports.random;
-    Jaguar server;
+    Jaguar server = Jaguar();
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port)
+      server = Jaguar(port: port)
         ..getJson('/api/add/:item', (ctx) async {
-          final Session session = await ctx.session;
-          final String newItem = ctx.pathParams['item'];
+          final Session? session = await ctx.session;
+          final String? newItem = ctx.pathParams['item'];
 
-          final List<String> items = (session['items'] ?? '').split(',');
+          final List<String> items = (session!['items'] ?? '').split(',');
 
           // Add item to shopping cart stored on session
           if (!items.contains(newItem)) {
-            items.add(newItem);
+            items.add(newItem!);
             session['items'] = items.join(',');
             return {"Action": "Added"};
           }
@@ -34,10 +34,10 @@ main() {
           return {"Action": "Already present"};
         })
         ..getJson('/api/remove/:item', (ctx) async {
-          final Session session = await ctx.session;
-          final String newItem = ctx.pathParams['item'];
+          final Session? session = await ctx.session;
+          final String? newItem = ctx.pathParams['item'];
 
-          final List<String> items = (session['items'] ?? '').split(',');
+          final List<String> items = (session!['items'] ?? '').split(',');
 
           // Remove item from shopping cart stored on session
           if (items.contains(newItem)) {

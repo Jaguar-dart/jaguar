@@ -9,9 +9,9 @@ import 'package:jaguar/http/http.dart';
 class StreamResponse extends Response<Stream<List<int>>> {
   StreamResponse(Stream<List<int>> value,
       {statusCode = 200,
-      Map<String, dynamic> headers,
-      String mimeType,
-      String charset})
+      Map<String, dynamic>? headers,
+      String? mimeType,
+      String? charset})
       : super(value,
             statusCode: statusCode,
             headers: headers,
@@ -21,9 +21,9 @@ class StreamResponse extends Response<Stream<List<int>>> {
   /// [Response] that writes the contents of [file] to the response.
   factory StreamResponse.fromFile(File file,
           {statusCode = 200,
-          Map<String, dynamic> headers,
-          String mimeType,
-          String charset}) =>
+          Map<String, dynamic>? headers,
+          String? mimeType,
+          String? charset}) =>
       StreamResponse(
         file.openRead(),
         statusCode: statusCode,
@@ -35,9 +35,9 @@ class StreamResponse extends Response<Stream<List<int>>> {
   /// [Response] that writes the contents of file at [path] to the response.
   static Future<StreamResponse> fromPath(String path,
       {int statusCode = 200,
-      Map<String, dynamic> headers,
-      String mimeType,
-      String charset}) async {
+      Map<String, dynamic>? headers,
+      String? mimeType,
+      String? charset}) async {
     final file = File(path);
     if (!await file.exists()) throw new Exception();
     return StreamResponse.fromFile(file,
@@ -50,9 +50,9 @@ class StreamResponse extends Response<Stream<List<int>>> {
   /// [Response] that writes the [strings] to the response.
   factory StreamResponse.fromStrings(Stream<String> strings,
       {statusCode = 200,
-      Map<String, dynamic> headers,
-      String mimeType,
-      String charset,
+      Map<String, dynamic>? headers,
+      String? mimeType,
+      String? charset,
       Encoding encoding = utf8}) {
     return StreamResponse(
       strings.transform(encoding.encoder),

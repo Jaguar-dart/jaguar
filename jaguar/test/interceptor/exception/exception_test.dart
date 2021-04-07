@@ -8,28 +8,28 @@ import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import '../../ports.dart' as ports;
 
-final Random rand = new Random.secure();
+final Random rand = Random.secure();
 
 Response handleException(Context ctx, e, s) =>
     ctx.response = Response('exception');
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('OnException', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
-      server
-        ..get('/except', (Context ctx) => throw new Exception(),
+      server = Jaguar(port: port);
+      server!
+        ..get('/except', (Context ctx) => throw Exception(),
             onException: [handleException]);
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test(

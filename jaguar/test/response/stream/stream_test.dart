@@ -9,20 +9,20 @@ import 'package:jaguar/jaguar.dart';
 import '../../ports.dart' as ports;
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('route', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar server = Jaguar();
     setUpAll(() async {
       print('Using port $port');
-      server = new Jaguar(port: port);
+      server = Jaguar(port: port);
       server
         ..get('/stream', (Context ctx) {
           StreamController<List<int>> streamCon =
-              new StreamController<List<int>>();
+              StreamController<List<int>>();
 
-          new Timer(new Duration(seconds: 5), () {
+          Timer(Duration(seconds: 5), () {
             streamCon.add([1, 2, 3, 4]);
             streamCon.add([5, 6, 7, 8]);
             streamCon.close();

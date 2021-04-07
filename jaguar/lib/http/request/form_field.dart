@@ -9,18 +9,7 @@ abstract class FormField<T> {
   T get value;
 
   /// content-type of the field
-  ContentType get contentType;
-
-  bool operator ==(other) {
-    if (other is FormField<T>)
-      return name == other.name &&
-          value == other.value &&
-          contentType == other.contentType;
-    return false;
-  }
-
-  /// Hash code
-  int get hashCode => name.hashCode;
+  ContentType? get contentType;
 }
 
 /// String field in the `multipart/form-data`
@@ -34,26 +23,9 @@ class StringFormField implements FormField<String> {
   final String value;
 
   /// content-type of the field
-  final ContentType contentType;
+  final ContentType? contentType;
 
   StringFormField(this.name, this.value, {this.contentType});
-
-  bool operator ==(other) {
-    if (other is! StringFormField) {
-      return false;
-    }
-
-    return _equality(other as StringFormField);
-  }
-
-  bool _equality(StringFormField other) {
-    return name == other.name &&
-        value == other.value &&
-        contentType.mimeType == other.contentType.mimeType &&
-        contentType.charset == other.contentType.charset;
-  }
-
-  int get hashCode => name.hashCode;
 
   String toString() {
     return "StringFormField('$name', '$value', '$contentType')";
@@ -75,21 +47,12 @@ class TextFileFormField implements FileFormField<Stream<String>> {
   final Stream<String> value;
 
   /// content-type of the field
-  final ContentType contentType;
+  final ContentType? contentType;
 
   /// File of the file field
-  final String filename;
+  final String? filename;
 
   TextFileFormField(this.name, this.value, {this.contentType, this.filename});
-
-  bool operator ==(other) {
-    return name == other.name &&
-        contentType.mimeType == other.contentType.mimeType &&
-        contentType.charset == other.contentType.charset &&
-        filename == other.filename;
-  }
-
-  int get hashCode => name.hashCode;
 
   String toString() {
     return "FileFormField('$name', '$contentType', '$filename')";
@@ -118,9 +81,9 @@ class TextFileListFormField implements TextFileFormField {
   Stream<String> get value => values.first.value;
 
   /// content-type of the field
-  ContentType get contentType => values.first.contentType;
+  ContentType? get contentType => values.first.contentType;
 
-  String get filename => values.first.filename;
+  String? get filename => values.first.filename;
 
   final List<TextFileFormField> values;
 
@@ -143,21 +106,12 @@ class BinaryFileFormField implements FileFormField<Stream<List<int>>> {
   final Stream<List<int>> value;
 
   /// content-type of the field
-  final ContentType contentType;
+  final ContentType? contentType;
 
   /// File of the file field
-  final String filename;
+  final String? filename;
 
   BinaryFileFormField(this.name, this.value, {this.contentType, this.filename});
-
-  bool operator ==(other) {
-    return name == other.name &&
-        contentType.mimeType == other.contentType.mimeType &&
-        contentType.charset == other.contentType.charset &&
-        filename == other.filename;
-  }
-
-  int get hashCode => name.hashCode;
 
   String toString() {
     return "FileFormField('$name', '$contentType', '$filename')";
@@ -186,9 +140,9 @@ class BinaryFileListFormField implements BinaryFileFormField {
   Stream<List<int>> get value => values.first.value;
 
   /// content-type of the field
-  ContentType get contentType => values.first.contentType;
+  ContentType? get contentType => values.first.contentType;
 
-  String get filename => values.first.filename;
+  String? get filename => values.first.filename;
 
   final List<BinaryFileFormField> values;
 

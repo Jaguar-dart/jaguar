@@ -5,7 +5,7 @@ import 'package:jaguar/jaguar.dart';
 /// Reads and writes session data to [Context]
 abstract class SessionIo {
   /// Reads the session data from [Context]
-  String read(Context ctx);
+  String? read(Context ctx);
 
   /// Writes session data to [Context]
   void write(Context ctx, String session);
@@ -25,9 +25,11 @@ class SessionIoCookie implements SessionIo {
   @override
 
   /// Reads the session data from cookies
-  String read(Context ctx) {
-    Cookie cook = ctx.cookies[cookieName];
-    if (cook == null) return null;
+  String? read(Context ctx) {
+    Cookie? cook = ctx.cookies[cookieName];
+    if (cook == null) {
+      return null;
+    }
     return cook.value;
   }
 
@@ -39,7 +41,7 @@ class SessionIoCookie implements SessionIo {
 
     final cook = Cookie(cookieName, session);
     cook.path = cookiePath;
-    ctx.response.cookies.add(cook);
+    ctx.response!.cookies.add(cook);
   }
 }
 
@@ -54,12 +56,14 @@ class SessionIoAuthHeader implements SessionIo {
   @override
 
   /// Reads the session data from authorization header
-  String read(Context ctx) {
-    String authHeaderStr =
+  String? read(Context ctx) {
+    String? authHeaderStr =
         ctx.req.headers.value(HttpHeaders.authorizationHeader);
-    AuthHeaderItem item =
+    AuthHeaderItem? item =
         AuthHeaderItem.fromHeaderBySchema(authHeaderStr, scheme);
-    if (item == null) return null;
+    if (item == null) {
+      return null;
+    }
     return item.credentials;
   }
 
@@ -69,11 +73,11 @@ class SessionIoAuthHeader implements SessionIo {
   void write(Context ctx, String session) {
     if (ctx.response == null) return;
 
-    final String oldHeader =
-        ctx.response.headers.value(HttpHeaders.authorizationHeader);
+    final String? oldHeader =
+        ctx.response!.headers.value(HttpHeaders.authorizationHeader);
     final headers = AuthHeaders.fromHeaderStr(oldHeader);
     headers.addItem(AuthHeaderItem(scheme, session));
-    ctx.response.headers
+    ctx.response!.headers
         .set(HttpHeaders.authorizationHeader, headers.toString());
   }
 }
@@ -89,7 +93,7 @@ class SessionIoHeader implements SessionIo {
   @override
 
   /// Reads the session data from header named by [name]
-  String read(Context ctx) => ctx.req.headers.value(name);
+  String? read(Context ctx) => ctx.req.headers.value(name);
 
   @override
 
@@ -97,6 +101,6 @@ class SessionIoHeader implements SessionIo {
   void write(Context ctx, String session) {
     if (ctx.response == null) return;
 
-    ctx.response.headers.set(name, session);
+    ctx.response!.headers.set(name, session);
   }
 }
