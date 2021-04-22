@@ -5,7 +5,6 @@ import 'dart:async';
 
 import 'dart:io';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:logging/logging.dart';
 import 'dart:convert' as conv;
 import 'package:auth_header/auth_header.dart';
@@ -113,8 +112,6 @@ class Context {
   /// Logger that can be used to log from middlerware and route handlers.
   final Logger log;
 
-  final Map<String, CodecRepo> _serializers;
-
   Context(this.req,
       {this.sessionManager,
       required this.log,
@@ -122,10 +119,8 @@ class Context {
       required this.before,
       required this.after,
       required this.onException,
-      Map<String, CodecRepo>? serializers,
       DateTime? at})
-      : _serializers = serializers ?? <String, CodecRepo>{},
-        at = at ?? DateTime.now().toUtc();
+      : at = at ?? DateTime.now().toUtc();
 
   final _variables = <Type, Map<String, dynamic>>{};
 
@@ -241,23 +236,6 @@ class Context {
     return Stream<List<int>>.fromIterable(<List<int>>[bodyRaw]);
   }
 
-  /// Returns [CodecRepo] for the requested [mimeType]. If [mimeType] is null,
-  /// the mime type of request is used.
-  CodecRepo? codecFor({String? mimeType}) =>
-      _serializers[mimeType ?? this.mimeType];
-
-  /// Returns serializer for given object [type] and [mimeType].
-  ///
-  /// If [mimeType] is null, the mime type of request is used.
-  Serializer<T>? serializerFor<T>(Type? type, {String? mimeType}) {
-    final codec = _serializers[mimeType ?? this.mimeType.mimeType];
-    if (codec == null) {
-      return null;
-    }
-    final ser = codec.getByType<T>(type ?? T);
-    return ser;
-  }
-
   /// Returns body as text
   ///
   /// Example:
@@ -272,6 +250,7 @@ class Context {
     return encoding.decode(await body);
   }
 
+  /*
   /// Deserializes body by mimetype using [_serializers]
   Future<T> bodyDecode<T>() async {
     final codec = _serializers[mimeType.mimeType];
@@ -282,6 +261,7 @@ class Context {
     }
     throw Exception("Do not have codec for mimetype: ${mimeType.mimeType}");
   }
+   */
 
   /// Decodes JSON body of the request
   ///
@@ -299,8 +279,10 @@ class Context {
       Type? type}) async {
     final String text = await bodyAsText(encoding);
     final dec = conv.json.decode(text);
-    if (convert != null) return convert(dec);
-    {
+    if (convert != null) {
+      return convert(dec);
+    }
+    /*{
       final repo = _serializers[MimeTypes.json];
       if (repo != null) {
         final ser = repo.getByType<T>(type ?? T);
@@ -308,7 +290,7 @@ class Context {
           return ser.fromMap(dec);
         }
       }
-    }
+    }*/
     return dec;
   }
 
@@ -350,7 +332,7 @@ class Context {
     if (convert != null) {
       return ret.cast<F>().map(convert).toList();
     }
-    {
+    /*{
       final repo = _serializers[MimeTypes.json];
       if (repo != null) {
         final ser = repo.getByType<T>(type ?? T);
@@ -358,7 +340,7 @@ class Context {
           return ser.fromList(ret.cast<Map>());
         }
       }
-    }
+    }*/
     return ret.cast<T>();
   }
 

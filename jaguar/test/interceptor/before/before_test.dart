@@ -43,14 +43,12 @@ void main() {
       await server?.close();
     });
 
-    test(
-        'one interceptor',
-        () => resty
-                .get('http://localhost:$port/two')
-                .exact(statusCode: 200, mimeType: 'application/json')
-                .decodeJson<Map>()
-                .then((Map body) {
-              expect(body['Random'] * 2, body['Doubled']);
-            }));
+    test('one interceptor', () async {
+      final body = (await resty
+              .get('http://localhost:$port/two')
+              .exact(statusCode: 200, mimeType: 'application/json'))
+          .json<Map>();
+      expect(body['Random'] * 2, body['Doubled']);
+    });
   });
 }

@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 
 import 'package:logging/logging.dart';
 
@@ -53,9 +52,6 @@ class Jaguar extends Object with Muxable {
 
   /// Internal http server
   List<HttpServer>? _servers;
-
-  /// Serializers for mimetypes
-  final serializers = Map<String, CodecRepo>();
 
   /// Constructs an instance of [Jaguar] with given configuration.
   ///
@@ -147,8 +143,7 @@ class Jaguar extends Object with Muxable {
         userFetchers: userFetchers,
         before: before.toList(),
         after: after.toList(),
-        onException: onException.toList(),
-        serializers: serializers);
+        onException: onException.toList());
 
     // Try to find a matching route and invoke it.
     Route? handler =

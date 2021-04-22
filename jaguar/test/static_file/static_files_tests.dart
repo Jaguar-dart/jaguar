@@ -49,7 +49,7 @@ void main() {
 
     test('path traversal', () async {
       Uri uri = _StupidUri(port, ['files', '..', 'inaccessible.txt']);
-      var response = await resty.globalClient.get(uri);
+      var response = await resty.globalClient!.get(uri);
       expect(response.statusCode, 404);
     });
   });

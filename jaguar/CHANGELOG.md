@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.2
+
++ Removed dependence on jaguar_serializer
+
+## 3.0.1
+
++ Removed dependence on jaguar_serializer
+
+## 3.0.0
+
++ Null safety
+
 ## 2.4.46
 
 + `Context.getVariable` returns by id if T is dynamic

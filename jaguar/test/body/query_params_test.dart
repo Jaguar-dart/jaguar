@@ -12,19 +12,19 @@ void main() {
 
   group('params.query', () {
     final port = ports.random;
-    Jaguar server;
+    Jaguar? server;
     setUpAll(() async {
       print('Using port $port');
       server = Jaguar(port: port);
-      server
+      server!
         ..get('/str', (ctx) => ctx.query['param'])
         ..get('/int', (ctx) => ctx.query.getInt('param', 5)! * 10)
         ..get('/double', (ctx) => ctx.query.getDouble('param', 5.5)! * 10);
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test('string', () async {
