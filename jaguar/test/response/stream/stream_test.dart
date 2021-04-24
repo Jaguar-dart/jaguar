@@ -19,8 +19,7 @@ void main() {
       server = Jaguar(port: port);
       server
         ..get('/stream', (Context ctx) {
-          StreamController<List<int>> streamCon =
-              StreamController<List<int>>();
+          StreamController<List<int>> streamCon = StreamController<List<int>>();
 
           Timer(Duration(seconds: 5), () {
             streamCon.add([1, 2, 3, 4]);

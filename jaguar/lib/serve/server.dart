@@ -146,8 +146,7 @@ class Jaguar extends Object with Muxable {
         onException: onException.toList());
 
     // Try to find a matching route and invoke it.
-    Route? handler =
-        _routeTree.match(request.uri.pathSegments, request.method);
+    Route? handler = _routeTree.match(request.uri.pathSegments, request.method);
 
     if (handler == null) {
       ctx.response = await errorWriter.make404(ctx);

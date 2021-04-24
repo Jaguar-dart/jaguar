@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.5
+
++ Null safe version release
+
 ## 3.0.2
 
 + Removed dependence on jaguar_serializer
