@@ -37,11 +37,9 @@ class SessionIoCookie implements SessionIo {
 
   /// Writes session data to cookies
   void write(Context ctx, String session) {
-    if (ctx.response == null) return;
-
     final cook = Cookie(cookieName, session);
     cook.path = cookiePath;
-    ctx.response!.cookies.add(cook);
+    ctx.response.cookies.add(cook);
   }
 }
 
@@ -71,13 +69,11 @@ class SessionIoAuthHeader implements SessionIo {
 
   /// Writes session data to authorization header
   void write(Context ctx, String session) {
-    if (ctx.response == null) return;
-
     final String? oldHeader =
-        ctx.response!.headers.value(HttpHeaders.authorizationHeader);
+        ctx.response.headers.value(HttpHeaders.authorizationHeader);
     final headers = AuthHeaders.fromHeaderStr(oldHeader);
     headers.addItem(AuthHeaderItem(scheme, session));
-    ctx.response!.headers
+    ctx.response.headers
         .set(HttpHeaders.authorizationHeader, headers.toString());
   }
 }
@@ -99,8 +95,6 @@ class SessionIoHeader implements SessionIo {
 
   /// Writes session data to header named by [name]
   void write(Context ctx, String session) {
-    if (ctx.response == null) return;
-
-    ctx.response!.headers.set(name, session);
+    ctx.response.headers.set(name, session);
   }
 }

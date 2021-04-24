@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.6
+
++ `Context.response` cannot be null
+
 ## 3.0.5
 
 + Null safe version release

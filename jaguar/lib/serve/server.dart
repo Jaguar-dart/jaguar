@@ -184,11 +184,9 @@ class Jaguar extends Object with Muxable {
           if (maybeFuture is Future) await maybeFuture;
         }
 
-        if (ctx.response != null) {
-          await ctx.response!.writeResponse(request.response);
-          if (onRouteServed != null) {
-            Future.microtask(() => onRouteServed!(ctx));
-          }
+        await ctx.response.writeResponse(request.response);
+        if (onRouteServed != null) {
+          Future.microtask(() => onRouteServed!(ctx));
         }
       } catch (e, stack) {
         log.warning('${e.toString()}\n${stack.toString()}');

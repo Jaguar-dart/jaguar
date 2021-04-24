@@ -525,7 +525,7 @@ class Context {
     return fieldData;
   }
 
-  Response? response;
+  Response response = Response('');
 
   /// Exception handlers executed if there is an exception during the execution of
   /// the route.
