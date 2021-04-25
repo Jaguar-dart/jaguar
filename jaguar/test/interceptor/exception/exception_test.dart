@@ -11,7 +11,7 @@ import '../../ports.dart' as ports;
 final Random rand = Random.secure();
 
 Response handleException(Context ctx, e, s) =>
-    ctx.response = Response('exception');
+    ctx.response = Response(body: 'exception');
 
 void main() {
   resty.globalClient = http.IOClient();

@@ -428,18 +428,19 @@ abstract class Muxable {
       if (!await file.exists()) {
         final fileDir = Directory(path);
 
-        if (!await fileDir.exists()) return Response(null, statusCode: 404);
+        if (!await fileDir.exists()) return Response(statusCode: 404);
 
         path = p.join(path, 'index.html');
         file = File(path);
 
         if (!await file.exists()) {
           if (directoryLister != null) return directoryLister(fileDir);
-          return Response(null, statusCode: 404);
+          return Response(statusCode: 404);
         }
       }
 
-      return StreamResponse(file.openRead(), mimeType: MimeTypes.ofFile(file));
+      return StreamResponse(
+          body: file.openRead(), mimeType: MimeTypes.ofFile(file));
     },
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -472,7 +473,7 @@ abstract class Muxable {
     return this.get(
         path,
         (_) async =>
-            StreamResponse(f.openRead(), mimeType: MimeTypes.ofFile(f)),
+            StreamResponse(body: f.openRead(), mimeType: MimeTypes.ofFile(f)),
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,

@@ -28,8 +28,10 @@ class DefaultErrorWriter implements ErrorWriter {
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
-      return Response(_write404Html(ctx),
-          statusCode: HttpStatus.notFound, mimeType: MimeTypes.html);
+      return Response(
+          body: _write404Html(ctx),
+          statusCode: HttpStatus.notFound,
+          mimeType: MimeTypes.html);
     } else if (acceptList.contains('application/json') ||
         acceptList.contains('text/json')) {
       return Response.json({
@@ -46,7 +48,7 @@ class DefaultErrorWriter implements ErrorWriter {
       return;
     } */
     else {
-      return Response(_write404Html(ctx), statusCode: HttpStatus.notFound)
+      return Response(body: _write404Html(ctx), statusCode: HttpStatus.notFound)
         ..headers.contentType = ContentType.html;
     }
   }
@@ -59,8 +61,10 @@ class DefaultErrorWriter implements ErrorWriter {
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
-      return Response(_write500Html(ctx, error, stack),
-          statusCode: HttpStatus.notFound, mimeType: MimeTypes.html);
+      return Response(
+          body: _write500Html(ctx, error, stack),
+          statusCode: HttpStatus.notFound,
+          mimeType: MimeTypes.html);
     } else if (acceptList.contains('application/json') ||
         acceptList.contains('text/json')) {
       final data = <String, dynamic>{
@@ -80,8 +84,10 @@ class DefaultErrorWriter implements ErrorWriter {
       return Response.xml(data, statusCode: 500);
     } */
     else {
-      return Response(_write500Html(ctx, error, stack),
-          statusCode: 500, mimeType: MimeTypes.html);
+      return Response(
+          body: _write500Html(ctx, error, stack),
+          statusCode: 500,
+          mimeType: MimeTypes.html);
     }
   }
 }

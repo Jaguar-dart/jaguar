@@ -525,7 +525,7 @@ class Context {
     return fieldData;
   }
 
-  Response response = Response('');
+  Response response = StringResponse();
 
   /// Exception handlers executed if there is an exception during the execution of
   /// the route.
@@ -580,17 +580,20 @@ class Context {
       dynamic res = route!.handler(this);
       if (res is Future) res = await res;
 
-      if (response == null) {
-        if (res is Response)
-          response = res;
-        else if (info.responseProcessor != null) {
-          maybeFuture = info.responseProcessor!(this, res);
-          if (maybeFuture is Future) await maybeFuture;
-        } else {
-          response = Response(res,
-              statusCode: info.statusCode,
-              mimeType: info.mimeType,
-              charset: info.charset);
+      if (res is Response) {
+        response = res;
+      } else {
+        if (response.body == null) {
+          if (info.responseProcessor != null) {
+            maybeFuture = info.responseProcessor!(this, res);
+            if (maybeFuture is Future) await maybeFuture;
+          } else if (res != null) {
+            response = StringResponse.cloneFrom(response,
+                body: res,
+                statusCode: info.statusCode,
+                mimeType: info.mimeType,
+                charset: info.charset);
+          }
         }
       }
     }

@@ -2,7 +2,12 @@
 
 ## 3.0.6
 
-+ `Context.response` cannot be null
++ `Context.response` is non-null
+
+**Breaking changes**:
+
++ Changes to `Response` constructor
++ Renamed `Response.value`to `Response.body`
 
 ## 3.0.5
 

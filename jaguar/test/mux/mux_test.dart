@@ -18,10 +18,10 @@ void main() {
       server = Jaguar(port: port);
       server!
         ..get('/hello', (ctx) {
-          ctx.response = Response('Hello world!');
+          ctx.response = Response(body: 'Hello world!');
         })
         ..get('/returnValue', (ctx) => 'Hello world, Champ!')
-        ..get('/returnResponse', (ctx) => Response('5'))
+        ..get('/returnResponse', (ctx) => Response(body: '5'))
         ..post('/', (ctx) => 'Post')
         ..put('/', (ctx) => 'Put')
         ..delete('/', (ctx) => 'Delete')

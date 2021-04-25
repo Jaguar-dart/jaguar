@@ -170,7 +170,8 @@ class Jaguar extends Object with Muxable {
             } finally {}
           }
         } catch (e) {
-          ctx.response = Response('General technical error', statusCode: 500);
+          ctx.response =
+              StringResponse(body: 'General technical error', statusCode: 500);
         }
       }
     }

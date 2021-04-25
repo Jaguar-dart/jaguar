@@ -17,10 +17,11 @@ void jsonResponseProcessor(Context context, dynamic result) {
   }
    */
 
-  context.response = Response.json(result,
-      statusCode: info?.statusCode ?? 200,
+  context.response = StringResponse.cloneFrom(context.response,
+      body: jsonEncode(result),
+      statusCode: info?.statusCode,
       mimeType: info?.mimeType ?? MimeTypes.json,
-      charset: info?.charset ?? kDefaultCharset);
+      charset: info?.charset);
 }
 
 ///An annotation to define a route
@@ -34,7 +35,7 @@ class HttpMethod {
   /// Map of regular expression matchers for specific path segment
   final Map<String, String>? pathRegEx;
 
-  final int statusCode;
+  final int? statusCode;
 
   final String? mimeType;
 
@@ -46,7 +47,7 @@ class HttpMethod {
       {this.path = '',
       this.methods = _methods,
       this.pathRegEx,
-      this.statusCode = 200,
+      this.statusCode,
       this.mimeType,
       this.charset,
       this.responseProcessor});
@@ -90,7 +91,7 @@ class WsStream implements WsAnnot {
   /// Map of regular expression matchers for specific path segment
   final Map<String, String>? pathRegEx;
 
-  final int statusCode;
+  final int? statusCode;
 
   final String? mimeType;
 
@@ -101,7 +102,7 @@ class WsStream implements WsAnnot {
   const WsStream(
       {this.path = '',
       this.pathRegEx,
-      this.statusCode = 200,
+      this.statusCode,
       this.mimeType,
       this.charset = kDefaultCharset,
       this.responseProcessor});
@@ -138,7 +139,7 @@ class WsRespond implements WsAnnot {
   /// Map of regular expression matchers for specific path segment
   final Map<String, String>? pathRegEx;
 
-  final int statusCode;
+  final int? statusCode;
 
   final String? mimeType;
 
@@ -149,7 +150,7 @@ class WsRespond implements WsAnnot {
   const WsRespond(
       {this.path = '',
       this.pathRegEx,
-      this.statusCode = 200,
+      this.statusCode,
       this.mimeType,
       this.charset = kDefaultCharset,
       this.responseProcessor});

@@ -9,9 +9,10 @@ import '../../ports.dart' as ports;
 
 void bef(Context ctx) => ctx.addVariable(5);
 
-void aft(Context ctx) => ctx.response = Response(ctx.getVariable<int>()! * 5);
+void aft(Context ctx) =>
+    ctx.response = Response(body: ctx.getVariable<int>()! * 5);
 
-void aft1(Context ctx) => ctx.response = Response('aft1');
+void aft1(Context ctx) => ctx.response = Response(body: 'aft1');
 
 void bef2(Context ctx) {
   ctx.addVariable(5);
