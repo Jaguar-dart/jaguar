@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
++ Null safety
+
 ## 3.0.0
 
 + `cors` replaces `CORS`

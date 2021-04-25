@@ -1,16 +1,16 @@
 // Copyright (c) 2017, teja. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'package:http/io_client.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_cors/jaguar_cors.dart';
 import 'package:test/test.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
-import 'package:http/http.dart' as http;
 
 const String baseUrl = 'http://localhost:10000';
 
 void main() {
-  resty.globalClient = http.Client();
+  resty.globalClient = IOClient();
 
   group('cors tests', () {
     final server = Jaguar(port: 10000);
@@ -54,10 +54,7 @@ void main() {
     });
 
     test('OriginsMatch', () async {
-      await resty
-          .get(baseUrl + '/origins')
-          .go()
-          .expect([resty.bodyIs('origins')]);
+      await resty.get(baseUrl + '/origins').expect([resty.bodyIs('origins')]);
       await resty
           .get(baseUrl + '/origins')
           .header('Origin', 'http://example1.com')

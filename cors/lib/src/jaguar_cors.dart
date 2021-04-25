@@ -18,7 +18,7 @@ class _Cors {
 
   _Cors(this.options);
 
-  _CorsRequestParams params;
+  _CorsRequestParams? params;
 
   bool _isCors = false;
 
@@ -28,9 +28,9 @@ class _Cors {
 
   bool get isPreflight => _isPreflight;
 
-  String _errorMsg;
+  String? _errorMsg;
 
-  String get errorMsg => _errorMsg;
+  String? get errorMsg => _errorMsg;
 
   bool get hasError => _errorMsg != null;
 
@@ -39,9 +39,10 @@ class _Cors {
     params = _CorsRequestParams.fromRequest(req);
 
     // Check if it is CORS request
-    if (params.origin is! String) {
+    if (params!.origin is! String) {
       if (!options.allowNonCorsRequests) {
-        throw Response('Only Cross origin requests are allowed!',
+        throw Response(
+            body: 'Only Cross origin requests are allowed!',
             statusCode: HttpStatus.forbidden);
       }
       return;
@@ -52,7 +53,7 @@ class _Cors {
 
     _isCors = true;
 
-    if (req.method == 'OPTIONS' && params.method is String) {
+    if (req.method == 'OPTIONS' && params!.method is String) {
       _isPreflight = true;
     }
 
@@ -67,7 +68,8 @@ class _Cors {
     }
 
     if (errorMsg != null) {
-      throw Response('Invalid CORS request: ' + errorMsg,
+      throw Response(
+          body: 'Invalid CORS request: ' + errorMsg!,
           statusCode: HttpStatus.forbidden);
     }
   }
@@ -80,17 +82,17 @@ class _Cors {
       return;
     }
 
-    if (!options.allowedOrigins.contains(params.origin)) {
+    if (!options.allowedOrigins!.contains(params!.origin)) {
       _errorMsg = 'Origin not allowed!';
       return;
     }
   }
 
   void _filterMethods(Request req) {
-    String method;
+    String? method;
 
     if (isPreflight) {
-      method = params.method;
+      method = params!.method;
     } else {
       method = req.method;
     }
@@ -102,7 +104,7 @@ class _Cors {
       return;
     }
 
-    if (!options.allowedMethods.contains(method)) {
+    if (method != null && !options.allowedMethods.contains(method)) {
       _errorMsg = 'Method not allowed!';
       return;
     }
@@ -114,8 +116,8 @@ class _Cors {
     if (isPreflight) {
       // If preflight, check that all headers supplied in 'Access-Control-Request-Headers'
       // are accepted
-      if (params.headers is List<String>) {
-        headers.addAll(params.headers);
+      if (params!.headers != null) {
+        headers.addAll(params!.headers!);
       }
     } else {
       req.headers.forEach((String header, _) => headers.add(header));
@@ -147,7 +149,7 @@ class _Cors {
       response.headers.set(_CorsHeaders.AllowedOrigin, '*');
     } else {
       response.headers
-          .set(_CorsHeaders.AllowedOrigin, options.allowedOrigins.join(', '));
+          .set(_CorsHeaders.AllowedOrigin, options.allowedOrigins!.join(', '));
     }
 
     if (options.vary) {

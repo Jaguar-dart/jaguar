@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 const String baseUrl = 'http://localhost:10000';
@@ -20,7 +21,7 @@ Future<void> onlySameOrigin() async {
 }
 
 Future<void> originMatch() async {
-  await resty.get(baseUrl + '/origins').go().expect([resty.bodyIs('origins')]);
+  await resty.get(baseUrl + '/origins').expect([resty.bodyIs('origins')]);
   await resty
       .get(baseUrl + '/origins')
       .header('Origin', 'http://example1.com')
@@ -48,7 +49,7 @@ Future<void> preflight() async {
 }
 
 main() async {
-  resty.globalClient = http.Client();
+  resty.globalClient = IOClient();
 
   await onlySameOrigin();
   await originMatch();

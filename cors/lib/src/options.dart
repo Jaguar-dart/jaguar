@@ -17,7 +17,7 @@ class CorsOptions {
   ///
   /// Under the hood:
   /// Sets Access-Control-Allow-Origin to list of allowed origins
-  final List<String> allowedOrigins;
+  final List<String>? allowedOrigins;
 
   /// Indicates whether the request can include user credentials like cookies,
   /// HTTP authentication or client side SSL certificates
@@ -66,7 +66,7 @@ class CorsOptions {
   ///
   /// Under the hood:
   /// Sets Access-Control-Max-Age
-  final int maxAge;
+  final int? maxAge;
 
   final bool vary;
 

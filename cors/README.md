@@ -36,8 +36,8 @@ class Routes extends Object with CorsHelper {
 }
 
 main() async {
-  final server = new Jaguar(port: 9000);
-  server.addApi(reflect(new Routes()));
+  final server = Jaguar(port: 9000);
+  server.addApi(reflect(Routes()));
   server.log.onRecord.listen(print);
   await server.serve();
 }
