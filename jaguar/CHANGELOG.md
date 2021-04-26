@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.8
+
++ Repository in pubspec
+
 ## 3.0.6
 
 + `Context.response` is non-null
