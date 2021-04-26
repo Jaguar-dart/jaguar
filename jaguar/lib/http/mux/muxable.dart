@@ -410,28 +410,15 @@ abstract class Muxable {
       ResponseProcessor? responseProcessor,
       bool stripPrefix = true,
       Future<Response> directoryLister(Directory directory)?,
-      Iterable<String Function(File)> mimeTypes,}) {
+      Iterable<String? Function(File)>? mimeTypeDetectors}) {
     if (directory is String) directory = Directory(directory);
 
     final Directory dir = directory;
     if (!dir.existsSync())
       throw Exception('Directory ${dir.path} does not exist!');
 
-    Route route;
     int skipCount = 0;
-
-    final mimeFunctions = []..addAll(mimeTypes ?? [])..add(MimeTypes.ofFile);
-    String determineMimeType(File f) {
-      for (var type in mimeFunctions) {
-        var result = type(f);
-        if (result != null) {
-          return result;
-        }
-      }
-      return null;
-    }
-
-    route = this.get(path, (ctx) async {
+    Route route = this.get(path, (ctx) async {
       Iterable<String> segs = ctx.pathSegments;
       if (stripPrefix) segs = segs.skip(skipCount);
 
@@ -452,8 +439,9 @@ abstract class Muxable {
         }
       }
 
-      return StreamResponse(body: await file.openRead(),
-          mimeType: determineMimeType(file));
+      return StreamResponse(
+          body: await file.openRead(),
+          mimeType: MimeTypes.ofFile(file, detectors: mimeTypeDetectors));
     },
         pathRegEx: pathRegEx,
         statusCode: statusCode,
@@ -462,8 +450,9 @@ abstract class Muxable {
         responseProcessor: responseProcessor);
 
     if (stripPrefix) {
-      if (route.pathSegments.isNotEmpty)
+      if (route.pathSegments.isNotEmpty) {
         skipCount = route.pathSegments.length - 1;
+      }
     }
     return route;
   }
@@ -479,14 +468,16 @@ abstract class Muxable {
       int statusCode = 200,
       String? mimeType,
       String? charset = kDefaultCharset,
-      ResponseProcessor? responseProcessor}) {
+      ResponseProcessor? responseProcessor,
+      Iterable<String? Function(File)>? mimeTypeDetectors}) {
     if (file is String) file = File(file);
 
     final File f = file;
     return this.get(
         path,
-        (_) async =>
-            StreamResponse(body: f.openRead(), mimeType: MimeTypes.ofFile(f)),
+        (_) async => StreamResponse(
+            body: f.openRead(),
+            mimeType: MimeTypes.ofFile(f, detectors: mimeTypeDetectors)),
         pathRegEx: pathRegEx,
         statusCode: statusCode,
         mimeType: mimeType,

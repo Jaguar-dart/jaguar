@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.9
+
++ mimeTypeDetectors for static file serving routes
+
 ## 3.0.8
 
 + Repository in pubspec

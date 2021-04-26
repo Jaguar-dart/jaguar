@@ -100,7 +100,16 @@ abstract class MimeTypes {
   };
 
   /// Returns mime type of [file] based on its extension
-  static String? ofFile(File file) {
+  static String? ofFile(File file, {Iterable<MimeTypeDetector>? detectors}) {
+    if (detectors != null) {
+      final mimeType = detectors
+          .map((e) => e(file))
+          .firstWhere((mime) => mime != null, orElse: () => null);
+      if (mimeType != null) {
+        return mimeType;
+      }
+    }
+
     String fileExtension = p.extension(file.path);
 
     if (fileExtension.startsWith('.'))
@@ -117,6 +126,8 @@ abstract class MimeTypes {
     return null;
   }
 }
+
+typedef String? MimeTypeDetector(File f);
 
 /// identifies the type of content of a message
 class MimeType {

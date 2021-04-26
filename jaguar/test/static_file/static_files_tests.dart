@@ -16,7 +16,7 @@ void main() {
     setUpAll(() async {
       server = Jaguar(port: port);
       server.staticFiles('files/*', 'test/static_file/files_root/files',
-          mimeTypes: [
+          mimeTypeDetectors: [
             (f) => f.path.endsWith('.ndjson') ? 'application/x-ndjson' : null,
             (f) => f.path.endsWith('override.txt') ? 'image/png' : null,
             (f) => f.path.endsWith('.auto') &&
