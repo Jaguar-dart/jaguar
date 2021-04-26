@@ -1,7 +1,7 @@
 part of 'error_writer.dart';
 
 /// Creates body for 500 html response
-String _write500Html(Context ctx, Object error, [StackTrace stack]) {
+String _write500Html(Context ctx, Object error, [StackTrace? stack]) {
   String stackInfo = "";
   if (stack != null) {
     stackInfo = '''

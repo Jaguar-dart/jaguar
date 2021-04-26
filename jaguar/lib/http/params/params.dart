@@ -3,13 +3,13 @@ library jaguar.src.http.params;
 
 import 'package:collection/collection.dart' show DelegatingMap;
 
-import 'package:jaguar/utils/string/import.dart';
+import 'package:jaguar/utils/string/string.dart';
 
 class CastableStringMap extends DelegatingMap<String, String> {
   CastableStringMap(Map<String, String> map) : super(map);
 
   ///Retrieve a value from this map
-  String get(String key, [String defaultValue]) {
+  String? get(String key, [String? defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -18,7 +18,7 @@ class CastableStringMap extends DelegatingMap<String, String> {
   }
 
   ///Retrieve a value from this map
-  int getInt(String key, [int defaultValue]) {
+  int? getInt(String key, [int? defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -37,7 +37,7 @@ class CastableStringMap extends DelegatingMap<String, String> {
   }
 
   ///Retrieve a value from this map
-  double getDouble(String key, [double defaultValue]) {
+  double? getDouble(String key, [double? defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -56,7 +56,7 @@ class CastableStringMap extends DelegatingMap<String, String> {
   }
 
   ///Retrieve a value from this map
-  num getNum(String key, [num defaultValue]) {
+  num? getNum(String key, [num? defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -75,7 +75,7 @@ class CastableStringMap extends DelegatingMap<String, String> {
   }
 
   ///Retrieve a value from this map
-  bool getBool(String key, [bool defaultValue]) {
+  bool? getBool(String key, [bool? defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -93,7 +93,7 @@ class CastableStringMap extends DelegatingMap<String, String> {
     return defaultValue;
   }
 
-  DateTime getDateTime(String key, {DateTime defaultValue}) {
+  DateTime? getDateTime(String key, {DateTime? defaultValue}) {
     final micros = getInt(key);
     if (micros == null) return defaultValue;
 
@@ -102,15 +102,15 @@ class CastableStringMap extends DelegatingMap<String, String> {
 
   List<String> getList(String key, [Pattern separator = ","]) {
     if (!containsKey(key)) return [];
-    return this[key].split(separator);
+    return this[key]!.split(separator);
   }
 }
 
 /// Class to hold path parameters
 class PathParams extends CastableStringMap {
-  PathParams([Map<String, dynamic> map]) : super({}) {
+  PathParams([Map<String, String>? map]) : super({}) {
     if (map is Map) {
-      addAll(map);
+      addAll(map!);
     }
   }
 
@@ -119,7 +119,13 @@ class PathParams extends CastableStringMap {
 
 /// Class to hold query parameters
 class QueryParams extends CastableStringMap {
-  QueryParams(Map<String, dynamic> map) : super(map);
+  QueryParams(Map<String, String> map) : super(map);
 
   QueryParams.FromQueryParam(QueryParams param) : super(param);
+
+  String toString() => this
+      .entries
+      .map((e) =>
+          '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}')
+      .join('&');
 }

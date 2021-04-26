@@ -6,7 +6,7 @@ export 'common/common.dart';
 export 'context/context.dart';
 export 'controller/controller.dart';
 export 'mux/mux.dart';
-export 'params/import.dart';
+export 'params/params.dart';
 export 'request/request.dart';
 export 'response/response.dart';
 export 'session/session.dart';

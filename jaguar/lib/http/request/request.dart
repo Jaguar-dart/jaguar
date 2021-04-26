@@ -49,14 +49,14 @@ abstract class Request {
   List<Cookie> get cookies;
 
   /// Connection information of the request
-  HttpConnectionInfo get connectionInfo;
+  HttpConnectionInfo? get connectionInfo;
 
   /// The client certificate of the client making the request
   ///
   /// This value is null if the connection is not a secure TLS or SSL connection,
   /// or if the server does not request a client certificate, or if the client
   /// does not provide one.
-  X509Certificate get certificate;
+  X509Certificate? get certificate;
 
   /// The content length of the request body
   ///

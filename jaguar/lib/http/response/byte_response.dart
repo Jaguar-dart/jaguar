@@ -1,22 +1,27 @@
-import 'dart:io';
-import 'response.dart';
+part of 'response.dart';
 
-/// [Response] that writes the bytes provided in [value] to the response.
+/// [Response] that writes the bytes provided in [body] to the response.
 class ByteResponse extends Response<List<int>> {
-  ByteResponse(List<int> value,
-      {int statusCode = 200,
-      Map<String, dynamic> headers,
-      String mimeType,
-      String charset})
-      : super(value,
+  ByteResponse({
+    List<int>? body,
+    int statusCode = 200,
+    Map<String, dynamic>? headers,
+    String? mimeType,
+    String? charset,
+    List<Cookie>? cookies,
+  }) : super._make(
+            body: body,
             statusCode: statusCode,
             headers: headers,
             mimeType: mimeType,
-            charset: charset);
+            charset: charset,
+            cookies: cookies);
 
   @override
   void writeResponse(HttpResponse resp) {
     writeAllButBody(resp);
-    resp.add(value);
+    if (body != null) {
+      resp.add(body!);
+    }
   }
 }

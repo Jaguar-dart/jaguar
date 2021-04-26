@@ -1,28 +1,30 @@
+library test.jaguar.session;
+
 import 'package:http/io_client.dart' as http;
-import 'package:http/http.dart' as http;
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
-import 'package:collection/collection.dart';
+import '../ports.dart' as ports;
 
 main() {
   resty.globalClient = http.IOClient();
 
   group("Session", () {
-    final jar = new resty.CookieJar();
-
-    Jaguar server;
+    final jar = resty.CookieJar();
+    final port = ports.random;
+    Jaguar? server;
     setUpAll(() async {
-      server = new Jaguar(port: 10000)
+      print('Using port $port');
+      server = Jaguar(port: port, sessionManager: JaguarSessionManager())
         ..getJson('/api/add/:item', (ctx) async {
-          final Session session = await ctx.session;
-          final String newItem = ctx.pathParams['item'];
+          final Session? session = await ctx.session;
+          final String? newItem = ctx.pathParams['item'];
 
-          final List<String> items = (session['items'] ?? '').split(',');
+          final List<String> items = session!['items']?.split(',') ?? [];
 
           // Add item to shopping cart stored on session
           if (!items.contains(newItem)) {
-            items.add(newItem);
+            items.add(newItem!);
             session['items'] = items.join(',');
             return {"Action": "Added"};
           }
@@ -30,10 +32,10 @@ main() {
           return {"Action": "Already present"};
         })
         ..getJson('/api/remove/:item', (ctx) async {
-          final Session session = await ctx.session;
-          final String newItem = ctx.pathParams['item'];
+          final Session? session = await ctx.session;
+          final String? newItem = ctx.pathParams['item'];
 
-          final List<String> items = (session['items'] ?? '').split(',');
+          final List<String> items = (session!['items'] ?? '').split(',');
 
           // Remove item from shopping cart stored on session
           if (items.contains(newItem)) {
@@ -44,54 +46,39 @@ main() {
 
           return {"Action": "Not present"};
         });
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test('ParseNUpdate', () async {
-      await resty
-          .get('http://localhost:10000/api/add/Dog')
+      var resp = await resty
+          .get('http://localhost:$port/api/add/Dog')
           .before(jar)
-          .go()
-          .json<Map>()
-          .expect([
-        resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
-      ]);
-      await resty
-          .get('http://localhost:10000/api/add/Cat')
+          .exact(statusCode: 200);
+      expect(resp.json(), {"Action": "Added"});
+      resp = await resty
+          .get('http://localhost:$port/api/add/Cat')
           .before(jar)
-          .go()
-          .json<Map>()
-          .expect([
-        resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
-      ]);
-      await resty
-          .get('http://localhost:10000/api/add/Mink')
+          .exact(statusCode: 200);
+      expect(resp.json(), {"Action": "Added"});
+      resp = await resty
+          .get('http://localhost:$port/api/add/Mink')
           .before(jar)
-          .go()
-          .json<Map>()
-          .expect([
-        resty.bodyIs({"Action": "Added"}, const MapEquality().equals)
-      ]);
-      await resty
-          .get('http://localhost:10000/api/remove/Cat')
+          .exact(statusCode: 200);
+      expect(resp.json(), {"Action": "Added"});
+      resp = await resty
+          .get('http://localhost:$port/api/remove/Cat')
           .before(jar)
-          .go()
-          .json<Map>()
-          .expect([
-        resty.bodyIs({"Action": "Removed"}, const MapEquality().equals)
-      ]);
-      await resty
-          .get('http://localhost:10000/api/remove/Cat')
+          .exact(statusCode: 200);
+      expect(resp.json(), {"Action": "Removed"});
+      resp = await resty
+          .get('http://localhost:$port/api/remove/Cat')
           .before(jar)
-          .go()
-          .json<Map>()
-          .expect([
-        resty.bodyIs({"Action": "Not present"}, const MapEquality().equals)
-      ]);
+          .exact(statusCode: 200);
+      expect(resp.json(), {"Action": "Not present"});
     });
   });
 }

@@ -58,7 +58,7 @@ class Session {
   /// If [id] is not given, it tries to create a new unique id.
   /// If [createdTime] is not given, it sets the [createdTime] to current time
   Session.newSession(Map<String, String> data,
-      {String id, DateTime createdTime})
+      {String? id, DateTime? createdTime})
       : id = id ?? newId,
         needsUpdate = true,
         createdTime = createdTime ?? new DateTime.now() {
@@ -74,7 +74,7 @@ class Session {
   ///       final String oldItem = session['item'];
   ///       // ...
   ///     });
-  String operator [](String key) => _data[key];
+  String? operator [](String key) => _data[key];
 
   /// Set session [value] by [key]
   ///
@@ -119,7 +119,7 @@ class Session {
   ///       session.remove('item');
   ///       // ...
   ///     });
-  String remove(String key) {
+  String? remove(String key) {
     needsUpdate = true;
     return _data.remove(key);
   }
@@ -138,38 +138,44 @@ class Session {
 
   /// Returns a session value as int by [key]. Returns [defaultVal] if the
   /// conversion fails.
-  int getInt(String key, [int defaultVal]) {
-    final String val = _data[key];
+  int? getInt(String key, [int? defaultVal]) {
+    final String? val = _data[key];
 
-    if (val == null) return defaultVal;
+    if (val == null) {
+      return defaultVal;
+    }
 
     return int.tryParse(val) ?? defaultVal;
   }
 
   /// Returns a session value as double by [key]. Returns [defaultVal] if the
   /// conversion fails.
-  double getDouble(String key, [double defaultVal]) {
-    final String val = _data[key];
+  double? getDouble(String key, [double? defaultVal]) {
+    final String? val = _data[key];
 
-    if (val == null) return defaultVal;
+    if (val == null) {
+      return defaultVal;
+    }
 
     return double.tryParse(val) ?? defaultVal;
   }
 
-  List<String> getList(String key, {String split = ','}) {
-    final String val = _data[key];
+  List<String>? getList(String key, {String split = ','}) {
+    final String? val = _data[key];
 
-    if (val == null) return null;
-    if (val.isEmpty) return [];
+    if (val == null) {
+      return null;
+    }
 
     return val.split(split);
   }
 
-  Set<String> getSet(String key, {String split = ','}) {
-    final String val = _data[key];
+  Set<String>? getSet(String key, {String split = ','}) {
+    final String? val = _data[key];
 
-    if (val == null) return null;
-    if (val.isEmpty) return Set();
+    if (val == null) {
+      return null;
+    }
 
     return Set.from(val.split(split));
   }

@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 
 import 'package:logging/logging.dart';
 
@@ -36,7 +35,7 @@ class Jaguar extends Object with Muxable {
   /// Session manager to parse and update session data for requests.
   ///
   /// Defaults to [JaguarSessionManager].
-  SessionManager sessionManager;
+  SessionManager? sessionManager;
 
   final before = <RouteInterceptor>[];
 
@@ -49,11 +48,10 @@ class Jaguar extends Object with Muxable {
   /// log.
   final log = Logger('J');
 
-  /// Internal http server
-  List<HttpServer> _server;
+  final FutureOr<void> Function(Context ctx)? onRouteServed;
 
-  /// Serializers for mimetypes
-  final serializers = Map<String, CodecRepo>();
+  /// Internal http server
+  List<HttpServer>? _servers;
 
   /// Constructs an instance of [Jaguar] with given configuration.
   ///
@@ -65,16 +63,16 @@ class Jaguar extends Object with Muxable {
   /// [errorWriter] is used to write custom error page [Response] in cases of HTTP
   /// errors.
   /// [sessionManager] provides ability to use custom session managers.
-  Jaguar(
-      {String address = "0.0.0.0",
-      int port = 8080,
-      bool multiThread = false,
-      SecurityContext securityContext,
-      this.autoCompress = false,
-      ErrorWriter errorWriter,
-      SessionManager sessionManager})
-      : errorWriter = errorWriter ?? DefaultErrorWriter(),
-        sessionManager = sessionManager ?? JaguarSessionManager(),
+  Jaguar({
+    String address = "0.0.0.0",
+    int port = 8080,
+    bool multiThread = false,
+    SecurityContext? securityContext,
+    this.autoCompress = false,
+    ErrorWriter? errorWriter,
+    this.sessionManager,
+    this.onRouteServed,
+  })  : errorWriter = errorWriter ?? DefaultErrorWriter(),
         _connectionInfos = [
           ConnectTo(
               address: address,
@@ -85,43 +83,42 @@ class Jaguar extends Object with Muxable {
 
   /// Start listening for requests also on [connection]
   void alsoTo(ConnectTo connection) {
-    if (_server != null) throw Exception('Already started!');
+    if (_servers != null) throw Exception('Already started!');
     _connectionInfos.add(connection);
   }
 
   /// Starts serving the requests.
   Future<void> serve({bool logRequests = false}) async {
-    if (_server != null) throw Exception('Already started!');
+    if (_servers != null) {
+      throw Exception('Already started!');
+    }
 
     _build();
 
     if (logRequests) log.info("Serving on " + _connectionInfos.join(', '));
 
-    _server = List<HttpServer>(_connectionInfos.length);
+    _servers = <HttpServer>[];
     try {
       for (int i = 0; i < _connectionInfos.length; i++) {
         ConnectTo ct = _connectionInfos[i];
         if (ct.securityContext != null) {
-          _server[i] = await HttpServer.bindSecure(
-              ct.address, ct.port, ct.securityContext,
-              shared: ct.multiThread);
+          _servers!.add(await HttpServer.bindSecure(
+              ct.address, ct.port, ct.securityContext!,
+              shared: ct.multiThread));
         } else {
-          _server[i] = await HttpServer.bind(ct.address, ct.port,
-              shared: ct.multiThread);
+          _servers!.add(await HttpServer.bind(ct.address, ct.port,
+              shared: ct.multiThread));
         }
-        _server[i].autoCompress = autoCompress;
+        _servers![i].autoCompress = autoCompress;
       }
     } catch (e) {
-      for (int i = 0; i < _connectionInfos.length; i++) {
-        HttpServer server = _server[i];
-        if (server != null) {
-          await server.close();
-        }
+      for (final server in _servers!) {
+        await server.close();
       }
       rethrow;
     }
 
-    for (HttpServer server in _server) {
+    for (HttpServer server in _servers!) {
       if (logRequests) {
         server.listen((HttpRequest r) {
           log.info("Req => Method: ${r.method} Url: ${r.uri}");
@@ -146,41 +143,36 @@ class Jaguar extends Object with Muxable {
         userFetchers: userFetchers,
         before: before.toList(),
         after: after.toList(),
-        onException: onException.toList(),
-        serializers: serializers);
+        onException: onException.toList());
 
     // Try to find a matching route and invoke it.
-    RouteHandler handler =
-        _routeTree.match(request.uri.pathSegments, request.method);
+    Route? handler = _routeTree.match(request.uri.pathSegments, request.method);
+
     if (handler == null) {
       ctx.response = await errorWriter.make404(ctx);
-      await ctx.response.writeResponse(request.response);
-      return request.response.close();
-    }
+    } else {
+      try {
+        await handler(ctx);
+      } catch (e, stack) {
+        try {
+          if (e is Response) {
+            ctx.response = e;
+          } else if (e is ExceptionWithResponse) {
+            ctx.response = e.response;
+          } else {
+            ctx.response = await errorWriter.make500(ctx, e, stack);
+          }
 
-    try {
-      await handler(ctx);
-      if (ctx.response is BuiltinErrorResponse)
-        ctx.response = await (ctx.response as BuiltinErrorResponse)
-            .convertToError(ctx, errorWriter);
-    } catch (e, stack) {
-      Response newResponse;
-      if (e is Response) newResponse = e;
-      for (int i = ctx.onException.length - 1; i >= 0; i--) {
-        maybeFuture = ctx.onException[i](ctx, e, stack);
-        if (maybeFuture is Future) maybeFuture = await maybeFuture;
-        if (maybeFuture is Response) newResponse = maybeFuture;
-      }
-      if (newResponse is Response) {
-        // If [Response] object was thrown, write it!
-        ctx.response = newResponse;
-      } else if (e is ExceptionWithResponse) {
-        ctx.response = e.response;
-        if (ctx.response == null) {
-          ctx.response = await errorWriter.make500(ctx, e, stack);
+          for (int i = ctx.onException.length - 1; i >= 0; i--) {
+            try {
+              var maybeFuture = ctx.onException[i](ctx, e, stack);
+              if (maybeFuture is Future) await maybeFuture;
+            } finally {}
+          }
+        } catch (e) {
+          ctx.response =
+              StringResponse(body: 'General technical error', statusCode: 500);
         }
-      } else {
-        ctx.response = await errorWriter.make500(ctx, e, stack);
       }
     }
 
@@ -189,12 +181,14 @@ class Jaguar extends Object with Muxable {
       try {
         // Update session, if required.
         if (ctx.sessionNeedsUpdate) {
-          maybeFuture = sessionManager.write(ctx);
+          maybeFuture = ctx.sessionManager!.write(ctx);
           if (maybeFuture is Future) await maybeFuture;
         }
 
-        if (ctx.response != null)
-          await ctx.response.writeResponse(request.response);
+        await ctx.response.writeResponse(request.response);
+        if (onRouteServed != null) {
+          Future.microtask(() => onRouteServed!(ctx));
+        }
       } catch (e, stack) {
         log.warning('${e.toString()}\n${stack.toString()}');
       }
@@ -206,29 +200,32 @@ class Jaguar extends Object with Muxable {
   /// Closes the server
   Future<void> close() async {
     dynamic err;
-    for (HttpServer server in _server) {
+    for (HttpServer server in _servers!) {
       try {
         await server.close(force: true);
       } catch (e) {
         if (err == null) err = e;
       }
     }
-    _server = null;
+    _servers = null;
     if (err != null) throw err;
   }
 
   /// Create a new route group
-  GroupBuilder group([String path = '']) => GroupBuilder(this, path: path);
+  GroupBuilder group([String path = '']) => GroupBuilder(this, path: path)
+    ..before.addAll(before)
+    ..after.addAll(after)
+    ..onException.addAll(onException);
 
   /// Adds all the given [routes] to be served
   void add(Iterable<Route> routes) {
-    if (_server != null) throw Exception('Server has started!');
+    if (_servers != null) throw Exception('Server has started!');
     _routes.addAll(routes);
   }
 
   /// Adds the given [route] to be served
   Route addRoute(Route route) {
-    if (_server != null) throw Exception('Server has started!');
+    if (_servers != null) throw Exception('Server has started!');
     _routes.add(route);
     return route;
   }
@@ -238,10 +235,10 @@ class Jaguar extends Object with Muxable {
 
   final userFetchers = <Type, UserFetcher<AuthorizationUser>>{};
 
-  PathTree<RouteHandler> _routeTree;
+  PathTree<Route> _routeTree = PathTree<Route>();
 
   void _build() {
-    _routeTree = PathTree<RouteHandler>();
+    _routeTree = PathTree<Route>();
 
     for (Route route in _routes) {
       _routeTree.addPathAsSegments(route.pathSegments, route,
@@ -258,7 +255,7 @@ class ConnectTo {
   final int port;
 
   /// Security context for HTTPS
-  final SecurityContext securityContext;
+  final SecurityContext? securityContext;
 
   /// Should the port be service-able from multiple isolates?
   ///

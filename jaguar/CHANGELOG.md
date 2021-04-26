@@ -1,5 +1,74 @@
 # Changelog
 
+## 3.0.8
+
++ Repository in pubspec
+
+## 3.0.6
+
++ `Context.response` is non-null
+
+**Breaking changes**:
+
++ Changes to `Response` constructor
++ Renamed `Response.value`to `Response.body`
+
+## 3.0.5
+
++ Null safe version release
+
+## 3.0.2
+
++ Removed dependence on jaguar_serializer
+
+## 3.0.1
+
++ Removed dependence on jaguar_serializer
+
+## 3.0.0
+
++ Null safety
+
+## 2.4.46
+
++ `Context.getVariable` returns by id if T is dynamic
+
+## 2.4.45
+
++ `Context.getVariable` returns by id if T is dynamic
+
+## 2.4.44
+
++ Upgraded `path_tree` dependency to version `2.4.44`
+
+## 2.4.43
+
++ `QueryParams.toString()`
+
+## 2.4.42
+
++ `Context.at` shows when the request arrived
+
+## 2.4.41
+
++ `Jaguar.onRouteServed` callback
+
+## 2.4.40
+
++ Exception handling of routes
+
+## 2.4.39
+
++ Exception handling of routes
+
+## 2.4.38
+
++ Use the response exception, before onException is called
+
+## 2.4.37
+
++ `group` method inherits interceptors and exception handlers
+
 ## 2.4.35
 
 + `getBinaryFile` and `getTextFile` in `Context`

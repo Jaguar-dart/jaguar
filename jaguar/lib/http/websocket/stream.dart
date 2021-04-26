@@ -8,16 +8,14 @@ RouteHandler wsStream<T>(WsOnConnect /* < Stream<T> | Response > */ onConnect) {
     final WebSocket ws = await ctx.req.upgradeToWebSocket;
     ctx.response = SkipResponse();
     Stream<T> stream;
-    if (onConnect != null) {
-      final resp = await onConnect(ctx, ws);
-      if (resp is Response) {
-        ctx.response = resp;
-        return;
-      } else if (resp is Stream<T>) {
-        stream = resp;
-      } else {
-        throw UnsupportedError("Unsupported type!");
-      }
+    final resp = await onConnect(ctx, ws);
+    if (resp is Response) {
+      ctx.response = resp;
+      return;
+    } else if (resp is Stream<T>) {
+      stream = resp;
+    } else {
+      throw UnsupportedError("Unsupported type!");
     }
 
     // TODO ws.asBroadcastStream().listen((_) => null);

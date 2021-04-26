@@ -1,29 +1,29 @@
 // Copyright (c) 2017, teja. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'package:http/io_client.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_cors/jaguar_cors.dart';
 import 'package:test/test.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
-import 'package:http/http.dart' as http;
 
 const String baseUrl = 'http://localhost:10000';
 
 void main() {
-  resty.globalClient = http.Client();
+  resty.globalClient = IOClient();
 
-  group('A group of tests', () {
+  group('cors tests', () {
     final server = Jaguar(port: 10000);
 
     setUp(() async {
-      server.get('/none', (_) => 'none', before: [Cors(CorsOptions())]);
+      server.get('/none', (_) => 'none', before: [cors(CorsOptions())]);
 
       {
         final options = CorsOptions(
             allowedOrigins: ['http://example.com', 'http://example1.com'],
             allowAllMethods: true,
             allowAllHeaders: true);
-        server.get('/origins', (_) => 'origins', before: [Cors(options)]);
+        server.get('/origins', (_) => 'origins', before: [cors(options)]);
       }
 
       {
@@ -32,7 +32,7 @@ void main() {
             allowAllMethods: true,
             allowAllHeaders: true);
         server.route('/origins', (_) => 'preflight',
-            methods: ['OPTIONS'], before: [Cors(options)]);
+            methods: ['OPTIONS'], before: [cors(options)]);
       }
 
       await server.serve();
@@ -54,10 +54,7 @@ void main() {
     });
 
     test('OriginsMatch', () async {
-      await resty
-          .get(baseUrl + '/origins')
-          .go()
-          .expect([resty.bodyIs('origins')]);
+      await resty.get(baseUrl + '/origins').expect([resty.bodyIs('origins')]);
       await resty
           .get(baseUrl + '/origins')
           .header('Origin', 'http://example1.com')

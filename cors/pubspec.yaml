@@ -1,19 +1,20 @@
 name: jaguar_cors
 description: CORS interceptor for Jaguar. Use Cors interceptor and CorsOptions configuration class to add CORS support to Jaguar server applications.
-version: 2.4.4
+version: 3.0.1
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
 homepage: http://jaguar-dart.github.io
+
 documentation:
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  jaguar: ^2.4.4
+  jaguar: ^3.0.6
 
 dev_dependencies:
   test:
-  jaguar_resty: ^2.8.0
+  jaguar_resty: ^3.0.0
   http:

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
+import '../../ports.dart' as ports;
 
 class _Info {
   String name;
@@ -20,22 +21,24 @@ class _Info {
 }
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('Response.Json', () {
-    Jaguar server;
+    final port = ports.random;
+    Jaguar server = Jaguar();
     setUpAll(() async {
-      server = new Jaguar(port: 10000);
+      print('Using port $port');
+      server = Jaguar(port: port);
       server
         ..getJson(
             '/response_processor/podo',
             (Context ctx) =>
-                new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']))
+                _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity']))
         ..getJson('/response_processor/nums', (Context ctx) => <int>[1, 2, 3])
         ..get(
             '/strresponse/podo',
             (Context ctx) => Response.json(
-                new _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity'])))
+                _Info('Jaguar', ['Speed', 'Simplicity', 'Extensiblity'])))
         ..get('/strresponse/nums',
             (Context ctx) => Response.json(<int>[1, 2, 3]));
       await server.serve();
@@ -46,7 +49,7 @@ void main() {
     });
 
     test('ResponseProcessor.Podo', () async {
-      await resty.get('http://localhost:10000/response_processor/podo').exact(
+      await resty.get('http://localhost:$port/response_processor/podo').exact(
           statusCode: 200,
           mimeType: MimeTypes.json,
           body:
@@ -55,12 +58,12 @@ void main() {
 
     test('ResponseProcessor.List', () async {
       await resty
-          .get('http://localhost:10000/response_processor/nums')
+          .get('http://localhost:$port/response_processor/nums')
           .exact(statusCode: 200, mimeType: MimeTypes.json, body: '[1,2,3]');
     });
 
     test('StrResponse.Podo', () async {
-      await resty.get('http://localhost:10000/strresponse/podo').exact(
+      await resty.get('http://localhost:$port/strresponse/podo').exact(
           statusCode: 200,
           mimeType: MimeTypes.json,
           body:
@@ -69,7 +72,7 @@ void main() {
 
     test('StrResponse.List', () async {
       await resty
-          .get('http://localhost:10000/strresponse/nums')
+          .get('http://localhost:$port/strresponse/nums')
           .exact(statusCode: 200, mimeType: MimeTypes.json, body: '[1,2,3]');
     });
   });

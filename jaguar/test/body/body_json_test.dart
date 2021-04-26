@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../ports.dart' as ports;
 
 class InputModel {
   InputModel(this.input1, this.input2);
@@ -17,8 +18,8 @@ class InputModel {
 
   int sub() => input1 - input2;
 
-  static InputModel fromJson(Map<String, dynamic> map) =>
-      new InputModel(map['input1'], map['input2']);
+  static InputModel fromJson(Map<dynamic, dynamic> map) =>
+      InputModel(map['input1'], map['input2']);
 
   Map toJson() => {
         'input1': input1,
@@ -30,10 +31,12 @@ void main() {
   resty.globalClient = http.IOClient();
 
   group('data.body.json', () {
-    Jaguar server;
+    final port = ports.random;
+    Jaguar? server;
     setUpAll(() async {
-      server = Jaguar(port: 10000);
-      server
+      print('Using port $port');
+      server = Jaguar(port: port);
+      server!
         ..post('/one/map', (ctx) async {
           final Map body = await ctx.bodyAsJsonMap();
           final InputModel input = InputModel.fromJson(body);
@@ -45,57 +48,57 @@ void main() {
           return input.sub();
         })
         ..post('/many/list', (ctx) async {
-          final List<Map<String, dynamic>> body = await ctx.bodyAsJsonList();
-          return body.map(InputModel.fromJson).map((m) => m.add()).toString();
+          final List<Map<String, dynamic>>? body = await ctx.bodyAsJsonList();
+          return body!.map(InputModel.fromJson).map((m) => m.add()).toString();
         })
         ..post('/many/convert', (ctx) async {
-          final List<InputModel> inputs =
+          final List<InputModel>? inputs =
               await ctx.bodyAsJsonList(convert: (InputModel.fromJson));
-          return inputs.map((m) => m.sub()).toString();
+          return inputs!.map((m) => m.sub()).toString();
         })
         ..put('/primitive', (ctx) async {
           final num body = await ctx.bodyAsJson();
           return body * 2;
         });
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
     test(
         'One.Map',
         () => resty
-            .post('http://localhost:10000/one/map')
-            .json(new InputModel(5, 15))
+            .post('http://localhost:$port/one/map')
+            .json(InputModel(5, 15))
             .exact(statusCode: 200, body: '20', mimeType: 'text/plain'));
 
     test(
         'One.Convert',
         () => resty
-            .post('http://localhost:10000/one/convert')
-            .json(new InputModel(30, 5))
+            .post('http://localhost:$port/one/convert')
+            .json(InputModel(30, 5))
             .exact(statusCode: 200, body: '25', mimeType: 'text/plain'));
 
     test(
         'Many.List',
         () => resty
-            .post('http://localhost:10000/many/list')
-            .json([new InputModel(5, 15), new InputModel(50, 55)]).exact(
+            .post('http://localhost:$port/many/list')
+            .json([InputModel(5, 15), InputModel(50, 55)]).exact(
                 statusCode: 200, body: '(20, 105)', mimeType: 'text/plain'));
 
     test(
         'Many.Convert',
         () => resty
-            .post('http://localhost:10000/many/convert')
-            .json([new InputModel(30, 5), new InputModel(75, 20)]).exact(
+            .post('http://localhost:$port/many/convert')
+            .json([InputModel(30, 5), InputModel(75, 20)]).exact(
                 statusCode: 200, body: '(25, 55)', mimeType: 'text/plain'));
 
     test(
         'primitive',
         () => resty
-            .put('http://localhost:10000/primitive')
+            .put('http://localhost:$port/primitive')
             .body('4')
             .exact(statusCode: 200, body: '8', mimeType: 'text/plain'));
   });

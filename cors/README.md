@@ -18,28 +18,26 @@ static const corsOptions = const CorsOptions(
   allowAllHeaders: true,
   allowAllMethods: true);
 
-Cors cors(Context ctx) => new Cors(corsOptions);
-
 @Api(path: '/api')
 class Routes extends Object with CorsHelper {
   @Route(methods: const ['GET', 'OPTIONS'])
-  @WrapOne(cors)
   Response<String> get(Context ctx) {
+    cors(ctx);
     if(ctx.req.method != 'GET') return null;
     return Response.json('Hello foreigner!');
   }
 
   @Route(methods: const ['POST', 'OPTIONS'])
-  @WrapOne(cors)
   Future<Response<String>> post(Context ctx) async {
+    cors(ctx);
     if(ctx.req.method != 'POST') return null;
     return Response.json(await ctx.req.bodyAsJson());
   }
 }
 
 main() async {
-  final server = new Jaguar(port: 9000);
-  server.addApi(reflect(new Routes()));
+  final server = Jaguar(port: 9000);
+  server.addApi(reflect(Routes()));
   server.log.onRecord.listen(print);
   await server.serve();
 }
@@ -49,7 +47,7 @@ main() async {
 
 ## Configuring Cors interceptor
 
-CorsOptions is used to configure `Cors` Interceptor.
+CorsOptions is used to configure `cors` Interceptor.
 
 * **allowedOrigins** `List<String>`: A list of origins a cross-domain request can be executed from. Setting [allowAllOrigins] 
 to [true] overrides [allowedOrigins] and allows all origins.
@@ -82,7 +80,7 @@ static const options = const CorsOptions(
 
 ## Wrapping the Cors interceptor
 
-The `Cors` interceptor itself is simple to use. It accepts a `CorsOptions` object as configuration. 
+The `cors` interceptor itself is simple to use. It accepts a `CorsOptions` object as configuration. 
 
 **Note**:
 1. Make sure that the route handler method/function accepts *OPTIONS* method.
@@ -91,8 +89,8 @@ skipped during preflight requests
 
 ```dart
   @Route(methods: const ['GET', 'OPTIONS'])
-  @WrapOne(cors)
   Response<String> get(Context ctx) {
+    cors(ctx);
     if(ctx.req.method != 'GET') return null;  // Skips for preflight requests
     return Response.json('Hello foreigner!');
   }
@@ -101,11 +99,9 @@ skipped during preflight requests
 ### Example
 
 ```dart
-	Cors cors(Context ctx) => new Cors(options);
-
   @Route(methods: const ['GET', 'OPTIONS'])
-  @WrapOne(cors)
   Response<String> get(Context ctx) {
+    cors(ctx);
     if(ctx.req.method != 'GET') return null;
     return Response.json('Hello foreigner!');
   }

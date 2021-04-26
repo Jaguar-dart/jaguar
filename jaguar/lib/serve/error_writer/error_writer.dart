@@ -8,36 +8,6 @@ import 'package:jaguar/jaguar.dart';
 part 'template_404.dart';
 part 'template_500.dart';
 
-abstract class BuiltinErrorResponse {
-  FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter);
-}
-
-class Builtin404ErrorResponse extends Response<String>
-    implements BuiltinErrorResponse {
-  Builtin404ErrorResponse() : super(null, statusCode: 404);
-
-  FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter) {
-    final resp = errorWriter.make404(ctx);
-    // TODO
-    return resp;
-  }
-}
-
-class Builtin500ErrorResponse extends Response<String>
-    implements BuiltinErrorResponse {
-  Object error;
-
-  StackTrace trace;
-
-  Builtin500ErrorResponse() : super(null, statusCode: 500);
-
-  FutureOr<Response> convertToError(Context ctx, ErrorWriter errorWriter) {
-    final resp = errorWriter.make500(ctx, error, trace);
-    // TODO
-    return resp;
-  }
-}
-
 /// Error writer interface
 ///
 /// Error writer is used by [Jaguar] server to write 404 and 500 errors
@@ -58,8 +28,10 @@ class DefaultErrorWriter implements ErrorWriter {
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
-      return Response(_write404Html(ctx),
-          statusCode: HttpStatus.notFound, mimeType: MimeTypes.html);
+      return Response(
+          body: _write404Html(ctx),
+          statusCode: HttpStatus.notFound,
+          mimeType: MimeTypes.html);
     } else if (acceptList.contains('application/json') ||
         acceptList.contains('text/json')) {
       return Response.json({
@@ -76,7 +48,7 @@ class DefaultErrorWriter implements ErrorWriter {
       return;
     } */
     else {
-      return Response(_write404Html(ctx), statusCode: HttpStatus.notFound)
+      return Response(body: _write404Html(ctx), statusCode: HttpStatus.notFound)
         ..headers.contentType = ContentType.html;
     }
   }
@@ -84,13 +56,15 @@ class DefaultErrorWriter implements ErrorWriter {
   /// Makes [Response] for 500 error
   ///
   /// Respects 'accept' request header and returns corresponding [Response]
-  Response make500(Context ctx, Object error, [StackTrace stack]) {
+  Response make500(Context ctx, Object error, [StackTrace? stack]) {
     final String accept = ctx.req.headers.value(HttpHeaders.acceptHeader) ?? '';
     final List<String> acceptList = accept.split(',');
 
     if (acceptList.contains('text/html')) {
-      return Response(_write500Html(ctx, error, stack),
-          statusCode: HttpStatus.notFound, mimeType: MimeTypes.html);
+      return Response(
+          body: _write500Html(ctx, error, stack),
+          statusCode: HttpStatus.notFound,
+          mimeType: MimeTypes.html);
     } else if (acceptList.contains('application/json') ||
         acceptList.contains('text/json')) {
       final data = <String, dynamic>{
@@ -110,8 +84,10 @@ class DefaultErrorWriter implements ErrorWriter {
       return Response.xml(data, statusCode: 500);
     } */
     else {
-      return Response(_write500Html(ctx, error, stack),
-          statusCode: 500, mimeType: MimeTypes.html);
+      return Response(
+          body: _write500Html(ctx, error, stack),
+          statusCode: 500,
+          mimeType: MimeTypes.html);
     }
   }
 }

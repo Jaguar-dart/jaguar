@@ -6,9 +6,10 @@ import 'dart:convert' as cnv;
 import 'package:jaguar/http/http.dart';
 import 'package:jaguar/annotations/import.dart';
 
-export 'byte_response.dart';
-export 'redirect_response.dart';
-export 'stream_response.dart';
+part 'byte_response.dart';
+part 'redirect_response.dart';
+part 'string_response.dart';
+part 'stream_response.dart';
 
 /// HTTP response. A route handler must respond to HTTP requests by producing a
 /// [Response] object.
@@ -17,9 +18,9 @@ export 'stream_response.dart';
 ///
 /// [writeResponse] can be used to write response to underlying abstracted
 /// response object.
-class Response<ValueType> {
+abstract class Response<ValueType> {
   /// Body of the response
-  ValueType value;
+  ValueType? body;
 
   /// Status code of the response
   int statusCode = 200;
@@ -30,11 +31,14 @@ class Response<ValueType> {
   /// Cookies
   final List<Cookie> cookies = [];
 
-  Response(this.value,
-      {this.statusCode = 200,
-      Map<String, dynamic> headers,
-      String mimeType,
-      String charset = kDefaultCharset}) {
+  Response._make({
+    this.body,
+    this.statusCode = 200,
+    Map<String, dynamic>? headers,
+    String? mimeType,
+    String? charset = kDefaultCharset,
+    List<Cookie>? cookies,
+  }) {
     if (headers != null)
       for (final String name in headers.keys) {
         this.headers.add(name, headers[name]);
@@ -42,36 +46,65 @@ class Response<ValueType> {
 
     if (mimeType != null) this.headers.mimeType = mimeType;
     if (charset != null) this.headers.charset = charset;
+
+    if (cookies != null) {
+      this.cookies.addAll(cookies);
+    }
   }
 
-  static Response<String> json<ST>(ST value,
-      {dynamic serializeWith(ST value),
-      int statusCode = HttpStatus.ok,
-      Map<String, dynamic> headers,
-      String mimeType = MimeTypes.json,
-      String charset = kDefaultCharset}) {
-    String data =
+  factory Response({
+    dynamic? body,
+    int statusCode = 200,
+    Map<String, dynamic>? headers,
+    String? mimeType,
+    String? charset = kDefaultCharset,
+    List<Cookie>? cookies,
+  }) {
+    return StringResponse(
+        body: body?.toString(),
+        statusCode: statusCode,
+        headers: headers,
+        mimeType: mimeType,
+        charset: charset,
+        cookies: cookies) as Response<ValueType>;
+  }
+
+  static StringResponse json<ST>(
+    ST value, {
+    dynamic serializeWith(ST value)?,
+    int statusCode = HttpStatus.ok,
+    Map<String, dynamic>? headers,
+    String mimeType = MimeTypes.json,
+    String charset = kDefaultCharset,
+    List<Cookie>? cookies,
+  }) {
+    String body =
         cnv.json.encode(serializeWith == null ? value : serializeWith(value));
-    return Response<String>(
-      data,
+    return StringResponse(
+      body: body,
       statusCode: statusCode,
       headers: headers,
       mimeType: mimeType,
       charset: charset,
+      cookies: cookies,
     );
   }
 
-  static Response<String> html(String html,
-      {int statusCode = HttpStatus.ok,
-      Map<String, dynamic> headers,
-      String mimeType = MimeTypes.html,
-      String charset = kDefaultCharset}) {
-    return Response<String>(
-      html,
+  static StringResponse html(
+    String html, {
+    int statusCode = HttpStatus.ok,
+    Map<String, dynamic>? headers,
+    String mimeType = MimeTypes.html,
+    String charset = kDefaultCharset,
+    List<Cookie>? cookies,
+  }) {
+    return StringResponse(
+      body: html,
       statusCode: statusCode,
       headers: headers,
       mimeType: mimeType,
       charset: charset,
+      cookies: cookies,
     );
   }
 
@@ -89,25 +122,22 @@ class Response<ValueType> {
   void writeAllButBody(HttpResponse resp) {
     resp.statusCode = statusCode;
 
-    for (dynamic name in headers.headers.keys)
-      resp.headers.set(name, headers.headers[name]);
+    for (dynamic name in headers.headers.keys) {
+      resp.headers.set(name, headers.headers[name]!);
+    }
 
     resp.cookies.addAll(cookies);
   }
 
-  /// Writes body of the HTTP response from [value] property
+  /// Writes body of the HTTP response from [body] property
   ///
   /// Different [ValueTypes] are differently when they are written
   /// to the response.
-  FutureOr<void> writeResponse(HttpResponse resp) {
-    writeAllButBody(resp);
-    if (value != null) resp.write(value.toString());
-    return null;
-  }
+  FutureOr<void> writeResponse(HttpResponse resp);
 }
 
 class SkipResponse extends Response {
-  SkipResponse() : super(null);
+  SkipResponse() : super._make();
 
   void writeResponse(HttpResponse resp) {}
 }

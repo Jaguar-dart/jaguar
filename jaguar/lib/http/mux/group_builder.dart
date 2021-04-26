@@ -19,14 +19,19 @@ class GroupBuilder extends Object with Muxable {
   }
 
   Route addRoute(Route route) {
-    final route1 = route.cloneWith(path: path + route.info.path);
-    route1._before.insertAll(0, before);
-    route1._after.insertAll(0, after);
-    route1._onException.insertAll(0, onException);
+    final route1 = route.cloneWith(
+      info: route.info.cloneWith(path: path + route.info.path),
+      before: [...before, ...route.getBefore()],
+      after: [...after, ...route.getAfter()],
+      onException: [...onException, ...route.getOnException()],
+    );
     parent.addRoute(route1);
     return route1;
   }
 
   GroupBuilder group({String path = ''}) =>
-      GroupBuilder(parent, path: this.path + path);
+      GroupBuilder(parent, path: this.path + path)
+        ..before.addAll(before)
+        ..after.addAll(after)
+        ..onException.addAll(onException);
 }

@@ -9,15 +9,16 @@ import 'package:jaguar/jaguar.dart';
 part 'options.dart';
 part 'request_params.dart';
 
-void cors(Context ctx, CorsOptions options) => Cors(options)(ctx);
+/// Interceptor to CORS requests
+RouteInterceptor<void> cors(CorsOptions options) =>
+    (Context ctx) => _Cors(options).before(ctx);
 
-/// Interceptor to handle CORS related requests
-class Cors implements Interceptor<void> {
+class _Cors {
   final CorsOptions options;
 
-  Cors(this.options);
+  _Cors(this.options);
 
-  _CorsRequestParams params;
+  _CorsRequestParams? params;
 
   bool _isCors = false;
 
@@ -27,30 +28,32 @@ class Cors implements Interceptor<void> {
 
   bool get isPreflight => _isPreflight;
 
-  String _errorMsg;
+  String? _errorMsg;
 
-  String get errorMsg => _errorMsg;
+  String? get errorMsg => _errorMsg;
 
   bool get hasError => _errorMsg != null;
 
-  void call(Context ctx) {
+  void before(Context ctx) {
     final Request req = ctx.req;
     params = _CorsRequestParams.fromRequest(req);
 
     // Check if it is CORS request
-    if (params.origin is! String) {
+    if (params!.origin is! String) {
       if (!options.allowNonCorsRequests) {
-        throw Response('Only Cross origin requests are allowed!',
+        throw Response(
+            body: 'Only Cross origin requests are allowed!',
             statusCode: HttpStatus.forbidden);
       }
       return;
     }
 
     ctx.after.add(after);
+    ctx.onException.add((ctx, exception, trace) => after(ctx));
 
     _isCors = true;
 
-    if (req.method == 'OPTIONS' && params.method is String) {
+    if (req.method == 'OPTIONS' && params!.method is String) {
       _isPreflight = true;
     }
 
@@ -65,7 +68,8 @@ class Cors implements Interceptor<void> {
     }
 
     if (errorMsg != null) {
-      throw Response('Invalid CORS request: ' + errorMsg,
+      throw Response(
+          body: 'Invalid CORS request: ' + errorMsg!,
           statusCode: HttpStatus.forbidden);
     }
   }
@@ -78,17 +82,17 @@ class Cors implements Interceptor<void> {
       return;
     }
 
-    if (!options.allowedOrigins.contains(params.origin)) {
+    if (!options.allowedOrigins!.contains(params!.origin)) {
       _errorMsg = 'Origin not allowed!';
       return;
     }
   }
 
   void _filterMethods(Request req) {
-    String method;
+    String? method;
 
     if (isPreflight) {
-      method = params.method;
+      method = params!.method;
     } else {
       method = req.method;
     }
@@ -100,7 +104,7 @@ class Cors implements Interceptor<void> {
       return;
     }
 
-    if (!options.allowedMethods.contains(method)) {
+    if (method != null && !options.allowedMethods.contains(method)) {
       _errorMsg = 'Method not allowed!';
       return;
     }
@@ -112,8 +116,8 @@ class Cors implements Interceptor<void> {
     if (isPreflight) {
       // If preflight, check that all headers supplied in 'Access-Control-Request-Headers'
       // are accepted
-      if (params.headers is List<String>) {
-        headers.addAll(params.headers);
+      if (params!.headers != null) {
+        headers.addAll(params!.headers!);
       }
     } else {
       req.headers.forEach((String header, _) => headers.add(header));
@@ -145,7 +149,7 @@ class Cors implements Interceptor<void> {
       response.headers.set(_CorsHeaders.AllowedOrigin, '*');
     } else {
       response.headers
-          .set(_CorsHeaders.AllowedOrigin, options.allowedOrigins.join(', '));
+          .set(_CorsHeaders.AllowedOrigin, options.allowedOrigins!.join(', '));
     }
 
     if (options.vary) {

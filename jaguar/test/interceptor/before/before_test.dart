@@ -6,26 +6,29 @@ import 'dart:math';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
+import '../../ports.dart' as ports;
 
-final Random rand = new Random.secure();
+final Random rand = Random.secure();
 
 void genRandom(Context ctx) {
   ctx.addVariable(rand.nextInt(1000), id: 'randomInt');
 }
 
 void doublesRandom(Context ctx) {
-  int randomInt = ctx.getVariable<int>(id: 'randomInt');
+  int randomInt = ctx.getVariable<int>(id: 'randomInt')!;
   ctx.addVariable(randomInt * 2, id: 'doubledRandomInt');
 }
 
 void main() {
-  resty.globalClient = new http.IOClient();
+  resty.globalClient = http.IOClient();
 
   group('Custom interceptor:Generated', () {
-    Jaguar server;
+    final port = ports.random;
+    Jaguar? server;
     setUpAll(() async {
-      server = Jaguar(port: 10000);
-      server
+      print('Using port $port');
+      server = Jaguar(port: port);
+      server!
         ..getJson(
             '/two',
             (Context ctx) => {
@@ -33,21 +36,19 @@ void main() {
                   'Doubled': ctx.getVariable<int>(id: 'doubledRandomInt'),
                 },
             before: [genRandom, doublesRandom]);
-      await server.serve();
+      await server!.serve();
     });
 
     tearDownAll(() async {
-      await server.close();
+      await server?.close();
     });
 
-    test(
-        'one interceptor',
-        () => resty
-                .get('http://localhost:10000/two')
-                .exact(statusCode: 200, mimeType: 'application/json')
-                .decodeJson<Map>()
-                .then((Map body) {
-              expect(body['Random'] * 2, body['Doubled']);
-            }));
+    test('one interceptor', () async {
+      final body = (await resty
+              .get('http://localhost:$port/two')
+              .exact(statusCode: 200, mimeType: 'application/json'))
+          .json<Map>();
+      expect(body['Random'] * 2, body['Doubled']);
+    });
   });
 }
