@@ -15,7 +15,15 @@ void main() {
     Jaguar server = Jaguar();
     setUpAll(() async {
       server = Jaguar(port: port);
-      server.staticFiles('files/*', 'test/static_file/files_root/files');
+      server.staticFiles('files/*', 'test/static_file/files_root/files',
+          mimeTypes: [
+            (f) => f.path.endsWith('.ndjson') ? 'application/x-ndjson' : null,
+            (f) => f.path.endsWith('override.txt') ? 'image/png' : null,
+            (f) => f.path.endsWith('.auto') &&
+                    f.readAsStringSync().startsWith('<!DOCTYPE html>')
+                ? 'text/html'
+                : null,
+          ]);
       await server.serve();
     });
 
@@ -32,6 +40,30 @@ void main() {
     test('directory/hello.html', () async {
       await resty
           .get('http://localhost:$port/files/directory/hello.html')
+          .exact(statusCode: 200, mimeType: 'text/html');
+    });
+
+    test('directory/ (implicit index.html)', () async {
+      await resty
+          .get('http://localhost:$port/files/directory/')
+          .exact(statusCode: 200, mimeType: 'text/html');
+    });
+
+    test('contents.ndjson', () async {
+      await resty
+          .get('http://localhost:$port/files/contents.ndjson')
+          .exact(statusCode: 200, mimeType: 'application/x-ndjson');
+    });
+
+    test('directory/override.txt', () async {
+      await resty
+          .get('http://localhost:$port/files/directory/override.txt')
+          .exact(statusCode: 200, mimeType: 'image/png');
+    });
+
+    test('html.auto', () async {
+      await resty
+          .get('http://localhost:$port/files/html.auto')
           .exact(statusCode: 200, mimeType: 'text/html');
     });
 
