@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.10
+
++ `Jaguar` now exposes underlying `HttpServer`s as `servers` property
+
 ## 3.0.9
 
 + mimeTypeDetectors for static file serving routes

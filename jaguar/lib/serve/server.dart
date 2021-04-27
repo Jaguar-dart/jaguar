@@ -81,6 +81,8 @@ class Jaguar extends Object with Muxable {
               multiThread: multiThread)
         ];
 
+  Iterable<HttpServer> get servers => List.unmodifiable(_servers!);
+
   /// Start listening for requests also on [connection]
   void alsoTo(ConnectTo connection) {
     if (_servers != null) throw Exception('Already started!');
@@ -95,25 +97,31 @@ class Jaguar extends Object with Muxable {
 
     _build();
 
-    if (logRequests) log.info("Serving on " + _connectionInfos.join(', '));
+    if (logRequests) {
+      log.info("Serving on " + _connectionInfos.join(', '));
+    }
 
     _servers = <HttpServer>[];
     try {
       for (int i = 0; i < _connectionInfos.length; i++) {
         ConnectTo ct = _connectionInfos[i];
+        HttpServer server;
         if (ct.securityContext != null) {
-          _servers!.add(await HttpServer.bindSecure(
+          server = await HttpServer.bindSecure(
               ct.address, ct.port, ct.securityContext!,
-              shared: ct.multiThread));
+              shared: ct.multiThread);
         } else {
-          _servers!.add(await HttpServer.bind(ct.address, ct.port,
-              shared: ct.multiThread));
+          server = await HttpServer.bind(ct.address, ct.port,
+              shared: ct.multiThread);
         }
-        _servers![i].autoCompress = autoCompress;
+        server.autoCompress = autoCompress;
+        _servers!.add(server);
       }
     } catch (e) {
-      for (final server in _servers!) {
-        await server.close();
+      try {
+        await close();
+      } catch (e) {
+        // ignore error
       }
       rethrow;
     }
@@ -199,6 +207,10 @@ class Jaguar extends Object with Muxable {
 
   /// Closes the server
   Future<void> close() async {
+    if (_servers == null) {
+      return;
+    }
+
     dynamic err;
     for (HttpServer server in _servers!) {
       try {
@@ -208,7 +220,9 @@ class Jaguar extends Object with Muxable {
       }
     }
     _servers = null;
-    if (err != null) throw err;
+    if (err != null) {
+      throw err;
+    }
   }
 
   /// Create a new route group
