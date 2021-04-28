@@ -38,24 +38,24 @@ import 'package:path/path.dart' as p;
 /// + `/html/static/index.html` is mapped into `http://localhost:8000/client/static/index.html`
 //TODO add timeout
 Route getOnlyProxy(String path, String proxyBaseUrl,
-    {Map<String, String> pathRegEx,
-    ResponseProcessor responseProcessor,
+    {Map<String, String>? pathRegEx,
+    ResponseProcessor? responseProcessor,
     bool stripPrefix: true,
     String proxyName: 'jaguar_proxy',
-    HttpClient client}) {
+    HttpClient? client}) {
   client ??= HttpClient();
 
   Route route;
-  int skipCount;
+  int skipCount = 0;
   route = Route.get(path, (ctx) async {
     Iterable<String> segs = ctx.pathSegments;
     if (stripPrefix) segs = segs.skip(skipCount);
     Uri requestUri = Uri.parse(proxyBaseUrl + '/' + segs.join('/'));
     HttpClientRequest clientReq;
     try {
-      clientReq = await client.openUrl(ctx.req.method, requestUri);
+      clientReq = await client!.openUrl(ctx.req.method, requestUri);
     } catch (e) {
-      return Builtin404ErrorResponse();
+      return Response(statusCode: 404);
     }
     clientReq.followRedirects = false;
 
@@ -73,7 +73,7 @@ Route getOnlyProxy(String path, String proxyBaseUrl,
     final HttpClientResponse clientResp = await clientReq.close();
 
     if (clientResp.statusCode == HttpStatus.notFound)
-      return Builtin404ErrorResponse();
+      return Response(statusCode: 404);
 
     _returnResponse(ctx, clientResp, requestUri, proxyName, proxyBaseUrl);
   }, responseProcessor: responseProcessor, pathRegEx: pathRegEx);
@@ -88,7 +88,7 @@ Route getOnlyProxy(String path, String proxyBaseUrl,
 void _returnResponse(Context ctx, HttpClientResponse clientResp, Uri requestUri,
     String proxyName, String proxyBaseUrl) {
   final servResp =
-      StreamResponse(clientResp, statusCode: clientResp.statusCode);
+      StreamResponse(body: clientResp, statusCode: clientResp.statusCode);
 
   clientResp.headers.forEach((String key, dynamic val) {
     servResp.headers.add(key, val);
@@ -117,7 +117,7 @@ void _returnResponse(Context ctx, HttpClientResponse clientResp, Uri requestUri,
   // than the destination server, if possible.
   if (clientResp.isRedirect && clientResp.headers.value('location') != null) {
     String location =
-        requestUri.resolve(clientResp.headers.value('location')).toString();
+        requestUri.resolve(clientResp.headers.value('location')!).toString();
     if (p.url.isWithin(proxyBaseUrl, location)) {
       // TODO add prefix
       servResp.headers
