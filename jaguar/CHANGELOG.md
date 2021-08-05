@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.12
+
++ Fixed a bug involving `Jaguar.group`
+
 ## 3.0.10
 
 + `Jaguar` now exposes underlying `HttpServer`s as `servers` property
