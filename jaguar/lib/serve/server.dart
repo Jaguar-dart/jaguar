@@ -90,7 +90,10 @@ class Jaguar extends Object with Muxable {
   }
 
   /// Starts serving the requests.
-  Future<void> serve({bool logRequests = false}) async {
+  Future<void> serve(
+      {bool logRequests = false,
+      Duration? idleTimeout,
+      int sessionTimeout = 1200}) async {
     if (_servers != null) {
       throw Exception('Already started!');
     }
@@ -110,9 +113,13 @@ class Jaguar extends Object with Muxable {
           server = await HttpServer.bindSecure(
               ct.address, ct.port, ct.securityContext!,
               shared: ct.multiThread);
+          server.idleTimeout = idleTimeout;
+          server.sessionTimeout = sessionTimeout;
         } else {
           server = await HttpServer.bind(ct.address, ct.port,
               shared: ct.multiThread);
+          server.idleTimeout = idleTimeout;
+          server.sessionTimeout = sessionTimeout;
         }
         server.autoCompress = autoCompress;
         _servers!.add(server);
