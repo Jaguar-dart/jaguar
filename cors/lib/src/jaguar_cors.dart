@@ -10,7 +10,7 @@ part 'options.dart';
 part 'request_params.dart';
 
 /// Interceptor to CORS requests
-RouteInterceptor<void> cors(CorsOptions options) =>
+RouteInterceptor cors(CorsOptions options) =>
     (Context ctx) => _Cors(options).before(ctx);
 
 class _Cors {
