@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.0
+*Breaking Changes:*
++ addVariable and getVariable only operate by id
++ id parameter on addVariable and getVariable are mandatory
++ Added addVariableByType and getVariableByType
++ RouteInterceptor does not take generic parameter
+
 ## 3.0.12
 
 + Fixed a bug involving `Jaguar.group`

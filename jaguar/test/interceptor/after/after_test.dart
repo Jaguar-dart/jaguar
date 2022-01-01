@@ -1,25 +1,25 @@
 library test.jaguar.intercept.after;
 
 import 'package:http/io_client.dart' as http;
-import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import '../../ports.dart' as ports;
 
-void bef(Context ctx) => ctx.addVariable(5);
+void bef(Context ctx) => ctx.addVariable(5, id: 'v');
 
 void aft(Context ctx) =>
-    ctx.response = Response(body: ctx.getVariable<int>()! * 5);
+    ctx.response = Response(body: ctx.getVariable<int>(id: 'v') * 5);
 
 void aft1(Context ctx) => ctx.response = Response(body: 'aft1');
 
 void bef2(Context ctx) {
-  ctx.addVariable(5);
+  ctx.addVariable(5, id: 'v');
   ctx.after.add(aft2);
 }
 
-void aft2(Context ctx) => ctx.addVariable(ctx.getVariable<int>()! * 2);
+void aft2(Context ctx) =>
+    ctx.addVariable(ctx.getVariable<int>(id: 'v') * 2, id: 'v');
 
 main() {
   resty.globalClient = http.IOClient();

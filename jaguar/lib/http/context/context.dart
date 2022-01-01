@@ -122,7 +122,41 @@ class Context {
       DateTime? at})
       : at = at ?? DateTime.now().toUtc();
 
-  final _variables = <Type, Map<String, dynamic>>{};
+  final _variables = <String, dynamic>{};
+
+  /// Adds a named variable to the context
+  void addVariable(value, {required String id}) {
+    _variables[id] = value;
+  }
+
+  /// Adds a named variables to the context
+  void addVariables(Map<String, dynamic> variables) {
+    _variables.addAll(variables);
+  }
+
+  /// Returns variable by id
+  T getVariable<T>({required String id}) {
+    return _variables[id] as T;
+  }
+
+  final _variablesByType = [];
+
+  /// Adds a named variable to the context
+  void addVariableByType(value) {
+    _variablesByType.add(value);
+  }
+
+  /// Returns variable by type
+  T? getVariableByType<T>({T? orElse}) {
+    for (final v in _variablesByType.reversed) {
+      if (v is T) {
+        return v;
+      }
+    }
+    return orElse;
+  }
+
+  /*final _variables = <Type, Map<String, dynamic>>{};
 
   /// Gets variable by type and id.
   ///
@@ -166,7 +200,7 @@ class Context {
     } else {
       _variables[value.runtimeType]![id] = value;
     }
-  }
+  }*/
 
   /// Headers in the HTTP request.
   HttpHeaders get headers => req.headers;

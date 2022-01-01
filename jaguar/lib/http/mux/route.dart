@@ -10,7 +10,7 @@ typedef FutureOr<void> ExceptionHandler(
 
 /// Prototype of route interceptor. A router interceptor is a function that runs
 /// before or after the route handler.
-typedef FutureOr<void> RouteInterceptor<Result>(Context ctx);
+typedef FutureOr<void> RouteInterceptor(Context ctx);
 
 /// An interceptor based on Dart class.
 ///

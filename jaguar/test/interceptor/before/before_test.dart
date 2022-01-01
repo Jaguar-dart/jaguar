@@ -1,7 +1,6 @@
 library test.jaguar.intercept.before;
 
 import 'package:http/io_client.dart' as http;
-import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
@@ -15,7 +14,7 @@ void genRandom(Context ctx) {
 }
 
 void doublesRandom(Context ctx) {
-  int randomInt = ctx.getVariable<int>(id: 'randomInt')!;
+  int randomInt = ctx.getVariable<int>(id: 'randomInt');
   ctx.addVariable(randomInt * 2, id: 'doubledRandomInt');
 }
 
