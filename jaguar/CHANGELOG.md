@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.1
++ Added addVariablesByType to `Context`
+
 ## 3.1.0
 *Breaking Changes:*
 + addVariable and getVariable only operate by id

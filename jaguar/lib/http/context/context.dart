@@ -146,6 +146,10 @@ class Context {
     _variablesByType.add(value);
   }
 
+  void addVariablesByType(List values) {
+    _variablesByType.addAll(values);
+  }
+
   /// Returns variable by type
   T? getVariableByType<T>({T? orElse}) {
     for (final v in _variablesByType.reversed) {
@@ -155,52 +159,6 @@ class Context {
     }
     return orElse;
   }
-
-  /*final _variables = <Type, Map<String, dynamic>>{};
-
-  /// Gets variable by type and id.
-  ///
-  /// Lets query for context variables by [id] and [type]. The variables are
-  /// added using [addVariable] method in middleware or route handler.
-  T? getVariable<T>({String? id, Type? type}) {
-    type ??= T;
-    Map<String, dynamic>? map = _variables[type];
-    if (map != null) {
-      if (id == null)
-        return map.values.first;
-      else {
-        if (map.containsKey(id)) return map[id];
-      }
-    }
-
-    if (id == null) {
-      if (T == dynamic) {
-        return null;
-      }
-
-      for (map in _variables.values) {
-        for (dynamic v in map.values) {
-          if (v is T) return v;
-        }
-      }
-    } else {
-      for (map in _variables.values) {
-        if (!map.containsKey(id)) continue;
-        if (map[id] is T) return map[id];
-      }
-    }
-
-    return null;
-  }
-
-  /// Adds variable by type and id
-  void addVariable<T>(T value, {String id = ''}) {
-    if (!_variables.containsKey(value.runtimeType)) {
-      _variables[value.runtimeType] = {id: value};
-    } else {
-      _variables[value.runtimeType]![id] = value;
-    }
-  }*/
 
   /// Headers in the HTTP request.
   HttpHeaders get headers => req.headers;
