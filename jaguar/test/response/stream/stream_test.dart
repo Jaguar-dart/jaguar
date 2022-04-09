@@ -3,7 +3,6 @@ library test.jaguar.response.stream;
 import 'package:http/io_client.dart' as http;
 import 'dart:async';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import '../../ports.dart' as ports;

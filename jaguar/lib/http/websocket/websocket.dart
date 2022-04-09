@@ -1,6 +1,5 @@
 library jaguar.websocket;
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:jaguar/jaguar.dart';

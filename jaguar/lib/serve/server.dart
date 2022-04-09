@@ -7,7 +7,6 @@ import 'package:jaguar/jaguar.dart';
 
 import 'package:logging/logging.dart';
 
-import 'package:jaguar/serve/error_writer/error_writer.dart';
 import 'package:path_tree/path_tree.dart';
 
 export 'package:jaguar/serve/error_writer/error_writer.dart';

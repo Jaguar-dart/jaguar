@@ -1,8 +1,6 @@
 library test.jaguar.static_file;
 
-import 'dart:io';
 import 'package:http/io_client.dart' as http;
-import 'package:http/http.dart' as http;
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';

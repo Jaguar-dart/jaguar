@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.3
+
++ Fixed analyzer issues
+
+## 3.1.2
+
++ Added wasm mime type
+
 ## 3.1.1
 + Added addVariablesByType to `Context`
 

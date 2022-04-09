@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar_common/jaguar_common.dart';
 
 export 'package:jaguar_common/jaguar_common.dart';
 

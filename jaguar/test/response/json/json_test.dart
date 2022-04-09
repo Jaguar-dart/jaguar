@@ -1,7 +1,6 @@
 library test.jaguar.response.json;
 
 import 'package:http/io_client.dart' as http;
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;

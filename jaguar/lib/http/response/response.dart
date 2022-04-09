@@ -53,7 +53,7 @@ abstract class Response<ValueType> {
   }
 
   factory Response({
-    dynamic? body,
+    dynamic body,
     int statusCode = 200,
     Map<String, dynamic>? headers,
     String? mimeType,

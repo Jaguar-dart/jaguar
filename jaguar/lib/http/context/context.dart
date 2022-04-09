@@ -467,7 +467,7 @@ class Context {
   }
 
   /// Converts the body to typ [T].
-  Future<T> bodyTo<T>(Converter<T, dynamic?> converter,
+  Future<T> bodyTo<T>(Converter<T, dynamic> converter,
       {conv.Encoding encoding = conv.utf8}) async {
     MimeType mt = mimeType;
 

@@ -3,7 +3,7 @@ part of 'response.dart';
 /// [Response] that writes the bytes provided in [body] to the response.
 class StringResponse extends Response<String> {
   StringResponse({
-    dynamic? body,
+    dynamic body,
     int statusCode = 200,
     Map<String, dynamic>? headers,
     String? mimeType,
@@ -19,7 +19,7 @@ class StringResponse extends Response<String> {
         );
 
   factory StringResponse.cloneFrom(Response response,
-      {dynamic? body, int? statusCode, String? mimeType, String? charset}) {
+      {dynamic body, int? statusCode, String? mimeType, String? charset}) {
     return StringResponse(
       body: body,
       statusCode: statusCode ?? response.statusCode,

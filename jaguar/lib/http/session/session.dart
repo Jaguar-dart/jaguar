@@ -50,7 +50,7 @@ class Session {
   /// [createdTime]
   Session(this.id, Map<String, String> data, this.createdTime,
       {this.needsUpdate = false}) {
-    if (data is Map) _data.addAll(data);
+    _data.addAll(data);
   }
 
   /// Create new session with given [data], [id] and [createdTime]
@@ -62,7 +62,7 @@ class Session {
       : id = id ?? newId,
         needsUpdate = true,
         createdTime = createdTime ?? new DateTime.now() {
-    if (data is Map) _data.addAll(data);
+    _data.addAll(data);
   }
 
   /// Access session value by [key]
