@@ -71,6 +71,8 @@ abstract class MimeTypes {
 
   static const tar = "application/x-tar";
 
+  static const wasm = "application/wasm";
+
   /// Map of file extension to mime type
   static const fromFileExtension = const <String, String>{
     "html": html,
@@ -97,6 +99,7 @@ abstract class MimeTypes {
     "txt": txt,
     "zip": zip,
     "tar": tar,
+    "wasm": wasm,
   };
 
   /// Returns mime type of [file] based on its extension
