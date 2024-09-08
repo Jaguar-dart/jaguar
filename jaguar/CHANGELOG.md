@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.4
+
++ Fixed OnRouteServed issue
+
 ## 3.1.3
 
 + Fixed analyzer issues
